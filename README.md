@@ -33,6 +33,8 @@ metadata {
 }
 ```
 
+The set of supported groups, versions and kinds are loaded dynamically from your Kubernetes cluster.
+
 ## Id Format
 The format of the resource Ids is ```<namespace>.<kind>.<name>```.  These are all Kubernetes identifiers.
 
