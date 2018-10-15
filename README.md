@@ -18,6 +18,7 @@ For new projects or after install/upgrade, run ```tf init```
 Run the ```tfextractor``` command.  The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
 
 ## Example
+[guestbook.tf](./examples/guestbook/guestbook.tf)
+
 Based on the official guessbook example https://github.com/kubernetes/examples/blob/master/guestbook/all-in-one/guestbook-all-in-one.yaml
 
-[guestbook.tf](./examples/guestbook/guestbook.tf)
