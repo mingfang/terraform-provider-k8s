@@ -20,4 +20,4 @@ Run the ```tfextractor``` command.  The ```tfextractor``` will load the existing
 ## Example
 Based on the official guessbook example https://github.com/kubernetes/examples/blob/master/guestbook/all-in-one/guestbook-all-in-one.yaml
 
-[./examples/guestbook/guestbook.tf](guestbook.tf)
+[guestbook.tf](./examples/guestbook/guestbook.tf)
