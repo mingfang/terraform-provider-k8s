@@ -14,8 +14,13 @@ terraform-provider-k8s is a Terraform plugin to manage Kubernetes resources.
 ## Init
 For new projects or after install/upgrade, run ```tf init```
 
-## Extract existing Kubernetes resources into Terraform *.tf files
+## Extract existing Kubernetes resources into Terraform tf files
 Run the ```tfextractor``` command.  The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
+
+## Import
+After extracting existing resources to tf files, you can import the state for them.
+
+Run ```tf import k8s_core_v1_service.nginx default.service.nginx``` to import, in this case a nginx service.
 
 ## Example
 [guestbook.tf](./examples/guestbook/guestbook.tf)
