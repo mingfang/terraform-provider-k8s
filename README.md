@@ -36,7 +36,7 @@ metadata {
 ## Id Format
 The format of the resource Ids is ```<namespace>.<kind>.<name>```.  These are all Kubernetes identifiers.
 
-Ids are used internally to uniquely identify resource state.
+Ids are used internally by Terraform to uniquely identify resource state.
 
 The user will only need to know them when importing state from a Kubernetes cluster.
 
