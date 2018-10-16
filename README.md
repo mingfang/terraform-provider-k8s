@@ -17,7 +17,7 @@ For new projects or after install/upgrade, run ```tf init```
 ## List Resource Types
 Run ```tfgenerator``` to list all available resource types
 
-## Generator Skeleton
+## Generate
 Run ```tfgenerator <resource>``` to generate a skeleton tf file for the resource. For example,
 
 - ```tfgenerator k8s_core_v1_service``` to generate a Kubernetes Service
