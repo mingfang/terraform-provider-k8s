@@ -9,11 +9,22 @@ terraform-provider-k8s is a Terraform plugin to manage Kubernetes resources.
 1. ```docker pull registry.rebelsoft.com/terraform```
 2. ```alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it terraform terraform'```
 3. ```alias tfextractor='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it terraform extractor'```
+4. ```alias tfgenerator='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it terraform generator'```
 
 ## Init
 For new projects or after install/upgrade, run ```tf init```
 
-## Extract existing Kubernetes resources into Terraform tf files
+## List Resource Types
+Run ```tfgenerator``` to list all available resource types
+
+## Generator Skeleton
+Run ```tfgenerator <resource>``` to generate a skeleton tf file for the resource. For example,
+
+- ```tfgenerator k8s_core_v1_service``` to generate a Kubernetes Service
+- ```tfgenerator k8s_apps_v1_deployment``` to generate a Kubernetes Deployment
+- ```tfgenerator k8s_apps_v1_stateful_set``` to generate a Kubernetes StatefulSet
+
+## Extract From Kubernetes
 Run the ```tfextractor``` command.  The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
 
 ## Import
