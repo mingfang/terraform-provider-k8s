@@ -1,5 +1,5 @@
 # terraform-provider-k8s
-terraform-provider-k8s is a Terraform plugin to manage Kubernetes resources.
+terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 
 ## Requirements
  - Docker
