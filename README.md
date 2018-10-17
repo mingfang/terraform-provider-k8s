@@ -27,8 +27,19 @@ Run ```tfgenerator <resource>``` to generate a skeleton tf file for the resource
 - ```tfgenerator k8s_apps_v1_deployment``` to generate a Kubernetes Deployment
 - ```tfgenerator k8s_apps_v1_stateful_set``` to generate a Kubernetes StatefulSet
 
+## Extract From YAML File
+The ```tfextractor``` will load the existing resources from YAML files and create Terraform files for them.  One file per resource in the YAML file.
+
+Run the ```tfextractor -filename <>``` command.
+
 ## Extract From Kubernetes
-Run the ```tfextractor``` command.  The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
+The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
+
+Run the ```tfextractor -namespace <> -kind <> -name <>``` command. Any may be left blank but at least one must be set.
+
+Example: ```tfextractor -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
+
+If ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
 
 ## Import
 After extracting existing resources to tf files, you can import the state for them.
