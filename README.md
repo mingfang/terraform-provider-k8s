@@ -69,7 +69,7 @@ Based on the official guessbook example https://github.com/kubernetes/examples/b
 # Utilities
 
 ## List Resource Types
-Run ```tfgenerate``` to list all available resource types
+Run ```tfgenerate``` to list all available resource and data source types
 
 ## Generate
 Run ```tfgenerate <resource>``` to generate a skeleton tf file for the resource. For example,
