@@ -36,6 +36,24 @@ metadata {
 
 The set of supported groups, versions and kinds are loaded dynamically from your Kubernetes cluster.
 
+## DataSource Format
+The resource format is ```data "k8s_<group>_<version>_<kind>" "<name>"```.
+
+The set of supported groups, versions and kinds are loaded dynamically from your Kubernetes cluster.
+
+For example, this gets the cluster_ip of the httpbin service.
+
+```
+data "k8s_core_v1_service" "httpbin" {
+  metadata {
+    name = "httpbin"
+  }
+}
+output "httpbin_cluster_ip" {
+  value = "${data.k8s_core_v1_service.httpbin.spec.0.cluster_ip}"
+}
+```
+
 ## Id Format
 The format of the resource Ids is ```<namespace>.<kind>.<name>```.  These are all Kubernetes identifiers.
 
