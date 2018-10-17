@@ -72,6 +72,6 @@ Run the ```tfextract -namespace <> -kind <> -name <>``` command. Any may be left
 
 Example: ```tfextract -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
 
-If ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
+In this example, if ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
 
 
