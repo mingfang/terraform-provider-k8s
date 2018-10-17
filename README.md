@@ -11,33 +11,33 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 ## Install
 1. ```docker pull registry.rebelsoft.com/terraform```
 2. ```alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform terraform'```
-3. ```alias tfextractor='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform extractor'```
-4. ```alias tfgenerator='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform generator'```
+3. ```alias tfextract='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform extractor'```
+4. ```alias tfgenerate='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform generator'```
 
 ## Init
 For new projects or after install/upgrade, run ```tf init```
 
 ## List Resource Types
-Run ```tfgenerator``` to list all available resource types
+Run ```tfgenerate``` to list all available resource types
 
 ## Generate
-Run ```tfgenerator <resource>``` to generate a skeleton tf file for the resource. For example,
+Run ```tfgenerate <resource>``` to generate a skeleton tf file for the resource. For example,
 
-- ```tfgenerator k8s_core_v1_service``` to generate a Kubernetes Service
-- ```tfgenerator k8s_apps_v1_deployment``` to generate a Kubernetes Deployment
-- ```tfgenerator k8s_apps_v1_stateful_set``` to generate a Kubernetes StatefulSet
+- ```tfgenerate k8s_core_v1_service``` to generate a Kubernetes Service
+- ```tfgenerate k8s_apps_v1_deployment``` to generate a Kubernetes Deployment
+- ```tfgenerate k8s_apps_v1_stateful_set``` to generate a Kubernetes StatefulSet
 
 ## Extract From YAML File
-The ```tfextractor``` will load the existing resources from YAML files and create Terraform files for them.  One file per resource in the YAML file.
+The ```tfextract``` will load the existing resources from YAML files and create Terraform files for them.  One file per resource in the YAML file.
 
-Run the ```tfextractor -filename <>``` command.
+Run the ```tfextract -filename <>``` command.
 
 ## Extract From Kubernetes
-The ```tfextractor``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
+The ```tfextract``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
 
-Run the ```tfextractor -namespace <> -kind <> -name <>``` command. Any may be left blank but at least one must be set.
+Run the ```tfextract -namespace <> -kind <> -name <>``` command. Any may be left blank but at least one must be set.
 
-Example: ```tfextractor -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
+Example: ```tfextract -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
 
 If ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
 
