@@ -37,8 +37,8 @@ metadata {
 
 The set of supported groups, versions and kinds are loaded dynamically from your Kubernetes cluster.
 
-## DataSource Format
-The resource format is ```data "k8s_<group>_<version>_<kind>" "<name>"```.
+## Data Source Format
+The data source format is ```data "k8s_<group>_<version>_<kind>" "<name>"```.
 
 The set of supported groups, versions and kinds are loaded dynamically from your Kubernetes cluster.
 
