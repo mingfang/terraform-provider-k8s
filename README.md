@@ -58,9 +58,9 @@ output "httpbin_cluster_ip" {
 ## Id Format
 The format of the resource Ids is ```<namespace>.<kind>.<name>```.  These are all Kubernetes identifiers.
 
-Ids are used internally by Terraform to uniquely identify resource state.
+If the Kind of the resource is not namespaced, such as ```Namespace``` resource, then the Id format is ```.<kind>.<name>```.
 
-The user will only need to know them when importing state from a Kubernetes cluster.
+Ids are used internally by Terraform to uniquely identify resource state.  The user will only need to know them when importing state from a Kubernetes cluster.
 
 ## Example
 [guestbook.tf](./examples/guestbook/guestbook.tf)
