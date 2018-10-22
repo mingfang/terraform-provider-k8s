@@ -87,10 +87,11 @@ Run the ```tfextract -filename <>``` command.
 ## Extract From Kubernetes
 The ```tfextract``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
 
-Run the ```tfextract -namespace <> -kind <> -name <>``` command. Any may be left blank but at least one must be set.
+Run the ```tfextract -namespace <> -kind <> -name <> -import``` command. Any may be left blank but at least one must be set.
 
 Example: ```tfextract -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
 
 For this example, if ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
 
+The ```-import``` flag will automatically import the extracted resources as Terraform state.
 
