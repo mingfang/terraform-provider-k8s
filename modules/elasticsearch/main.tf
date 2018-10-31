@@ -1,3 +1,51 @@
+/**
+ * Module usage:
+ *
+ *     module "elasticsearch" {
+ *       source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
+ *       name               = "test-elasticsearch"
+ *       storage_class_name = "test-elasticsearch"
+ *       storage            = "100Gi"
+ *       replicas           = "${k8s_core_v1_persistent_volume.test-elasticsearch.count}"
+ *     }
+ *     
+ *     resource "k8s_core_v1_persistent_volume" "test-elasticsearch" {
+ *       count = 3
+ *     
+ *       metadata {
+ *         name = "pvc-test-elasticsearch-${count.index}"
+ *       }
+ *     
+ *       spec {
+ *         storage_class_name               = "test-elasticsearch"
+ *         persistent_volume_reclaim_policy = "Retain"
+ *     
+ *         access_modes = [
+ *           "ReadWriteMany",
+ *         ]
+ *     
+ *         capacity {
+ *           storage = "100Gi"
+ *         }
+ *     
+ *         cephfs {
+ *           user = "admin"
+ *     
+ *           monitors = [
+ *             "192.168.2.89",
+ *             "192.168.2.39",
+ *           ]
+ *     
+ *           secret_ref {
+ *             name = "ceph-secret"
+ *             namespace = "default"
+ *           }
+ *         }
+ *       }
+ *     }
+ */
+
+
 variable "name" {
   default = "elasticsearch"
 }
@@ -27,6 +75,10 @@ variable storage_class_name {
 }
 
 variable storage {
+}
+
+variable volume_claim_template_name {
+  default = "pvc"
 }
 
 locals {
@@ -228,7 +280,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
 
     volume_claim_templates {
       metadata {
-        name = "pvc"
+        name = "${var.volume_claim_template_name}"
       }
 
       spec {
