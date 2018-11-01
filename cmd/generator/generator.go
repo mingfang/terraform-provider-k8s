@@ -49,8 +49,9 @@ func mainPrintList() {
 func mainPrintResource(resourceKey string) {
 	resourcesMap := k8s.BuildResourcesMap()
 	resource := resourcesMap[resourceKey]
-	fmt.Printf("resource \"%s\" \"name\"\n", resourceKey)
+	fmt.Printf("resource \"%s\" \"name\" {\n", resourceKey)
 	printResource(resource, 1)
+	fmt.Println("}")
 }
 
 func printResource(resource *tfSchema.Resource, level int) {
