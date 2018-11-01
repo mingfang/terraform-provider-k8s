@@ -75,7 +75,7 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 				continue
 			}
 
-			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
+			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey, map[string]struct{}{})
 			model.Accept(schemaVisitor)
 			//todo: lost the top level description here
 			resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
@@ -141,7 +141,7 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 			//	continue
 			//}
 
-			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
+			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey, map[string]struct{}{})
 			model.Accept(schemaVisitor)
 			//todo: lost the top level description here
 			resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
