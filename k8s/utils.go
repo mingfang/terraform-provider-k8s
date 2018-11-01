@@ -53,6 +53,8 @@ var skipFields = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.self_link$`),
 	regexp.MustCompile(`.*\.template_generation$`),
 	regexp.MustCompile(`.*\.uid$`),
+	regexp.MustCompile(`.*\.open_apiv3_schema$`),
+	//regexp.MustCompile(`\.metadata\.annotations\.kubectl`),
 	regexp.MustCompile(`\.metadata\.annotations\.\w+_kubernetes_io`),
 	regexp.MustCompile(`\.metadata\.finalizers$`),
 	regexp.MustCompile(`\.spec\.claim_ref`),

@@ -10,23 +10,21 @@ import (
 )
 
 type K8S2TFSchemaVisitor struct {
-	Schema            tfSchema.Schema
-	readOnly          bool
-	path              string
-	visitedReferences map[string]struct{}
+	Schema   tfSchema.Schema
+	readOnly bool
+	path     string
 }
 
-func NewK8S2TFSchemaVisitor(path string, visitedReferences map[string]struct{}) *K8S2TFSchemaVisitor {
+func NewK8S2TFSchemaVisitor(path string) *K8S2TFSchemaVisitor {
 	return &K8S2TFSchemaVisitor{
-		Schema:            tfSchema.Schema{},
-		path:              path,
-		visitedReferences: visitedReferences,
+		Schema: tfSchema.Schema{},
+		path:   path,
 	}
 }
 
 func (this *K8S2TFSchemaVisitor) VisitArray(proto *proto.Array) {
 	//log.Println("VisitArray path:", this.path)
-	schemaVisitor := NewK8S2TFSchemaVisitor(this.path, this.visitedReferences)
+	schemaVisitor := NewK8S2TFSchemaVisitor(this.path)
 	proto.SubType.Accept(schemaVisitor)
 
 	this.Schema.Type = tfSchema.TypeList
@@ -41,7 +39,7 @@ func (this *K8S2TFSchemaVisitor) VisitArray(proto *proto.Array) {
 
 func (this *K8S2TFSchemaVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap path:", this.path)
-	schemaVisitor := NewK8S2TFSchemaVisitor(this.path, this.visitedReferences)
+	schemaVisitor := NewK8S2TFSchemaVisitor(this.path)
 	proto.SubType.Accept(schemaVisitor)
 
 	this.Schema.Type = tfSchema.TypeMap
@@ -81,7 +79,7 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 		if IsSkipPath(path) {
 			continue
 		}
-		schemaVistor := NewK8S2TFSchemaVisitor(path, this.visitedReferences)
+		schemaVistor := NewK8S2TFSchemaVisitor(path)
 		v.Accept(schemaVistor)
 
 		schemaVistor.Schema.Computed =
@@ -101,16 +99,7 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 }
 
 func (this *K8S2TFSchemaVisitor) VisitReference(proto proto.Reference) {
-	if _, exists := this.visitedReferences[proto.Reference()]; exists {
-		//todo: need to do more than just return to handle loops
-		log.Println("loop detected path:", this.path, " reference:", proto.Reference())
-		return
-	}
-	this.visitedReferences[proto.Reference()] = struct{}{}
-
 	proto.SubSchema().Accept(this)
 	this.Schema.Description = proto.GetDescription()
 	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
-
-	delete(this.visitedReferences, proto.Reference())
 }
