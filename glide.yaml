@@ -1,32 +1,40 @@
 package: github.com/mingfang/terraform-provider-k8s
 import:
+- package: github.com/davecgh/go-spew
+  version: ^1.1.1
+  subpackages:
+  - spew
+- package: github.com/hashicorp/hcl
+  version: ^1.0.0
+  subpackages:
+  - hcl/ast
+  - hcl/printer
+  - hcl/token
+  - json/scanner
+  - json/token
 - package: github.com/hashicorp/terraform
-  version: ^0.11.8
+  version: ^0.11.10
   subpackages:
   - helper/schema
   - plugin
   - terraform
 - package: k8s.io/apimachinery
   subpackages:
+  - pkg/api/errors
+  - pkg/api/meta
+  - pkg/apis/meta/v1
   - pkg/apis/meta/v1/unstructured
   - pkg/runtime/schema
+  - pkg/types
+  - pkg/util/yaml
 - package: k8s.io/cli-runtime
   subpackages:
-  - pkg/genericclioptions/resource
+  - pkg/genericclioptions
 - package: k8s.io/client-go
-  version: ^9.0.0-invalid
+  version: ^9.0.0
   subpackages:
   - discovery
   - dynamic
-  - restmapper
-  - tools/clientcmd
 - package: k8s.io/kube-openapi
   subpackages:
   - pkg/util/proto
-- package: github.com/davecgh/go-spew
-  version: ^1.1.1
-  subpackages:
-  - spew
-- package: github.com/iancoleman/strcase
-- package: gopkg.in/yaml.v2
-  version: ^2.2.1
