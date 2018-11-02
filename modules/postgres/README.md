@@ -52,14 +52,14 @@ Module usage:
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | name | - | string | - | yes |
-| namespace | - | string | `default` | no |
-| replicas | - | string | `1` | no |
-| image | - | string | `postgres:9.6` | no |
-| node\_selector | - | map | `<map>` | no |
-| storage\_class\_name | - | string | - | yes |
-| storage | - | string | - | yes |
-| volume\_claim\_template\_name | - | string | `pvc` | no |
+| postgres\_db | - | string | - | yes |
 | postgres\_password | - | string | - | yes |
 | postgres\_user | - | string | - | yes |
-| postgres\_db | - | string | - | yes |
+| storage | - | string | - | yes |
+| storage\_class\_name | - | string | - | yes |
+| image | - | string | `postgres:9.6` | no |
+| namespace | - | string | `default` | no |
+| node\_selector | - | map | `<map>` | no |
+| replicas | - | string | `1` | no |
+| volume\_claim\_template\_name | - | string | `pvc` | no |
 
