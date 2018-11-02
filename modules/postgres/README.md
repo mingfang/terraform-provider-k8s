@@ -59,7 +59,7 @@ Module usage:
 | storage\_class\_name | - | string | - | yes |
 | image | - | string | `postgres:9.6` | no |
 | namespace | - | string | `default` | no |
-| node\_selector | - | map | `<map>` | no |
+| node\_selector | - | map | `{}` | no |
 | replicas | - | string | `1` | no |
 | volume\_claim\_template\_name | - | string | `pvc` | no |
 

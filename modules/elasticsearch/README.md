@@ -47,13 +47,13 @@ Module usage:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| name | - | string | `elasticsearch` | no |
-| namespace | - | string | `default` | no |
-| replicas | - | string | `2` | no |
-| image | - | string | `docker.elastic.co/elasticsearch/elasticsearch:6.4.2` | no |
-| heap\_size | - | string | `4g` | no |
-| node\_selector | - | map | `<map>` | no |
-| storage\_class\_name | - | string | - | yes |
+| name | - | string | - | yes |
 | storage | - | string | - | yes |
+| storage\_class\_name | - | string | - | yes |
+| heap\_size | - | string | `4g` | no |
+| image | - | string | `docker.elastic.co/elasticsearch/elasticsearch:6.4.2` | no |
+| namespace | - | string | `default` | no |
+| node\_selector | - | map | `{}` | no |
+| replicas | - | string | `1` | no |
 | volume\_claim\_template\_name | - | string | `pvc` | no |
 
