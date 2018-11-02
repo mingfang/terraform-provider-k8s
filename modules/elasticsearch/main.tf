@@ -45,25 +45,22 @@
  *     }
  */
 
+/*
+common variables
+*/
 
-variable "name" {
-  default = "elasticsearch"
-}
+variable "name" {}
 
 variable "namespace" {
   default = "default"
 }
 
 variable "replicas" {
-  default = 2
+  default = 1
 }
 
 variable image {
   default = "docker.elastic.co/elasticsearch/elasticsearch:6.4.2"
-}
-
-variable "heap_size" {
-  default = "4g"
 }
 
 variable "node_selector" {
@@ -71,14 +68,24 @@ variable "node_selector" {
   default = {}
 }
 
-variable storage_class_name {
-}
+variable storage_class_name {}
 
-variable storage {
-}
+variable storage {}
+
+/*
+statefulset specific
+*/
 
 variable volume_claim_template_name {
   default = "pvc"
+}
+
+/*
+service specific variables
+*/
+
+variable "heap_size" {
+  default = "4g"
 }
 
 locals {
@@ -89,6 +96,10 @@ locals {
   }
 }
 
+/*
+service
+*/
+
 resource "k8s_core_v1_service" "elasticsearch" {
   metadata {
     name      = "${var.name}"
@@ -98,7 +109,7 @@ resource "k8s_core_v1_service" "elasticsearch" {
 
   spec {
     cluster_ip = "None"
-    selector = "${local.labels}"
+    selector   = "${local.labels}"
 
     ports = [
       {
@@ -112,6 +123,10 @@ resource "k8s_core_v1_service" "elasticsearch" {
     ]
   }
 }
+
+/*
+statefulset
+*/
 
 resource "k8s_apps_v1_stateful_set" "elasticsearch" {
   metadata {
@@ -133,7 +148,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
       type = "RollingUpdate"
 
       rolling_update {
-        "partition" = 0
+        partition = 0
       }
     }
 
@@ -143,6 +158,8 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
       }
 
       spec {
+        node_selector = "${var.node_selector}"
+
         containers = [
           {
             name  = "elasticsearch"
@@ -273,8 +290,6 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
             }
           },
         ]
-
-        node_selector = "${var.node_selector}"
       }
     }
 

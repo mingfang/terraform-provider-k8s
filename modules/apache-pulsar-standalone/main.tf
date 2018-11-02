@@ -1,6 +1,4 @@
-variable "name" {
-  default = "apache-pulsar"
-}
+variable "name" {}
 
 variable "namespace" {
   default = "default"
@@ -12,6 +10,11 @@ variable "replicas" {
 
 variable image {
   default = "apachepulsar/pulsar-all:2.2.0"
+}
+
+variable "node_selector" {
+  type    = "map"
+  default = {}
 }
 
 locals {
@@ -74,6 +77,8 @@ resource "k8s_apps_v1_deployment" "apache-pulsar" {
       }
 
       spec {
+        node_selector = "${var.node_selector}"
+
         containers = [
           {
             name  = "pulsar"
