@@ -38,9 +38,9 @@ func IsForceNewField(path string) bool {
 	return false
 }
 
-var skipFields = []*regexp.Regexp{
-	regexp.MustCompile(`.*\.api_version$`),
-	regexp.MustCompile(`.*\.kind$`),
+var skipPaths = []*regexp.Regexp{
+	regexp.MustCompile(`k8s_\w+_\w+_\w+\.api_version$`),
+	regexp.MustCompile(`k8s_\w+_\w+_\w+\.kind$`),
 	regexp.MustCompile(`.*\.generation$`),
 	regexp.MustCompile(`.*\.status$`),
 	regexp.MustCompile(`.*\.creation_timestamp$`),
@@ -54,7 +54,6 @@ var skipFields = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.template_generation$`),
 	regexp.MustCompile(`.*\.uid$`),
 	regexp.MustCompile(`.*\.open_apiv3_schema$`),
-	//regexp.MustCompile(`\.metadata\.annotations\.kubectl`),
 	regexp.MustCompile(`\.metadata\.annotations\.\w+_kubernetes_io`),
 	regexp.MustCompile(`\.metadata\.finalizers$`),
 	regexp.MustCompile(`\.spec\.claim_ref`),
@@ -62,7 +61,7 @@ var skipFields = []*regexp.Regexp{
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
 func IsSkipPath(path string) bool {
-	for _, pattern := range skipFields {
+	for _, pattern := range skipPaths {
 		//log.Println("isSkipPath:", path)
 		if pattern.MatchString(path) {
 			//log.Println("SkipPath:", path)
