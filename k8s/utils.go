@@ -7,7 +7,10 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/kube-openapi/pkg/util/proto"
 )
 
 func ContainsVerb(verbs metav1.Verbs, verb string) bool {
@@ -26,6 +29,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.selector\.match_labels$`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
+	regexp.MustCompile(`k8s_\w+_\w+_job\.spec\.template`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
@@ -39,8 +43,8 @@ func IsForceNewField(path string) bool {
 }
 
 var skipPaths = []*regexp.Regexp{
-	regexp.MustCompile(`k8s_\w+_\w+_\w+\.api_version$`),
-	regexp.MustCompile(`k8s_\w+_\w+_\w+\.kind$`),
+	regexp.MustCompile(`^[\w]+\.api_version$`),
+	regexp.MustCompile(`^[\w]+\.kind$`),
 	regexp.MustCompile(`.*\.generation$`),
 	regexp.MustCompile(`.*\.status$`),
 	regexp.MustCompile(`.*\.creation_timestamp$`),
@@ -53,10 +57,12 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.self_link$`),
 	regexp.MustCompile(`.*\.template_generation$`),
 	regexp.MustCompile(`.*\.uid$`),
-	regexp.MustCompile(`.*\.open_apiv3_schema$`),
-	regexp.MustCompile(`\.metadata\.annotations\.\w+_kubernetes_io`),
-	regexp.MustCompile(`\.metadata\.finalizers$`),
-	regexp.MustCompile(`\.spec\.claim_ref`),
+	regexp.MustCompile(`.*\.metadata\.annotations\.\w+_kubernetes_io`),
+	regexp.MustCompile(`.*\.metadata\.finalizers$`),
+	regexp.MustCompile(`.*\.spec\.claim_ref`),
+	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`),
+	regexp.MustCompile(`.*_job\..*labels\.controller-uid$`),
+	regexp.MustCompile(`.*_job\..*labels\.job-name$`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
@@ -165,4 +171,30 @@ func PrintKeys(data map[string]struct{}) {
 		keys = append(keys, key)
 	}
 	log.Println("keys:", strings.Join(keys, ","))
+}
+
+func ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
+	k8sConfig := NewK8SConfig()
+	modelsMap := BuildModelsMap(k8sConfig)
+	apiGroupList, err := k8sConfig.DiscoveryClient.ServerGroups()
+	if err != nil {
+		log.Println(err)
+	}
+	for _, group := range apiGroupList.Groups {
+		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
+		apiResourceList, err := k8sConfig.DiscoveryClient.ServerResourcesForGroupVersion(group.PreferredVersion.GroupVersion)
+		if err != nil {
+			log.Println(err)
+		}
+		group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
+		for _, apiResource := range apiResourceList.APIResources {
+			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
+				Group:    group,
+				Version:  version,
+				Resource: apiResource.Kind,
+			})
+			callback(apiResource, gvk, modelsMap, k8sConfig)
+		}
+	}
+
 }

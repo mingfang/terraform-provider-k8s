@@ -193,7 +193,7 @@ func execCommand(cmd string, args []string) (string, error) {
 }
 
 func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resourceKey string, gvk schema.GroupVersionKind) {
-	visitor := k8s.NewK8S2TFReadVisitor("", itemObject)
+	visitor := k8s.NewK8S2TFReadVisitor(resourceKey, itemObject)
 	model.Accept(visitor)
 	visitorObject := visitor.Object.([]interface{})[0].(map[string]interface{})
 	name := k8s.ToSnake(visitorObject["metadata"].([]interface{})[0].(map[string]interface{})["name"].(string))

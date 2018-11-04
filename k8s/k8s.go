@@ -45,14 +45,22 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 	modelsMap := BuildModelsMap(k8sConfig)
 	resourcesMap := map[string]*tfSchema.Resource{}
 
-	apiResourceLists, _ := k8sConfig.DiscoveryClient.ServerPreferredResources()
-	for _, apiResourceList := range apiResourceLists {
+	apiGroupList, err := k8sConfig.DiscoveryClient.ServerGroups()
+	if err != nil {
+		log.Println(err)
+	}
+	for _, group := range apiGroupList.Groups {
+		//log.Println("group:", group.PreferredVersion.GroupVersion)
+		apiResourceList, err := k8sConfig.DiscoveryClient.ServerResourcesForGroupVersion(group.PreferredVersion.GroupVersion)
+		if err != nil {
+			log.Println(err)
+		}
+		group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
 		for _, apiResource := range apiResourceList.APIResources {
 			if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
 				continue
 			}
 
-			group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
 			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
 				Group:    group,
 				Version:  version,
@@ -67,6 +75,7 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 
 			model := modelsMap[gvk]
 			if model == nil {
+				//log.Println("no model for:", apiResource)
 				continue
 			}
 			resourceKey := ResourceKey(group, version, apiResource.Kind)
@@ -85,13 +94,13 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 				return resourceExists(&gvk, isNamespaced, model, resourceData, meta)
 			}
 			resource.Create = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceCreate(&gvk, isNamespaced, model, resourceData, meta)
+				return resourceCreate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
 			}
 			resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceRead(&gvk, isNamespaced, model, resourceData, meta)
+				return resourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
 			}
 			resource.Update = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceUpdate(&gvk, isNamespaced, model, resourceData, meta)
+				return resourceUpdate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
 			}
 			resource.Delete = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
 				return resourceDelete(&gvk, isNamespaced, model, resourceData, meta)
@@ -148,7 +157,7 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 			isNamespaced := apiResource.Namespaced
 
 			resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return datasourceRead(&gvk, isNamespaced, model, resourceData, meta)
+				return datasourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
 			}
 
 			resourcesMap[resourceKey] = resource
@@ -158,7 +167,7 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 	return resourcesMap
 }
 
-func datasourceRead(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
+func datasourceRead(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	k8sConfig := meta.(*K8SConfig)
 	name, nameErr := getName(resourceData)
 	if nameErr != nil {
@@ -167,7 +176,7 @@ func datasourceRead(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 	namespace := getNamespace(isNamespaced, resourceData, k8sConfig)
 	resourceData.SetId(CreateId(namespace, gvk.Kind, name))
 
-	return resourceRead(gvk, isNamespaced, model, resourceData, meta)
+	return resourceRead(resourceKey, gvk, isNamespaced, model, resourceData, meta)
 }
 
 func resourceExists(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
@@ -189,7 +198,7 @@ func resourceExists(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 	return true, nil
 }
 
-func resourceCreate(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
+func resourceCreate(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	k8sConfig := meta.(*K8SConfig)
 	name, nameErr := getName(resourceData)
 	if nameErr != nil {
@@ -221,10 +230,10 @@ func resourceCreate(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 	//log.Println("create res:", res)
 
 	resourceData.SetId(CreateId(namespace, gvk.Kind, name))
-	return setState(res.Object, model, resourceData)
+	return setState(resourceKey, res.Object, model, resourceData)
 }
 
-func resourceRead(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
+func resourceRead(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	//log.Println("resourceRead Id:", resourceData.Id())
 	k8sConfig := meta.(*K8SConfig)
 	namespace, _, name, nameErr := parseId(resourceData.Id())
@@ -238,10 +247,10 @@ func resourceRead(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.S
 	}
 	//log.Println("read res:", res)
 
-	return setState(res.Object, model, resourceData)
+	return setState(resourceKey, res.Object, model, resourceData)
 }
 
-func resourceUpdate(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
+func resourceUpdate(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	k8sConfig := meta.(*K8SConfig)
 	namespace, _, name, nameErr := parseId(resourceData.Id())
 	if nameErr != nil {
@@ -268,11 +277,11 @@ func resourceUpdate(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 		return err
 	}
 	log.Println("update res:", res)
-	return setState(res.Object, model, resourceData)
+	return setState(resourceKey, res.Object, model, resourceData)
 }
 
-func setState(state map[string]interface{}, model proto.Schema, resourceData *tfSchema.ResourceData) error {
-	visitor := NewK8S2TFReadVisitor("", state)
+func setState(resourceKey string, state map[string]interface{}, model proto.Schema, resourceData *tfSchema.ResourceData) error {
+	visitor := NewK8S2TFReadVisitor(resourceKey, state)
 	model.Accept(visitor)
 	visitorObject := visitor.Object.([]interface{})[0].(map[string]interface{})
 
