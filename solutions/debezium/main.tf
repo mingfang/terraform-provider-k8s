@@ -1,5 +1,6 @@
 /**
- * Use Debezium and Kafka Connect to sync from Mysql to Elasticsearch
+ * Use Debezium and Kafka Connect to sync from Mysql to Elasticsearch.
+ *
  * Based on https://github.com/debezium/debezium-examples/tree/master/unwrap-smt
 */
 
