@@ -2,6 +2,7 @@ PriorityClass defines mapping from a priority class name to the priority integer
 The value can be any valid integer.
 
 Module usage:
+
     module "priority-class" {
       source         = "./modules/kubernetes/priority-class"
       name           = "normal"

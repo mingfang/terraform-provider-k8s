@@ -3,6 +3,7 @@
  * The value can be any valid integer.
  *
  * Module usage:
+ *
  *     module "priority-class" {
  *       source         = "./modules/kubernetes/priority-class"
  *       name           = "normal"
@@ -10,13 +11,13 @@
  *       description    = "Normal Priority"
  *       global_default = true
  *     }
-*/
+ */
 
 variable name {
 }
 
 //The value of this priority class. This is the actual priority that pods
-//receive when they have the name of this class in their pod spec.
+// receive when they have the name of this class in their pod spec.
 variable "value" {
 }
 
@@ -26,11 +27,11 @@ variable "description" {
 }
 
 //globalDefault specifies whether this PriorityClass should be considered as
-//the default priority for pods that do not have any priority class. Only one
-//PriorityClass can be marked as `globalDefault`. However, if more than one
-//PriorityClasses exists with their `globalDefault` field set to true, the
-//smallest value of such global default PriorityClasses will be used as the
-//default priority.
+// the default priority for pods that do not have any priority class. Only one
+// PriorityClass can be marked as `globalDefault`. However, if more than one
+// PriorityClasses exists with their `globalDefault` field set to true, the
+// smallest value of such global default PriorityClasses will be used as the
+// default priority.
 variable global_default {
   default = false
 }
