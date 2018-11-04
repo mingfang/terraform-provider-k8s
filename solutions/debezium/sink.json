@@ -1,0 +1,15 @@
+{
+  "name": "${name}",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "tasks.max": "1",
+    "topics": "${topic}",
+    "connection.url": "${connection.url}",
+    "transforms": "unwrap,key",
+    "transforms.unwrap.type": "io.debezium.transforms.UnwrapFromEnvelope",
+    "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.key.field": "id",
+    "key.ignore": "false",
+    "type.name": "customer"
+  }
+}
