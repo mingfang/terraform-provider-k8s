@@ -4,7 +4,7 @@ The value can be any valid integer.
 Module usage:
 
     module "priority-class" {
-      source         = "./modules/kubernetes/priority-class"
+      source         = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/priority-class"
       name           = "normal"
       value          = 50
       description    = "Normal Priority"
