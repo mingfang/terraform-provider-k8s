@@ -13,13 +13,11 @@
  *     }
  */
 
-variable name {
-}
+variable name {}
 
 //The value of this priority class. This is the actual priority that pods
 // receive when they have the name of this class in their pod spec.
-variable "value" {
-}
+variable "value" {}
 
 //description is an arbitrary string that usually provides guidelines on when this priority class should be used.
 variable "description" {
@@ -37,11 +35,11 @@ variable global_default {
 }
 
 resource "k8s_scheduling_k8s_io_v1beta1_priority_class" "priority-class" {
-  metadata     {
+  metadata {
     name = "${var.name}"
   }
 
-  value = "${var.value}"
-  description = "${var.description}"
+  value          = "${var.value}"
+  description    = "${var.description}"
   global_default = "${var.global_default}"
 }
