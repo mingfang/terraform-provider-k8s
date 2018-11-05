@@ -87,7 +87,7 @@ locals {
 
 data "template_file" "zoo-servers" {
   count    = "${var.replicas}"
-  template = "server.${count.index}=${var.name}-${count.index}.${var.name}.${var.namespace}.svc.cluster.local:2888:3888"
+  template = "server.${count.index}=${var.name}-${count.index}.${var.name}-headless.${var.namespace}.svc.cluster.local:2888:3888"
 }
 
 /*
@@ -102,7 +102,6 @@ resource "k8s_core_v1_service" "zookeeper" {
   }
 
   spec {
-    cluster_ip = "None"
     selector   = "${local.labels}"
 
     ports = [
@@ -110,6 +109,26 @@ resource "k8s_core_v1_service" "zookeeper" {
         name = "client"
         port = 2181
       },
+    ]
+  }
+}
+
+/*
+headless service
+*/
+
+resource "k8s_core_v1_service" "zookeeper-headless" {
+  metadata {
+    name      = "${var.name}-headless"
+    namespace = "${var.namespace}"
+    labels    = "${local.labels}"
+  }
+
+  spec {
+    cluster_ip = "None"
+    selector   = "${local.labels}"
+
+    ports = [
       {
         name = "server"
         port = 2888
@@ -135,7 +154,7 @@ resource "k8s_apps_v1_stateful_set" "zookeeper" {
 
   spec {
     replicas              = "${var.replicas}"
-    service_name          = "${var.name}"
+    service_name          = "${k8s_core_v1_service.zookeeper-headless.metadata.0.name}"
     pod_management_policy = "OrderedReady"
 
     selector {
