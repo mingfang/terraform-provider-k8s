@@ -108,7 +108,6 @@ resource "k8s_core_v1_service" "elasticsearch" {
   }
 
   spec {
-    cluster_ip = "None"
     selector   = "${local.labels}"
 
     ports = [
@@ -240,7 +239,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
             }
 
             volume_mounts {
-              name       = "pvc"
+              name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
               sub_path   = "${var.name}"
             }
@@ -264,7 +263,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
             }
 
             volume_mounts {
-              name       = "pvc"
+              name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
               sub_path   = "${var.name}"
             }
@@ -318,6 +317,20 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
           }
         }
       }
+    }
+  }
+}
+
+resource "k8s_policy_v1beta1_pod_disruption_budget" "elasticsearch" {
+  metadata {
+    name = "${var.name}"
+  }
+
+  spec {
+    max_unavailable = 1
+
+    selector {
+      match_labels = "${local.labels}"
     }
   }
 }
