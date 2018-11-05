@@ -199,6 +199,22 @@ resource "k8s_apps_v1_stateful_set" "zookeeper" {
               },
             ]
 
+            liveness_probe {
+              exec {
+                command = [
+                  "/bin/bash",
+                  "-cx",
+                  <<EOF
+                echo "ruok" | nc localhost 2181 | grep imok
+EOF
+                  ,
+                ]
+              }
+
+              initial_delay_seconds = 1
+              timeout_seconds       = 3
+            }
+
             resources {
               requests {
                 cpu    = "500m"
