@@ -114,7 +114,6 @@ resource "k8s_core_v1_service" "postgres" {
   }
 
   spec {
-    cluster_ip = "None"
     selector   = "${local.labels}"
 
     ports = [
