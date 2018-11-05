@@ -162,6 +162,22 @@ resource "k8s_apps_v1_stateful_set" "postgres" {
       spec {
         node_selector = "${var.node_selector}"
 
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
+
         containers = [
           {
             name  = "postgres"
@@ -169,18 +185,15 @@ resource "k8s_apps_v1_stateful_set" "postgres" {
 
             env = [
               {
-                name = "POSTGRES_PASSWORD"
-
+                name  = "POSTGRES_PASSWORD"
                 value = "${var.postgres_password}"
               },
               {
-                name = "POSTGRES_USER"
-
+                name  = "POSTGRES_USER"
                 value = "${var.postgres_user}"
               },
               {
-                name = "POSTGRES_DB"
-
+                name  = "POSTGRES_DB"
                 value = "${var.postgres_db}"
               },
               {
@@ -193,8 +206,7 @@ resource "k8s_apps_v1_stateful_set" "postgres" {
                 }
               },
               {
-                name = "PGDATA"
-
+                name  = "PGDATA"
                 value = "/data/$(POD_NAME)"
               },
             ]
@@ -216,16 +228,13 @@ resource "k8s_apps_v1_stateful_set" "postgres" {
 
       spec {
         storage_class_name = "${var.storage_class_name}"
+        access_modes       = ["ReadWriteOnce"]
 
         resources {
           requests {
             storage = "${var.storage}"
           }
         }
-
-        access_modes = [
-          "ReadWriteMany",
-        ]
       }
     }
   }

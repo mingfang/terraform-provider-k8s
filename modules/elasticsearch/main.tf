@@ -160,6 +160,22 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
       spec {
         node_selector = "${var.node_selector}"
 
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
+
         containers = [
           {
             name  = "elasticsearch"
@@ -167,8 +183,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
 
             env = [
               {
-                name = "cluster.name"
-
+                name  = "cluster.name"
                 value = "${var.name}"
               },
               {
@@ -181,13 +196,11 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
                 }
               },
               {
-                name = "discovery.zen.ping.unicast.hosts"
-
+                name  = "discovery.zen.ping.unicast.hosts"
                 value = "${var.name}"
               },
               {
-                name = "ES_JAVA_OPTS"
-
+                name  = "ES_JAVA_OPTS"
                 value = "-Xms${var.heap_size} -Xmx${var.heap_size}"
               },
               {
@@ -200,8 +213,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
                 }
               },
               {
-                name = "path.data"
-
+                name  = "path.data"
                 value = "/data/$(POD_NAME)"
               },
             ]
@@ -214,16 +226,14 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
               timeout_seconds       = 1
 
               http_get {
-                path = "/"
-
-                port = 9200
-
+                path   = "/"
+                port   = 9200
                 scheme = "HTTP"
               }
             }
 
             resources {
-              requests = {
+              requests {
                 cpu    = "250m"
                 memory = "4Gi"
               }
@@ -300,16 +310,13 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
 
       spec {
         storage_class_name = "${var.storage_class_name}"
+        access_modes       = ["ReadWriteOnce"]
 
         resources {
           requests {
             storage = "${var.storage}"
           }
         }
-
-        access_modes = [
-          "ReadWriteMany",
-        ]
       }
     }
   }
