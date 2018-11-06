@@ -8,21 +8,13 @@ variable "debezium-version" {
   default = "0.9"
 }
 
-/*
-Kafka
-*/
-
 module "zookeeper" {
   source = "./zookeeper"
-  name   = "debezium-zookeeper"
-  image  = "debezium/zookeeper:${var.debezium-version}"
 }
 
 module "kafka" {
   source    = "./kafka"
-  name      = "debezium-kafka"
-  image     = "debezium/kafka:${var.debezium-version}"
-  zookeeper = "${module.zookeeper.name}:2181"
+  zookeeper = "${module.zookeeper.name}"
 }
 
 /*
@@ -38,15 +30,6 @@ module "mysql" {
 }
 
 /*
-Data sink
-*/
-
-module "elasticsearch" {
-  source = "./elasticsearch"
-  name   = "debezium-elasticsearch"
-}
-
-/*
 Kafka Connect For Source
 */
 
@@ -55,6 +38,14 @@ module "kafka-connect-source" {
   name              = "debezium-connect-source"
   image             = "debezium/connect:${var.debezium-version}"
   bootstrap_servers = "${module.kafka.name}:9092"
+}
+
+/*
+Data sink
+*/
+
+module "elasticsearch" {
+  source = "./elasticsearch"
 }
 
 /*
@@ -89,38 +80,17 @@ data "template_file" "source" {
   }
 }
 
-resource "k8s_batch_v1_job" "source" {
-  metadata {
-    name = "debezium-source-init"
-  }
+module "job_source" {
+  source = "./job"
+  name   = "debezium-source-init"
 
-  spec {
-    template {
-      spec {
-        containers {
-          name  = "base"
-          image = "registry.rebelsoft.com/base"
-
-          command = [
-            "bash",
-            "-cx",
-            <<EOF
-              until curl -s -H 'Accept:application/json' ${module.kafka-connect-source.name}:8083/
-              do echo 'Waiting for Kafka Connect...'; sleep 10; done
-              curl -s -X DELETE ${module.kafka-connect-source.name}:8083/connectors/${data.template_file.source.vars.name}
-              curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-                ${module.kafka-connect-source.name}:8083/connectors/ -d '${data.template_file.source.rendered}'
+  command = <<EOF
+    until curl -s -H 'Accept:application/json' ${module.kafka-connect-source.name}:8083/
+    do echo 'Waiting for Kafka Connect...'; sleep 10; done
+    curl -s -X DELETE ${module.kafka-connect-source.name}:8083/connectors/${data.template_file.source.vars.name}
+    curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
+      ${module.kafka-connect-source.name}:8083/connectors/ -d '${data.template_file.source.rendered}'
 EOF
-            ,
-          ]
-        }
-
-        restart_policy = "Never"
-      }
-    }
-
-    backoff_limit = 4
-  }
 }
 
 /*
@@ -137,36 +107,15 @@ data "template_file" "sink" {
   }
 }
 
-resource "k8s_batch_v1_job" "sink" {
-  metadata {
-    name = "debezium-sink-init"
-  }
+module "job_sink" {
+  source = "./job"
+  name   = "debezium-sink-init"
 
-  spec {
-    template {
-      spec {
-        containers {
-          name  = "base"
-          image = "registry.rebelsoft.com/base"
-
-          command = [
-            "bash",
-            "-cx",
-            <<EOF
-              until curl -s -H 'Accept:application/json' ${module.kafka-connect-sink.name}:8083/
-              do echo 'Waiting for Kafka Connect...'; sleep 10; done
-              curl -s -X DELETE ${module.kafka-connect-sink.name}:8083/connectors/${data.template_file.sink.vars.name}
-              curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-                ${module.kafka-connect-sink.name}:8083/connectors/ -d '${data.template_file.sink.rendered}'
+  command = <<EOF
+    until curl -s -H 'Accept:application/json' ${module.kafka-connect-sink.name}:8083/
+    do echo 'Waiting for Kafka Connect...'; sleep 10; done
+    curl -s -X DELETE ${module.kafka-connect-sink.name}:8083/connectors/${data.template_file.sink.vars.name}
+    curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
+      ${module.kafka-connect-sink.name}:8083/connectors/ -d '${data.template_file.sink.rendered}'
 EOF
-            ,
-          ]
-        }
-
-        restart_policy = "Never"
-      }
-    }
-
-    backoff_limit = 4
-  }
 }

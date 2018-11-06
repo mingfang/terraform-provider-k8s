@@ -1,124 +1,63 @@
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = "default"
+module "elasticsearch" {
+  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
+  name               = "debezium-elasticsearch"
+  storage_class_name = "${element(k8s_core_v1_persistent_volume_claim.debezium-elasticsearch.*.spec.0.storage_class_name, 0)}"
+  storage            = "${element(k8s_core_v1_persistent_volume_claim.debezium-elasticsearch.*.spec.0.resources.0.requests.storage, 0)}"
+  replicas           = "${k8s_core_v1_persistent_volume_claim.debezium-elasticsearch.count}"
 }
 
-variable "replicas" {
-  default = 1
-}
+resource "k8s_core_v1_persistent_volume_claim" "debezium-elasticsearch" {
+  count = "${k8s_core_v1_persistent_volume.debezium-elasticsearch.count}"
 
-variable image {
-  default = "docker.elastic.co/elasticsearch/elasticsearch:5.5.2"
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-locals {
-  labels = {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
-  }
-}
-
-/*
-service
-*/
-
-resource "k8s_core_v1_service" "elasticsearch" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    name = "${element(k8s_core_v1_persistent_volume.debezium-elasticsearch.*.metadata.0.name, count.index)}"
   }
 
   spec {
-    cluster_ip = "None"
-    selector   = "${local.labels}"
+    storage_class_name = "${element(k8s_core_v1_persistent_volume.debezium-elasticsearch.*.spec.0.storage_class_name, count.index)}"
+    volume_name        = "${element(k8s_core_v1_persistent_volume.debezium-elasticsearch.*.metadata.0.name, count.index)}"
+    access_modes       = ["ReadWriteOnce"]
 
-    ports = [
-      {
-        name = "http"
-        port = 9200
-      },
-    ]
+    resources {
+      requests {
+        storage = "${element(k8s_core_v1_persistent_volume.debezium-elasticsearch.*.spec.0.capacity.storage, count.index)}"
+      }
+    }
   }
 }
 
-/*
-statefulset
-*/
+resource "k8s_core_v1_persistent_volume" "debezium-elasticsearch" {
+  count = 3
 
-resource "k8s_apps_v1_stateful_set" "elasticsearch" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    name = "pvc-debezium-elasticsearch-${count.index}"
   }
 
   spec {
-    replicas              = "${var.replicas}"
-    service_name          = "${var.name}"
-    pod_management_policy = "OrderedReady"
+    storage_class_name               = "debezium-elasticsearch"
+    persistent_volume_reclaim_policy = "Retain"
+    access_modes                     = ["ReadWriteOnce"]
 
-    selector {
-      match_labels = "${local.labels}"
+    capacity {
+      storage = "100Gi"
     }
 
-    update_strategy {
-      type = "RollingUpdate"
+    cephfs {
+      user = "admin"
 
-      rolling_update {
-        partition = 0
-      }
-    }
+      monitors = [
+        "192.168.2.89",
+        "192.168.2.39",
+      ]
 
-    template {
-      metadata {
-        labels = "${local.labels}"
-      }
-
-      spec {
-        node_selector = "${var.node_selector}"
-
-        containers = [
-          {
-            name  = "elasticsearch"
-            image = "${var.image}"
-
-            env = [
-              {
-                name  = "http.host"
-                value = "0.0.0.0"
-              },
-              {
-                name  = "transport.host"
-                value = "127.0.0.1"
-              },
-              {
-                name  = "xpack.security.enabled"
-                value = "false"
-              },
-              {
-                name  = "ES_JAVA_OPTS"
-                value = "-Xms512m -Xmx512m"
-              },
-            ]
-          },
-        ]
+      secret_ref {
+        name      = "ceph-secret"
+        namespace = "default"
       }
     }
   }
 }
 
 output "name" {
-  value = "${k8s_core_v1_service.elasticsearch.metadata.0.name}"
+  value = "${module.elasticsearch.name}"
 }

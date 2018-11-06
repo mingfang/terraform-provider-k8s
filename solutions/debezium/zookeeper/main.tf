@@ -1,121 +1,63 @@
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = "default"
+module "zookeeper" {
+  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/zookeeper"
+  name               = "debezium-zookeeper"
+  storage_class_name = "${element(k8s_core_v1_persistent_volume_claim.debezium-zookeeper.*.spec.0.storage_class_name, 0)}"
+  storage            = "${element(k8s_core_v1_persistent_volume_claim.debezium-zookeeper.*.spec.0.resources.0.requests.storage, 0)}"
+  replicas           = "${k8s_core_v1_persistent_volume_claim.debezium-zookeeper.count}"
 }
 
-variable "replicas" {
-  default = 1
-}
+resource "k8s_core_v1_persistent_volume_claim" "debezium-zookeeper" {
+  count = "${k8s_core_v1_persistent_volume.debezium-zookeeper.count}"
 
-variable image {
-  default = "debezium/zookeeper"
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-/*
-statefulset specific
-*/
-
-/*
-service specific variables
-*/
-
-locals {
-  labels = {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
-  }
-}
-
-/*
-service
-*/
-
-resource "k8s_core_v1_service" "zookeeper" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    name = "${element(k8s_core_v1_persistent_volume.debezium-zookeeper.*.metadata.0.name, count.index)}"
   }
 
   spec {
-    cluster_ip = "None"
-    selector   = "${local.labels}"
+    storage_class_name = "${element(k8s_core_v1_persistent_volume.debezium-zookeeper.*.spec.0.storage_class_name, count.index)}"
+    volume_name        = "${element(k8s_core_v1_persistent_volume.debezium-zookeeper.*.metadata.0.name, count.index)}"
+    access_modes       = ["ReadWriteOnce"]
 
-    ports = [
-      {
-        name = "tcp1"
-        port = 2181
-      },
-      {
-        name = "tcp2"
-        port = 2888
-      },
-      {
-        name = "tcp3"
-        port = 3888
-      },
-    ]
+    resources {
+      requests {
+        storage = "${element(k8s_core_v1_persistent_volume.debezium-zookeeper.*.spec.0.capacity.storage, count.index)}"
+      }
+    }
   }
 }
 
-/*
-statefulset
-*/
+resource "k8s_core_v1_persistent_volume" "debezium-zookeeper" {
+  count = 3
 
-resource "k8s_apps_v1_stateful_set" "zookeeper" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    name = "pvc-debezium-zookeeper-${count.index}"
   }
 
   spec {
-    replicas              = "${var.replicas}"
-    service_name          = "${var.name}"
-    pod_management_policy = "OrderedReady"
+    storage_class_name               = "debezium-zookeeper"
+    persistent_volume_reclaim_policy = "Retain"
+    access_modes                     = ["ReadWriteOnce"]
 
-    selector {
-      match_labels = "${local.labels}"
+    capacity {
+      storage = "100Gi"
     }
 
-    update_strategy {
-      type = "RollingUpdate"
+    cephfs {
+      user = "admin"
 
-      rolling_update {
-        partition = 0
-      }
-    }
+      monitors = [
+        "192.168.2.89",
+        "192.168.2.39",
+      ]
 
-    template {
-      metadata {
-        labels = "${local.labels}"
-      }
-
-      spec {
-        node_selector = "${var.node_selector}"
-
-        containers = [
-          {
-            name  = "zookeeper"
-            image = "${var.image}"
-          },
-        ]
+      secret_ref {
+        name      = "ceph-secret"
+        namespace = "default"
       }
     }
   }
 }
 
 output "name" {
-  value = "${k8s_core_v1_service.zookeeper.metadata.0.name}"
+  value = "${module.zookeeper.name}"
 }
