@@ -68,13 +68,13 @@ variable "node_selector" {
   default = {}
 }
 
-variable storage_class_name {}
-
-variable storage {}
-
 /*
 statefulset specific
 */
+
+variable storage_class_name {}
+
+variable storage {}
 
 variable volume_claim_template_name {
   default = "pvc"
@@ -100,7 +100,7 @@ locals {
 service
 */
 
-resource "k8s_core_v1_service" "elasticsearch" {
+resource "k8s_core_v1_service" "this" {
   metadata {
     name      = "${var.name}"
     namespace = "${var.namespace}"
@@ -108,7 +108,7 @@ resource "k8s_core_v1_service" "elasticsearch" {
   }
 
   spec {
-    selector   = "${local.labels}"
+    selector = "${local.labels}"
 
     ports = [
       {
@@ -127,7 +127,7 @@ resource "k8s_core_v1_service" "elasticsearch" {
 statefulset
 */
 
-resource "k8s_apps_v1_stateful_set" "elasticsearch" {
+resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
     name      = "${var.name}"
     namespace = "${var.namespace}"
@@ -136,7 +136,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
 
   spec {
     replicas              = "${var.replicas}"
-    service_name          = "${var.name}"
+    service_name          = "${k8s_core_v1_service.this.metadata.0.name}"
     pod_management_policy = "OrderedReady"
 
     selector {
@@ -321,7 +321,7 @@ resource "k8s_apps_v1_stateful_set" "elasticsearch" {
   }
 }
 
-resource "k8s_policy_v1beta1_pod_disruption_budget" "elasticsearch" {
+resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
   metadata {
     name = "${var.name}"
   }
@@ -333,4 +333,8 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "elasticsearch" {
       match_labels = "${local.labels}"
     }
   }
+}
+
+output "name" {
+  value = "${k8s_core_v1_service.this.metadata.0.name}"
 }

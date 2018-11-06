@@ -65,13 +65,13 @@ variable "node_selector" {
   default = {}
 }
 
-variable storage_class_name {}
-
-variable storage {}
-
 /*
 statefulset specific
 */
+
+variable storage_class_name {}
+
+variable storage {}
 
 variable volume_claim_template_name {
   default = "pvc"
@@ -87,14 +87,14 @@ locals {
 
 data "template_file" "zoo-servers" {
   count    = "${var.replicas}"
-  template = "server.${count.index}=${var.name}-${count.index}.${var.name}-headless.${var.namespace}.svc.cluster.local:2888:3888"
+  template = "server.${count.index}=${var.name}-${count.index}.${var.name}.${var.namespace}.svc.cluster.local:2888:3888"
 }
 
 /*
 service
 */
 
-resource "k8s_core_v1_service" "zookeeper" {
+resource "k8s_core_v1_service" "this" {
   metadata {
     name      = "${var.name}"
     namespace = "${var.namespace}"
@@ -102,33 +102,13 @@ resource "k8s_core_v1_service" "zookeeper" {
   }
 
   spec {
-    selector   = "${local.labels}"
+    selector = "${local.labels}"
 
     ports = [
       {
         name = "client"
         port = 2181
       },
-    ]
-  }
-}
-
-/*
-headless service
-*/
-
-resource "k8s_core_v1_service" "zookeeper-headless" {
-  metadata {
-    name      = "${var.name}-headless"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
-  }
-
-  spec {
-    cluster_ip = "None"
-    selector   = "${local.labels}"
-
-    ports = [
       {
         name = "server"
         port = 2888
@@ -145,7 +125,7 @@ resource "k8s_core_v1_service" "zookeeper-headless" {
 statefulset
 */
 
-resource "k8s_apps_v1_stateful_set" "zookeeper" {
+resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
     name      = "${var.name}"
     namespace = "${var.namespace}"
@@ -154,7 +134,7 @@ resource "k8s_apps_v1_stateful_set" "zookeeper" {
 
   spec {
     replicas              = "${var.replicas}"
-    service_name          = "${k8s_core_v1_service.zookeeper-headless.metadata.0.name}"
+    service_name          = "${k8s_core_v1_service.this.metadata.0.name}"
     pod_management_policy = "OrderedReady"
 
     selector {
@@ -200,10 +180,6 @@ resource "k8s_apps_v1_stateful_set" "zookeeper" {
 
             env = [
               {
-                name  = "ZOO_SERVERS"
-                value = "${join(" ", data.template_file.zoo-servers.*.rendered)}"
-              },
-              {
                 name = "POD_NAME"
 
                 value_from {
@@ -216,9 +192,16 @@ resource "k8s_apps_v1_stateful_set" "zookeeper" {
                 name  = "ZOO_DATA_DIR"
                 value = "/data/$(POD_NAME)"
               },
+              {
+                name  = "ZOO_SERVERS"
+                value = "${join(" ", data.template_file.zoo-servers.*.rendered)}"
+              },
             ]
 
             liveness_probe {
+              initial_delay_seconds = 1
+              timeout_seconds       = 3
+
               exec {
                 command = [
                   "/bin/bash",
@@ -229,9 +212,6 @@ EOF
                   ,
                 ]
               }
-
-              initial_delay_seconds = 1
-              timeout_seconds       = 3
             }
 
             resources {
@@ -242,7 +222,7 @@ EOF
             }
 
             volume_mounts {
-              name       = "pvc"
+              name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
               sub_path   = "${var.name}"
             }
@@ -281,7 +261,7 @@ EOF
             ]
 
             volume_mounts {
-              name       = "pvc"
+              name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
               sub_path   = "${var.name}"
             }
@@ -309,7 +289,7 @@ EOF
   }
 }
 
-resource "k8s_policy_v1beta1_pod_disruption_budget" "zookeeper" {
+resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
   metadata {
     name = "${var.name}"
   }
@@ -321,4 +301,8 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "zookeeper" {
       match_labels = "${local.labels}"
     }
   }
+}
+
+output "name" {
+  value = "${k8s_core_v1_service.this.metadata.0.name}"
 }
