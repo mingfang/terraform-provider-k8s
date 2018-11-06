@@ -53,3 +53,9 @@ Module usage:
 | replicas | - | string | `1` | no |
 | volume\_claim\_template\_name | - | string | `pvc` | no |
 
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| name | - |
+
