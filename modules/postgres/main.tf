@@ -94,6 +94,10 @@ variable postgres_user {}
 
 variable postgres_db {}
 
+variable port {
+  default = 5432
+}
+
 locals {
   labels = {
     app     = "${var.name}"
@@ -119,7 +123,7 @@ resource "k8s_core_v1_service" "this" {
     ports = [
       {
         name = "tcp"
-        port = 5432
+        port = "${var.port}"
       },
     ]
   }
@@ -271,4 +275,8 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
 
 output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
+}
+
+output "port" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
 }

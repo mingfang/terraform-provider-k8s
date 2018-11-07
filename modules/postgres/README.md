@@ -60,6 +60,14 @@ Module usage:
 | image | - | string | `postgres:9.6` | no |
 | namespace | - | string | `default` | no |
 | node\_selector | - | map | `{}` | no |
+| port | - | string | `5432` | no |
 | replicas | - | string | `1` | no |
 | volume\_claim\_template\_name | - | string | `pvc` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| name | - |
+| port | - |
 
