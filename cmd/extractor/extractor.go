@@ -70,6 +70,10 @@ func extractFile(filename string) {
 		if decodeErr != nil {
 			break
 		}
+		if len(object) == 0 {
+			continue
+		}
+		//log.Println(object)
 		group, version, _ := k8s.SplitGroupVersion(object["apiVersion"].(string))
 		kind := object["kind"].(string)
 		resourceKey := k8s.ResourceKey(group, version, kind)
@@ -79,6 +83,10 @@ func extractFile(filename string) {
 			Resource: kind,
 		})
 		model := modelsMap[gvk]
+		if model == nil {
+			log.Println("No Model For:", gvk)
+			continue
+		}
 		saveK8SasTF(object, model, resourceKey, gvk)
 	}
 	if decodeErr != nil && decodeErr != io.EOF {
@@ -114,6 +122,7 @@ func extractCluster(namespace, kind, name string, isImport bool) {
 			})
 			model := modelsMap[gvk]
 			if model == nil {
+				log.Println("No Model For:", gvk)
 				continue
 			}
 			resourceKey := k8s.ResourceKey(gvk.Group, gvk.Version, gvk.Kind)
