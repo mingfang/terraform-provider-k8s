@@ -10,7 +10,7 @@ import (
 	"sort"
 )
 
-const indentString = "    "
+const indentString = "  "
 
 func main() {
 	argsWithoutProg := os.Args[1:]
