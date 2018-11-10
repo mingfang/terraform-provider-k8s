@@ -117,10 +117,6 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 			}
 		}
 	}
-	if len(this.Object.([]interface{})[0].(map[string]interface{})) == 0 {
-		//log.Println("VisitKind empty path:", this.path)
-		this.Object = nil
-	}
 }
 
 func (this *K8S2TFReadVisitor) VisitReference(proto proto.Reference) {
