@@ -202,36 +202,16 @@ func execCommand(cmd string, args []string) (string, error) {
 }
 
 func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resourceKey string, gvk schema.GroupVersionKind) {
-	visitor := k8s.NewK8S2TFReadVisitor(resourceKey, itemObject)
-	model.Accept(visitor)
-	visitorObject := visitor.Object.([]interface{})[0].(map[string]interface{})
-	name := k8s.ToSnake(visitorObject["metadata"].([]interface{})[0].(map[string]interface{})["name"].(string))
-
-	//todo: is there a nicer way? needs resource "resourceKey" "name" + visitorObject
-	resource := map[string]interface{}{}
-	resource["resource"] = map[string]interface{}{}
-	resource["resource"].(map[string]interface{})[resourceKey] = map[string]interface{}{}
-	resource["resource"].(map[string]interface{})[resourceKey].(map[string]interface{})[name] = visitorObject
-
-	//convert k8s to json
-	jsonBytes, jsonErr := json.MarshalIndent(resource, "", "  ")
-	if jsonErr != nil {
-		log.Fatalf("unable to marshal itemObject: %s\n", jsonErr)
-	}
-	//parse json as hcl
-	ast, err := Parse(jsonBytes)
-	//log.Println(spew.Sdump(ast))
-	if err != nil {
-		log.Fatalf("unable to parse JSON: %s\n", err)
-	}
 	var buf bytes.Buffer
-	if err := printer.Fprint(&buf, ast); err != nil {
-		log.Fatalf("unable to print HCL: %s\n", err)
-	}
+	name, _, _ := unstructured.NestedString(itemObject, "metadata", "name")
+	name = k8s.ToSnake(name)
+	fmt.Fprintf(&buf, "resource \"%s\" \"%s\"", resourceKey, name)
+	visitor := NewK8S2TFPrintVisitor(&buf, resourceKey, itemObject, 1, false)
+	model.Accept(visitor)
+
 	filename := k8s.ToSnake(gvk.Kind) + "-" + name + ".tf"
 	log.Println(filename)
-	//log.Println(string(formatted))
 	if err := ioutil.WriteFile(filename, buf.Bytes(), 0644); err != nil {
-		log.Fatalf("WriteFile err:", err)
+		log.Fatal("WriteFile err:", err)
 	}
 }
