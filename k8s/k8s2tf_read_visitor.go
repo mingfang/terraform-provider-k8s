@@ -45,6 +45,9 @@ func (this *K8S2TFReadVisitor) VisitArray(proto *proto.Array) {
 
 func (this *K8S2TFReadVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap path:", this.path)
+	if this.context == nil {
+		return
+	}
 	this.Object = make(map[string]interface{})
 	for key := range this.context.(map[string]interface{}) {
 		path := this.path + "." + ToSnake(key)
