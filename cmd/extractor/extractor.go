@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -21,8 +20,6 @@ import (
 	"k8s.io/kube-openapi/pkg/util/proto"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/hashicorp/hcl/hcl/printer"
-
 	"github.com/mingfang/terraform-provider-k8s/k8s"
 )
 
