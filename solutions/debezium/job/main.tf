@@ -1,25 +1,20 @@
 variable "name" {}
 
-variable "command" {}
+variable "kafka_connect" {}
 
-resource "k8s_batch_v1_job" "this" {
-  metadata {
-    name = "${var.name}"
-  }
+variable "connector_name" {}
 
-  spec {
-    template {
-      spec {
-        containers {
-          name    = "base"
-          image   = "registry.rebelsoft.com/base"
-          command = ["bash", "-cx", "${var.command}"]
-        }
+variable "connector_config" {}
 
-        restart_policy = "Never"
-      }
-    }
+module "job_source_postgres" {
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/job"
+  name   = "${var.name}"
 
-    backoff_limit = 4
-  }
+  command = <<EOF
+    until curl -s -H 'Accept:application/json' ${var.kafka_connect}:8083/
+    do echo 'Waiting for Kafka Connect...'; sleep 10; done
+    curl -s -X DELETE ${var.kafka_connect}:8083/connectors/${var.connector_name}
+    curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
+      ${var.kafka_connect}:8083/connectors/ -d '${var.connector_config}'
+EOF
 }

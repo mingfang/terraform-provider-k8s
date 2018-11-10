@@ -84,13 +84,9 @@ module "job_source" {
   source = "./job"
   name   = "debezium-source-init"
 
-  command = <<EOF
-    until curl -s -H 'Accept:application/json' ${module.kafka-connect-source.name}:8083/
-    do echo 'Waiting for Kafka Connect...'; sleep 10; done
-    curl -s -X DELETE ${module.kafka-connect-source.name}:8083/connectors/${data.template_file.source.vars.name}
-    curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-      ${module.kafka-connect-source.name}:8083/connectors/ -d '${data.template_file.source.rendered}'
-EOF
+  kafka_connect    = "${module.kafka-connect-source.name}"
+  connector_name   = "${data.template_file.source.vars.name}"
+  connector_config = "${data.template_file.source.rendered}"
 }
 
 /*
@@ -111,11 +107,7 @@ module "job_sink" {
   source = "./job"
   name   = "debezium-sink-init"
 
-  command = <<EOF
-    until curl -s -H 'Accept:application/json' ${module.kafka-connect-sink.name}:8083/
-    do echo 'Waiting for Kafka Connect...'; sleep 10; done
-    curl -s -X DELETE ${module.kafka-connect-sink.name}:8083/connectors/${data.template_file.sink.vars.name}
-    curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-      ${module.kafka-connect-sink.name}:8083/connectors/ -d '${data.template_file.sink.rendered}'
-EOF
+  kafka_connect    = "${module.kafka-connect-sink.name}"
+  connector_name   = "${data.template_file.sink.vars.name}"
+  connector_config = "${data.template_file.sink.rendered}"
 }
