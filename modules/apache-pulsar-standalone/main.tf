@@ -88,8 +88,12 @@ resource "k8s_apps_v1_deployment" "apache-pulsar" {
               "bin/pulsar",
               "standalone",
             ]
+
+            resources {}
           },
         ]
+
+        security_context {}
       }
     }
   }
