@@ -214,6 +214,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               },
             ]
 
+            resources {}
+
             volume_mounts = [
               {
                 name       = "${var.volume_claim_template_name}"
@@ -227,6 +229,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
             ]
           },
         ]
+
+        security_context {}
 
         volumes = [
           {
