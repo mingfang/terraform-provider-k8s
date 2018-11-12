@@ -29,7 +29,8 @@ resource "k8s_batch_v1_job" "this" {
           resources = {}
         }
 
-        restart_policy = "${var.restart_policy}"
+        restart_policy   = "${var.restart_policy}"
+        security_context = {}
       }
     }
 
