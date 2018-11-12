@@ -23,9 +23,10 @@ resource "k8s_batch_v1_job" "this" {
     template {
       spec {
         containers {
-          name    = "base"
-          image   = "${var.image}"
-          command = ["bash", "-cx", "${var.command}"]
+          name      = "base"
+          image     = "${var.image}"
+          command   = ["bash", "-cx", "${var.command}"]
+          resources = {}
         }
 
         restart_policy = "${var.restart_policy}"

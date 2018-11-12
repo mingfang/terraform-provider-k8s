@@ -258,6 +258,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               "chown -R 1000:1000 /data",
             ]
 
+            resources {}
+
             security_context {
               privileged = true
             }
@@ -279,6 +281,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               "vm.max_map_count=262144",
             ]
 
+            resources {}
+
             security_context {
               privileged = true
             }
@@ -294,11 +298,15 @@ resource "k8s_apps_v1_stateful_set" "this" {
               "ulimit -n 65536",
             ]
 
+            resources {}
+
             security_context {
               privileged = true
             }
           },
         ]
+
+        security_context {}
       }
     }
 

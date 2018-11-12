@@ -260,6 +260,8 @@ EOF
               ,
             ]
 
+            resources {}
+
             volume_mounts {
               name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
@@ -267,6 +269,8 @@ EOF
             }
           },
         ]
+
+        security_context {}
       }
     }
 
