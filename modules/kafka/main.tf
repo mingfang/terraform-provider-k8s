@@ -13,7 +13,7 @@ variable "replicas" {
 }
 
 variable image {
-  default = "confluentinc/cp-kafka:5.0.0"
+  default = "confluentinc/cp-kafka"
 }
 
 variable "node_selector" {
