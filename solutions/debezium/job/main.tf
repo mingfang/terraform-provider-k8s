@@ -11,10 +11,10 @@ module "job_source_postgres" {
   name   = "${var.name}"
 
   command = <<EOF
-    until curl -s -H 'Accept:application/json' ${var.kafka_connect}:8083/
+    until curl -s -H 'Accept:application/json' ${var.kafka_connect}/
     do echo 'Waiting for Kafka Connect...'; sleep 10; done
-    curl -s -X DELETE ${var.kafka_connect}:8083/connectors/${var.connector_name}
+    curl -s -X DELETE ${var.kafka_connect}/connectors/${var.connector_name}
     curl -s -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-      ${var.kafka_connect}:8083/connectors/ -d '${var.connector_config}'
+      ${var.kafka_connect}/connectors/ -d '${var.connector_config}'
 EOF
 }
