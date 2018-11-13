@@ -86,7 +86,7 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 	} else {
 		if proto.Type == "string" {
 			//escape ${
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(strings.Replace(this.context.(string), "${", "$\\{", -1)))
+			fmt.Fprintf(this.buf, "%v", strconv.Quote(strings.Replace(this.context.(string), "${", "$${", -1)))
 		} else {
 			fmt.Fprintf(this.buf, "%v", this.context)
 		}
