@@ -20,7 +20,11 @@ resource "k8s_batch_v1_job" "this" {
   }
 
   spec {
+    selector = {}
+
     template {
+      metadata = {}
+
       spec {
         containers {
           name      = "base"
