@@ -206,10 +206,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
                 command = [
                   "/bin/bash",
                   "-cx",
-                  <<EOF
-                echo "ruok" | nc localhost 2181 | grep imok
-EOF
-                  ,
+                  "echo 'ruok' | nc localhost 2181 | grep imok",
                 ]
               }
             }
@@ -253,11 +250,7 @@ EOF
             command = [
               "bash",
               "-cx",
-              <<EOF
-              mkdir -p $ZOO_DATA_DIR
-              echo "$${HOSTNAME//[^0-9]/}" > $ZOO_DATA_DIR/myid
-EOF
-              ,
+              "mkdir -p $ZOO_DATA_DIR; echo \"$${HOSTNAME//[^0-9]/}\" > $ZOO_DATA_DIR/myid",
             ]
 
             resources {}
