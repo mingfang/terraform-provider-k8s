@@ -3,7 +3,7 @@ package k8s
 import (
 	"log"
 	"strconv"
-	"strings"
+	//"strings"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -85,8 +85,7 @@ func (this *K8S2TFReadVisitor) VisitPrimitive(proto *proto.Primitive) {
 		}
 	} else {
 		if proto.Type == "string" {
-			//escape ${
-			this.Object = strings.Replace(this.context.(string), "${", "$\\{", -1)
+			this.Object = this.context.(string)
 		} else {
 			this.Object = this.context
 		}
