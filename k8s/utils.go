@@ -157,6 +157,19 @@ func CreateId(namespace string, kind string, name string) string {
 	return namespace + "." + ToSnake(kind) + "." + name
 }
 
+var idPattern = regexp.MustCompile(`^([^.]*)\.([^.]+)\.([^.]+)$`)
+
+func ParseId(id string) (string, string, string, error) {
+	parts := idPattern.FindStringSubmatch(id)
+
+	if len(parts) != 4 {
+		err := fmt.Errorf("Unexpected ID format (%q), expected %q.", id, "namespace.kind.name")
+		return "", "", "", err
+	}
+
+	return parts[1], parts[2], parts[3], nil
+}
+
 func Dump(object interface{}) {
 	spew.Config.Indent = "  "
 	spew.Config.DisablePointerMethods = true

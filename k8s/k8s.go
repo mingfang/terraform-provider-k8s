@@ -3,7 +3,6 @@ package k8s
 import (
 	"fmt"
 	"log"
-	"regexp"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -182,7 +181,7 @@ func datasourceRead(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 func resourceExists(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
 	//log.Println("resourceExists Id:", resourceData.Id())
 	k8sConfig := meta.(*K8SConfig)
-	namespace, _, name, err := parseId(resourceData.Id())
+	namespace, _, name, err := ParseId(resourceData.Id())
 	if err != nil {
 		return false, err
 	}
@@ -236,7 +235,7 @@ func resourceCreate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 func resourceRead(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	//log.Println("resourceRead Id:", resourceData.Id())
 	k8sConfig := meta.(*K8SConfig)
-	namespace, _, name, nameErr := parseId(resourceData.Id())
+	namespace, _, name, nameErr := ParseId(resourceData.Id())
 	if nameErr != nil {
 		return nameErr
 	}
@@ -252,7 +251,7 @@ func resourceRead(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced
 
 func resourceUpdate(resourceKey string, gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	k8sConfig := meta.(*K8SConfig)
-	namespace, _, name, nameErr := parseId(resourceData.Id())
+	namespace, _, name, nameErr := ParseId(resourceData.Id())
 	if nameErr != nil {
 		return nameErr
 	}
@@ -297,7 +296,7 @@ func setState(resourceKey string, state map[string]interface{}, model proto.Sche
 func resourceDelete(gvk *schema.GroupVersionKind, isNamespaced bool, model proto.Schema, resourceData *tfSchema.ResourceData, meta interface{}) error {
 	//log.Println("resourceDelete Id:", resourceData.Id())
 	k8sConfig := meta.(*K8SConfig)
-	namespace, _, name, nameErr := parseId(resourceData.Id())
+	namespace, _, name, nameErr := ParseId(resourceData.Id())
 	if nameErr != nil {
 		return nameErr
 	}
@@ -317,19 +316,6 @@ func resourceDelete(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 	resourceData.SetId("")
 	//todo: wait for confirmed delete else problems when force recreate get already exists error
 	return nil
-}
-
-var idPattern = regexp.MustCompile(`^(\w*)\.(\w+)\.(.*)`)
-
-func parseId(id string) (string, string, string, error) {
-	parts := idPattern.FindStringSubmatch(id)
-
-	if len(parts) != 4 {
-		err := fmt.Errorf("Unexpected ID format (%q), expected %q.", id, "namespace.kind.name")
-		return "", "", "", err
-	}
-
-	return parts[1], parts[2], parts[3], nil
 }
 
 func getName(resourceData *tfSchema.ResourceData) (string, error) {
