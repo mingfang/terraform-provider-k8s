@@ -59,6 +59,7 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.uid$`),
 	regexp.MustCompile(`.*\.metadata\.annotations\.\w+_kubernetes_io`),
 	regexp.MustCompile(`.*\.metadata\.finalizers$`),
+	regexp.MustCompile(`.*\.spec\.finalizers$`),
 	regexp.MustCompile(`.*\.spec\.claim_ref`),
 	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`),
 	regexp.MustCompile(`.*_job\..*labels\.controller-uid$`),
