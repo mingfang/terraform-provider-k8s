@@ -80,6 +80,8 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.Itoa(this.context.(int))))
 		case int64:
 			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.FormatInt(this.context.(int64), 10)))
+		case float64:
+			fmt.Fprintf(this.buf, "%v", strconv.Quote(fmt.Sprintf("%f", this.context.(float64))))
 		default:
 			fmt.Fprintf(this.buf, "%v", strconv.Quote(this.context.(string)))
 		}
