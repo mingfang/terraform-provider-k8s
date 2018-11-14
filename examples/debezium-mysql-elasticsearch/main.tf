@@ -14,25 +14,6 @@ variable "topics" {
   default = "customers"
 }
 
-module "mysql" {
-  source = "./mysql"
-  name   = "${var.name}-mysql"
-}
-
-module "elasticsearch_storage" {
-  source = "./storage"
-  name   = "${var.name}-elasticsearch"
-  count  = 3
-}
-
-module "elasticsearch" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
-  name               = "${var.name}-elasticsearch"
-  storage_class_name = "${module.elasticsearch_storage.storage_class_name}"
-  storage            = "${module.elasticsearch_storage.storage}"
-  replicas           = "${module.elasticsearch_storage.count}"
-}
-
 module "zookeeper_storage" {
   source = "./storage"
   name   = "${var.name}-zookeeper"
@@ -45,8 +26,27 @@ module "kafka_storage" {
   count  = 3
 }
 
+module "elasticsearch_storage" {
+  source = "./storage"
+  name   = "${var.name}-elasticsearch"
+  count  = 3
+}
+
+module "mysql" {
+  source = "./mysql"
+  name   = "${var.name}-mysql"
+}
+
+module "elasticsearch" {
+  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
+  name               = "${var.name}-elasticsearch"
+  storage_class_name = "${module.elasticsearch_storage.storage_class_name}"
+  storage            = "${module.elasticsearch_storage.storage}"
+  replicas           = "${module.elasticsearch_storage.count}"
+}
+
 module "debezium" {
-  source                  = "../../solutions/debezium"
+  source                  = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium"
   name                    = "${var.name}"
   zookeeper_storage_class = "${module.zookeeper_storage.storage_class_name}"
   zookeeper_storage       = "${module.zookeeper_storage.storage}"
@@ -74,7 +74,7 @@ data "template_file" "source" {
 }
 
 module "job_source" {
-  source = "../../solutions/debezium/job"
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-source-init"
 
   kafka_connect    = "${module.debezium.kafka-connect-source}"
@@ -94,7 +94,7 @@ data "template_file" "sink" {
 }
 
 module "job_sink" {
-  source = "../../solutions/debezium/job"
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-sink-init"
 
   kafka_connect    = "${module.debezium.kafka-connect-sink}"
