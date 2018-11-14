@@ -1,11 +1,14 @@
 # terraform-provider-k8s
 terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 
+## Features
 - Uses the Kubernetes client-go library to dynamically discover available resources
 - Supports multiple versions of the same resource kinds, including aplha and beta versions
 - Supports the latest version of Kubernetes
 - Auto extract from live Kubernetes cluster and import as Terraform state
 - Convert Kubernetes manifests to Terraform files
+- A catalog of resusable [modules](https://github.com/mingfang/terraform-provider-k8s/tree/master/modules)
+- A catalog of complete [solutions](https://github.com/mingfang/terraform-provider-k8s/tree/master/solutions) using the modules
 
 ## Requirements
 - Docker 
