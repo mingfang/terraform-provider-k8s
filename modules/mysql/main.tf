@@ -171,13 +171,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
             resources {}
 
-            volume_mounts = [
-              {
+            volume_mounts {
                 name       = "${var.volume_claim_template_name}"
                 mount_path = "/var/lib/mysql"
                 sub_path   = "${var.name}"
-              },
-            ]
+            }
           },
         ]
 
@@ -185,7 +183,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
     }
 
-    volume_claim_templates = {
+    volume_claim_templates {
       metadata {
         name = "${var.volume_claim_template_name}"
       }
