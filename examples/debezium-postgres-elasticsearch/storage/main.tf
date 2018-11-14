@@ -1,12 +1,6 @@
 variable name {}
 
-module "zookeeper" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/zookeeper"
-  name               = "${var.name}"
-  storage_class_name = "${element(k8s_core_v1_persistent_volume_claim.this.*.spec.0.storage_class_name, 0)}"
-  storage            = "${element(k8s_core_v1_persistent_volume_claim.this.*.spec.0.resources.0.requests.storage, 0)}"
-  replicas           = "${k8s_core_v1_persistent_volume_claim.this.count}"
-}
+variable count {}
 
 resource "k8s_core_v1_persistent_volume_claim" "this" {
   count = "${k8s_core_v1_persistent_volume.this.count}"
@@ -29,7 +23,7 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
 }
 
 resource "k8s_core_v1_persistent_volume" "this" {
-  count = 3
+  count = "${var.count}"
 
   metadata {
     name = "pvc-${var.name}-${count.index}"
@@ -60,6 +54,14 @@ resource "k8s_core_v1_persistent_volume" "this" {
   }
 }
 
-output "name" {
-  value = "${module.zookeeper.name}"
+output storage_class_name {
+  value = "${element(k8s_core_v1_persistent_volume_claim.this.*.spec.0.storage_class_name, 0)}"
+}
+
+output storage {
+  value = "${element(k8s_core_v1_persistent_volume_claim.this.*.spec.0.resources.0.requests.storage, 0)}"
+}
+
+output count {
+  value = "${k8s_core_v1_persistent_volume_claim.this.count}"
 }
