@@ -20,9 +20,9 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "crontabs
     scope   = "Namespaced"
 
     names {
-      plural    = "crontabs"
-      singular  = "crontabs"
-      kind      = "CronTab"
+      plural   = "crontabs"
+      singular = "crontabs"
+      kind     = "CronTab"
 
       short_names = [
         "ct",
