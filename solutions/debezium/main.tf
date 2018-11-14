@@ -4,15 +4,33 @@ variable "debezium-version" {
   default = "0.9"
 }
 
+variable "zookeeper_storage_class" {}
+
+variable "zookeeper_storage" {}
+
+variable "zookeeper_count" {}
+
+variable "kafka_storage_class" {}
+
+variable "kafka_storage" {}
+
+variable "kafka_count" {}
+
 module "zookeeper" {
-  source = "./zookeeper"
-  name   = "${var.name}-zookeeper"
+  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/zookeeper"
+  name               = "${var.name}-zookeeper"
+  storage_class_name = "${var.zookeeper_storage_class}"
+  storage            = "${var.zookeeper_storage}"
+  replicas           = "${var.zookeeper_count}"
 }
 
 module "kafka" {
-  source    = "./kafka"
-  name      = "${var.name}-kafka"
-  zookeeper = "${module.zookeeper.name}:2181"
+  source                  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kafka"
+  name                    = "${var.name}-kafka"
+  storage_class_name      = "${var.kafka_storage_class}"
+  storage                 = "${var.kafka_storage}"
+  replicas                = "${var.kafka_count}"
+  kafka_zookeeper_connect = "${module.zookeeper.name}:${module.zookeeper.port}"
 }
 
 module "kafka-rest-proxy" {
