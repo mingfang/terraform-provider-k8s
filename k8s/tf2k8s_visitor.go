@@ -95,37 +95,22 @@ func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap", proto)
 	//log.Println("VisitMap keyPath:", this.keyPath)
 	if this.resourceData.HasChange(this.keyPath) {
-		_, newV := this.resourceData.GetChange(this.keyPath)
-		//log.Println("VisitMap HasChange:", this.keyPath, "old:", oldV, "new:", newV)
-		//is deleted
-		if len(newV.(map[string]interface{})) == 0 {
+		_, newValue := this.resourceData.GetChange(this.keyPath)
+		//log.Println("VisitMap HasChange:", this.keyPath, "old:", oldV, "new:", newValue)
+		if len(newValue.(map[string]interface{})) == 0 {
+			//deleted
 			this.ops = append(this.ops, &RemoveOperation{
 				Path: this.jsonPath,
 			})
-			return
-		}
-	} else {
-		return
-	}
-
-	this.Object = map[string]interface{}{}
-	for key := range this.context.(map[string]interface{}) {
-		keyPath := this.keyPath + "." + key
-		jsonPath := this.jsonPath + "/" + key
-		//log.Println("VisitMap keyPath:", keyPath)
-		if value, exists := this.resourceData.GetOkExists(keyPath); exists {
-			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
-			proto.SubType.Accept(visitor)
-			if visitor.Object != nil {
-				this.Object.(map[string]interface{})[key] = visitor.Object
-				//log.Println("VisitMap keyPath:", keyPath, " Object:", visitor.Object)
-			}
+		} else {
+			//add or update
+			this.Object = newValue
+			this.ops = append(this.ops, &AddOperation{
+				Path:  this.jsonPath,
+				Value: this.Object,
+			})
 		}
 	}
-	this.ops = append(this.ops, &AddOperation{
-		Path:  this.jsonPath,
-		Value: this.Object,
-	})
 }
 
 func (this *TF2K8SVisitor) VisitPrimitive(proto *proto.Primitive) {
