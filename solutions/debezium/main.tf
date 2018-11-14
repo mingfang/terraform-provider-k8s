@@ -1,3 +1,18 @@
+/**
+ * [Debezium](https://debezium.io)
+ *
+ * This solution sets up:
+ * - a [Kafka](https://kafka.apache.org) cluster
+ * - a [Zookeeper](https://zookeeper.apache.org) cluster
+ * - two [Kafka Connect](https://docs.confluent.io/current/connect/index.html) instances (one for source and another for sink).
+ * - [Kafka Connect UI](http://kafka-connect-ui.landoop.com)
+ * - [Kafka Topic UI](http://kafka-topics-ui.landoop.com)
+ *
+ * Examples:
+ * - [Sync MySql to Elasticsearch](https://github.com/mingfang/terraform-provider-k8s/tree/master/examples/debezium-mysql-elasticsearch)
+ * - [Sync Postgres to Elasticsearch](https://github.com/mingfang/terraform-provider-k8s/tree/master/examples/debezium-postgres-elasticsearch)
+ */
+
 variable name {}
 
 variable "debezium-version" {
