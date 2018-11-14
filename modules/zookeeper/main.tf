@@ -77,6 +77,14 @@ variable volume_claim_template_name {
   default = "pvc"
 }
 
+/*
+service specific variables
+*/
+
+variable port {
+  default = 2181
+}
+
 locals {
   labels = {
     app     = "${var.name}"
@@ -107,7 +115,7 @@ resource "k8s_core_v1_service" "this" {
     ports = [
       {
         name = "client"
-        port = 2181
+        port = "${var.port}"
       },
       {
         name = "server"
@@ -302,4 +310,8 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
 
 output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
+}
+
+output "port" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
 }
