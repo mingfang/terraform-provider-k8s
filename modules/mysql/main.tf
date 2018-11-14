@@ -167,10 +167,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
                   }
                 }
               },
-              {
-                name  = "PGDATA"
-                value = "/data/$(POD_NAME)"
-              },
             ]
 
             resources {}

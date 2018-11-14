@@ -64,7 +64,7 @@ variable "replicas" {
 }
 
 variable image {
-  default = "postgres:9.6"
+  default = "postgres"
 }
 
 variable "node_selector" {
@@ -188,12 +188,12 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
             env = [
               {
-                name  = "POSTGRES_PASSWORD"
-                value = "${var.postgres_password}"
-              },
-              {
                 name  = "POSTGRES_USER"
                 value = "${var.postgres_user}"
+              },
+              {
+                name  = "POSTGRES_PASSWORD"
+                value = "${var.postgres_password}"
               },
               {
                 name  = "POSTGRES_DB"
