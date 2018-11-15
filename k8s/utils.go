@@ -142,7 +142,7 @@ func CreateId(namespace string, kind string, name string) string {
 	return namespace + "." + ToSnake(kind) + "." + name
 }
 
-var idPattern = regexp.MustCompile(`^([^.]*)\.([^.]+)\.([^.]+)$`)
+var idPattern = regexp.MustCompile(`^([^.]*)\.([^.]+)\.(.+)$`)
 
 func ParseId(id string) (string, string, string, error) {
 	parts := idPattern.FindStringSubmatch(id)
