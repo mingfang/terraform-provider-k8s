@@ -43,27 +43,11 @@ func IsForceNewField(path string) bool {
 }
 
 var skipPaths = []*regexp.Regexp{
-	regexp.MustCompile(`^[\w]+\.api_version$`),
-	regexp.MustCompile(`^[\w]+\.kind$`),
-	regexp.MustCompile(`.*\.generation$`),
-	regexp.MustCompile(`.*\.status$`),
-	regexp.MustCompile(`.*\.creation_timestamp$`),
-	regexp.MustCompile(`.*\.deletion_timestamp$`),
-	regexp.MustCompile(`.*\.owner_references$`),
-	regexp.MustCompile(`.*\.paused$`),
-	regexp.MustCompile(`.*\.resource_version$`),
-	regexp.MustCompile(`.*\.result$`),
-	regexp.MustCompile(`.*\.revision_history_limit$`),
-	regexp.MustCompile(`.*\.self_link$`),
-	regexp.MustCompile(`.*\.template_generation$`),
-	regexp.MustCompile(`.*\.uid$`),
-	regexp.MustCompile(`.*\.metadata\.annotations\.\w+_kubernetes_io`),
-	regexp.MustCompile(`.*\.metadata\.finalizers$`),
-	regexp.MustCompile(`.*\.spec\.finalizers$`),
-	regexp.MustCompile(`.*\.spec\.claim_ref`),
-	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`),
-	regexp.MustCompile(`.*_job\..*labels\.controller-uid$`),
-	regexp.MustCompile(`.*_job\..*labels\.job-name$`),
+	regexp.MustCompile(`^[\w]+\.api_version$`),                                  //redundant; already in resourceKey
+	regexp.MustCompile(`^[\w]+\.kind$`),                                         //redundant; already in resourceKey
+	regexp.MustCompile(`.*\.status$`),                                           //this is actually not part of schema
+	regexp.MustCompile(`.*\.metadata\.annotations\.\w+_kubernetes_io`),          //ignore kubectl annotation
+	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinit loop
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name

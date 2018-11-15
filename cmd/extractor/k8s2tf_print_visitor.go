@@ -54,7 +54,7 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 	for key := range this.context.(map[string]interface{}) {
 		path := this.path + "." + k8s.ToSnake(key)
 		//log.Println("VisitMap path:", path)
-		if k8s.IsSkipPath(path) {
+		if k8s.IsSkipPath(path) || IsSkipPrintPath(path) {
 			continue
 		}
 		if value, ok := this.context.(map[string]interface{})[key]; ok {
@@ -81,7 +81,7 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 		case int64:
 			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.FormatInt(this.context.(int64), 10)))
 		case float64:
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(fmt.Sprintf("%f", this.context.(float64))))
+			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.FormatFloat(this.context.(float64), '-f', '-1, 64)))
 		default:
 			fmt.Fprintf(this.buf, "%v", strconv.Quote(this.context.(string)))
 		}
@@ -106,7 +106,7 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 		//log.Println("VisitKind GetPath:", proto.GetPath(), "Key:", key)
 		path := this.path + "." + k8s.ToSnake(key)
 		//log.Println("VisitKind path:", path)
-		if k8s.IsSkipPath(path) {
+		if k8s.IsSkipPath(path) || IsSkipPrintPath(path){
 			continue
 		}
 		if value, ok := this.context.(map[string]interface{})[key]; ok {
