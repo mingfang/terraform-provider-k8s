@@ -102,7 +102,8 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 	this.Object.([]interface{})[0] = make(map[string]interface{})
 	for _, key := range proto.Keys() {
 		//log.Println("VisitKind GetPath:", proto.GetPath(), "Key:", key)
-		path := this.path + "." + ToSnake(key)
+		snakeKey := ToSnake(key)
+		path := this.path + "." + snakeKey
 		//log.Println("VisitKind path:", path)
 		if IsSkipPath(path) {
 			continue
@@ -111,9 +112,9 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 			visitor := NewK8S2TFReadVisitor(path, value)
 			field := proto.Fields[key]
 			field.Accept(visitor)
-			if visitor.Object != nil {
-				this.Object.([]interface{})[0].(map[string]interface{})[ToSnake(key)] = visitor.Object
-			}
+			this.Object.([]interface{})[0].(map[string]interface{})[snakeKey] = visitor.Object
+		} else {
+			this.Object.([]interface{})[0].(map[string]interface{})[snakeKey] = nil
 		}
 	}
 }

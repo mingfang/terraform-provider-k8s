@@ -82,11 +82,17 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 		schemaVistor := NewK8S2TFSchemaVisitor(path)
 		v.Accept(schemaVistor)
 
-		schemaVistor.Schema.Computed =
-			(schemaVistor.readOnly || !proto.IsRequired(key)) && schemaVistor.Schema.Type != tfSchema.TypeList && schemaVistor.Schema.Type != tfSchema.TypeMap
-		schemaVistor.Schema.Required = proto.IsRequired(key)
-		schemaVistor.Schema.Optional = !proto.IsRequired(key)
-		schemaVistor.Schema.ForceNew = IsForceNewField(path)
+		if proto.IsRequired(key) {
+			schemaVistor.Schema.Required = true
+			schemaVistor.Schema.Computed = false
+			schemaVistor.Schema.Optional = false
+			schemaVistor.Schema.ForceNew = IsForceNewField(path)
+		} else {
+			schemaVistor.Schema.Required = false
+			schemaVistor.Schema.Computed = true
+			schemaVistor.Schema.Optional = true
+			schemaVistor.Schema.ForceNew = IsForceNewField(path)
+		}
 
 		elements[ToSnake(key)] = &schemaVistor.Schema
 	}
