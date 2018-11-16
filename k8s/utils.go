@@ -29,7 +29,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.selector\.match_labels$`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
-	regexp.MustCompile(`k8s_\w+_\w+_job\.spec\.template`),
+	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
@@ -46,7 +46,7 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`^[\w]+\.api_version$`),                                  //redundant; already in resourceKey
 	regexp.MustCompile(`^[\w]+\.kind$`),                                         //redundant; already in resourceKey
 	regexp.MustCompile(`.*\.status$`),                                           //this is actually not part of schema
-	regexp.MustCompile(`.*\.metadata\.annotations\.\w+_kubernetes_io`),          //ignore kubectl annotation
+	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //ignore kubernetes generated annotations
 	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinit loop
 }
 
