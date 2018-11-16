@@ -63,6 +63,11 @@ variable image {
   default = "docker.elastic.co/elasticsearch/elasticsearch:6.4.2"
 }
 
+variable "annotations" {
+  type    = "map"
+  default = {}
+}
+
 variable "node_selector" {
   type    = "map"
   default = {}
@@ -129,9 +134,10 @@ statefulset
 
 resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
+    labels      = "${local.labels}"
+    annotations = "${var.annotations}"
   }
 
   spec {
