@@ -2,7 +2,8 @@ resource "k8s_core_v1_persistent_volume" "this" {
   count = "${var.count}"
 
   metadata {
-    name = "pvc-${var.name}-${count.index}"
+    name        = "pvc-${var.name}-${count.index}"
+    annotations = "${var.annotations}"
   }
 
   spec {

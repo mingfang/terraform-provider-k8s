@@ -2,11 +2,8 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
   count = "${k8s_core_v1_persistent_volume.this.count}"
 
   metadata {
-    name = "${element(k8s_core_v1_persistent_volume.this.*.metadata.0.name, count.index)}"
-
-    annotations {
-      "pv-uid" = "${element(k8s_core_v1_persistent_volume.this.*.metadata.0.uid, count.index)}"
-    }
+    name        = "${element(k8s_core_v1_persistent_volume.this.*.metadata.0.name, count.index)}"
+    annotations = "${merge(var.annotations, map("pv-uid", element(k8s_core_v1_persistent_volume.this.*.metadata.0.uid, count.index)))}"
   }
 
   spec {
