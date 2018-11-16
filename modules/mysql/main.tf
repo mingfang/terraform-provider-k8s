@@ -172,9 +172,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
             resources {}
 
             volume_mounts {
-                name       = "${var.volume_claim_template_name}"
-                mount_path = "/var/lib/mysql"
-                sub_path   = "${var.name}"
+              name       = "${var.volume_claim_template_name}"
+              mount_path = "/var/lib/mysql"
+              sub_path   = "${var.name}"
             }
           },
         ]
