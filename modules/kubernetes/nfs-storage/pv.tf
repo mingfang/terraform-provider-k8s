@@ -19,5 +19,7 @@ resource "k8s_core_v1_persistent_volume" "this" {
       path   = "/"
       server = "${var.nfs_server}"
     }
+
+    mount_options = "${var.mount_options}"
   }
 }

@@ -7,12 +7,17 @@
 
 variable "name" {}
 variable "count" {}
-variable "nfs_server" {}
 variable "storage" {}
 
 variable "annotations" {
   type    = "map"
   default = {}
+}
+
+variable "nfs_server" {}
+variable "mount_options" {
+  type = "list"
+  default = []
 }
 
 output storage_class_name {
