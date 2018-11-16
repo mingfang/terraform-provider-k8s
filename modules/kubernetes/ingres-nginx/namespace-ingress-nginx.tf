@@ -3,6 +3,4 @@ resource "k8s_core_v1_namespace" "ingress-nginx" {
     labels = "${local.labels}"
     name   = "${var.namespace}"
   }
-
-  spec {}
 }
