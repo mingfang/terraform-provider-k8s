@@ -151,7 +151,21 @@ resource "k8s_apps_v1_stateful_set" "this" {
               },
             ]
 
-            resources {}
+            liveness_probe {
+              exec {
+                command = [
+                  "sh",
+                  "-ec",
+                  "/usr/bin/jps | /bin/grep -q SupportedKafka",
+                ]
+              }
+            }
+
+            readiness_probe {
+              tcp_socket {
+                port = 9092
+              }
+            }
 
             volume_mounts {
               name       = "${var.volume_claim_template_name}"
