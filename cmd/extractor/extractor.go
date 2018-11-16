@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"regexp"
@@ -19,48 +20,59 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/kube-openapi/pkg/util/proto"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/mingfang/terraform-provider-k8s/k8s"
 )
 
 func main() {
-	//debug
-	spew.Config.Indent = "  "
-	spew.Config.DisablePointerMethods = true
-	spew.Config.DisablePointerAddresses = true
-	spew.Config.DisableCapacities = true
-
-	var filename, namespace, kind, name string
+	var filename, namespace, kind, name, dir, url string
 	var isImport bool
+
 	flag.StringVar(&filename, "filename", "", "name of file to extract")
+	flag.StringVar(&dir, "dir", "", "destination directory")
+	flag.StringVar(&url, "url", "", "source url")
 	flag.StringVar(&namespace, "namespace", "default", "namespace of resources to extract")
 	flag.StringVar(&kind, "kind", "", "kind of resources to extract")
 	flag.StringVar(&name, "name", "", "name of resources to extract")
 	flag.BoolVar(&isImport, "import", false, "automatically import resources")
 	flag.Parse()
 
-	if filename != "" {
-		extractFile(filename)
+	if url != "" {
+		extractURL(url, dir)
+	} else if filename != "" {
+		extractFile(filename, dir)
 	} else if namespace != "" || kind != "" || name != "" {
-		extractCluster(namespace, kind, name, isImport)
+		extractCluster(namespace, kind, name, isImport, dir)
 	} else {
 		fmt.Println("Usage: -filename <name of file to extract>")
 		fmt.Println("Usage: -namespace <namespace> -kind <kind> -name <name>, blank means all")
 	}
 
 }
+func extractURL(url string, dir string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	//log.Println(string(body))
+	extractYamlBytes(body, dir)
+}
 
-func extractFile(filename string) {
-	k8sConfig := k8s.NewK8SConfig()
-	modelsMap := k8s.BuildModelsMap(k8sConfig)
-
+func extractFile(filename string, dir string) {
 	yamlBytes, yamlErr := ioutil.ReadFile(filename)
 	if yamlErr != nil {
 		log.Fatal(yamlErr)
 	}
+	extractYamlBytes(yamlBytes, dir)
+}
+
+func extractYamlBytes(yamlBytes []byte, dir string) {
+	k8sConfig := k8s.NewK8SConfig()
+	modelsMap := k8s.BuildModelsMap(k8sConfig)
+
 	decoder := yaml.NewYAMLToJSONDecoder(bytes.NewReader(yamlBytes))
 	object := map[string]interface{}{}
-
 	var decodeErr error
 	for {
 		decodeErr = decoder.Decode(&object)
@@ -84,15 +96,14 @@ func extractFile(filename string) {
 			log.Println("No Model For:", gvk)
 			continue
 		}
-		saveK8SasTF(object, model, resourceKey, gvk)
+		saveK8SasTF(object, model, resourceKey, gvk, dir)
 	}
 	if decodeErr != nil && decodeErr != io.EOF {
 		log.Println(decodeErr)
 	}
-
 }
 
-func extractCluster(namespace, kind, name string, isImport bool) {
+func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 	k8sConfig := k8s.NewK8SConfig()
 	modelsMap := k8s.BuildModelsMap(k8sConfig)
 	systemNamePattern := regexp.MustCompile(`^system:`)
@@ -170,7 +181,7 @@ func extractCluster(namespace, kind, name string, isImport bool) {
 					log.Println(stateName, "exists")
 					continue
 				}
-				saveK8SasTF(item.Object, model, resourceKey, gvk)
+				saveK8SasTF(item.Object, model, resourceKey, gvk, dir)
 
 				//import
 				if isImport {
@@ -198,7 +209,7 @@ func execCommand(cmd string, args []string) (string, error) {
 	return string(cmdOut), execErr
 }
 
-func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resourceKey string, gvk schema.GroupVersionKind) {
+func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resourceKey string, gvk schema.GroupVersionKind, dir string) {
 	var buf bytes.Buffer
 	name, _, _ := unstructured.NestedString(itemObject, "metadata", "name")
 	name = k8s.ToSnake(name)
@@ -207,6 +218,9 @@ func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resource
 	model.Accept(visitor)
 
 	filename := k8s.ToSnake(gvk.Kind) + "-" + name + ".tf"
+	if dir != "" {
+		filename = dir + "/" + filename
+	}
 	log.Println(filename)
 	if err := ioutil.WriteFile(filename, buf.Bytes(), 0644); err != nil {
 		log.Fatal("WriteFile err:", err)
