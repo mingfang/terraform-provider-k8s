@@ -56,7 +56,7 @@ func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema
 		} else {
 			//count down
 			this.countdownLatch.Store(gvk, latch.(int)-1)
-			one, err := this.getOne(name, gvk, namespace)
+			one, err := this.GetOne(name, gvk, namespace)
 			if err != nil {
 				return nil, err
 			}
@@ -66,7 +66,7 @@ func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema
 		//todo: make countdown value configurable
 		//start countdown
 		this.countdownLatch.Store(gvk, 0)
-		one, err := this.getOne(name, gvk, namespace)
+		one, err := this.GetOne(name, gvk, namespace)
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema
 	}
 }
 
-func (this *K8SConfig) getOne(name string, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
+func (this *K8SConfig) GetOne(name string, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
 	RESTMapping, _ := this.RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
 	var resourceClient dynamic.ResourceInterface
 	resourceClient = this.DynamicClient.Resource(RESTMapping.Resource)
@@ -92,7 +92,7 @@ func (this *K8SConfig) getOne(name string, gvk *schema.GroupVersionKind, namespa
 	if err != nil {
 		return nil, err
 	}
-	log.Println("getOne name:", name, "gvk:", gvk)
+	log.Println("GetOne name:", name, "gvk:", gvk)
 	return res, nil
 }
 

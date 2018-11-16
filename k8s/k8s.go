@@ -12,6 +12,7 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/kube-openapi/pkg/util/proto"
 
+	"github.com/hashicorp/terraform/helper/resource"
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -314,8 +315,15 @@ func resourceDelete(gvk *schema.GroupVersionKind, isNamespaced bool, model proto
 	}
 
 	resourceData.SetId("")
-	//todo: wait for confirmed delete else problems when force recreate get already exists error
-	return nil
+	return resource.Retry(resourceData.Timeout(tfSchema.TimeoutDelete), func() *resource.RetryError {
+		res, err := k8sConfig.GetOne(name, gvk, namespace)
+		log.Println("Deleting:", res, err)
+		if statusErr, ok := err.(*errors.StatusError); ok && statusErr.ErrStatus.Code == 404 {
+			return resource.NonRetryableError(nil)
+		} else {
+			return resource.RetryableError(fmt.Errorf("Waiting for %s to be deleted", name))
+		}
+	})
 }
 
 func getName(resourceData *tfSchema.ResourceData) (string, error) {
