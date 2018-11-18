@@ -22,4 +22,8 @@ resource "k8s_core_v1_persistent_volume" "this" {
 
     mount_options = "${var.mount_options}"
   }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
+  }
 }
