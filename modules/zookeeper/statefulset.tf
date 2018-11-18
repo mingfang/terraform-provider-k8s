@@ -126,8 +126,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
               "mkdir -p $ZOO_DATA_DIR; echo \"$${HOSTNAME//[^0-9]/}\" > $ZOO_DATA_DIR/myid",
             ]
 
-            resources {}
-
             volume_mounts {
               name       = "${var.volume_claim_template_name}"
               mount_path = "/data"
@@ -136,7 +134,10 @@ resource "k8s_apps_v1_stateful_set" "this" {
           },
         ]
 
-        security_context {}
+        security_context {
+          fsgroup    = 1000
+          run_asuser = 1000
+        }
       }
     }
 
