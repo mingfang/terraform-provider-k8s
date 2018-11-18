@@ -22,8 +22,8 @@ resource "k8s_apps_v1_deployment" "this" {
 
         containers = [
           {
-            image = "${var.image}"
             name  = "pulsar"
+            image = "${var.image}"
 
             command = [
               "bin/pulsar",

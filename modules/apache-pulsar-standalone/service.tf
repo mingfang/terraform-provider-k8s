@@ -1,15 +1,16 @@
 resource "k8s_core_v1_service" "this" {
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
+    labels      = "${local.labels}"
+    annotations = "${var.annotations}"
   }
 
   spec {
     ports = [
       {
         name = "pulsar"
-        port = 6650
+        port = "${var.port}"
       },
       {
         name = "http-admin"
