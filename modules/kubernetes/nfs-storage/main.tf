@@ -15,8 +15,9 @@ variable "annotations" {
 }
 
 variable "nfs_server" {}
+
 variable "mount_options" {
-  type = "list"
+  type    = "list"
   default = []
 }
 

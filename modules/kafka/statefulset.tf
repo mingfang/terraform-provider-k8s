@@ -76,6 +76,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
             ]
 
             liveness_probe {
+              initial_delay_seconds = 1
+              timeout_seconds       = 3
+
               exec {
                 command = [
                   "sh",
@@ -98,8 +101,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
             }
           },
         ]
-
-        security_context {}
       }
     }
 
