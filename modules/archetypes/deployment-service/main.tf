@@ -42,7 +42,7 @@ locals
 */
 
 locals {
-  labels = {
+  labels {
     app     = "${var.name}"
     name    = "${var.name}"
     service = "${var.name}"

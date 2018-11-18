@@ -1,8 +1,8 @@
 resource "k8s_apps_v1_deployment" "this" {
   metadata {
+    labels    = "${local.labels}"
     name      = "${var.name}"
     namespace = "${var.namespace}"
-    labels    = "${local.labels}"
   }
 
   spec {
