@@ -5,7 +5,7 @@ common variables
 variable "name" {}
 
 variable "namespace" {
-  default = "default"
+  default = ""
 }
 
 variable "replicas" {
@@ -15,6 +15,14 @@ variable "replicas" {
 //this image contains example data
 variable image {
   default = "debezium/example-mysql"
+}
+variable port {
+  default = 3306
+}
+
+variable "annotations" {
+  type    = "map"
+  default = {}
 }
 
 variable "node_selector" {
@@ -42,9 +50,10 @@ variable "mysql_root_password" {
   default = "debezium"
 }
 
-variable port {
-  default = 3306
-}
+
+/*
+locals
+*/
 
 locals {
   labels = {
@@ -55,126 +64,28 @@ locals {
 }
 
 /*
-service
+output
 */
 
-resource "k8s_core_v1_service" "this" {
-  metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
-  }
+output "name" {
+  value = "${k8s_core_v1_service.this.metadata.0.name}"
+}
 
-  spec {
-    selector = "${local.labels}"
+output "port" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
+}
 
-    ports = [
-      {
-        name = "tcp"
-        port = "${var.port}"
-      },
-    ]
-  }
+output "cluster_ip" {
+  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
+}
+
+output "statefulset_uid" {
+  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
 }
 
 /*
-statefulset
+statefulset specific
 */
-
-resource "k8s_apps_v1_stateful_set" "this" {
-  metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
-  }
-
-  spec {
-    replicas              = "${var.replicas}"
-    service_name          = "${k8s_core_v1_service.this.metadata.0.name}"
-    pod_management_policy = "OrderedReady"
-
-    selector {
-      match_labels = "${local.labels}"
-    }
-
-    update_strategy {
-      type = "RollingUpdate"
-
-      rolling_update {
-        partition = 0
-      }
-    }
-
-    template {
-      metadata {
-        labels = "${local.labels}"
-      }
-
-      spec {
-        node_selector = "${var.node_selector}"
-
-        affinity {
-          pod_anti_affinity {
-            required_during_scheduling_ignored_during_execution {
-              label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["${var.name}"]
-                }
-              }
-
-              topology_key = "kubernetes.io/hostname"
-            }
-          }
-        }
-
-        containers = [
-          {
-            name  = "mysql"
-            image = "${var.image}"
-
-            env = [
-              {
-                name  = "MYSQL_USER"
-                value = "${var.mysql_user}"
-              },
-              {
-                name  = "MYSQL_PASSWORD"
-                value = "${var.mysql_password}"
-              },
-              {
-                name  = "MYSQL_DATABASE"
-                value = "${var.mysql_database}"
-              },
-              {
-                name  = "MYSQL_ROOT_PASSWORD"
-                value = "${var.mysql_root_password}"
-              },
-              {
-                name  = "TZ"
-                value = "UTC"
-              },
-              {
-                name = "POD_NAME"
-
-                value_from {
-                  field_ref {
-                    field_path = "metadata.name"
-                  }
-                }
-              },
-            ]
-
-            resources {}
-          },
-        ]
-
-        security_context {}
-      }
-    }
-  }
-}
 
 resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
   metadata {
@@ -188,12 +99,4 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
       match_labels = "${local.labels}"
     }
   }
-}
-
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
 }

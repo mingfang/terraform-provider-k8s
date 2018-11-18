@@ -6,28 +6,71 @@ variable "topics" {
   default = "musicgroup,musicalbum,musicrecording"
 }
 
+module "nfs-server" {
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/nfs-server-empty-dir"
+  name   = "nfs-server"
+}
+
+locals {
+  mount_options = [
+    "nfsvers=4.2",
+    "proto=tcp",
+    "port=2049",
+  ]
+}
+
 module "zookeeper_storage" {
-  source = "./storage"
-  name   = "${var.name}-zookeeper"
-  count  = 3
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  name    = "${var.name}-zookeeper"
+  count   = 3
+  storage = "1Gi"
+
+  annotations {
+    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
+  }
+
+  nfs_server    = "${module.nfs-server.cluster_ip}"
+  mount_options = "${local.mount_options}"
 }
 
 module "kafka_storage" {
-  source = "./storage"
-  name   = "${var.name}-kafka"
-  count  = 3
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  name    = "${var.name}-kafka"
+  count   = 3
+  storage = "1Gi"
+
+  annotations {
+    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
+  }
+
+  nfs_server    = "${module.nfs-server.cluster_ip}"
+  mount_options = "${local.mount_options}"
 }
 
 module "elasticsearch_storage" {
-  source = "./storage"
-  name   = "${var.name}-elasticsearch"
-  count  = 3
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  name    = "${var.name}-elasticsearch"
+  count   = 3
+  storage = "1Gi"
+
+  annotations {
+    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
+  }
+
+  nfs_server    = "${module.nfs-server.cluster_ip}"
+  mount_options = "${local.mount_options}"
 }
 
 module "postgres_storage" {
-  source = "./storage"
-  name   = "${var.name}-postgres"
-  count  = 1
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  name       = "${var.name}-postgres"
+  count      = 1
+  storage    = "1Gi"
+  nfs_server = "${module.nfs-server.cluster_ip}"
+
+  annotations {
+    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
+  }
 }
 
 module "postgres" {
