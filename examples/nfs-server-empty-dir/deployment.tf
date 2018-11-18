@@ -22,8 +22,15 @@ resource "k8s_apps_v1_deployment" "this" {
 
         containers = [
           {
+            name  = "nfs-server"
             image = "${var.image}"
-            name  = "${var.name}"
+
+            env = [
+              {
+                name  = "SHARED_DIRECTORY"
+                value = "/data"
+              },
+            ]
 
             security_context {
               privileged = true
@@ -31,7 +38,7 @@ resource "k8s_apps_v1_deployment" "this" {
 
             volume_mounts = [
               {
-                mount_path = "/exports"
+                mount_path = "/data"
                 name       = "data"
               },
             ]

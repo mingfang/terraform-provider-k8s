@@ -6,6 +6,10 @@
  * Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
  */
 
+/*
+common variables
+*/
+
 variable "name" {}
 
 variable "namespace" {
@@ -17,12 +21,25 @@ variable "replicas" {
 }
 
 variable image {
-  default = "k8s.gcr.io/volume-nfs:0.8"
+  default = "itsthenetwork/nfs-server-alpine"
+}
+
+variable "annotations" {
+  type    = "map"
+  default = {}
 }
 
 variable "node_selector" {
   type    = "map"
   default = {}
+}
+
+/*
+service specific variables
+*/
+
+variable port {
+  default = 2049
 }
 
 locals {
@@ -35,6 +52,10 @@ locals {
 
 output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
+}
+
+output "port" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
 }
 
 output "cluster_ip" {
