@@ -22,6 +22,7 @@ variable "replicas" {
 variable image {
   default = "apachepulsar/pulsar-all:2.2.0"
 }
+
 variable port {
   default = 6650
 }
