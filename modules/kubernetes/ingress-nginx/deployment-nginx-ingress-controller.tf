@@ -1,4 +1,4 @@
-resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
+resource "k8s_apps_v1_deployment" "this" {
   metadata {
     labels    = "${local.labels}"
     name      = "${var.name}"
@@ -38,9 +38,9 @@ resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
           {
             args = [
               "/nginx-ingress-controller",
-              "--configmap=$(POD_NAMESPACE)/nginx-configuration",
-              "--publish-service=$(POD_NAMESPACE)/ingress-nginx",
-              "--annotations-prefix=nginx.ingress.kubernetes.io",
+              "--configmap=$(POD_NAMESPACE)/${k8s_core_v1_config_map.nginx-configuration.metadata.0.name}",
+              "--publish-service=$(POD_NAMESPACE)/${var.name}",
+              "--annotations-prefix=${var.annotations_prefix}",
             ]
 
             env = [

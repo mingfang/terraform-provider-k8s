@@ -1,8 +1,9 @@
-resource "k8s_core_v1_service" "ingress-nginx" {
+resource "k8s_core_v1_service" "this" {
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${k8s_core_v1_namespace.ingress-nginx.metadata.0.name}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${k8s_core_v1_namespace.ingress-nginx.metadata.0.name}"
   }
 
   spec {
@@ -10,7 +11,7 @@ resource "k8s_core_v1_service" "ingress-nginx" {
       {
         name        = "http"
         protocol    = "TCP"
-        port        = 80
+        port        = "${var.port}"
         target_port = 80
         node_port   = "${var.node_port_http}"
       },
