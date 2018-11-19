@@ -3,14 +3,25 @@
  *
  * Based on https://github.com/debezium/debezium-examples/tree/master/unwrap-smt
  *
+ * Ingress:
+ *   You must set the ingress_host variable to the IP address of any node.
+ *   The default will most likely not match yours.
+ *
+ *
 */
 
 variable "name" {
   default = "debezium-mysql-es"
 }
 
+//comma separated list of tables to sync
 variable "topics" {
   default = "customers"
+}
+
+//The IP address of any node
+variable "ingress_host" {
+  default = "192.168.2.146"
 }
 
 module "nfs-server" {
