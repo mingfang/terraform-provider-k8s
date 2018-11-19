@@ -16,6 +16,7 @@ variable "replicas" {
 variable image {
   default = "debezium/example-mysql"
 }
+
 variable port {
   default = 3306
 }
@@ -49,7 +50,6 @@ variable mysql_database {
 variable "mysql_root_password" {
   default = "debezium"
 }
-
 
 /*
 locals
