@@ -19,14 +19,14 @@
  * 2. Copy the kubeconfig file for your cluster to the current directory.
  * 3. Create a Terraform file to include this example, like this
  *    ```
- *       module "debezium-mysql-es" {
- *         source = "git::https://github.com/mingfang/terraform-provider-k8s.git//examples/debezium-mysql-elasticsearch"
- *         ingress_host = "<IP of any node, e.g. 192.168.2.146>"
- *       }
+ *    module "debezium-mysql-es" {
+ *      source = "git::https://github.com/mingfang/terraform-provider-k8s.git//examples/debezium-mysql-elasticsearch"
+ *      ingress_host = "<IP of any node, e.g. 192.168.2.146>"
+ *    }
  *
- *       output "urls" {
- *         value = "${module.debezium-mysql-es.urls}"
- *       }
+ *    output "urls" {
+ *      value = "${module.debezium-mysql-es.urls}"
+ *    }
  *    ```
  * 4. Run init to download the modules.
  *    ```
