@@ -14,7 +14,7 @@
  * Instructions:
  * 1. Create alias to run Terraform with this Kubernetes plugin.
  *    ```
- *    alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it'
+ *    alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform terraform'
  *    ```
  * 2. Copy the kubeconfig file for your cluster to the current directory.
  * 3. Create a Terraform file to include this example, like this
@@ -41,9 +41,9 @@
  *    Outputs:
  *
  *    urls = [
- *        http://kafka-connect-ui.192.168.2.146.xip.io:30000,
- *        http://kafka-topic-ui.192.168.2.146.xip.io:30000,
- *        http://elasticsearch.192.168.2.146.xip.io:30000
+ *        http://kafka-connect-ui.192.168.2.146.nip.io:30000,
+ *        http://kafka-topic-ui.192.168.2.146.nip.io:30000,
+ *        http://elasticsearch.192.168.2.146.nip.io:30000
  *    ]
  *    ```
  * 7. After a couple of minutes, you should see customer data sync from MySql to Elasticsearch.

@@ -14,7 +14,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
   spec {
     rules = [
       {
-        host = "kafka-connect-ui.${var.ingress_host}.xip.io"
+        host = "kafka-connect-ui.${var.ingress_host}.nip.io"
 
         http {
           paths = [
@@ -30,7 +30,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
         }
       },
       {
-        host = "kafka-topic-ui.${var.ingress_host}.xip.io"
+        host = "kafka-topic-ui.${var.ingress_host}.nip.io"
 
         http {
           paths = [
@@ -46,7 +46,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
         }
       },
       {
-        host = "elasticsearch.${var.ingress_host}.xip.io"
+        host = "elasticsearch.${var.ingress_host}.nip.io"
 
         http {
           paths = [
