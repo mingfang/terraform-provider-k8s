@@ -32,7 +32,7 @@ module "nfs-server" {
 }
 
 module "storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name    = "${var.name}"
   count   = 1
   storage = "1Gi"

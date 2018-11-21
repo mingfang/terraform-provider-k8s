@@ -20,7 +20,7 @@ locals {
 }
 
 module "zookeeper_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name    = "${var.name}-zookeeper"
   count   = 3
   storage = "1Gi"
@@ -34,7 +34,7 @@ module "zookeeper_storage" {
 }
 
 module "kafka_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name    = "${var.name}-kafka"
   count   = 3
   storage = "1Gi"
@@ -48,7 +48,7 @@ module "kafka_storage" {
 }
 
 module "elasticsearch_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name    = "${var.name}-elasticsearch"
   count   = 3
   storage = "1Gi"
@@ -62,7 +62,7 @@ module "elasticsearch_storage" {
 }
 
 module "postgres_storage" {
-  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/nfs-storage"
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name       = "${var.name}-postgres"
   count      = 1
   storage    = "1Gi"
