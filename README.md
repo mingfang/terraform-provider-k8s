@@ -67,11 +67,6 @@ If the Kind of the resource is not namespaced, such as ```Namespace``` resource,
 
 Ids are used internally by Terraform to uniquely identify resource state.  The user will only need to know them when importing state from a Kubernetes cluster.
 
-## Example
-[guestbook.tf](./examples/guestbook/guestbook.tf)
-
-Based on the official guessbook example https://github.com/kubernetes/examples/blob/master/guestbook/all-in-one/guestbook-all-in-one.yaml
-
 # Utilities
 
 ## List Resource Types
@@ -87,14 +82,16 @@ Run ```tfgenerate <resource>``` to generate a skeleton tf file for the resource.
 ## Extract From YAML File
 The ```tfextract``` will load the existing resources from YAML files and create Terraform files for them.  One file per resource in the YAML file.
 
-Run the ```tfextract -filename <>``` command.
+For local file, run the ```tfextract -filename <> -dir <target>``` command.
+
+For remote file, run the ```tfextract -url <> -dir <target>``` command.
 
 ## Extract From Kubernetes
 The ```tfextract``` will load the existing resources from Kubernetes and create Terraform files for them.  One file per resource.
 
-Run the ```tfextract -namespace <> -kind <> -name <> -import``` command. Any may be left blank but at least one must be set.
+Run the ```tfextract -namespace <> -kind <> -name <> -import -dir <target>``` command. Any may be left blank but at least one must be set.
 
-Example: ```tfextract -kind service -name nginx``` will extract the Service named nginx into a file called service-nginx.tf.
+Example: ```tfextract -kind service -name nginx -dir <target>``` will extract the Service named nginx into a file called service-nginx.tf.
 
 For this example, if ```-kind service``` was left blank then all resources named nginx will be extracted to their coresponding files.  Likewise for ```-name nginx```; if left blank then all services will be extracted.
 
