@@ -1,7 +1,5 @@
 /**
- * Documentation
- *
- * terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
+ * [Docker Registry](https://docs.docker.com/registry/)
  *
  */
 
