@@ -176,14 +176,14 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 				if (name != "" && name != itemName) || systemNamePattern.MatchString(itemName) {
 					continue
 				}
-				stateName := resourceKey + "." + k8s.ToSnake(itemName)
-				if strings.Contains(stateList, stateName) {
-					log.Println(stateName, "exists")
-					continue
-				}
 				saveK8SasTF(item.Object, model, resourceKey, gvk, dir)
 
 				//import
+				stateName := resourceKey + "." + k8s.ToSnake(itemName)
+				if strings.Contains(stateList, stateName) {
+					log.Println("skip import:", stateName)
+					continue
+				}
 				if isImport {
 					var id string
 					if apiResource.Namespaced {
