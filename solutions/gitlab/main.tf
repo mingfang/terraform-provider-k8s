@@ -1,6 +1,9 @@
 variable "name" {}
-variable "storage_class_name" {}
-variable "storage" {}
+
+variable "annotations" {
+  type    = "map"
+  default = {}
+}
 
 variable "gitlab_root_password" {}
 variable "gitlab_runners_registration_token" {}
@@ -9,22 +12,27 @@ variable "gitlab_external_url" {}
 variable "mattermost_external_url" {}
 variable "registry_external_url" {}
 
+variable "storage_class_name" {}
+variable "storage" {}
+
 variable "gitlab_runner_replicas" {
   default = 1
 }
 
 module "gitlab" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/gitlab"
-  name               = "${var.name}"
-  storage_class_name = "${var.storage_class_name}"
-  storage            = "${var.storage}"
+  source      = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/gitlab"
+  name        = "${var.name}"
+  annotations = "${var.annotations}"
 
   gitlab_root_password              = "${var.gitlab_root_password}"
-  auto_devops_domain                = "${var.auto_devops_domain}"
   gitlab_runners_registration_token = "${var.gitlab_runners_registration_token}"
+  auto_devops_domain                = "${var.auto_devops_domain}"
   gitlab_external_url               = "${var.gitlab_external_url}"
   mattermost_external_url           = "${var.mattermost_external_url}"
   registry_external_url             = "${var.registry_external_url}"
+
+  storage_class_name = "${var.storage_class_name}"
+  storage            = "${var.storage}"
 }
 
 module "gitlab-runner" {
