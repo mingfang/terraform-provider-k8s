@@ -88,3 +88,11 @@ output "deployment_uid" {
 output "annotations_prefix" {
   value = "${var.annotations_prefix}"
 }
+
+output "node_port_http" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.node_port}"
+}
+
+output "node_port_https" {
+  value = "${k8s_core_v1_service.this.spec.0.ports.1.node_port}"
+}

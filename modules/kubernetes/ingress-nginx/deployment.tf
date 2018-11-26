@@ -38,7 +38,7 @@ resource "k8s_apps_v1_deployment" "this" {
           {
             args = [
               "/nginx-ingress-controller",
-              "--configmap=$(POD_NAMESPACE)/${k8s_core_v1_config_map.nginx-configuration.metadata.0.name}",
+              "--configmap=$(POD_NAMESPACE)/${k8s_core_v1_config_map.this.metadata.0.name}",
               "--publish-service=$(POD_NAMESPACE)/${var.name}",
               "--annotations-prefix=${var.annotations_prefix}",
             ]
@@ -128,8 +128,13 @@ resource "k8s_apps_v1_deployment" "this" {
 
         security_context {}
 
-        service_account_name = "${k8s_core_v1_service_account.nginx-ingress-serviceaccount.metadata.0.name}"
+        service_account_name = "${k8s_core_v1_service_account.this.metadata.0.name}"
       }
     }
   }
+
+  depends_on = [
+    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this",
+    "k8s_rbac_authorization_k8s_io_v1_role_binding.this"
+  ]
 }

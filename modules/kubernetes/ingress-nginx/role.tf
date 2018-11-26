@@ -1,4 +1,4 @@
-resource "k8s_rbac_authorization_k8s_io_v1_role" "nginx-ingress-role" {
+resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
   metadata {
     labels    = "${local.labels}"
     name      = "${var.name}"
