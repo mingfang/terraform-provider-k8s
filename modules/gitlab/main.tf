@@ -42,11 +42,26 @@ service specific variables
 */
 
 variable "gitlab_root_password" {}
+variable "gitlab_runners_registration_token" {}
+variable "auto_devops_domain" {}
 variable "gitlab_external_url" {}
 variable "mattermost_external_url" {}
 variable "registry_external_url" {}
-variable "auto_devops_domain" {}
-variable "gitlab_runners_registration_token" {}
+
+/*
+statefulset specific
+*/
+
+variable storage_class_name {}
+variable storage {}
+
+variable volume_claim_template_name {
+  default = "pvc"
+}
+
+/*
+locals
+*/
 
 locals {
   gitlab_omnibus_config = <<-EOF
@@ -62,10 +77,6 @@ locals {
     registry_nginx['listen_https'] = false;
     EOF
 }
-
-/*
-locals
-*/
 
 locals {
   labels {
@@ -95,16 +106,12 @@ output "statefulset_uid" {
   value = "${k8s_apps_v1_stateful_set.gitlab.metadata.0.uid}"
 }
 
-/*
-statefulset specific
-*/
+output "gitlab_runners_registration_token" {
+  value = "${var.gitlab_runners_registration_token}"
+}
 
-variable storage_class_name {}
-
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
+output "gitlab_external_url" {
+  value = "${var.gitlab_external_url}"
 }
 
 resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
