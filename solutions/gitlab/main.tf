@@ -40,8 +40,8 @@ module "gitlab-runner" {
   name     = "${var.name}-runner"
   replicas = "${var.gitlab_runner_replicas}"
 
-  registration_token = "${var.gitlab_runners_registration_token}"
-  gitlab_url         = "${var.gitlab_external_url}"
+  registration_token = "${module.gitlab.gitlab_runners_registration_token}"
+  gitlab_url         = "${module.gitlab.gitlab_external_url}"
 }
 
 output "gitlab_external_url" {
