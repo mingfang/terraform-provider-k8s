@@ -1,10 +1,14 @@
 module "ingress-controller" {
-  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
+  source          = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
+  name            = "${var.name}-ingress-controller"
+  namespace       = "default"
+  node_port_http  = "31000"
+  node_port_https = "31443"
 }
 
 resource "k8s_extensions_v1beta1_ingress" "this" {
   metadata {
-    name = "${var.name}"
+    name = "${var.name}-ingress"
 
     annotations {
       "kubernetes.io/ingress.class" = "nginx"
@@ -67,8 +71,8 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
 
 output "urls" {
   value = [
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:30000",
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:30000",
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:30000",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:${module.ingress-controller.node_port_http}",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:${module.ingress-controller.node_port_http}",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:${module.ingress-controller.node_port_http}",
   ]
 }
