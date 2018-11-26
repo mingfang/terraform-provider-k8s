@@ -16,9 +16,9 @@ resource "k8s_core_v1_persistent_volume" "this" {
     }
 
     cephfs {
-      user = "${var.user}"
-
+      user     = "${var.user}"
       monitors = "${var.monitors}"
+      path     = "${var.path}"
 
       secret_ref {
         name      = "${var.secret_name}"
