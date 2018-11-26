@@ -13,7 +13,7 @@ variable "name" {
 }
 
 variable "namespace" {
-  default = "ingress-nginx"
+  default = "default"
 }
 
 variable "replicas" {

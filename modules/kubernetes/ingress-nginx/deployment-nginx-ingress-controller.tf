@@ -2,7 +2,7 @@ resource "k8s_apps_v1_deployment" "this" {
   metadata {
     labels    = "${local.labels}"
     name      = "${var.name}"
-    namespace = "${k8s_core_v1_namespace.ingress-nginx.metadata.0.name}"
+    namespace = "${var.namespace}"
   }
 
   spec {
