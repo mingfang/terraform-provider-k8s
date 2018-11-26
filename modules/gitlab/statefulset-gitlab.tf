@@ -1,8 +1,9 @@
 resource "k8s_apps_v1_stateful_set" "gitlab" {
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
   }
 
   spec {
@@ -76,8 +77,46 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
               },
             ]
 
-            image     = "${var.image}"
-            name      = "gitlab"
+            name  = "gitlab"
+            image = "${var.image}"
+
+            liveness_probe = [
+              {
+                failure_threshold = 3
+
+                http_get = [
+                  {
+                    path   = "/help"
+                    port   = "${var.port}"
+                    scheme = "HTTP"
+                  },
+                ]
+
+                initial_delay_seconds = 300
+                period_seconds        = 10
+                success_threshold     = 1
+                timeout_seconds       = 1
+              },
+            ]
+
+            readiness_probe = [
+              {
+                failure_threshold = 3
+
+                http_get = [
+                  {
+                    path   = "/help"
+                    port   = "${var.port}"
+                    scheme = "HTTP"
+                  },
+                ]
+
+                period_seconds    = 10
+                success_threshold = 1
+                timeout_seconds   = 1
+              },
+            ]
+
             resources = {}
 
             volume_mounts = [
@@ -97,7 +136,7 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
 
         security_context {}
 
-        service_account_name = "${k8s_core_v1_service_account.gitlab.metadata.0.name}"
+        service_account_name = "${k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.gitlab.subjects.0.name}"
       }
     }
 
@@ -118,4 +157,8 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
       }
     }
   }
+
+  //  depends_on = [
+  //    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.gitlab"
+  //  ]
 }
