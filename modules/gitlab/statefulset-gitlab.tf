@@ -92,7 +92,7 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
                   },
                 ]
 
-                initial_delay_seconds = 300
+                initial_delay_seconds = 600
                 period_seconds        = 10
                 success_threshold     = 1
                 timeout_seconds       = 1
