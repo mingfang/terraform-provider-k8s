@@ -84,7 +84,7 @@ resource "k8s_apps_v1_deployment" "gitlab-runner" {
 
         security_context {}
 
-        service_account_name = "${k8s_core_v1_service_account.gitlab-runner.metadata.0.name}"
+        service_account_name = "${k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.gitlab-runner.subjects.0.name}"
 
         volumes = [
           {
