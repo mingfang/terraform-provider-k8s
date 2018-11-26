@@ -1,5 +1,5 @@
 variable name {
-  default = "test-gitlab"
+  default = "gitlab-example"
 }
 
 variable "ingress_host" {
@@ -33,7 +33,7 @@ module "nfs-server" {
 
 module "storage" {
   source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
-  name    = "${var.name}"
+  name    = "${var.name}-gitlab"
   count   = 1
   storage = "1Gi"
 
