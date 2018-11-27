@@ -33,6 +33,38 @@ variable "node_selector" {
   default = {}
 }
 
+variable "dns_policy" {
+  default = ""
+}
+
+variable "priority_class_name" {
+  default = ""
+}
+
+variable "restart_policy" {
+  default = ""
+}
+
+variable "scheduler_name" {
+  default = ""
+}
+
+variable "service_account_name" {
+  default = ""
+}
+
+variable "termination_grace_period_seconds" {
+  default = 30
+}
+
+variable "session_affinity" {
+  default = ""
+}
+
+variable "service_type" {
+  default = ""
+}
+
 /*
 service specific variables
 */
@@ -79,18 +111,4 @@ variable storage {}
 
 variable volume_claim_template_name {
   default = "pvc"
-}
-
-resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
-  metadata {
-    name = "${var.name}"
-  }
-
-  spec {
-    max_unavailable = 1
-
-    selector {
-      match_labels = "${local.labels}"
-    }
-  }
 }

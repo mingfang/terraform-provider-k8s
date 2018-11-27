@@ -1,8 +1,9 @@
 resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
   }
 
   spec {
@@ -28,7 +29,82 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
 
       spec {
-        node_selector = "${var.node_selector}"
+        containers = [
+          {
+            name    = "NAME"
+            image   = "${var.image}"
+            command = []
+            args    = []
+
+            env = [
+              {
+                name = "POD_NAME"
+
+                value_from {
+                  field_ref {
+                    field_path = "metadata.name"
+                  }
+                }
+              },
+            ]
+
+            liveness_probe = [
+              {
+                failure_threshold = 3
+
+                http_get = [
+                  {
+                    path   = "/status"
+                    port   = "${var.port}"
+                    scheme = "HTTP"
+                  },
+                ]
+
+                initial_delay_seconds = 60
+                period_seconds        = 10
+                success_threshold     = 1
+                timeout_seconds       = 1
+              },
+            ]
+
+            readiness_probe = [
+              {
+                failure_threshold = 3
+
+                http_get = [
+                  {
+                    path   = "/status"
+                    port   = "${var.port}"
+                    scheme = "HTTP"
+                  },
+                ]
+
+                period_seconds    = 10
+                success_threshold = 1
+                timeout_seconds   = 1
+              },
+            ]
+
+            resources = {}
+
+            volume_mounts = [
+              {
+                mount_path = "/data"
+                name       = "${var.volume_claim_template_name}"
+                sub_path   = "${var.name}"
+              },
+            ]
+          },
+        ]
+
+        dns_policy                       = "${var.dns_policy}"
+        node_selector                    = "${var.node_selector}"
+        priority_class_name              = "${var.priority_class_name}"
+        restart_policy                   = "${var.restart_policy}"
+        scheduler_name                   = "${var.scheduler_name}"
+        security_context                 = {}
+        service_account_name             = "${var.service_account_name}"
+        termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
 
         affinity {
           pod_anti_affinity {
@@ -45,55 +121,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
             }
           }
         }
-
-        containers = [
-          {
-            name  = "mysql"
-            image = "${var.image}"
-
-            env = [
-              {
-                name  = "MYSQL_USER"
-                value = "${var.mysql_user}"
-              },
-              {
-                name  = "MYSQL_PASSWORD"
-                value = "${var.mysql_password}"
-              },
-              {
-                name  = "MYSQL_DATABASE"
-                value = "${var.mysql_database}"
-              },
-              {
-                name  = "MYSQL_ROOT_PASSWORD"
-                value = "${var.mysql_root_password}"
-              },
-              {
-                name  = "TZ"
-                value = "UTC"
-              },
-              {
-                name = "POD_NAME"
-
-                value_from {
-                  field_ref {
-                    field_path = "metadata.name"
-                  }
-                }
-              },
-            ]
-
-            resources {}
-
-            volume_mounts {
-              name       = "${var.volume_claim_template_name}"
-              mount_path = "/var/lib/mysql"
-              sub_path   = "${var.name}"
-            }
-          },
-        ]
-
-        security_context {}
       }
     }
 
@@ -113,5 +140,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
         }
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
   }
 }
