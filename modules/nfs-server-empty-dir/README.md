@@ -9,9 +9,11 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | name | - | string | - | yes |
-| image | - | string | `k8s.gcr.io/volume-nfs:0.8` | no |
+| annotations | - | map | `{}` | no |
+| image | - | string | `itsthenetwork/nfs-server-alpine` | no |
 | namespace | - | string | `default` | no |
 | node\_selector | - | map | `{}` | no |
+| port | - | string | `2049` | no |
 | replicas | - | string | `1` | no |
 
 ## Outputs
@@ -21,4 +23,5 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 | cluster\_ip | - |
 | deployment\_uid | - |
 | name | - |
+| port | - |
 

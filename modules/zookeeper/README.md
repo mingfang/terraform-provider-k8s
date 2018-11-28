@@ -48,8 +48,9 @@ Module usage:
 | storage | - | string | - | yes |
 | storage\_class\_name | - | string | - | yes |
 | image | - | string | `zookeeper` | no |
-| namespace | - | string | `default` | no |
+| namespace | - | string | `` | no |
 | node\_selector | - | map | `{}` | no |
+| port | - | string | `2181` | no |
 | replicas | - | string | `1` | no |
 | volume\_claim\_template\_name | - | string | `pvc` | no |
 
@@ -58,4 +59,5 @@ Module usage:
 | Name | Description |
 |------|-------------|
 | name | - |
+| port | - |
 

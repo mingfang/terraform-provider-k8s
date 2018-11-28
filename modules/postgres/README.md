@@ -57,7 +57,7 @@ Module usage:
 | postgres\_user | - | string | - | yes |
 | storage | - | string | - | yes |
 | storage\_class\_name | - | string | - | yes |
-| image | - | string | `postgres:9.6` | no |
+| image | - | string | `postgres` | no |
 | namespace | - | string | `default` | no |
 | node\_selector | - | map | `{}` | no |
 | port | - | string | `5432` | no |

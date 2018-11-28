@@ -16,6 +16,7 @@ Useful for used with the VolumeClaimTemplates of StatefulSets.
 | user | - | string | - | yes |
 | annotations | - | map | `{}` | no |
 | mount\_options | - | list | `[]` | no |
+| path | - | string | `/` | no |
 
 ## Outputs
 

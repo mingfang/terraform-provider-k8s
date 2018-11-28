@@ -29,6 +29,8 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 | Name | Description |
 |------|-------------|
 | cluster\_ip | - |
+| gitlab\_external\_url | - |
+| gitlab\_runners\_registration\_token | - |
 | name | - |
 | port | - |
 | statefulset\_uid | - |

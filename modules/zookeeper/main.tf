@@ -49,7 +49,7 @@ common variables
 variable "name" {}
 
 variable "namespace" {
-  default = "default"
+  default = ""
 }
 
 variable "replicas" {
@@ -95,7 +95,7 @@ locals {
 
 data "template_file" "zoo-servers" {
   count    = "${var.replicas}"
-  template = "server.${count.index}=${var.name}-${count.index}.${var.name}.${var.namespace}.svc.cluster.local:2888:3888"
+  template = "server.${count.index}=${var.name}-${count.index}.${var.name}:2888:3888"
 }
 
 resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {

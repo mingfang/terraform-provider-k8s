@@ -9,7 +9,7 @@
 | annotations | - | map | `{}` | no |
 | dns\_policy | - | string | `` | no |
 | elasticsearch\_url | - | string | `http://elasticsearch:9200` | no |
-| image | - | string | `docker.elastic.co/kibana/kibana:6.5.1` | no |
+| image | - | string | `docker.elastic.co/kibana/kibana:6.5.0` | no |
 | name | - | string | `kibana` | no |
 | namespace | - | string | `` | no |
 | node\_selector | - | map | `{}` | no |

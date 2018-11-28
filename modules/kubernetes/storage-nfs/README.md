@@ -12,6 +12,7 @@ Useful for used with the VolumeClaimTemplates of StatefulSets.
 | nfs\_server | - | string | - | yes |
 | storage | - | string | - | yes |
 | annotations | - | map | `{}` | no |
+| mount\_options | - | list | `[]` | no |
 
 ## Outputs
 

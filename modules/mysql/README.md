@@ -20,6 +20,8 @@
 
 | Name | Description |
 |------|-------------|
+| cluster\_ip | - |
 | name | - |
 | port | - |
+| statefulset\_uid | - |
 
