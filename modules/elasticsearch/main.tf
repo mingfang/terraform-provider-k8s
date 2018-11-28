@@ -1,4 +1,6 @@
 /**
+ * [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+ *
  * Module usage:
  *
  *     module "elasticsearch" {
@@ -60,7 +62,7 @@ variable "replicas" {
 }
 
 variable image {
-  default = "docker.elastic.co/elasticsearch/elasticsearch:6.4.2"
+  default = "docker.elastic.co/elasticsearch/elasticsearch:6.5.1"
 }
 
 variable port {

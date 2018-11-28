@@ -1,3 +1,5 @@
+[Elasticsearch](https://www.elastic.co/products/elasticsearch)
+
 Module usage:
 
     module "elasticsearch" {
@@ -53,7 +55,7 @@ Module usage:
 | annotations | - | map | `{}` | no |
 | dns\_policy | - | string | `` | no |
 | heap\_size | - | string | `4g` | no |
-| image | - | string | `docker.elastic.co/elasticsearch/elasticsearch:6.4.2` | no |
+| image | - | string | `docker.elastic.co/elasticsearch/elasticsearch:6.5.1` | no |
 | namespace | - | string | `` | no |
 | node\_selector | - | map | `{}` | no |
 | port | - | string | `9200` | no |
