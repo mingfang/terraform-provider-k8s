@@ -8,8 +8,10 @@
 | gitlab\_runners\_registration\_token | - | string | - | yes |
 | mattermost\_external\_url | - | string | - | yes |
 | name | - | string | - | yes |
+| registry\_external\_url | - | string | - | yes |
 | storage | - | string | - | yes |
 | storage\_class\_name | - | string | - | yes |
+| annotations | - | map | `{}` | no |
 | gitlab\_runner\_replicas | - | string | `1` | no |
 
 ## Outputs
