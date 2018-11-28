@@ -2,8 +2,8 @@ module "ingress-controller" {
   source          = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
   name            = "${var.name}-ingress-controller"
   namespace       = "default"
-  node_port_http  = "31000"
-  node_port_https = "31443"
+  node_port_http  = "${var.ingress_node_port_http}"
+  node_port_https = "${var.ingress_node_port_https}"
 }
 
 resource "k8s_extensions_v1beta1_ingress" "this" {

@@ -6,7 +6,9 @@
 | gitlab\_root\_password | - | string | `changeme` | no |
 | gitlab\_runners\_registration\_token | - | string | `wMFs1-9kpfMeKsfKsNFQ` | no |
 | ingress\_host | - | string | `192.168.2.146` | no |
-| name | - | string | `test-gitlab` | no |
+| ingress\_node\_port\_http | - | string | `31000` | no |
+| ingress\_node\_port\_https | not used but set to avoid conflict | string | `31443` | no |
+| name | - | string | `gitlab-example` | no |
 
 ## Outputs
 

@@ -6,6 +6,15 @@ variable "ingress_host" {
   default = "192.168.2.146"
 }
 
+variable "ingress_node_port_http" {
+  default = 31000
+}
+
+//not used but set to avoid conflict
+variable "ingress_node_port_https" {
+  default = 31443
+}
+
 variable gitlab_root_password {
   default = "changeme"
 }
@@ -54,7 +63,7 @@ module "gitlab" {
   gitlab_root_password              = "${var.gitlab_root_password}"
   auto_devops_domain                = "${var.auto_devops_domain}"
   gitlab_runners_registration_token = "${var.gitlab_runners_registration_token}"
-  gitlab_external_url               = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:30000"
-  mattermost_external_url           = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:30000"
-  registry_external_url             = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:30000"
+  gitlab_external_url               = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:${var.ingress_node_port_http}"
+  mattermost_external_url           = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:${var.ingress_node_port_http}"
+  registry_external_url             = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:${var.ingress_node_port_http}"
 }
