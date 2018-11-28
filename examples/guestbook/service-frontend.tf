@@ -1,19 +1,22 @@
-resource "k8s_core_v1_service" "frontend"{
+resource "k8s_core_v1_service" "frontend" {
   metadata {
     labels {
-      "app" = "guestbook"
+      "app"  = "guestbook"
       "tier" = "frontend"
     }
+
     name = "frontend"
   }
+
   spec {
     ports = [
       {
         port = 80
       },
     ]
+
     selector {
-      "app" = "guestbook"
+      "app"  = "guestbook"
       "tier" = "frontend"
     }
   }
