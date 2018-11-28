@@ -29,51 +29,12 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
 
       spec {
-        node_selector = "${var.node_selector}"
-
-        affinity {
-          pod_anti_affinity {
-            required_during_scheduling_ignored_during_execution {
-              label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["${var.name}"]
-                }
-              }
-
-              topology_key = "kubernetes.io/hostname"
-            }
-          }
-        }
-
         containers = [
           {
             name  = "elasticsearch"
             image = "${var.image}"
 
             env = [
-              {
-                name  = "cluster.name"
-                value = "${var.name}"
-              },
-              {
-                name = "node.name"
-
-                value_from {
-                  field_ref {
-                    field_path = "metadata.name"
-                  }
-                }
-              },
-              {
-                name  = "discovery.zen.ping.unicast.hosts"
-                value = "${var.name}"
-              },
-              {
-                name  = "ES_JAVA_OPTS"
-                value = "-Xms${var.heap_size} -Xmx${var.heap_size}"
-              },
               {
                 name = "POD_NAME"
 
@@ -84,10 +45,40 @@ resource "k8s_apps_v1_stateful_set" "this" {
                 }
               },
               {
+                name  = "cluster.name"
+                value = "${var.name}"
+              },
+              {
+                name  = "node.name"
+                value = "$(POD_NAME)"
+              },
+              {
+                name  = "discovery.zen.ping.unicast.hosts"
+                value = "${var.name}"
+              },
+              {
+                name  = "ES_JAVA_OPTS"
+                value = "-Xms${var.heap_size} -Xmx${var.heap_size}"
+              },
+              {
                 name  = "path.data"
                 value = "/data/$(POD_NAME)"
               },
             ]
+
+            liveness_probe {
+              failure_threshold     = 3
+              initial_delay_seconds = 120
+              period_seconds        = 10
+              success_threshold     = 1
+              timeout_seconds       = 1
+
+              http_get {
+                path   = "/"
+                port   = "${var.port}"
+                scheme = "HTTP"
+              }
+            }
 
             readiness_probe {
               failure_threshold     = 3
@@ -124,10 +115,22 @@ resource "k8s_apps_v1_stateful_set" "this" {
             image             = "busybox"
             image_pull_policy = "IfNotPresent"
 
+            env = [
+              {
+                name = "POD_NAME"
+
+                value_from {
+                  field_ref {
+                    field_path = "metadata.name"
+                  }
+                }
+              },
+            ]
+
             command = [
               "sh",
               "-c",
-              "chown -R 1000:1000 /data",
+              "mkdir -p /data/$(POD_NAME) && chown -R 1000:1000 /data/$(POD_NAME)",
             ]
 
             resources {}
@@ -179,12 +182,29 @@ resource "k8s_apps_v1_stateful_set" "this" {
         ]
 
         dns_policy                       = "${var.dns_policy}"
+        node_selector                    = "${var.node_selector}"
         priority_class_name              = "${var.priority_class_name}"
         restart_policy                   = "${var.restart_policy}"
         scheduler_name                   = "${var.scheduler_name}"
         security_context                 = {}
         service_account_name             = "${var.service_account_name}"
         termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
+
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
       }
     }
 
@@ -204,5 +224,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
         }
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
   }
 }
