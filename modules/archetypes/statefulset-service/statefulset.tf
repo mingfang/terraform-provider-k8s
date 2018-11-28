@@ -48,44 +48,35 @@ resource "k8s_apps_v1_stateful_set" "this" {
               },
             ]
 
-            liveness_probe = [
-              {
-                failure_threshold = 3
+            liveness_probe {
+              failure_threshold     = 3
+              initial_delay_seconds = 60
+              period_seconds        = 10
+              success_threshold     = 1
+              timeout_seconds       = 1
 
-                http_get = [
-                  {
-                    path   = "/status"
-                    port   = "${var.port}"
-                    scheme = "HTTP"
-                  },
-                ]
+              http_get {
+                path   = "/status"
+                port   = "${var.port}"
+                scheme = "HTTP"
+              }
+            }
 
-                initial_delay_seconds = 60
-                period_seconds        = 10
-                success_threshold     = 1
-                timeout_seconds       = 1
-              },
-            ]
+            readiness_probe {
+              failure_threshold     = 3
+              initial_delay_seconds = 5
+              period_seconds        = 10
+              success_threshold     = 1
+              timeout_seconds       = 1
 
-            readiness_probe = [
-              {
-                failure_threshold = 3
+              http_get {
+                path   = "/status"
+                port   = "${var.port}"
+                scheme = "HTTP"
+              }
+            }
 
-                http_get = [
-                  {
-                    path   = "/status"
-                    port   = "${var.port}"
-                    scheme = "HTTP"
-                  },
-                ]
-
-                period_seconds    = 10
-                success_threshold = 1
-                timeout_seconds   = 1
-              },
-            ]
-
-            resources = {}
+            resources {}
 
             volume_mounts = [
               {
