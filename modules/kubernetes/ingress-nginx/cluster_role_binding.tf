@@ -14,7 +14,7 @@ resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "this" {
     {
       kind      = "ServiceAccount"
       name      = "${k8s_core_v1_service_account.this.metadata.0.name}"
-      namespace = "${var.namespace}"
+      namespace = "${k8s_core_v1_service_account.this.metadata.0.namespace}"
     },
   ]
 }

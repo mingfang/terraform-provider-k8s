@@ -8,6 +8,7 @@ Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandator
 |------|-------------|:----:|:-----:|:-----:|
 | annotations | - | map | `{}` | no |
 | annotations\_prefix | - | string | `nginx.ingress.kubernetes.io` | no |
+| dns\_policy | - | string | `` | no |
 | image | - | string | `quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.20.0` | no |
 | name | - | string | `ingress-nginx` | no |
 | namespace | - | string | `default` | no |
@@ -15,7 +16,13 @@ Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandator
 | node\_port\_https | - | string | `30443` | no |
 | node\_selector | - | map | `{}` | no |
 | port | - | string | `80` | no |
+| priority\_class\_name | - | string | `` | no |
 | replicas | - | string | `1` | no |
+| restart\_policy | - | string | `` | no |
+| scheduler\_name | - | string | `` | no |
+| service\_type | - | string | `NodePort` | no |
+| session\_affinity | - | string | `` | no |
+| termination\_grace\_period\_seconds | - | string | `30` | no |
 
 ## Outputs
 

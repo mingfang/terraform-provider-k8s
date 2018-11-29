@@ -24,7 +24,8 @@ resource "k8s_core_v1_service" "this" {
       },
     ]
 
-    selector = "${local.labels}"
-    type     = "NodePort"
+    selector         = "${local.labels}"
+    session_affinity = "${var.session_affinity}"
+    type             = "${var.service_type}"
   }
 }

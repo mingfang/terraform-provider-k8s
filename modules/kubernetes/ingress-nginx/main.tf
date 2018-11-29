@@ -38,6 +38,34 @@ variable "node_selector" {
   default = {}
 }
 
+variable "dns_policy" {
+  default = ""
+}
+
+variable "priority_class_name" {
+  default = ""
+}
+
+variable "restart_policy" {
+  default = ""
+}
+
+variable "scheduler_name" {
+  default = ""
+}
+
+variable "termination_grace_period_seconds" {
+  default = 30
+}
+
+variable "session_affinity" {
+  default = ""
+}
+
+variable "service_type" {
+  default = "NodePort"
+}
+
 /*
 service specific variables
 */
