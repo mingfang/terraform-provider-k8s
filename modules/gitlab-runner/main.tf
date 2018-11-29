@@ -37,6 +37,38 @@ variable "node_selector" {
   default = {}
 }
 
+variable "dns_policy" {
+  default = ""
+}
+
+variable "priority_class_name" {
+  default = ""
+}
+
+variable "restart_policy" {
+  default = ""
+}
+
+variable "scheduler_name" {
+  default = ""
+}
+
+variable "service_account_name" {
+  default = ""
+}
+
+variable "termination_grace_period_seconds" {
+  default = 30
+}
+
+variable "session_affinity" {
+  default = ""
+}
+
+variable "service_type" {
+  default = ""
+}
+
 /*
 service specific variables
 */
@@ -74,5 +106,5 @@ output "cluster_ip" {
 }
 
 output "deployment_uid" {
-  value = "${k8s_apps_v1_deployment.gitlab-runner.metadata.0.uid}"
+  value = "${k8s_apps_v1_deployment.this.metadata.0.uid}"
 }

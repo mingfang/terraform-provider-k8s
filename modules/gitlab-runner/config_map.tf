@@ -1,4 +1,4 @@
-resource "k8s_core_v1_config_map" "gitlab-runner" {
+resource "k8s_core_v1_config_map" "this" {
   data {
     "config.toml" = <<-EOF
       concurrent = 4
@@ -7,6 +7,7 @@ resource "k8s_core_v1_config_map" "gitlab-runner" {
   }
 
   metadata {
+    labels    = "${local.labels}"
     name      = "${var.name}"
     namespace = "${var.namespace}"
   }
