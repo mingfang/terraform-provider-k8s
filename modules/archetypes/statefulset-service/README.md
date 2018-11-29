@@ -20,7 +20,6 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 | replicas | - | string | `1` | no |
 | restart\_policy | - | string | `` | no |
 | scheduler\_name | - | string | `` | no |
-| service\_account\_name | - | string | `` | no |
 | service\_type | - | string | `` | no |
 | session\_affinity | - | string | `` | no |
 | termination\_grace\_period\_seconds | - | string | `30` | no |

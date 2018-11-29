@@ -31,8 +31,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
       spec {
         containers = [
           {
-            name    = "NAME"
-            image   = "${var.image}"
+            name  = "NAME"
+            image = "${var.image}"
+
             command = []
             args    = []
 
@@ -80,6 +81,10 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
             volume_mounts = [
               {
+                mount_path = "/config"
+                name       = "config"
+              },
+              {
                 mount_path = "/data"
                 name       = "${var.volume_claim_template_name}"
                 sub_path   = "${var.name}"
@@ -88,14 +93,25 @@ resource "k8s_apps_v1_stateful_set" "this" {
           },
         ]
 
+        security_context = {}
+
         dns_policy                       = "${var.dns_policy}"
         node_selector                    = "${var.node_selector}"
         priority_class_name              = "${var.priority_class_name}"
         restart_policy                   = "${var.restart_policy}"
         scheduler_name                   = "${var.scheduler_name}"
-        security_context                 = {}
-        service_account_name             = "${var.service_account_name}"
+        service_account_name             = "${k8s_core_v1_service_account.this.metadata.0.name}"
         termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
+
+        volumes = [
+          {
+            name = "config"
+
+            config_map {
+              name = "${k8s_core_v1_config_map.this.metadata.0.name}"
+            }
+          },
+        ]
 
         affinity {
           pod_anti_affinity {
@@ -132,6 +148,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
     }
   }
+
+  depends_on = [
+    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this",
+    "k8s_rbac_authorization_k8s_io_v1_role_binding.this",
+  ]
 
   lifecycle {
     ignore_changes = ["metadata.0.annotations"]

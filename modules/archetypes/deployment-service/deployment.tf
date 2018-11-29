@@ -14,12 +14,12 @@ resource "k8s_apps_v1_deployment" "this" {
     }
 
     strategy {
+      type = "RollingUpdate"
+
       rolling_update {
         max_surge       = "25%"
         max_unavailable = "25%"
       }
-
-      type = "RollingUpdate"
     }
 
     template {
@@ -30,8 +30,9 @@ resource "k8s_apps_v1_deployment" "this" {
       spec {
         containers = [
           {
-            name    = "NAME"
-            image   = "${var.image}"
+            name  = "NAME"
+            image = "${var.image}"
+
             command = []
             args    = []
 
@@ -47,55 +48,64 @@ resource "k8s_apps_v1_deployment" "this" {
               },
             ]
 
-            liveness_probe = [
+            liveness_probe {
+              failure_threshold     = 3
+              initial_delay_seconds = 60
+              period_seconds        = 10
+              success_threshold     = 1
+              timeout_seconds       = 1
+
+              http_get {
+                path   = "/status"
+                port   = "${var.port}"
+                scheme = "HTTP"
+              }
+            }
+
+            readiness_probe {
+              failure_threshold     = 3
+              initial_delay_seconds = 5
+              period_seconds        = 10
+              success_threshold     = 1
+              timeout_seconds       = 1
+
+              http_get {
+                path   = "/status"
+                port   = "${var.port}"
+                scheme = "HTTP"
+              }
+            }
+
+            resources {}
+
+            volume_mounts = [
               {
-                failure_threshold = 3
-
-                http_get = [
-                  {
-                    path   = "/status"
-                    port   = "${var.port}"
-                    scheme = "HTTP"
-                  },
-                ]
-
-                initial_delay_seconds = 60
-                period_seconds        = 10
-                success_threshold     = 1
-                timeout_seconds       = 1
+                mount_path = "/config"
+                name       = "config"
               },
             ]
-
-            readiness_probe = [
-              {
-                failure_threshold = 3
-
-                http_get = [
-                  {
-                    path   = "/status"
-                    port   = "${var.port}"
-                    scheme = "HTTP"
-                  },
-                ]
-
-                period_seconds    = 10
-                success_threshold = 1
-                timeout_seconds   = 1
-              },
-            ]
-
-            resources = {}
           },
         ]
+
+        security_context {}
 
         dns_policy                       = "${var.dns_policy}"
         node_selector                    = "${var.node_selector}"
         priority_class_name              = "${var.priority_class_name}"
         restart_policy                   = "${var.restart_policy}"
         scheduler_name                   = "${var.scheduler_name}"
-        security_context                 = {}
-        service_account_name             = "${var.service_account_name}"
+        service_account_name             = "${k8s_core_v1_service_account.this.metadata.0.name}"
         termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
+
+        volumes = [
+          {
+            name = "config"
+
+            config_map {
+              name = "${k8s_core_v1_config_map.this.metadata.0.name}"
+            }
+          },
+        ]
 
         affinity {
           pod_anti_affinity {
@@ -115,6 +125,11 @@ resource "k8s_apps_v1_deployment" "this" {
       }
     }
   }
+
+  depends_on = [
+    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this",
+    "k8s_rbac_authorization_k8s_io_v1_role_binding.this",
+  ]
 
   lifecycle {
     ignore_changes = ["metadata.0.annotations"]

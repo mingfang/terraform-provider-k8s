@@ -49,10 +49,6 @@ variable "scheduler_name" {
   default = ""
 }
 
-variable "service_account_name" {
-  default = ""
-}
-
 variable "termination_grace_period_seconds" {
   default = 30
 }
