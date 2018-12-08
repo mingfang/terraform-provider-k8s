@@ -94,51 +94,38 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 
 //todo: share data between the Build calls to avoid hitting the server
 func BuildDataSourcesMap() map[string]*tfSchema.Resource {
-	k8sConfig := NewK8SConfig()
-	modelsMap := BuildModelsMap(k8sConfig)
 	resourcesMap := map[string]*tfSchema.Resource{}
 
-	apiResourceLists, _ := k8sConfig.DiscoveryClient.ServerPreferredResources()
-	for _, apiResourceList := range apiResourceLists {
-		for _, apiResource := range apiResourceList.APIResources {
-			if !ContainsVerb(apiResource.Verbs, "get") {
-				continue
-			}
-
-			group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
-			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
-				Group:    group,
-				Version:  version,
-				Resource: apiResource.Kind,
-			})
-			model := modelsMap[gvk]
-			if model == nil {
-				continue
-			}
-			resourceKey := ResourceKey(group, version, apiResource.Kind)
-			//log.Println("gvk:", gvk, "resource:", resourceKey)
-			//log.Println(apiResource)
-			if _, hasKey := resourcesMap[resourceKey]; hasKey {
-				continue
-			}
-			//log.Println(model)
-			//if gvk.Kind != "Service"{
-			//	continue
-			//}
-
-			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
-			model.Accept(schemaVisitor)
-			//todo: lost the top level description here
-			resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
-			isNamespaced := apiResource.Namespaced
-
-			resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return datasourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
-			}
-
-			resourcesMap[resourceKey] = resource
+	ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+		if !ContainsVerb(apiResource.Verbs, "get") {
+			return
 		}
-	}
+
+		model := modelsMap[gvk]
+		if model == nil {
+			log.Println("no model for:", apiResource, gvk)
+			return
+		}
+
+		resourceKey := ResourceKey(gvk.Group, gvk.Version, apiResource.Kind)
+		//log.Println("gvk:", gvk, "resource:", resourceKey)
+		if _, hasKey := resourcesMap[resourceKey]; hasKey {
+			//dups
+			return
+		}
+
+		schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
+		model.Accept(schemaVisitor)
+		//todo: lost the top level description here
+		resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
+		isNamespaced := apiResource.Namespaced
+
+		resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
+			return datasourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
+		}
+
+		resourcesMap[resourceKey] = resource
+	})
 
 	return resourcesMap
 }
