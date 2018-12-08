@@ -12,6 +12,7 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
+	"k8s.io/kube-openapi/pkg/util/proto"
 )
 
 type K8SConfig struct {
@@ -22,6 +23,7 @@ type K8SConfig struct {
 	cache           sync.Map
 	countdownLatch  sync.Map
 	mutex           sync.Mutex
+	ModelsMap       map[schema.GroupVersionKind]proto.Schema
 }
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
@@ -44,7 +46,7 @@ func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema
 	if latch, ok := this.countdownLatch.Load(gvk); ok {
 		if latch.(int) == 0 {
 			//get all
-			if res, err := this.getAll(gvk, namespace); err != nil {
+			if res, err := this.GetAll(gvk, namespace); err != nil {
 				return nil, err
 			} else {
 				for _, item := range res.Items {
@@ -96,22 +98,26 @@ func (this *K8SConfig) GetOne(name string, gvk *schema.GroupVersionKind, namespa
 	return res, nil
 }
 
-func (this *K8SConfig) getAll(gvk *schema.GroupVersionKind, namespace string) (*unstructured.UnstructuredList, error) {
+func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*unstructured.UnstructuredList, error) {
 	RESTMapping, _ := this.RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
 	var resourceClient dynamic.ResourceInterface
 	resourceClient = this.DynamicClient.Resource(RESTMapping.Resource)
 	if namespace != "" {
 		resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
 	}
-	log.Println("getAll gvk:", gvk)
+	log.Println("GetAll gvk:", gvk)
 	return resourceClient.List(metav1.ListOptions{})
 }
 
 func NewK8SConfig() *K8SConfig {
 	//todo: where is kubeconfig
 	kubeconfig := "/kubeconfig"
+	cacheDir := "/dev/shm/kube/http-cache"
 
-	RESTClientGetter := &genericclioptions.ConfigFlags{KubeConfig: &kubeconfig}
+	RESTClientGetter := &genericclioptions.ConfigFlags{
+		KubeConfig: &kubeconfig,
+		CacheDir:   &cacheDir,
+	}
 	RESTMapper, err := RESTClientGetter.ToRESTMapper()
 	if err != nil {
 		log.Fatal(err)
@@ -129,9 +135,84 @@ func NewK8SConfig() *K8SConfig {
 		log.Fatal(err)
 	}
 
+	modelsMap := buildModelsMap(discoveryClient)
+
 	return &K8SConfig{
 		RESTMapper:      RESTMapper,
 		DynamicClient:   dynamicClient,
 		DiscoveryClient: discoveryClient,
+		ModelsMap:       modelsMap,
 	}
+}
+
+func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[schema.GroupVersionKind]proto.Schema {
+	doc, err := DiscoveryClient.OpenAPISchema()
+	if err != nil {
+		log.Fatal(err)
+	}
+	models, _ := proto.NewOpenAPIData(doc)
+	modelsMap := map[schema.GroupVersionKind]proto.Schema{}
+	for _, modelName := range models.ListModels() {
+		model := models.LookupModel(modelName)
+		if model == nil {
+			log.Println("No Model For ModelName:", modelName)
+			continue
+		}
+		gvkList := parseGroupVersionKind(model)
+		for _, gvk := range gvkList {
+			if len(gvk.Kind) > 0 && !IsSkipKind(gvk.Kind) {
+				modelsMap[gvk] = model
+			}
+		}
+	}
+	return modelsMap
+}
+
+const groupVersionKindExtensionKey = "x-kubernetes-group-version-kind"
+
+func parseGroupVersionKind(s proto.Schema) []schema.GroupVersionKind {
+	extensions := s.GetExtensions()
+
+	gvkListResult := []schema.GroupVersionKind{}
+
+	// Get the extensions
+	gvkExtension, ok := extensions[groupVersionKindExtensionKey]
+	if !ok {
+		return []schema.GroupVersionKind{}
+	}
+
+	// gvk extension must be a list of at least 1 element.
+	gvkList, ok := gvkExtension.([]interface{})
+	if !ok {
+		return []schema.GroupVersionKind{}
+	}
+
+	for _, gvk := range gvkList {
+		// gvk extension list must be a map with group, version, and
+		// kind fields
+		gvkMap, ok := gvk.(map[interface{}]interface{})
+		if !ok {
+			continue
+		}
+		group, ok := gvkMap["group"].(string)
+		if !ok {
+			continue
+		}
+		version, ok := gvkMap["version"].(string)
+		if !ok {
+			continue
+		}
+		kind, ok := gvkMap["kind"].(string)
+		if !ok {
+			continue
+		}
+
+		gvkListResult = append(gvkListResult, schema.GroupVersionKind{
+			Group:   group,
+			Version: version,
+			Kind:    kind,
+		})
+	}
+
+	return gvkListResult
 }

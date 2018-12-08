@@ -16,30 +16,6 @@ import (
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
 )
 
-//map gvk to model
-func BuildModelsMap(k8sConfig *K8SConfig) map[schema.GroupVersionKind]proto.Schema {
-	doc, err := k8sConfig.DiscoveryClient.OpenAPISchema()
-	if err != nil {
-		log.Fatal(err)
-	}
-	models, _ := proto.NewOpenAPIData(doc)
-	modelsMap := map[schema.GroupVersionKind]proto.Schema{}
-	for _, modelName := range models.ListModels() {
-		model := models.LookupModel(modelName)
-		if model == nil {
-			log.Println("No Model For ModelName:", modelName)
-			continue
-		}
-		gvkList := parseGroupVersionKind(model)
-		for _, gvk := range gvkList {
-			if len(gvk.Kind) > 0 && !IsSkipKind(gvk.Kind) {
-				modelsMap[gvk] = model
-			}
-		}
-	}
-	return modelsMap
-}
-
 func BuildResourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
 
@@ -308,53 +284,4 @@ func getNamespace(isNamespaced bool, resourceData *tfSchema.ResourceData, k8sCon
 	} else {
 		return k8sConfig.Namespace
 	}
-}
-
-const groupVersionKindExtensionKey = "x-kubernetes-group-version-kind"
-
-func parseGroupVersionKind(s proto.Schema) []schema.GroupVersionKind {
-	extensions := s.GetExtensions()
-
-	gvkListResult := []schema.GroupVersionKind{}
-
-	// Get the extensions
-	gvkExtension, ok := extensions[groupVersionKindExtensionKey]
-	if !ok {
-		return []schema.GroupVersionKind{}
-	}
-
-	// gvk extension must be a list of at least 1 element.
-	gvkList, ok := gvkExtension.([]interface{})
-	if !ok {
-		return []schema.GroupVersionKind{}
-	}
-
-	for _, gvk := range gvkList {
-		// gvk extension list must be a map with group, version, and
-		// kind fields
-		gvkMap, ok := gvk.(map[interface{}]interface{})
-		if !ok {
-			continue
-		}
-		group, ok := gvkMap["group"].(string)
-		if !ok {
-			continue
-		}
-		version, ok := gvkMap["version"].(string)
-		if !ok {
-			continue
-		}
-		kind, ok := gvkMap["kind"].(string)
-		if !ok {
-			continue
-		}
-
-		gvkListResult = append(gvkListResult, schema.GroupVersionKind{
-			Group:   group,
-			Version: version,
-			Kind:    kind,
-		})
-	}
-
-	return gvkListResult
 }

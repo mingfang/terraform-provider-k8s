@@ -173,7 +173,7 @@ func PrintKeys(data map[string]struct{}) {
 
 func ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
 	k8sConfig := NewK8SConfig()
-	modelsMap := BuildModelsMap(k8sConfig)
+	modelsMap := k8sConfig.ModelsMap
 	apiGroupList, err := k8sConfig.DiscoveryClient.ServerGroups()
 	if err != nil {
 		log.Println(err)
