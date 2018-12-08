@@ -41,77 +41,53 @@ func BuildModelsMap(k8sConfig *K8SConfig) map[schema.GroupVersionKind]proto.Sche
 }
 
 func BuildResourcesMap() map[string]*tfSchema.Resource {
-	k8sConfig := NewK8SConfig()
-	modelsMap := BuildModelsMap(k8sConfig)
 	resourcesMap := map[string]*tfSchema.Resource{}
 
-	apiGroupList, err := k8sConfig.DiscoveryClient.ServerGroups()
-	if err != nil {
-		log.Println(err)
-	}
-	for _, group := range apiGroupList.Groups {
-		//log.Println("group:", group.PreferredVersion.GroupVersion)
-		apiResourceList, err := k8sConfig.DiscoveryClient.ServerResourcesForGroupVersion(group.PreferredVersion.GroupVersion)
-		if err != nil {
-			log.Println(err)
+	ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+		if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
+			return
 		}
-		group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
-		for _, apiResource := range apiResourceList.APIResources {
-			if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
-				continue
-			}
 
-			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
-				Group:    group,
-				Version:  version,
-				Resource: apiResource.Kind,
-			})
-
-			//debug
-			//if gvk.Kind != "PersistentVolume"{
-			//	continue
-			//}
-			//log.Println(apiResource)
-
-			model := modelsMap[gvk]
-			if model == nil {
-				//log.Println("no model for:", apiResource)
-				continue
-			}
-			resourceKey := ResourceKey(group, version, apiResource.Kind)
-			//log.Println("gvk:", gvk, "resource:", resourceKey)
-			if _, hasKey := resourcesMap[resourceKey]; hasKey {
-				continue
-			}
-
-			schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
-			model.Accept(schemaVisitor)
-			//todo: lost the top level description here
-			resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
-			isNamespaced := apiResource.Namespaced
-
-			resource.Exists = func(resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
-				return resourceExists(&gvk, isNamespaced, model, resourceData, meta)
-			}
-			resource.Create = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceCreate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
-			}
-			resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
-			}
-			resource.Update = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceUpdate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
-			}
-			resource.Delete = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
-				return resourceDelete(&gvk, isNamespaced, model, resourceData, meta)
-			}
-			resource.Importer = &tfSchema.ResourceImporter{
-				State: tfSchema.ImportStatePassthrough,
-			}
-
-			resourcesMap[resourceKey] = resource
+		model := modelsMap[gvk]
+		if model == nil {
+			log.Println("no model for:", apiResource, gvk)
+			return
 		}
-	}
+
+		resourceKey := ResourceKey(gvk.Group, gvk.Version, apiResource.Kind)
+		//log.Println("gvk:", gvk, "resource:", resourceKey)
+		if _, hasKey := resourcesMap[resourceKey]; hasKey {
+			//dups
+			return
+		}
+
+		schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
+		model.Accept(schemaVisitor)
+		//todo: lost the top level description here
+		resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
+		isNamespaced := apiResource.Namespaced
+
+		resource.Exists = func(resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
+			return resourceExists(&gvk, isNamespaced, model, resourceData, meta)
+		}
+		resource.Create = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
+			return resourceCreate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
+		}
+		resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
+			return resourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
+		}
+		resource.Update = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
+			return resourceUpdate(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
+		}
+		resource.Delete = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
+			return resourceDelete(&gvk, isNamespaced, model, resourceData, meta)
+		}
+		resource.Importer = &tfSchema.ResourceImporter{
+			State: tfSchema.ImportStatePassthrough,
+		}
+
+		resourcesMap[resourceKey] = resource
+	})
 
 	return resourcesMap
 }

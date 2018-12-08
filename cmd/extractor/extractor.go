@@ -104,102 +104,91 @@ func extractYamlBytes(yamlBytes []byte, dir string) {
 }
 
 func extractCluster(namespace, kind, name string, isImport bool, dir string) {
-	k8sConfig := k8s.NewK8SConfig()
-	modelsMap := k8s.BuildModelsMap(k8sConfig)
 	systemNamePattern := regexp.MustCompile(`^system:`)
-
 	var dupDetector = map[string]struct{}{}
-	apiResourceLists, _ := k8sConfig.DiscoveryClient.ServerPreferredResources()
-	for _, apiResourceList := range apiResourceLists {
-		group, version, _ := k8s.SplitGroupVersion(apiResourceList.GroupVersion)
-		if version == "v1beta1" {
-			log.Println("Skip:", apiResourceList.GroupVersion)
-			continue
+
+	k8s.ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *k8s.K8SConfig) {
+		if gvk.Version == "v1beta1" {
+			//log.Println("Skip v1beta1:", gvk.Group, gvk.Version, gvk.Kind)
+			return
 		}
-		for _, apiResource := range apiResourceList.APIResources {
-			if kind != "" && strings.ToLower(kind) != strings.ToLower(apiResource.Kind) {
-				continue
-			}
-			if !k8s.ContainsVerb(apiResource.Verbs, "create") || !k8s.ContainsVerb(apiResource.Verbs, "get") {
-				continue
-			}
-			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
-				Group:    group,
-				Version:  version,
-				Resource: apiResource.Kind,
-			})
-			model := modelsMap[gvk]
-			if model == nil {
-				log.Println("No Model For:", gvk)
-				continue
-			}
-			resourceKey := k8s.ResourceKey(gvk.Group, gvk.Version, gvk.Kind)
-			//log.Println("gvk:", gvk, "resource:", resourceKey)
-			//log.Println(apiResource)
-
-			//todo: handle dup deploys that comes in as both beta1 and v1
-			//todo: prevent dup, some are repeated with category = "all"
-			if _, hasKey := dupDetector[resourceKey]; hasKey {
-				continue
-			}
-			dupDetector[resourceKey] = struct{}{}
-
-			//todo: add exclude option
-			if apiResource.Kind == "Pod" || apiResource.Kind == "ReplicaSet" || apiResource.Kind == "Endpoints" || apiResource.Kind == "APIService" {
-				log.Println("Skip:", apiResource.Kind)
-				continue
-			}
-
-			RESTMapping, _ := k8sConfig.RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
-			//todo: get namespace from command line
-			var resourceClient dynamic.ResourceInterface
-			resourceClient = k8sConfig.DynamicClient.Resource(RESTMapping.Resource)
-			if apiResource.Namespaced {
-				resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
-			}
-			res, err := resourceClient.List(metav1.ListOptions{})
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			//log.Println("read res:", res)
-
-			//skip existing resources
-			execCommand("terraform", []string{"init"})
-			stateList, execErr := execCommand("terraform", []string{"state", "list"})
-			if execErr != nil {
-				log.Println(string(stateList))
-			}
-
-			for _, item := range res.Items {
-				itemName, _, _ := unstructured.NestedString(item.Object, "metadata", "name")
-				if (name != "" && name != itemName) || systemNamePattern.MatchString(itemName) {
-					continue
-				}
-				saveK8SasTF(item.Object, model, resourceKey, gvk, dir)
-
-				//import
-				stateName := resourceKey + "." + k8s.ToSnake(itemName)
-				if strings.Contains(stateList, stateName) {
-					log.Println("skip import:", stateName)
-					continue
-				}
-				if isImport {
-					var id string
-					if apiResource.Namespaced {
-						id = k8s.CreateId(namespace, gvk.Kind, itemName)
-					} else {
-						id = k8s.CreateId("", gvk.Kind, itemName)
-					}
-					log.Printf("terraform import %s.%s %s\n", resourceKey, itemName, id)
-					if cmdOut, execErr := execCommand("terraform", []string{"import", stateName, id}); execErr != nil {
-						log.Println(string(cmdOut))
-					}
-				}
-			}
-
+		if kind != "" && strings.ToLower(kind) != strings.ToLower(apiResource.Kind) {
+			//log.Println("Skip kind:", gvk.Group, gvk.Version, gvk.Kind)
+			return
 		}
-	}
+		if !k8s.ContainsVerb(apiResource.Verbs, "create") || !k8s.ContainsVerb(apiResource.Verbs, "get") {
+			//log.Println("Skip Verbs:", gvk.Group, gvk.Version, gvk.Kind)
+			return
+		}
+		model := modelsMap[gvk]
+		if model == nil {
+			//log.Println("No Model For:", gvk)
+			return
+		}
+		resourceKey := k8s.ResourceKey(gvk.Group, gvk.Version, gvk.Kind)
+		//log.Println("gvk:", gvk, "resource:", resourceKey)
+
+		//todo: handle dup deploys that comes in as both beta1 and v1
+		//todo: prevent dup, some are repeated with category = "all"
+		if _, hasKey := dupDetector[resourceKey]; hasKey {
+			return
+		}
+		dupDetector[resourceKey] = struct{}{}
+
+		//todo: add exclude option
+		if apiResource.Kind == "Pod" || apiResource.Kind == "ReplicaSet" || apiResource.Kind == "Endpoints" || apiResource.Kind == "APIService" {
+			//log.Println("Skip:", apiResource.Kind)
+			return
+		}
+
+		RESTMapping, _ := k8sConfig.RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
+		//todo: get namespace from command line
+		var resourceClient dynamic.ResourceInterface
+		resourceClient = k8sConfig.DynamicClient.Resource(RESTMapping.Resource)
+		if apiResource.Namespaced {
+			resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
+		}
+		res, err := resourceClient.List(metav1.ListOptions{})
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		//log.Println("read res:", res)
+
+		//skip existing resources
+		execCommand("terraform", []string{"init"})
+		stateList, execErr := execCommand("terraform", []string{"state", "list"})
+		if execErr != nil {
+			log.Println(string(stateList))
+		}
+
+		for _, item := range res.Items {
+			itemName, _, _ := unstructured.NestedString(item.Object, "metadata", "name")
+			if (name != "" && name != itemName) || systemNamePattern.MatchString(itemName) {
+				continue
+			}
+			saveK8SasTF(item.Object, model, resourceKey, gvk, dir)
+
+			//import
+			stateName := resourceKey + "." + k8s.ToSnake(itemName)
+			if strings.Contains(stateList, stateName) {
+				log.Println("skip import:", stateName)
+				continue
+			}
+			if isImport {
+				var id string
+				if apiResource.Namespaced {
+					id = k8s.CreateId(namespace, gvk.Kind, itemName)
+				} else {
+					id = k8s.CreateId("", gvk.Kind, itemName)
+				}
+				log.Printf("terraform import %s.%s %s\n", resourceKey, itemName, id)
+				if cmdOut, execErr := execCommand("terraform", []string{"import", stateName, id}); execErr != nil {
+					log.Println(string(cmdOut))
+				}
+			}
+		}
+	})
 }
 
 func execCommand(cmd string, args []string) (string, error) {
