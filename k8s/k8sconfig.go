@@ -15,6 +15,53 @@ import (
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
 
+var (
+	singleton *K8SConfig
+)
+
+func K8SConfig_Singleton() *K8SConfig {
+	if singleton == nil {
+		singleton = newK8SConfig()
+	}
+	return singleton
+}
+
+func newK8SConfig() *K8SConfig {
+	//todo: where is kubeconfig
+	kubeconfig := "/kubeconfig"
+	cacheDir := "/dev/shm/kube/http-cache"
+
+	RESTClientGetter := &genericclioptions.ConfigFlags{
+		KubeConfig: &kubeconfig,
+		CacheDir:   &cacheDir,
+	}
+	RESTMapper, err := RESTClientGetter.ToRESTMapper()
+	if err != nil {
+		log.Fatal(err)
+	}
+	RESTConfig, err := RESTClientGetter.ToRESTConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	dynamicClient, err := dynamic.NewForConfig(RESTConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+	discoveryClient, err := RESTClientGetter.ToDiscoveryClient()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	modelsMap := buildModelsMap(discoveryClient)
+
+	return &K8SConfig{
+		RESTMapper:      RESTMapper,
+		DynamicClient:   dynamicClient,
+		DiscoveryClient: discoveryClient,
+		ModelsMap:       modelsMap,
+	}
+}
+
 type K8SConfig struct {
 	RESTMapper      meta.RESTMapper
 	DynamicClient   dynamic.Interface
@@ -109,40 +156,21 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 	return resourceClient.List(metav1.ListOptions{})
 }
 
-func NewK8SConfig() *K8SConfig {
-	//todo: where is kubeconfig
-	kubeconfig := "/kubeconfig"
-	cacheDir := "/dev/shm/kube/http-cache"
-
-	RESTClientGetter := &genericclioptions.ConfigFlags{
-		KubeConfig: &kubeconfig,
-		CacheDir:   &cacheDir,
-	}
-	RESTMapper, err := RESTClientGetter.ToRESTMapper()
-	if err != nil {
-		log.Fatal(err)
-	}
-	RESTConfig, err := RESTClientGetter.ToRESTConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-	dynamicClient, err := dynamic.NewForConfig(RESTConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
-	discoveryClient, err := RESTClientGetter.ToDiscoveryClient()
-	if err != nil {
-		log.Fatal(err)
+func (this *K8SConfig) ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
+	lists, _ := this.DiscoveryClient.ServerPreferredResources()
+	for _, list := range lists {
+		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
+		gv, _ := schema.ParseGroupVersion(list.GroupVersion)
+		for _, apiResource := range list.APIResources {
+			gvk, _ := this.RESTMapper.KindFor(schema.GroupVersionResource{
+				Group:    gv.Group,
+				Version:  gv.Version,
+				Resource: apiResource.Kind,
+			})
+			callback(apiResource, gvk, this.ModelsMap, this)
+		}
 	}
 
-	modelsMap := buildModelsMap(discoveryClient)
-
-	return &K8SConfig{
-		RESTMapper:      RESTMapper,
-		DynamicClient:   dynamicClient,
-		DiscoveryClient: discoveryClient,
-		ModelsMap:       modelsMap,
-	}
 }
 
 func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[schema.GroupVersionKind]proto.Schema {
@@ -155,7 +183,7 @@ func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[sche
 	for _, modelName := range models.ListModels() {
 		model := models.LookupModel(modelName)
 		if model == nil {
-			log.Println("No Model For ModelName:", modelName)
+			//log.Println("No Model For ModelName:", modelName)
 			continue
 		}
 		gvkList := parseGroupVersionKind(model)

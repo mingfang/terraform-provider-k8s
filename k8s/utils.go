@@ -9,8 +9,6 @@ import (
 	"github.com/davecgh/go-spew/spew"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kube-openapi/pkg/util/proto"
 )
 
 func ContainsVerb(verbs metav1.Verbs, verb string) bool {
@@ -169,30 +167,4 @@ func PrintKeys(data map[string]struct{}) {
 		keys = append(keys, key)
 	}
 	log.Println("keys:", strings.Join(keys, ","))
-}
-
-func ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
-	k8sConfig := NewK8SConfig()
-	modelsMap := k8sConfig.ModelsMap
-	apiGroupList, err := k8sConfig.DiscoveryClient.ServerGroups()
-	if err != nil {
-		log.Println(err)
-	}
-	for _, group := range apiGroupList.Groups {
-		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
-		apiResourceList, err := k8sConfig.DiscoveryClient.ServerResourcesForGroupVersion(group.PreferredVersion.GroupVersion)
-		if err != nil {
-			log.Println(err)
-		}
-		group, version, _ := SplitGroupVersion(apiResourceList.GroupVersion)
-		for _, apiResource := range apiResourceList.APIResources {
-			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
-				Group:    group,
-				Version:  version,
-				Resource: apiResource.Kind,
-			})
-			callback(apiResource, gvk, modelsMap, k8sConfig)
-		}
-	}
-
 }

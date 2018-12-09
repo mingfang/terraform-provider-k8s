@@ -19,14 +19,14 @@ import (
 func BuildResourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
 
-	ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
 		if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
 			return
 		}
 
 		model := modelsMap[gvk]
 		if model == nil {
-			log.Println("no model for:", apiResource, gvk)
+			//log.Println("no model for:", apiResource, gvk)
 			return
 		}
 
@@ -68,18 +68,17 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 	return resourcesMap
 }
 
-//todo: share data between the Build calls to avoid hitting the server
 func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
 
-	ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
 		if !ContainsVerb(apiResource.Verbs, "get") {
 			return
 		}
 
 		model := modelsMap[gvk]
 		if model == nil {
-			log.Println("no model for:", apiResource, gvk)
+			//log.Println("no model for:", apiResource, gvk)
 			return
 		}
 

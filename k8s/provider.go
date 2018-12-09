@@ -24,7 +24,7 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(resourceData *schema.ResourceData) (interface{}, error) {
-	k8sConfig := NewK8SConfig()
+	k8sConfig := K8SConfig_Singleton()
 	k8sConfig.Namespace = resourceData.Get("namespace").(string)
 	return k8sConfig, nil
 }
