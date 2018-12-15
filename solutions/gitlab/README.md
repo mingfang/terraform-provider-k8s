@@ -21,3 +21,4 @@
 | gitlab\_external\_url | - |
 | mattermost\_external\_url | - |
 
+<img src='diagram.svg'/>
