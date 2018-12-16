@@ -19,14 +19,11 @@ func Test(t *testing.T) {
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 	terraform.InitAndApply(t, terraformOptions)
 
-	elasticsearchURL := terraform.Output(t, terraformOptions, "elasticsearch_url")
-	kibanaURL := terraform.Output(t, terraformOptions, "kibana_url")
+	gitlabURL := terraform.Output(t, terraformOptions, "gitlab_url")
 	maxRetries := 30
 	timeBetweenRetries := 5 * time.Second
 
-	http_helper.HttpGetWithRetryWithCustomValidation(t, elasticsearchURL, maxRetries, timeBetweenRetries, validate)
-
-	http_helper.HttpGetWithRetryWithCustomValidation(t, kibanaURL, maxRetries, timeBetweenRetries, validate)
+	http_helper.HttpGetWithRetryWithCustomValidation(t, gitlabURL, maxRetries, timeBetweenRetries, validate)
 }
 
 func validate(status int, _ string) bool {

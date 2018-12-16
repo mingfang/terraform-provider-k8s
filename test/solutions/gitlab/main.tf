@@ -1,5 +1,5 @@
 /**
- * go test -v test/solutions/central-logging/basic_test.go
+ * go test -v test/solutions/gitlab/basic_test.go
  */
 
 variable "name" {
@@ -10,6 +10,18 @@ variable "ingress_host" {
   default = "192.168.2.146"
 }
 
+variable gitlab_root_password {
+  default = "changeme"
+}
+
+variable gitlab_runners_registration_token {
+  default = "wMFs1-9kpfMeKsfKsNFQ"
+}
+
+variable auto_devops_domain {
+  default = "1.2.3.4.nip.io"
+}
+
 module "ingress-controller" {
   source = "../../../test/fixtures/ingress"
   name   = "${var.name}"
@@ -17,16 +29,22 @@ module "ingress-controller" {
 
 module "storage" {
   source = "../../../test/fixtures/storage"
-  name   = "${var.name}-es"
+  name   = "${var.name}"
   count  = 1
 }
 
-module "central_logging" {
-  source             = "../../../solutions/central-logging"
+module "gitlab" {
+  source             = "../../../solutions/gitlab"
   name               = "${var.name}"
   storage_class_name = "${module.storage.storage_class_name}"
   storage            = "${module.storage.storage}"
-  es_replicas        = "${module.storage.count}"
+
+  gitlab_root_password              = "${var.gitlab_root_password}"
+  auto_devops_domain                = "${var.auto_devops_domain}"
+  gitlab_runners_registration_token = "${var.gitlab_runners_registration_token}"
+  gitlab_external_url               = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:${module.ingress-controller.node_port_http}"
+  mattermost_external_url           = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:${module.ingress-controller.node_port_http}"
+  registry_external_url             = "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:${module.ingress-controller.node_port_http}"
 }
 
 resource "k8s_extensions_v1beta1_ingress" "this" {
@@ -41,7 +59,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
   spec {
     rules = [
       {
-        host = "${module.central_logging.elasticsearch_name}.${var.ingress_host}.nip.io"
+        host = "${var.name}.${var.ingress_host}.nip.io"
 
         http {
           paths = [
@@ -49,15 +67,15 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
               path = "/"
 
               backend {
-                service_name = "${module.central_logging.elasticsearch_name}"
-                service_port = "${module.central_logging.elasticsearch_port}"
+                service_name = "${var.name}"
+                service_port = 80
               }
             },
           ]
         }
       },
       {
-        host = "${module.central_logging.kibana_name}.${var.ingress_host}.nip.io"
+        host = "mattermost.${var.name}.${var.ingress_host}.nip.io"
 
         http {
           paths = [
@@ -65,8 +83,24 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
               path = "/"
 
               backend {
-                service_name = "${module.central_logging.kibana_name}"
-                service_port = "${module.central_logging.kibana_port}"
+                service_name = "${var.name}"
+                service_port = 80
+              }
+            },
+          ]
+        }
+      },
+      {
+        host = "registry.${var.name}.${var.ingress_host}.nip.io"
+
+        http {
+          paths = [
+            {
+              path = "/"
+
+              backend {
+                service_name = "${var.name}"
+                service_port = 80
               }
             },
           ]
@@ -76,10 +110,6 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
   }
 }
 
-output "elasticsearch_url" {
-  value = "http://${module.central_logging.elasticsearch_name}.${var.ingress_host}.nip.io:${module.ingress-controller.node_port_http}"
-}
-
-output "kibana_url" {
-  value = "http://${module.central_logging.kibana_name}.${var.ingress_host}.nip.io:${module.ingress-controller.node_port_http}"
+output "gitlab_url" {
+  value = "${module.gitlab.gitlab_external_url}"
 }

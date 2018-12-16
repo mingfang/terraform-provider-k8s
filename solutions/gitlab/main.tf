@@ -44,6 +44,14 @@ module "gitlab-runner" {
   gitlab_url         = "${module.gitlab.gitlab_external_url}"
 }
 
+output "gitlab_name" {
+  value = "${module.gitlab.name}"
+}
+
+output "gitlab_port" {
+  value = "${module.gitlab.port}"
+}
+
 output "gitlab_external_url" {
   value = "${var.gitlab_external_url}"
 }
