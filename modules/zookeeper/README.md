@@ -44,20 +44,21 @@ Module usage:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| name | - | string | - | yes |
-| storage | - | string | - | yes |
-| storage\_class\_name | - | string | - | yes |
-| image | - | string | `zookeeper` | no |
-| namespace | - | string | `` | no |
-| node\_selector | - | map | `{}` | no |
-| port | - | string | `2181` | no |
-| replicas | - | string | `1` | no |
-| volume\_claim\_template\_name | - | string | `pvc` | no |
+| name |  | string | n/a | yes |
+| storage |  | string | n/a | yes |
+| storage\_class\_name |  | string | n/a | yes |
+| image |  | string | `"zookeeper"` | no |
+| namespace |  | string | `""` | no |
+| node\_selector |  | map | `{}` | no |
+| port |  | string | `"2181"` | no |
+| replicas |  | string | `"1"` | no |
+| volume\_claim\_template\_name |  | string | `"pvc"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| name | - |
-| port | - |
+| name |  |
+| port |  |
 
+<img src="diagram.svg"/>

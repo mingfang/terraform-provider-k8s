@@ -4,12 +4,13 @@ go test -v test/modules/prometheus/basic_test.go
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| ingress\_host | - | string | `192.168.2.146` | no |
-| name | - | string | `test` | no |
+| ingress\_host |  | string | `"192.168.2.146"` | no |
+| name |  | string | `"test"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| url | - |
+| url |  |
 
+<img src="diagram.svg"/>

@@ -49,32 +49,33 @@ Module usage:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| name | - | string | - | yes |
-| storage | - | string | - | yes |
-| storage\_class\_name | - | string | - | yes |
-| annotations | - | map | `{}` | no |
-| dns\_policy | - | string | `` | no |
-| heap\_size | - | string | `4g` | no |
-| image | - | string | `docker.elastic.co/elasticsearch/elasticsearch:6.5.1` | no |
-| namespace | - | string | `` | no |
-| node\_selector | - | map | `{}` | no |
-| port | - | string | `9200` | no |
-| priority\_class\_name | - | string | `` | no |
-| replicas | - | string | `1` | no |
-| restart\_policy | - | string | `` | no |
-| scheduler\_name | - | string | `` | no |
-| service\_account\_name | - | string | `` | no |
-| service\_type | - | string | `` | no |
-| session\_affinity | - | string | `` | no |
-| termination\_grace\_period\_seconds | - | string | `30` | no |
-| volume\_claim\_template\_name | - | string | `pvc` | no |
+| name |  | string | n/a | yes |
+| storage |  | string | n/a | yes |
+| storage\_class\_name |  | string | n/a | yes |
+| annotations |  | map | `{}` | no |
+| dns\_policy |  | string | `""` | no |
+| heap\_size |  | string | `"4g"` | no |
+| image |  | string | `"docker.elastic.co/elasticsearch/elasticsearch:6.5.1"` | no |
+| namespace |  | string | `""` | no |
+| node\_selector |  | map | `{}` | no |
+| port |  | string | `"9200"` | no |
+| priority\_class\_name |  | string | `""` | no |
+| replicas |  | string | `"1"` | no |
+| restart\_policy |  | string | `""` | no |
+| scheduler\_name |  | string | `""` | no |
+| service\_account\_name |  | string | `""` | no |
+| service\_type |  | string | `""` | no |
+| session\_affinity |  | string | `""` | no |
+| termination\_grace\_period\_seconds |  | string | `"30"` | no |
+| volume\_claim\_template\_name |  | string | `"pvc"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| cluster\_ip | - |
-| name | - |
-| port | - |
-| statefulset\_uid | - |
+| cluster\_ip |  |
+| name |  |
+| port |  |
+| statefulset\_uid |  |
 
+<img src="diagram.svg"/>

@@ -58,13 +58,14 @@ Instructions:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| ingress\_host | The IP address of any node | string | `192.168.2.146` | no |
-| name | - | string | `debezium-mysql-es` | no |
-| topics | comma separated list of tables to sync | string | `customers` | no |
+| ingress\_host | The IP address of any node | string | `"192.168.2.146"` | no |
+| name |  | string | `"debezium-mysql-es"` | no |
+| topics | comma separated list of tables to sync | string | `"customers"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| urls | - |
+| urls |  |
 
+<img src="diagram.svg"/>

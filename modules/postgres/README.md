@@ -51,23 +51,24 @@ Module usage:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| name | - | string | - | yes |
-| postgres\_db | - | string | - | yes |
-| postgres\_password | - | string | - | yes |
-| postgres\_user | - | string | - | yes |
-| storage | - | string | - | yes |
-| storage\_class\_name | - | string | - | yes |
-| image | - | string | `postgres` | no |
-| namespace | - | string | `default` | no |
-| node\_selector | - | map | `{}` | no |
-| port | - | string | `5432` | no |
-| replicas | - | string | `1` | no |
-| volume\_claim\_template\_name | - | string | `pvc` | no |
+| name |  | string | n/a | yes |
+| postgres\_db |  | string | n/a | yes |
+| postgres\_password |  | string | n/a | yes |
+| postgres\_user |  | string | n/a | yes |
+| storage |  | string | n/a | yes |
+| storage\_class\_name |  | string | n/a | yes |
+| image |  | string | `"postgres"` | no |
+| namespace |  | string | `"default"` | no |
+| node\_selector |  | map | `{}` | no |
+| port |  | string | `"5432"` | no |
+| replicas |  | string | `"1"` | no |
+| volume\_claim\_template\_name |  | string | `"pvc"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| name | - |
-| port | - |
+| name |  |
+| port |  |
 
+<img src="diagram.svg"/>

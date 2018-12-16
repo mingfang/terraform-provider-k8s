@@ -4,18 +4,19 @@ Central Logging Solution using Elasticsearch, Fluentbit, and Kibana
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| es\_replicas | - | string | - | yes |
-| name | - | string | - | yes |
-| storage | - | string | - | yes |
-| storage\_class\_name | - | string | - | yes |
-| namespace | - | string | `default` | no |
+| es\_replicas |  | string | n/a | yes |
+| name |  | string | n/a | yes |
+| storage |  | string | n/a | yes |
+| storage\_class\_name |  | string | n/a | yes |
+| namespace |  | string | `"default"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| elasticsearch\_name | - |
-| elasticsearch\_port | - |
-| kibana\_name | - |
-| kibana\_port | - |
+| elasticsearch\_name |  |
+| elasticsearch\_port |  |
+| kibana\_name |  |
+| kibana\_port |  |
 
+<img src="diagram.svg"/>
