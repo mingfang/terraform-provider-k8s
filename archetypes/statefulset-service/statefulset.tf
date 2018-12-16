@@ -151,7 +151,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
   depends_on = [
     "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this",
-    "k8s_rbac_authorization_k8s_io_v1_role_binding.this",
   ]
 
   lifecycle {
