@@ -44,3 +44,5 @@ import:
   - modules/terraform
 - package: github.com/stretchr/testify
   version: ^1.2.2
+- package: github.com/awalterschulze/gographviz
+  version: ^2.0.0
