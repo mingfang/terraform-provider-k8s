@@ -37,9 +37,9 @@ func main() {
 	flag.Parse()
 
 	if url != "" {
-		extractURL(url, dir)
+		extractURL(url, kind, dir)
 	} else if filename != "" {
-		extractFile(filename, dir)
+		extractFile(filename, kind, dir)
 	} else if namespace != "" || kind != "" || name != "" {
 		extractCluster(namespace, kind, name, isImport, dir)
 	} else {
@@ -48,7 +48,7 @@ func main() {
 	}
 
 }
-func extractURL(url string, dir string) {
+func extractURL(url string, kind string, dir string) {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
@@ -56,20 +56,20 @@ func extractURL(url string, dir string) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	//log.Println(string(body))
-	extractYamlBytes(body, dir)
+	extractYamlBytes(body, kind, dir)
 }
 
-func extractFile(filename string, dir string) {
+func extractFile(filename string, kind string, dir string) {
 	yamlBytes, yamlErr := ioutil.ReadFile(filename)
 	if yamlErr != nil {
 		log.Fatal(yamlErr)
 	}
-	extractYamlBytes(yamlBytes, dir)
+	extractYamlBytes(yamlBytes, kind, dir)
 }
 
-func extractYamlBytes(yamlBytes []byte, dir string) {
-	k8sConfig := k8s.NewK8SConfig()
-	modelsMap := k8s.BuildModelsMap(k8sConfig)
+func extractYamlBytes(yamlBytes []byte, kindFilter string, dir string) {
+	k8sConfig := k8s.K8SConfig_Singleton()
+	modelsMap := k8sConfig.ModelsMap
 
 	decoder := yaml.NewYAMLToJSONDecoder(bytes.NewReader(yamlBytes))
 	object := map[string]interface{}{}
@@ -85,6 +85,10 @@ func extractYamlBytes(yamlBytes []byte, dir string) {
 		//log.Println(object)
 		group, version, _ := k8s.SplitGroupVersion(object["apiVersion"].(string))
 		kind := object["kind"].(string)
+		if kindFilter != "" && strings.ToLower(kindFilter) != strings.ToLower(kind) {
+			//log.Println("Skip kind:", kind)
+			continue
+		}
 		resourceKey := k8s.ResourceKey(group, version, kind)
 		gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
 			Group:    group,
@@ -93,7 +97,7 @@ func extractYamlBytes(yamlBytes []byte, dir string) {
 		})
 		model := modelsMap[gvk]
 		if model == nil {
-			log.Println("No Model For:", gvk)
+			log.Println("No Model For:", kind, gvk)
 			continue
 		}
 		saveK8SasTF(object, model, resourceKey, gvk, dir)
@@ -107,7 +111,8 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 	systemNamePattern := regexp.MustCompile(`^system:`)
 	var dupDetector = map[string]struct{}{}
 
-	k8s.ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *k8s.K8SConfig) {
+	k8sConfig := k8s.K8SConfig_Singleton()
+	k8sConfig.ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *k8s.K8SConfig) {
 		if gvk.Version == "v1beta1" {
 			//log.Println("Skip v1beta1:", gvk.Group, gvk.Version, gvk.Kind)
 			return
