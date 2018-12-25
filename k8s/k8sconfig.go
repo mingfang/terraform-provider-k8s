@@ -58,7 +58,7 @@ func newK8SConfig() *K8SConfig {
 		RESTMapper:      RESTMapper,
 		DynamicClient:   dynamicClient,
 		DiscoveryClient: discoveryClient,
-		ModelsMap:       modelsMap,
+		modelsMap:       modelsMap,
 	}
 }
 
@@ -70,7 +70,7 @@ type K8SConfig struct {
 	cache           sync.Map
 	countdownLatch  sync.Map
 	mutex           sync.Mutex
-	ModelsMap       map[schema.GroupVersionKind]proto.Schema
+	modelsMap       map[schema.GroupVersionKind]proto.Schema
 }
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
@@ -157,7 +157,7 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 }
 
 func (this *K8SConfig) ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
-	lists, _ := this.DiscoveryClient.ServerPreferredResources()
+	lists, _ := this.DiscoveryClient.ServerResources()
 	for _, list := range lists {
 		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
 		gv, _ := schema.ParseGroupVersion(list.GroupVersion)
@@ -167,7 +167,7 @@ func (this *K8SConfig) ForEachAPIResource(callback func(apiResource metav1.APIRe
 				Version:  gv.Version,
 				Resource: apiResource.Kind,
 			})
-			callback(apiResource, gvk, this.ModelsMap, this)
+			callback(apiResource, gvk, this.modelsMap, this)
 		}
 	}
 
