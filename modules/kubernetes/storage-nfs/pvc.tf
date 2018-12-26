@@ -3,6 +3,7 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
 
   metadata {
     name        = "${element(k8s_core_v1_persistent_volume.this.*.metadata.0.name, count.index)}"
+    namespace   = "${var.namespace}"
     annotations = "${merge(var.annotations, map("pv-uid", element(k8s_core_v1_persistent_volume.this.*.metadata.0.uid, count.index)))}"
   }
 
