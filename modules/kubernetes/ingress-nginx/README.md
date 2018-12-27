@@ -10,6 +10,7 @@ Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandator
 | annotations\_prefix |  | string | `"nginx.ingress.kubernetes.io"` | no |
 | dns\_policy |  | string | `""` | no |
 | image |  | string | `"quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.21.0"` | no |
+| ingress\_class |  | string | `"nginx"` | no |
 | name |  | string | `"ingress-nginx"` | no |
 | namespace |  | string | `"default"` | no |
 | node\_port\_http |  | string | `"30000"` | no |
@@ -31,6 +32,7 @@ Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandator
 | annotations\_prefix |  |
 | cluster\_ip |  |
 | deployment\_uid |  |
+| ingress\_class |  |
 | name |  |
 | node\_port\_http |  |
 | node\_port\_https |  |
