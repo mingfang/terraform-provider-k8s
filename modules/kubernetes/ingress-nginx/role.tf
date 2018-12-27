@@ -28,7 +28,7 @@ resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
       ]
 
       resource_names = [
-        "ingress-controller-leader-nginx",
+        "${k8s_core_v1_config_map.this.metadata.0.name}-${var.ingress_class}",
       ]
 
       resources = [
