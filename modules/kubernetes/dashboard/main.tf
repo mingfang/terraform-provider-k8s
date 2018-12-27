@@ -20,7 +20,7 @@ variable "replicas" {
 }
 
 variable image {
-  default = "gcr.io/google_containers/kubernetes-dashboard-amd64:v1.10.0"
+  default = "gcr.io/google_containers/kubernetes-dashboard-amd64:v1.10.1"
 }
 
 variable port {
