@@ -4,6 +4,7 @@
 |------|-------------|:----:|:-----:|:-----:|
 | count |  | string | n/a | yes |
 | name |  | string | n/a | yes |
+| namespace |  | string | n/a | yes |
 
 ## Outputs
 

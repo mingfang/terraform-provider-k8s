@@ -12,6 +12,7 @@ Useful for used with the VolumeClaimTemplates of StatefulSets.
 | storage |  | string | n/a | yes |
 | annotations |  | map | `{}` | no |
 | mount\_options |  | list | `[]` | no |
+| namespace |  | string | `""` | no |
 
 ## Outputs
 

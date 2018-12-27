@@ -6,9 +6,11 @@
  */
 
 variable "name" {}
+
 variable "namespace" {
   default = ""
 }
+
 variable "count" {}
 variable "storage" {}
 
