@@ -9,7 +9,7 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 | name |  | string | n/a | yes |
 | annotations |  | map | `{}` | no |
 | dns\_policy |  | string | `""` | no |
-| image |  | string | `"gcr.io/google_containers/kubernetes-dashboard-amd64:v1.10.0"` | no |
+| image |  | string | `"gcr.io/google_containers/kubernetes-dashboard-amd64:v1.10.1"` | no |
 | namespace |  | string | `""` | no |
 | node\_selector |  | map | `{}` | no |
 | port |  | string | `"9090"` | no |
