@@ -74,6 +74,10 @@ variable "annotations_prefix" {
   default = "nginx.ingress.kubernetes.io"
 }
 
+variable "ingress_class" {
+  default = "nginx"
+}
+
 variable "node_port_http" {
   default = 30000
 }
@@ -115,6 +119,10 @@ output "deployment_uid" {
 
 output "annotations_prefix" {
   value = "${var.annotations_prefix}"
+}
+
+output "ingress_class" {
+  value = "${var.ingress_class}"
 }
 
 output "node_port_http" {

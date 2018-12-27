@@ -43,6 +43,7 @@ resource "k8s_apps_v1_deployment" "this" {
               "--configmap=$(POD_NAMESPACE)/${k8s_core_v1_config_map.this.metadata.0.name}",
               "--publish-service=$(POD_NAMESPACE)/${var.name}",
               "--annotations-prefix=${var.annotations_prefix}",
+              "--ingress-class=${var.ingress_class}",
             ]
 
             env = [
