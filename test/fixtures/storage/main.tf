@@ -3,9 +3,10 @@ variable "namespace" {}
 variable "count" {}
 
 module "nfs-server" {
-  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/nfs-server-empty-dir"
+  source    = "../../../modules/nfs-server-empty-dir"
   name      = "${var.name}-nfs-server"
   namespace = "${var.namespace}"
+  medium    = "Memory"
 }
 
 locals {
@@ -17,7 +18,7 @@ locals {
 }
 
 module "storage" {
-  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
+  source    = "../../../modules/kubernetes/storage-nfs"
   name      = "${var.name}"
   namespace = "${var.namespace}"
   count     = "${var.count}"
