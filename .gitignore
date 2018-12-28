@@ -1,4 +1,5 @@
 .idea
+.DS_STORE
 /vendor/
 .terraform/
 terraform.tfstate
