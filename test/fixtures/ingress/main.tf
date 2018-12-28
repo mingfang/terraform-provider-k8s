@@ -15,7 +15,7 @@ variable "node_port_https" {
 }
 
 module "ingress-controller" {
-  source          = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
+  source          = "../../../modules/kubernetes/ingress-nginx"
   name            = "${var.name}-ingress-controller"
   namespace       = "${var.namespace}"
   ingress_class   = "${var.ingress_class}"
