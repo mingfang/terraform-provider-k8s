@@ -16,6 +16,12 @@
 # default named port `https`. This works for single API server deployments as
 # well as HA API server deployments.
 scrape_configs:
+- job_name: 'prometheus'
+  metrics_path: /metrics
+
+  static_configs:
+  - targets: ['localhost:9090']
+
 - job_name: 'kubernetes-apiservers'
 
   kubernetes_sd_configs:
