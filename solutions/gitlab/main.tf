@@ -1,5 +1,9 @@
 variable "name" {}
 
+variable "namespace" {
+  default = ""
+}
+
 variable "annotations" {
   type    = "map"
   default = {}
@@ -22,6 +26,7 @@ variable "gitlab_runner_replicas" {
 module "gitlab" {
   source      = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/gitlab"
   name        = "${var.name}"
+  namespace   = "${var.namespace}"
   annotations = "${var.annotations}"
 
   gitlab_root_password              = "${var.gitlab_root_password}"
@@ -36,9 +41,10 @@ module "gitlab" {
 }
 
 module "gitlab-runner" {
-  source   = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/gitlab-runner"
-  name     = "${var.name}-runner"
-  replicas = "${var.gitlab_runner_replicas}"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/gitlab-runner"
+  name      = "${var.name}-runner"
+  namespace = "${var.namespace}"
+  replicas  = "${var.gitlab_runner_replicas}"
 
   registration_token = "${module.gitlab.gitlab_runners_registration_token}"
   gitlab_url         = "${module.gitlab.gitlab_external_url}"

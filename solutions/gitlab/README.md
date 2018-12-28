@@ -13,6 +13,7 @@
 | storage\_class\_name |  | string | n/a | yes |
 | annotations |  | map | `{}` | no |
 | gitlab\_runner\_replicas |  | string | `"1"` | no |
+| namespace |  | string | `""` | no |
 
 ## Outputs
 
