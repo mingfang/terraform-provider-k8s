@@ -3,7 +3,7 @@
  */
 
 variable "name" {
-  default = "test"
+  default = "test-prometheus"
 }
 
 variable "ingress_host" {
@@ -11,19 +11,22 @@ variable "ingress_host" {
 }
 
 module "ingress-controller" {
-  source = "../../../test/fixtures/ingress"
-  name   = "${var.name}"
+  source    = "../../../test/fixtures/ingress"
+  name      = "${var.name}"
+  namespace = "${k8s_core_v1_namespace.this.metadata.0.name}"
 }
 
 module "storage" {
-  source = "../../../test/fixtures/storage"
-  name   = "${var.name}"
-  count  = 1
+  source    = "../../../test/fixtures/storage"
+  name      = "${var.name}"
+  namespace = "${k8s_core_v1_namespace.this.metadata.0.name}"
+  count     = 1
 }
 
 module "prometheus" {
   source             = "../../../modules/prometheus"
   name               = "${var.name}"
+  namespace          = "${k8s_core_v1_namespace.this.metadata.0.name}"
   storage_class_name = "${module.storage.storage_class_name}"
   storage            = "${module.storage.storage}"
   replicas           = "${module.storage.count}"
@@ -31,10 +34,11 @@ module "prometheus" {
 
 resource "k8s_extensions_v1beta1_ingress" "this" {
   metadata {
-    name = "${var.name}-ingress"
+    name      = "${var.name}"
+    namespace = "${k8s_core_v1_namespace.this.metadata.0.name}"
 
     annotations {
-      "kubernetes.io/ingress.class" = "nginx"
+      "kubernetes.io/ingress.class" = "${module.ingress-controller.ingress_class}"
     }
   }
 
