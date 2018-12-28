@@ -20,7 +20,7 @@ func Test(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	gitlabURL := terraform.Output(t, terraformOptions, "gitlab_url")
-	maxRetries := 30
+	maxRetries := 50
 	timeBetweenRetries := 5 * time.Second
 
 	http_helper.HttpGetWithRetryWithCustomValidation(t, gitlabURL, maxRetries, timeBetweenRetries, validate)

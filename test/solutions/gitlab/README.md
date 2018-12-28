@@ -8,7 +8,7 @@ go test -v test/solutions/gitlab/basic_test.go
 | gitlab\_root\_password |  | string | `"changeme"` | no |
 | gitlab\_runners\_registration\_token |  | string | `"wMFs1-9kpfMeKsfKsNFQ"` | no |
 | ingress\_host |  | string | `"192.168.2.146"` | no |
-| name |  | string | `"test"` | no |
+| name |  | string | `"test-gitlab"` | no |
 
 ## Outputs
 

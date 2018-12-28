@@ -21,7 +21,7 @@ func Test(t *testing.T) {
 
 	elasticsearchURL := terraform.Output(t, terraformOptions, "elasticsearch_url")
 	kibanaURL := terraform.Output(t, terraformOptions, "kibana_url")
-	maxRetries := 30
+	maxRetries := 50
 	timeBetweenRetries := 5 * time.Second
 
 	http_helper.HttpGetWithRetryWithCustomValidation(t, elasticsearchURL, maxRetries, timeBetweenRetries, validate)
