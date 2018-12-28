@@ -38,6 +38,11 @@ variable "node_selector" {
 service specific variables
 */
 
+//Set to Memory to use tmpfs
+variable "medium" {
+  default = ""
+}
+
 variable port {
   default = 2049
 }

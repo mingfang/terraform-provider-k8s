@@ -47,8 +47,11 @@ resource "k8s_apps_v1_deployment" "this" {
 
         volumes = [
           {
-            name      = "data"
-            empty_dir = {}
+            name = "data"
+
+            empty_dir = {
+              medium = "${var.medium}"
+            }
           },
         ]
       }

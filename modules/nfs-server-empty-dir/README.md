@@ -11,6 +11,7 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 | name |  | string | n/a | yes |
 | annotations |  | map | `{}` | no |
 | image |  | string | `"itsthenetwork/nfs-server-alpine"` | no |
+| medium | Set to Memory to use tmpfs | string | `""` | no |
 | namespace |  | string | `"default"` | no |
 | node\_selector |  | map | `{}` | no |
 | port |  | string | `"2049"` | no |
