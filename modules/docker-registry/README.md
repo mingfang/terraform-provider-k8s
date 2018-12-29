@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 [Docker Registry](https://docs.docker.com/registry/)
 
 ## Inputs
@@ -32,4 +34,3 @@
 | port |  |
 | statefulset\_uid |  |
 
-<img src="diagram.svg"/>

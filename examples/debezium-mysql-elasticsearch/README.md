@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 Use Debezium and Kafka Connect to sync from MySql to Elasticsearch.
 
 Based on https://github.com/debezium/debezium-examples/tree/master/unwrap-smt
@@ -68,4 +70,3 @@ Instructions:
 |------|-------------|
 | urls |  |
 
-<img src="diagram.svg"/>

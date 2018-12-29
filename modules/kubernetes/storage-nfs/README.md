@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 Create a set of PersistentVolumes and a coresponding set of PersistentVolumeClaims.
 
 Useful for used with the VolumeClaimTemplates of StatefulSets.
@@ -22,4 +24,3 @@ Useful for used with the VolumeClaimTemplates of StatefulSets.
 | storage |  |
 | storage\_class\_name |  |
 
-<img src="diagram.svg"/>

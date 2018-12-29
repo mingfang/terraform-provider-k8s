@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 [Debezium](https://debezium.io)
 
 This solution sets up:
@@ -32,4 +34,3 @@ Examples:
 | kafka-connect-sink |  |
 | kafka-connect-source |  |
 
-<img src="diagram.svg"/>

@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 go test -v test/solutions/central-logging/basic_test.go
 
 ## Inputs
@@ -14,4 +16,3 @@ go test -v test/solutions/central-logging/basic_test.go
 | elasticsearch\_url |  |
 | kibana\_url |  |
 
-<img src="diagram.svg"/>

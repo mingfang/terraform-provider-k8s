@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 Central Logging Solution using Elasticsearch, Fluentbit, and Kibana
 
 ## Inputs
@@ -19,4 +21,3 @@ Central Logging Solution using Elasticsearch, Fluentbit, and Kibana
 | kibana\_name |  |
 | kibana\_port |  |
 
-<img src="diagram.svg"/>

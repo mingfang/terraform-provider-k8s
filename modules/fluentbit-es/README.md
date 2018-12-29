@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 [Fluent Bit](https://fluentbit.io)
 
 FluentBit Runs as a daemonset sending logs directly to Elasticsearch
@@ -27,4 +29,3 @@ FluentBit Runs as a daemonset sending logs directly to Elasticsearch
 |------|-------------|
 | name |  |
 
-<img src="diagram.svg"/>

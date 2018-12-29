@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 PriorityClass defines mapping from a priority class name to the priority integer value.
 The value can be any valid integer.
 
@@ -20,4 +22,3 @@ Module usage:
 | description | description is an arbitrary string that usually provides guidelines on when this priority class should be used. | string | `""` | no |
 | global\_default | globalDefault specifies whether this PriorityClass should be considered asthe default priority for pods that do not have any priority class. Only onePriorityClass can be marked as `globalDefault`. However, if more than onePriorityClasses exists with their `globalDefault` field set to true, thesmallest value of such global default PriorityClasses will be used as thedefault priority. | string | `"false"` | no |
 
-<img src="diagram.svg"/>

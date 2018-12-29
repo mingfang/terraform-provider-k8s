@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 Runs a NFS Server serving from an empheral empty dir.
 
 WARNING: For demonstration purpose only; You will loose data.
@@ -26,4 +28,3 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 | name |  |
 | port |  |
 
-<img src="diagram.svg"/>

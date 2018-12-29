@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 [Kibana](https://www.elastic.co/products/kibana)
 
 ## Inputs
@@ -33,4 +35,3 @@
 | name |  |
 | port |  |
 
-<img src="diagram.svg"/>

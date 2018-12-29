@@ -1,3 +1,5 @@
+<img src="diagram.svg"/>To view the full size interactive diagram, append ```?sanitize=true``` to the raw URL.
+
 [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
 
 Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandatory.yaml
@@ -38,4 +40,3 @@ Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandator
 | node\_port\_https |  |
 | port |  |
 
-<img src="diagram.svg"/>
