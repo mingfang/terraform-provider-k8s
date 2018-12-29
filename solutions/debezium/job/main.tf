@@ -10,7 +10,7 @@ variable "connector_name" {}
 
 variable "connector_config" {}
 
-module "job_source_postgres" {
+module "job" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/job"
   name   = "${var.name}"
 
