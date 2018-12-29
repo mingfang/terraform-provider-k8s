@@ -1,7 +1,9 @@
-<svg id="sprotty_1" class="sprotty-graph sprotty" tabindex="1002" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1484 771"><style>.elknode {
+<svg id="sprotty_1" class="sprotty-graph sprotty" tabindex="1002" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1484 771"><style>
+.elknode {
     stroke: #448;
-    stroke-width: 4;
+    stroke-width: 2;
     fill: #ddf;
+    fill-opacity: 0.5;
 }
 
 .elkport {
@@ -12,14 +14,17 @@
 
 .elkedge {
     fill: none;
-    stroke: #224;
-    stroke-width: 2;
+    stroke: #88f;
+    stroke-width: 8;
+    stroke-opacity: 0.3;
     pointer-events: stroke;
+    stroke-linejoin: round;
 }
 
 .elkedge:hover {
-    stroke: #88f;
+    stroke: #448;
     stroke-width: 8;
+    stroke-opacity: 1;
     stroke-dasharray: 16px;
     stroke-dashoffset: 32px;
     animation: stroke 0.5s linear infinite;
