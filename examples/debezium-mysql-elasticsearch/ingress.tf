@@ -1,5 +1,6 @@
-module "ingress" {
+module "ingress-controller" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
+  name   = "${var.name}"
 }
 
 resource "k8s_extensions_v1beta1_ingress" "this" {
@@ -7,14 +8,14 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
     name = "${var.name}"
 
     annotations {
-      "kubernetes.io/ingress.class" = "nginx"
+      "kubernetes.io/ingress.class" = "${module.ingress-controller.ingress_class}"
     }
   }
 
   spec {
     rules = [
       {
-        host = "kafka-connect-ui.${var.ingress_host}.nip.io"
+        host = "kafka-connect-ui.${var.ingress_host}.nip.io:${module.ingress-controller.node_port_http}"
 
         http {
           paths = [
@@ -22,7 +23,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
               path = "/"
 
               backend {
-                service_name = "${var.name}-kafka-connect-ui"
+                service_name = "${module.debezium.kafka_connect_ui_name}"
                 service_port = "8000"
               }
             },
@@ -30,7 +31,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
         }
       },
       {
-        host = "kafka-topic-ui.${var.ingress_host}.nip.io"
+        host = "kafka-topic-ui.${var.ingress_host}.nip.io:${module.ingress-controller.node_port_http}"
 
         http {
           paths = [
@@ -38,7 +39,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
               path = "/"
 
               backend {
-                service_name = "${var.name}-kafka-topic-ui"
+                service_name = "${module.debezium.kafka_topic_ui_name}"
                 service_port = "8000"
               }
             },
@@ -46,7 +47,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
         }
       },
       {
-        host = "elasticsearch.${var.ingress_host}.nip.io"
+        host = "elasticsearch.${var.ingress_host}.nip.io:${module.ingress-controller.node_port_http}"
 
         http {
           paths = [
@@ -54,8 +55,8 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
               path = "/"
 
               backend {
-                service_name = "${var.name}-elasticsearch"
-                service_port = "9200"
+                service_name = "${module.elasticsearch.name}"
+                service_port = "${module.elasticsearch.port}"
               }
             },
           ]
@@ -67,8 +68,8 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
 
 output "urls" {
   value = [
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}:30000",
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}:30000",
-    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}:30000",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.0.host}",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.1.host}",
+    "http://${k8s_extensions_v1beta1_ingress.this.spec.0.rules.2.host}",
   ]
 }

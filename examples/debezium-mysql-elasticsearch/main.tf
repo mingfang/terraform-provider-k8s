@@ -161,7 +161,7 @@ data "template_file" "source" {
     database.server.id                       = "184054"
     database.server.name                     = "dbserver1"
     database.whitelist                       = "inventory"
-    database.history.kafka.bootstrap.servers = "${module.debezium.kafka-bootstrap-servers}"
+    database.history.kafka.bootstrap.servers = "${module.debezium.kafka_bootstrap_servers}"
     database.history.kafka.topic             = "${var.name}.schema-changes"
   }
 }
@@ -170,7 +170,7 @@ module "job_source" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-source-init"
 
-  kafka_connect    = "${module.debezium.kafka-connect-source}"
+  kafka_connect    = "${module.debezium.kafka_connect_source}"
   connector_name   = "${module.mysql.name}"
   connector_config = "${data.template_file.source.rendered}"
 }
@@ -190,7 +190,7 @@ module "job_sink" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-sink-init"
 
-  kafka_connect    = "${module.debezium.kafka-connect-sink}"
+  kafka_connect    = "${module.debezium.kafka_connect_sink}"
   connector_name   = "${module.elasticsearch.name}"
   connector_config = "${data.template_file.sink.rendered}"
 }
