@@ -1,5 +1,5 @@
 /**
- * go test -v test/solutions/gitlab/basic_test.go
+ * GOCACHE=off go test -v test/solutions/gitlab/basic_test.go
  */
 
 variable "name" {

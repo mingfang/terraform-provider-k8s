@@ -30,7 +30,9 @@ Examples:
 
 | Name | Description |
 |------|-------------|
-| kafka-bootstrap-servers |  |
-| kafka-connect-sink |  |
-| kafka-connect-source |  |
+| kafka\_bootstrap\_servers |  |
+| kafka\_connect\_sink |  |
+| kafka\_connect\_source |  |
+| kafka\_connect\_ui\_name |  |
+| kafka\_topic\_ui\_name |  |
 
