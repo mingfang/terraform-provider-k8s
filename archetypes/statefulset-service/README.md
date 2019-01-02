@@ -10,7 +10,7 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 |------|-------------|:----:|:-----:|:-----:|
 | image |  | string | n/a | yes |
 | name |  | string | n/a | yes |
-| port |  | string | n/a | yes |
+| ports | list of name,port pairs | list | n/a | yes |
 | storage |  | string | n/a | yes |
 | storage\_class\_name |  | string | n/a | yes |
 | annotations |  | map | `{}` | no |
@@ -32,6 +32,6 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 |------|-------------|
 | cluster\_ip |  |
 | name |  |
-| port |  |
+| ports |  |
 | statefulset\_uid |  |
 

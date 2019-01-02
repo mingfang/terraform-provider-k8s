@@ -10,7 +10,7 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 |------|-------------|:----:|:-----:|:-----:|
 | image |  | string | n/a | yes |
 | name |  | string | n/a | yes |
-| port |  | string | n/a | yes |
+| ports | list of name,port pairs | list | n/a | yes |
 | annotations |  | map | `{}` | no |
 | dns\_policy |  | string | `""` | no |
 | namespace |  | string | `""` | no |
@@ -30,5 +30,5 @@ terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
 | cluster\_ip |  |
 | deployment\_uid |  |
 | name |  |
-| port |  |
+| ports |  |
 

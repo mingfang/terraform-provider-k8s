@@ -57,7 +57,7 @@ resource "k8s_apps_v1_deployment" "this" {
 
               http_get {
                 path   = "/status"
-                port   = "${var.port}"
+                port   = "${lookup(var.ports[0], "port")}"
                 scheme = "HTTP"
               }
             }
@@ -71,7 +71,7 @@ resource "k8s_apps_v1_deployment" "this" {
 
               http_get {
                 path   = "/status"
-                port   = "${var.port}"
+                port   = "${lookup(var.ports[0], "port")}"
                 scheme = "HTTP"
               }
             }

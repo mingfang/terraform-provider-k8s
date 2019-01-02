@@ -7,13 +7,7 @@ resource "k8s_core_v1_service" "this" {
   }
 
   spec {
-    ports = [
-      {
-        name = "port1"
-        port = "${var.port}"
-      },
-    ]
-
+    ports            = ["${var.ports}"]
     selector         = "${local.labels}"
     session_affinity = "${var.session_affinity}"
     type             = "${var.service_type}"

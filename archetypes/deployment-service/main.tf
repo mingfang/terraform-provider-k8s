@@ -21,7 +21,10 @@ variable "replicas" {
 
 variable image {}
 
-variable port {}
+//list of name,port pairs
+variable ports {
+  type = "list"
+}
 
 variable "annotations" {
   type    = "map"
@@ -85,8 +88,8 @@ output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
 }
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
+output "ports" {
+  value = "${k8s_core_v1_service.this.spec.0.ports}"
 }
 
 output "cluster_ip" {

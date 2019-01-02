@@ -58,7 +58,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
               http_get {
                 path   = "/status"
-                port   = "${var.port}"
+                port   = "${lookup(var.ports[0], "port")}"
                 scheme = "HTTP"
               }
             }
@@ -72,7 +72,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
 
               http_get {
                 path   = "/status"
-                port   = "${var.port}"
+                port   = "${lookup(var.ports[0], "port")}"
                 scheme = "HTTP"
               }
             }
@@ -93,7 +93,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
           },
         ]
 
-        security_context = {}
+        security_context {}
 
         dns_policy                       = "${var.dns_policy}"
         node_selector                    = "${var.node_selector}"
