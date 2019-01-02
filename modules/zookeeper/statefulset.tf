@@ -1,8 +1,9 @@
 resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
   }
 
   spec {
@@ -28,24 +29,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
 
       spec {
-        node_selector = "${var.node_selector}"
-
-        affinity {
-          pod_anti_affinity {
-            required_during_scheduling_ignored_during_execution {
-              label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["${var.name}"]
-                }
-              }
-
-              topology_key = "kubernetes.io/hostname"
-            }
-          }
-        }
-
         containers = [
           {
             name  = "zookeeper"
@@ -69,6 +52,16 @@ resource "k8s_apps_v1_stateful_set" "this" {
                 name  = "ZOO_SERVERS"
                 value = "${join(" ", data.template_file.zoo-servers.*.rendered)}"
               },
+            ]
+
+            command = [
+              "bash",
+              "-cx",
+              <<EOF
+              export ZOO_SERVERS=$$(echo $$ZOO_SERVERS|sed "s|$$POD_NAME.${var.name}|0.0.0.0|")
+              /docker-entrypoint.sh zkServer.sh start-foreground
+              EOF
+              ,
             ]
 
             liveness_probe {
@@ -138,6 +131,29 @@ resource "k8s_apps_v1_stateful_set" "this" {
           fsgroup    = 1000
           run_asuser = 1000
         }
+
+        dns_policy                       = "${var.dns_policy}"
+        node_selector                    = "${var.node_selector}"
+        priority_class_name              = "${var.priority_class_name}"
+        restart_policy                   = "${var.restart_policy}"
+        scheduler_name                   = "${var.scheduler_name}"
+        termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
+
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
       }
     }
 
@@ -158,4 +174,13 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
+  }
+}
+
+data "template_file" "zoo-servers" {
+  count    = "${var.replicas}"
+  template = "server.${count.index}=${var.name}-${count.index}.${var.name}:2888:3888"
 }
