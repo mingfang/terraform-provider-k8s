@@ -1,4 +1,4 @@
-resource "k8s_apps_v1_stateful_set" "gitlab" {
+resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
     annotations = "${var.annotations}"
     labels      = "${local.labels}"
@@ -8,7 +8,7 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
 
   spec {
     replicas              = "${var.replicas}"
-    service_name          = "${k8s_core_v1_service.gitlab.metadata.0.name}"
+    service_name          = "${k8s_core_v1_service.this.metadata.0.name}"
     pod_management_policy = "OrderedReady"
 
     selector {
@@ -136,7 +136,7 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
 
         security_context {}
 
-        service_account_name = "${k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.gitlab.subjects.0.name}"
+        service_account_name = "${k8s_core_v1_service_account.this.metadata.0.name}"
       }
     }
 
@@ -159,6 +159,6 @@ resource "k8s_apps_v1_stateful_set" "gitlab" {
   }
 
   //  depends_on = [
-  //    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.gitlab"
+  //    "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this",
   //  ]
 }

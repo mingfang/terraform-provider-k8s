@@ -91,19 +91,19 @@ output
 */
 
 output "name" {
-  value = "${k8s_core_v1_service.gitlab.metadata.0.name}"
+  value = "${k8s_core_v1_service.this.metadata.0.name}"
 }
 
 output "port" {
-  value = "${k8s_core_v1_service.gitlab.spec.0.ports.0.port}"
+  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
 }
 
 output "cluster_ip" {
-  value = "${k8s_core_v1_service.gitlab.spec.0.cluster_ip}"
+  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
 }
 
 output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.gitlab.metadata.0.uid}"
+  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
 }
 
 output "gitlab_runners_registration_token" {

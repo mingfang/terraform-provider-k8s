@@ -1,4 +1,4 @@
-resource "k8s_core_v1_service" "gitlab" {
+resource "k8s_core_v1_service" "this" {
   metadata {
     annotations = "${var.annotations}"
     labels      = "${local.labels}"
