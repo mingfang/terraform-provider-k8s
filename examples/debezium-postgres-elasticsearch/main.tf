@@ -2,6 +2,7 @@ variable "name" {
   default = "debezium-postgres-es"
 }
 
+//comma separated list of tables to sync
 variable "topics" {
   default = "musicgroup,musicalbum,musicrecording"
 }
@@ -9,14 +10,6 @@ variable "topics" {
 module "nfs-server" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/nfs-server-empty-dir"
   name   = "nfs-server"
-}
-
-locals {
-  mount_options = [
-    "nfsvers=4.2",
-    "proto=tcp",
-    "port=2049",
-  ]
 }
 
 module "zookeeper_storage" {
@@ -30,7 +23,7 @@ module "zookeeper_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "kafka_storage" {
@@ -44,7 +37,7 @@ module "kafka_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "elasticsearch_storage" {
@@ -58,7 +51,7 @@ module "elasticsearch_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "postgres_storage" {
@@ -117,7 +110,7 @@ data "template_file" "source" {
     database.dbname                          = "postgres"
     database.server.name                     = "postgres"
     database.whitelist                       = "${var.topics}"
-    database.history.kafka.bootstrap.servers = "${module.debezium.kafka-bootstrap-servers}"
+    database.history.kafka.bootstrap.servers = "${module.debezium.kafka_bootstrap_servers}"
     database.history.kafka.topic             = "${var.name}.schema-changes"
   }
 }
@@ -126,7 +119,7 @@ module "job_source" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-source-init"
 
-  kafka_connect    = "${module.debezium.kafka-connect-source}"
+  kafka_connect    = "${module.debezium.kafka_connect_source}"
   connector_name   = "${module.postgres.name}"
   connector_config = "${data.template_file.source.rendered}"
 }
@@ -146,7 +139,7 @@ module "job_sink" {
   source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name   = "${var.name}-sink-init"
 
-  kafka_connect    = "${module.debezium.kafka-connect-sink}"
+  kafka_connect    = "${module.debezium.kafka_connect_sink}"
   connector_name   = "${module.elasticsearch.name}"
   connector_config = "${data.template_file.sink.rendered}"
 }

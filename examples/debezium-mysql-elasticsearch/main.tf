@@ -75,14 +75,6 @@ module "nfs-server" {
   name   = "nfs-server"
 }
 
-locals {
-  mount_options = [
-    "nfsvers=4.2",
-    "proto=tcp",
-    "port=2049",
-  ]
-}
-
 module "zookeeper_storage" {
   source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name    = "${var.name}-zookeeper"
@@ -94,7 +86,7 @@ module "zookeeper_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "kafka_storage" {
@@ -108,7 +100,7 @@ module "kafka_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "elasticsearch_storage" {
@@ -122,7 +114,7 @@ module "elasticsearch_storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 module "mysql" {

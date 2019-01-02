@@ -5,5 +5,5 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | name |  | string | `"debezium-postgres-es"` | no |
-| topics |  | string | `"musicgroup,musicalbum,musicrecording"` | no |
+| topics | comma separated list of tables to sync | string | `"musicgroup,musicalbum,musicrecording"` | no |
 
