@@ -1,19 +1,13 @@
 resource "k8s_core_v1_service" "this" {
   metadata {
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
     name        = "${var.name}"
     namespace   = "${var.namespace}"
-    labels      = "${local.labels}"
-    annotations = "${var.annotations}"
   }
 
   spec {
-    ports = [
-      {
-        name = "tcp"
-        port = "${var.port}"
-      },
-    ]
-
+    ports    = ["${var.ports}"]
     selector = "${local.labels}"
   }
 }

@@ -14,9 +14,9 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 | annotations |  | map | `{}` | no |
 | image |  | string | `"itsthenetwork/nfs-server-alpine"` | no |
 | medium | Set to Memory to use tmpfs | string | `""` | no |
-| namespace |  | string | `"default"` | no |
+| namespace |  | string | `""` | no |
 | node\_selector |  | map | `{}` | no |
-| port |  | string | `"2049"` | no |
+| ports | list of name,port pairs | list | `[ { "name": "tcp", "port": 2049 } ]` | no |
 | replicas |  | string | `"1"` | no |
 
 ## Outputs
@@ -25,6 +25,7 @@ Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
 |------|-------------|
 | cluster\_ip |  |
 | deployment\_uid |  |
+| mount\_options |  |
 | name |  |
-| port |  |
+| ports |  |
 

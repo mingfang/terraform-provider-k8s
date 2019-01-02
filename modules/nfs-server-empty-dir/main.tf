@@ -13,7 +13,7 @@ common variables
 variable "name" {}
 
 variable "namespace" {
-  default = "default"
+  default = ""
 }
 
 variable "replicas" {
@@ -22,6 +22,18 @@ variable "replicas" {
 
 variable image {
   default = "itsthenetwork/nfs-server-alpine"
+}
+
+//list of name,port pairs
+variable ports {
+  type = "list"
+
+  default = [
+    {
+      name = "tcp"
+      port = 2049
+    },
+  ]
 }
 
 variable "annotations" {
@@ -43,24 +55,32 @@ variable "medium" {
   default = ""
 }
 
-variable port {
-  default = 2049
-}
-
 locals {
-  labels = {
+  labels {
     app     = "${var.name}"
     name    = "${var.name}"
     service = "${var.name}"
   }
 }
 
+locals {
+  mount_options = [
+    "nfsvers=4.2",
+    "proto=tcp",
+    "port=${lookup(var.ports[0], "port")}",
+  ]
+}
+
+output "mount_options" {
+  value = "${local.mount_options}"
+}
+
 output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
 }
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
+output "ports" {
+  value = "${k8s_core_v1_service.this.spec.0.ports}"
 }
 
 output "cluster_ip" {

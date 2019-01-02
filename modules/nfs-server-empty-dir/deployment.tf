@@ -1,8 +1,9 @@
 resource "k8s_apps_v1_deployment" "this" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
   }
 
   spec {
@@ -12,14 +13,21 @@ resource "k8s_apps_v1_deployment" "this" {
       match_labels = "${local.labels}"
     }
 
+    strategy {
+      type = "RollingUpdate"
+
+      rolling_update {
+        max_surge       = "25%"
+        max_unavailable = "25%"
+      }
+    }
+
     template {
       metadata {
         labels = "${local.labels}"
       }
 
       spec {
-        node_selector = "${var.node_selector}"
-
         containers = [
           {
             name  = "nfs-server"
@@ -45,6 +53,8 @@ resource "k8s_apps_v1_deployment" "this" {
           },
         ]
 
+        node_selector = "${var.node_selector}"
+
         volumes = [
           {
             name = "data"
@@ -54,7 +64,27 @@ resource "k8s_apps_v1_deployment" "this" {
             }
           },
         ]
+
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
   }
 }
