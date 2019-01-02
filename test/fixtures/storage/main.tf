@@ -9,14 +9,6 @@ module "nfs-server" {
   medium    = "Memory"
 }
 
-locals {
-  mount_options = [
-    "nfsvers=4.2",
-    "proto=tcp",
-    "port=2049",
-  ]
-}
-
 module "storage" {
   source    = "../../../modules/kubernetes/storage-nfs"
   name      = "${var.name}"
@@ -29,7 +21,7 @@ module "storage" {
   }
 
   nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${local.mount_options}"
+  mount_options = "${module.nfs-server.mount_options}"
 }
 
 output "count" {
