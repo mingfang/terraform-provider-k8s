@@ -58,7 +58,7 @@ func newK8SConfig() *K8SConfig {
 		RESTMapper:      RESTMapper,
 		DynamicClient:   dynamicClient,
 		DiscoveryClient: discoveryClient,
-		modelsMap:       modelsMap,
+		ModelsMap:       modelsMap,
 	}
 }
 
@@ -70,7 +70,7 @@ type K8SConfig struct {
 	cache           sync.Map
 	countdownLatch  sync.Map
 	mutex           sync.Mutex
-	modelsMap       map[schema.GroupVersionKind]proto.Schema
+	ModelsMap       map[schema.GroupVersionKind]proto.Schema
 }
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
@@ -167,7 +167,7 @@ func (this *K8SConfig) ForEachAPIResource(callback func(apiResource metav1.APIRe
 				Version:  gv.Version,
 				Resource: apiResource.Kind,
 			})
-			callback(apiResource, gvk, this.modelsMap, this)
+			callback(apiResource, gvk, this.ModelsMap, this)
 		}
 	}
 
