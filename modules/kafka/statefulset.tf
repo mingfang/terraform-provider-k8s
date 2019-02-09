@@ -1,8 +1,9 @@
 resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
-    labels    = "${local.labels}"
+    annotations = "${var.annotations}"
+    labels      = "${local.labels}"
+    name        = "${var.name}"
+    namespace   = "${var.namespace}"
   }
 
   spec {
@@ -28,24 +29,6 @@ resource "k8s_apps_v1_stateful_set" "this" {
       }
 
       spec {
-        node_selector = "${var.node_selector}"
-
-        affinity {
-          pod_anti_affinity {
-            required_during_scheduling_ignored_during_execution {
-              label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["${var.name}"]
-                }
-              }
-
-              topology_key = "kubernetes.io/hostname"
-            }
-          }
-        }
-
         containers = [
           {
             name  = "kafka"
@@ -101,6 +84,31 @@ resource "k8s_apps_v1_stateful_set" "this" {
             }
           },
         ]
+
+        security_context {}
+
+        dns_policy                       = "${var.dns_policy}"
+        node_selector                    = "${var.node_selector}"
+        priority_class_name              = "${var.priority_class_name}"
+        restart_policy                   = "${var.restart_policy}"
+        scheduler_name                   = "${var.scheduler_name}"
+        termination_grace_period_seconds = "${var.termination_grace_period_seconds}"
+
+        affinity {
+          pod_anti_affinity {
+            required_during_scheduling_ignored_during_execution {
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["${var.name}"]
+                }
+              }
+
+              topology_key = "kubernetes.io/hostname"
+            }
+          }
+        }
       }
     }
 
@@ -120,5 +128,9 @@ resource "k8s_apps_v1_stateful_set" "this" {
         }
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = ["metadata.0.annotations"]
   }
 }
