@@ -1,5 +1,9 @@
 package: github.com/mingfang/terraform-provider-k8s
 import:
+- package: golang.org/x/sys
+  version: 41f3e6584952bb034a481797859f6ab34b6803bd
+  subpackages:
+  - unix
 - package: github.com/awalterschulze/gographviz
   version: ^2.0.0
   subpackages:
@@ -8,13 +12,15 @@ import:
   version: ^1.1.1
   subpackages:
   - spew
+
 - package: github.com/hashicorp/terraform
-  version: ^0.12.0-alpha4
+  version: ^0.11.11
   subpackages:
   - helper/resource
   - helper/schema
   - plugin
   - terraform
+
 - package: k8s.io/apimachinery
   subpackages:
   - pkg/api/errors
@@ -35,9 +41,10 @@ import:
 - package: k8s.io/kube-openapi
   subpackages:
   - pkg/util/proto
+
 testImport:
 - package: github.com/gruntwork-io/terratest
-  version: ^0.13.20
+  version: ^0.13.24
   subpackages:
   - modules/http-helper
   - modules/terraform
