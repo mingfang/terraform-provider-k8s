@@ -45,13 +45,13 @@ module "kafka" {
   storage_class_name      = "${var.kafka_storage_class}"
   storage                 = "${var.kafka_storage}"
   replicas                = "${var.kafka_count}"
-  kafka_zookeeper_connect = "${module.zookeeper.name}:${module.zookeeper.port}"
+  kafka_zookeeper_connect = "${module.zookeeper.name}:${lookup(module.zookeeper.ports[0], "port")}"
 }
 
 module "kafka-rest-proxy" {
   source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kafka-rest-proxy"
   name      = "${var.name}-kafka-rest-proxy"
-  zookeeper = "${module.zookeeper.name}:2181"
+  zookeeper = "${module.zookeeper.name}:${lookup(module.zookeeper.ports[0], "port")}"
 }
 
 module "kafka-topic-ui" {
