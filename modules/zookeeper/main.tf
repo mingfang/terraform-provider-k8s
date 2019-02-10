@@ -60,8 +60,23 @@ variable image {
   default = "zookeeper"
 }
 
-variable port {
-  default = 2181
+variable ports {
+  type = "list"
+
+  default = [
+    {
+      name = "client"
+      port = 2181
+    },
+    {
+      name = "server"
+      port = 2888
+    },
+    {
+      name = "leader-election"
+      port = 3888
+    },
+  ]
 }
 
 variable "annotations" {
@@ -126,8 +141,8 @@ output "name" {
   value = "${k8s_core_v1_service.this.metadata.0.name}"
 }
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
+output "ports" {
+  value = "${k8s_core_v1_service.this.spec.0.ports}"
 }
 
 output "cluster_ip" {

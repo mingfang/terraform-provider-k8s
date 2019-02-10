@@ -54,7 +54,7 @@ Module usage:
 | image |  | string | `"zookeeper"` | no |
 | namespace |  | string | `""` | no |
 | node\_selector |  | map | `{}` | no |
-| port |  | string | `"2181"` | no |
+| ports |  | list | `[ { "name": "client", "port": 2181 }, { "name": "server", "port": 2888 }, { "name": "leader-election", "port": 3888 } ]` | no |
 | priority\_class\_name |  | string | `""` | no |
 | replicas |  | string | `"1"` | no |
 | restart\_policy |  | string | `""` | no |
@@ -70,6 +70,6 @@ Module usage:
 |------|-------------|
 | cluster\_ip |  |
 | name |  |
-| port |  |
+| ports |  |
 | statefulset\_uid |  |
 
