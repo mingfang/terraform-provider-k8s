@@ -41,9 +41,13 @@ func IsForceNewField(path string) bool {
 }
 
 var skipPaths = []*regexp.Regexp{
-	regexp.MustCompile(`^[\w]+\.api_version$`),                                  //redundant; already in resourceKey
-	regexp.MustCompile(`^[\w]+\.kind$`),                                         //redundant; already in resourceKey
-	regexp.MustCompile(`.*\.status$`),                                           //this is actually not part of schema
+	regexp.MustCompile(`^[\w]+\.api_version$`), //redundant; already in resourceKey
+	regexp.MustCompile(`^[\w]+\.kind$`),        //redundant; already in resourceKey
+	regexp.MustCompile(`.*\.status$`),          //this is actually not part of schema
+	regexp.MustCompile(`.*\.metadata\.cluster_name$`),
+	regexp.MustCompile(`.*\.metadata\.finalizers$`),
+	regexp.MustCompile(`.*\.metadata\.initializers$`),
+	regexp.MustCompile(`.*\.metadata\.owner_references$`),
 	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //ignore kubernetes generated annotations
 	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinit loop
 }
