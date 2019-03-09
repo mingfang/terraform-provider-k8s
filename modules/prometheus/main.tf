@@ -5,112 +5,148 @@
  *
  */
 
-/*
-common variables
-*/
-
-variable "name" {
-  default = "prometheus"
-}
-
-variable "namespace" {
-  default = "default"
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "prom/prometheus"
-}
-
-variable port {
-  default = 9090
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports = [
+      {
+        name = "http"
+        port = var.port
+      },
+    ]
+    containers = [
+      {
+        name  = "prometheus"
+        image = var.image
+        env   = var.env
+
+        args = [
+          "--config.file=/config/prometheus.yml",
+        ]
+
+        liveness_probe = {
+          failure_threshold     = 3
+          initial_delay_seconds = 60
+          period_seconds        = 10
+          success_threshold     = 1
+          timeout_seconds       = 1
+
+          http_get = {
+            path   = "/-/healthy"
+            port   = var.port
+            scheme = "HTTP"
+          }
+        }
+
+        readiness_probe = {
+          failure_threshold     = 3
+          initial_delay_seconds = 5
+          period_seconds        = 10
+          success_threshold     = 1
+          timeout_seconds       = 1
+
+          http_get = {
+            path   = "/-/ready"
+            port   = var.port
+            scheme = "HTTP"
+          }
+        }
+
+        volume_mounts = [
+          {
+            mount_path = "/config"
+            name       = "config"
+          },
+          {
+            name       = var.volume_claim_template_name
+            mount_path = "/prometheus-data"
+            sub_path   = var.name
+          },
+        ]
+      },
+    ]
+    volumes = [
+      {
+        name = "config"
+
+        config_map = {
+          name = k8s_core_v1_config_map.this.metadata.0.name
+        }
+      },
+    ]
+    volume_claim_templates = [
+      {
+        name               = var.volume_claim_template_name
+        storage_class_name = var.storage_class_name
+        access_modes       = ["ReadWriteOnce"]
+
+        resources = {
+          requests = {
+            storage = var.storage
+          }
+        }
+      }
+    ]
+    service_account_name = module.rbac.service_account.metadata.0.name
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
+module "statefulset-service" {
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
+  parameters = merge(local.parameters, var.overrides)
 }
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
-}
+module "rbac" {
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/rbac"
+  name      = var.name
+  namespace = var.namespace
+  cluster_role_rules = [
+    {
+      api_groups = [
+        "",
+      ]
 
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
+      resources = [
+        "nodes",
+        "nodes/proxy",
+        "services",
+        "endpoints",
+        "pods",
+      ]
 
-output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
-}
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      api_groups = [
+        "extensions",
+      ]
 
-/*
-statefulset specific
-*/
+      resources = [
+        "ingresses",
+      ]
 
-variable storage_class_name {}
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      non_resource_urls = [
+        "/metrics",
+      ]
 
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
+      verbs = [
+        "get",
+      ]
+    },
+  ]
 }
