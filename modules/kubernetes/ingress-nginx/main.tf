@@ -4,131 +4,269 @@
  * Based on https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandatory.yaml
  */
 
-/*
-common variables
-*/
-
-variable "name" {
-  default = "ingress-nginx"
-}
-
-variable "namespace" {
-  default = "default"
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.21.0"
-}
-
-variable port {
-  default = 80
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = "NodePort"
-}
-
-/*
-service specific variables
-*/
-
-variable "annotations_prefix" {
-  default = "nginx.ingress.kubernetes.io"
-}
-
-variable "ingress_class" {
-  default = "nginx"
-}
-
-variable "node_port_http" {
-  default = 30000
-}
-
-variable "node_port_https" {
-  default = 30443
-}
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    "app.kubernetes.io/name"    = "${var.name}"
-    "app.kubernetes.io/part-of" = "${var.name}"
+  parameters = {
+    name      = var.name
+    namespace = var.namespace
+    replicas  = var.replicas
+    ports = [
+      {
+        name        = "http"
+        protocol    = "TCP"
+        port        = var.port
+        target_port = 80
+        node_port   = var.node_port_http
+      },
+      {
+        name        = "https"
+        protocol    = "TCP"
+        port        = 443
+        target_port = 443
+        node_port   = var.node_port_https
+      },
+    ]
+    containers = [
+      {
+        name  = "nginx-ingress-controller"
+        image = var.image
+
+        args = [
+          "/nginx-ingress-controller",
+          "--election-id=${var.name}",
+          "--ingress-class=${var.ingress_class}",
+          //          "--configmap=$(POD_NAMESPACE)/${k8s_core_v1_config_map.this.metadata.0.name}",
+          "--publish-service=$(POD_NAMESPACE)/${var.name}",
+          "--annotations-prefix=${var.annotations_prefix}",
+        ]
+
+        env = [
+          {
+            name = "POD_NAME"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.name"
+              }
+            }
+          },
+          {
+            name = "POD_NAMESPACE"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.namespace"
+              }
+            }
+          },
+        ]
+
+        liveness_probe = {
+          failure_threshold     = 3
+          initial_delay_seconds = 10
+          period_seconds        = 10
+          success_threshold     = 1
+          timeout_seconds       = 1
+
+          http_get = {
+            path   = "/healthz"
+            port   = "10254"
+            scheme = "HTTP"
+          }
+        }
+
+        readiness_probe = {
+          failure_threshold = 3
+          period_seconds    = 10
+          success_threshold = 1
+          timeout_seconds   = 1
+
+          http_get = {
+            path   = "/healthz"
+            port   = "10254"
+            scheme = "HTTP"
+          }
+        }
+
+        security_context = {
+          capabilities = {
+            add = [
+              "NET_BIND_SERVICE",
+            ]
+
+            drop = [
+              "ALL",
+            ]
+          }
+
+          run_asuser = 33
+        }
+      },
+    ]
+    service_account_name = module.rbac.service_account.metadata.0.name
+    type                 = var.service_type
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
+module "deployment-service" {
+  source     = "../../../archetypes/deployment-service"
+  parameters = merge(local.parameters, var.overrides)
 }
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
-}
+module "rbac" {
+  source    = "../rbac"
+  name      = var.name
+  namespace = var.namespace
+  cluster_role_rules = [
+    {
+      api_groups = [
+        "",
+      ]
 
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
+      resources = [
+        "configmaps",
+        "endpoints",
+        "nodes",
+        "pods",
+        "secrets",
+      ]
 
-output "deployment_uid" {
-  value = "${k8s_apps_v1_deployment.this.metadata.0.uid}"
-}
+      verbs = [
+        "list",
+        "watch",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
 
-output "annotations_prefix" {
-  value = "${var.annotations_prefix}"
-}
+      resources = [
+        "nodes",
+      ]
 
-output "ingress_class" {
-  value = "${var.ingress_class}"
-}
+      verbs = [
+        "get",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
 
-output "node_port_http" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.node_port}"
-}
+      resources = [
+        "services",
+      ]
 
-output "node_port_https" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.1.node_port}"
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      api_groups = [
+        "extensions",
+      ]
+
+      resources = [
+        "ingresses",
+      ]
+
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
+
+      resources = [
+        "events",
+      ]
+
+      verbs = [
+        "create",
+        "patch",
+      ]
+    },
+    {
+      api_groups = [
+        "extensions",
+      ]
+
+      resources = [
+        "ingresses/status",
+      ]
+
+      verbs = [
+        "update",
+      ]
+    },
+  ]
+  role_rules = [
+    {
+      api_groups = [
+        "",
+      ]
+
+      resources = [
+        "configmaps",
+        "pods",
+        "secrets",
+        "namespaces",
+      ]
+
+      verbs = [
+        "get",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
+
+      resource_names = [
+        "k8s_core_v1_config_map.this.metadata.0.name-var.ingress_class",
+      ]
+
+      resources = [
+        "configmaps",
+      ]
+
+      verbs = [
+        "get",
+        "update",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
+
+      resources = [
+        "configmaps",
+      ]
+
+      verbs = [
+        "create",
+      ]
+    },
+    {
+      api_groups = [
+        "",
+      ]
+
+      resources = [
+        "endpoints",
+      ]
+
+      verbs = [
+        "get",
+      ]
+    },
+  ]
 }

@@ -1,0 +1,104 @@
+<svg id="sprotty_1" class="sprotty-graph sprotty" tabindex="1002" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3234 1087.5"><style>
+.elknode {
+    stroke: #448;
+    stroke-width: 2;
+    fill: #ddf;
+    fill-opacity: 0.5;
+}
+
+.elkport {
+    stroke: #448;
+    stroke-width: 1;
+    fill: #66c;
+}
+
+.elkedge {
+    fill: none;
+    stroke: #88f;
+    stroke-width: 8;
+    stroke-opacity: 0.3;
+    pointer-events: stroke;
+    stroke-linejoin: round;
+}
+
+.elkedge:hover {
+    stroke: #448;
+    stroke-width: 8;
+    stroke-opacity: 1;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 32px;
+    animation: stroke 0.5s linear infinite;
+}
+
+@keyframes stroke {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.elkedge.arrow {
+    fill: #336;
+}
+
+.elklabel {
+    stroke-width: 0;
+    stroke: #000;
+    fill: #000;
+    font-family: sans-serif;
+    font-size: 10pt;
+    dominant-baseline: hanging;
+}
+
+.elklabel:hover {
+    font-size: 24pt;
+}
+
+.elkjunction {
+    stroke: none;
+    fill: #224;
+}
+
+.selected &gt; rect {
+    stroke-width: 3;
+}
+
+.mouseover {
+    stroke: #88f;
+}
+/*
+ * Copyright (C) 2017 TypeFox and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+.sprotty {
+    padding: 0px;
+    font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
+}
+
+.sprotty-hidden {
+    display: block;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+}
+
+.sprotty-popup {
+    font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
+    position: absolute;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid;
+    max-width: 400px;
+    min-width: 100px;
+}
+
+.sprotty-popup &gt; div {
+    margin: 10px;
+}
+
+.sprotty-popup-closed {
+    display: none;
+}
+</style><g transform="scale(1) translate(0,0)"><g id="sprotty_3" transform="translate(117, 71)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="3000" height="966.5" /><g id="sprotty_5" transform="translate(1500, 467)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_6" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">k8s_core_v1_service_account.this</text></g><g id="sprotty_7" transform="translate(1500, 136)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_8" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">k8s_rbac_authorization_k8s_io_v1_cluster_role.this</text></g><g id="sprotty_9" transform="translate(2700, 50)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_10" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">k8s_rbac_authorization_k8s_io_v1_cluster_role_binding.this</text></g><g id="sprotty_11" transform="translate(1500, 629)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_12" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">k8s_rbac_authorization_k8s_io_v1_role.this</text></g><g id="sprotty_13" transform="translate(2700, 497)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_14" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">k8s_rbac_authorization_k8s_io_v1_role_binding.this</text></g><g id="sprotty_15" transform="translate(1100, 296)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_16" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.cluster_role_ref</text></g><g id="sprotty_17" transform="translate(700, 121)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_18" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.cluster_role_rules</text></g><g id="sprotty_19" transform="translate(1100, 467)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_20" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.k8s_core_v1_service_account_parameters</text></g><g id="sprotty_21" transform="translate(2300, 306)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_22" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.k8s_rbac_authorization_k8s_io_v1_cluster_role_binding_parameters</text></g><g id="sprotty_23" transform="translate(1100, 136)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_24" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.k8s_rbac_authorization_k8s_io_v1_cluster_role_parameters</text></g><g id="sprotty_25" transform="translate(2300, 487)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_26" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters</text></g><g id="sprotty_27" transform="translate(1100, 629)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_28" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.k8s_rbac_authorization_k8s_io_v1_role_parameters</text></g><g id="sprotty_29" transform="translate(300, 538)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_30" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.labels</text></g><g id="sprotty_31" transform="translate(700, 548)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_32" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.parameters</text></g><g id="sprotty_33" transform="translate(1500, 790)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_34" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.role_ref</text></g><g id="sprotty_35" transform="translate(700, 710)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_36" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.role_rules</text></g><g id="sprotty_37" transform="translate(1900, 467)" opacity="1"><rect class="elknode" x="0" y="0" rx="10" width="200" height="60" /><text id="sprotty_38" class="elklabel" transform="translate(5, 22) translate(0, 0)" opacity="1">local.subjects</text></g><g id="sprotty_42" transform="translate(-16, 65.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_43" class="elklabel" transform="translate(-1, 10) translate(0, 0)" opacity="1">cluster_role_rules</text></g><g id="sprotty_47" transform="translate(-16, 735.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_48" class="elklabel" transform="translate(-1, 10) translate(0, 0)" opacity="1">role_rules</text></g><g id="sprotty_50" transform="translate(-16, 563.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_51" class="elklabel" transform="translate(-1, 10) translate(0, 0)" opacity="1">name</text></g><g id="sprotty_55" transform="translate(-16, 482.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_56" class="elklabel" transform="translate(-1, 10) translate(0, 0)" opacity="1">overrides</text></g><g id="sprotty_70" transform="translate(-16, 643.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_71" class="elklabel" transform="translate(-1, 10) translate(0, 0)" opacity="1">namespace</text></g><g id="sprotty_76" transform="translate(3000, 411.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_77" class="elklabel" transform="translate(17, -1) translate(0, 0)" opacity="1">name</text></g><g id="sprotty_79" transform="translate(3000, 906.5)" opacity="1"><rect class="elkport" x="0" y="0" width="16" height="9" /><text id="sprotty_80" class="elklabel" transform="translate(17, 10) translate(0, 0)" opacity="1">service_account</text></g><text id="sprotty_4" class="elklabel" transform="translate(0, -21) translate(0, 0)" opacity="1">modules/kubernetes/rbac</text><g id="sprotty_39" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1300,497 L 1500,497" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1500 497) translate(1500 497)" /></g><g id="sprotty_40" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1300,166 L 1500,166" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1500 166) translate(1500 166)" /></g><g id="sprotty_41" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 2500,336 L 2550,336 L 2550,90 L 2700,90" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2700 90) translate(2700 90)" /></g><g id="sprotty_44" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,70 L 2700,70" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2700 70) translate(2700 70)" /></g><g id="sprotty_45" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1300,659 L 1500,659" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1500 659) translate(1500 659)" /></g><g id="sprotty_46" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 2500,517 L 2700,517" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2700 517) translate(2700 517)" /></g><g id="sprotty_49" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,740 L 150,740 L 150,900 L 2550,900 L 2550,537 L 2700,537" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2700 537) translate(2700 537)" /><g id="sprotty_49_j0" transform="translate(150, 740)" opacity="1"><circle class="elkjunction" r="2" /></g></g><g id="sprotty_52" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,568 L 200,568 L 200,326 L 1100,326" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 326) translate(1100 326)" /><g id="sprotty_52_j0" transform="translate(200, 568)" opacity="1"><circle class="elkjunction" r="2" /></g></g><g id="sprotty_53" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,70 L 550,70 L 550,151 L 700,151" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 700 151) translate(700 151)" /><g id="sprotty_53_j0" transform="translate(550, 70)" opacity="1"><circle class="elkjunction" r="2" /></g></g><g id="sprotty_54" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 900,578 L 1050,578 L 1050,507 L 1100,507" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 507) translate(1100 507)" /></g><g id="sprotty_57" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,487 L 1100,487" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 487) translate(1100 487)" /></g><g id="sprotty_58" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1300,326 L 2300,326" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2300 326) translate(2300 326)" /></g><g id="sprotty_59" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 2100,487 L 2150,487 L 2150,346 L 2300,346" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2300 346) translate(2300 346)" /></g><g id="sprotty_60" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 900,151 L 1100,151" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 151) translate(1100 151)" /></g><g id="sprotty_61" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 900,563 L 1000,563 L 1000,181 L 1100,181" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 181) translate(1100 181)" /></g><g id="sprotty_62" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,487 L 250,487 L 250,231 L 950,231 L 950,166 L 1100,166" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 166) translate(1100 166)" /><g id="sprotty_62_j0" transform="translate(250, 487)" opacity="1"><circle class="elkjunction" r="2" /></g></g><g id="sprotty_63" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1700,820 L 2150,820 L 2150,527 L 2300,527" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2300 527) translate(2300 527)" /></g><g id="sprotty_64" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 2100,507 L 2300,507" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 2300 507) translate(2300 507)" /></g><g id="sprotty_65" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 900,593 L 950,593 L 950,644 L 1100,644" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 644) translate(1100 644)" /></g><g id="sprotty_66" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 900,740 L 950,740 L 950,674 L 1100,674" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 674) translate(1100 674)" /></g><g id="sprotty_67" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,487 L 250,487 L 250,659 L 1100,659" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1100 659) translate(1100 659)" /></g><g id="sprotty_68" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,568 L 300,568" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 300 568) translate(300 568)" /></g><g id="sprotty_69" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 500,568 L 700,568" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 700 568) translate(700 568)" /></g><g id="sprotty_72" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,648 L 550,648 L 550,588 L 700,588" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 700 588) translate(700 588)" /></g><g id="sprotty_73" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,568 L 200,568 L 200,820 L 1500,820" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1500 820) translate(1500 820)" /></g><g id="sprotty_74" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 0,740 L 700,740" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 700 740) translate(700 740)" /></g><g id="sprotty_75" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1700,497 L 1900,497" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 1900 497) translate(1900 497)" /></g><g id="sprotty_78" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1700,482 L 1750,482 L 1750,416 L 3000,416" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 3000 416) translate(3000 416)" /></g><g id="sprotty_81" class="sprotty-edge" opacity="1"><path class="elkedge" d="M 1700,512 L 1750,512 L 1750,911 L 3000,911" /><path class="edge arrow" d="M 0,0 L 8,-3 L 8,3 Z" transform="rotate(180 3000 911) translate(3000 911)" /></g></g></g></svg>
