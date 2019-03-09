@@ -6,60 +6,51 @@
  * Based on https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
  */
 
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "itsthenetwork/nfs-server-alpine"
-}
-
-//list of name,port pairs
-variable ports {
-  type = "list"
-
-  default = [
-    {
-      name = "tcp"
-      port = 2049
-    },
-  ]
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-/*
-service specific variables
-*/
-
-//Set to Memory to use tmpfs
-variable "medium" {
-  default = ""
-}
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name      = var.name
+    namespace = var.namespace
+    replicas  = var.replicas
+    ports = [
+      {
+        name = "tcp"
+        port = var.port
+      }
+    ]
+    containers = [
+      {
+        name  = "nfs-server"
+        image = var.image
+
+        env = [
+          {
+            name  = "SHARED_DIRECTORY"
+            value = "/data"
+          },
+        ]
+
+        security_context = {
+          privileged = true
+        }
+
+        volume_mounts = [
+          {
+            mount_path = "/data"
+            name       = "data"
+          }
+        ]
+      }
+    ]
+
+    volumes = [
+      {
+        name = "data"
+
+        empty_dir = {
+          medium = var.medium
+        }
+      }
+    ]
   }
 }
 
@@ -67,26 +58,11 @@ locals {
   mount_options = [
     "nfsvers=4.2",
     "proto=tcp",
-    "port=${lookup(var.ports[0], "port")}",
+    "port=${var.port}",
   ]
 }
 
-output "mount_options" {
-  value = "${local.mount_options}"
-}
-
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "ports" {
-  value = "${k8s_core_v1_service.this.spec.0.ports}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "deployment_uid" {
-  value = "${k8s_apps_v1_deployment.this.metadata.0.uid}"
+module "deployment-service" {
+  source     = "../../archetypes/deployment-service"
+  parameters = merge(local.parameters, var.overrides)
 }
