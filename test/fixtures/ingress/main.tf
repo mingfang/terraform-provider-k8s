@@ -17,20 +17,20 @@ variable "node_port_https" {
 module "ingress-controller" {
   source          = "../../../modules/kubernetes/ingress-nginx"
   name            = "${var.name}-ingress-controller"
-  namespace       = "${var.namespace}"
-  ingress_class   = "${var.ingress_class}"
-  node_port_http  = "${var.node_port_http}"
-  node_port_https = "${var.node_port_https}"
+  namespace       = var.namespace
+  ingress_class   = var.ingress_class
+  node_port_http  = var.node_port_http
+  node_port_https = var.node_port_https
 }
 
 output "ingress_class" {
-  value = "${module.ingress-controller.ingress_class}"
+  value = module.ingress-controller.ingress_class
 }
 
 output "node_port_http" {
-  value = "${module.ingress-controller.node_port_http}"
+  value = module.ingress-controller.node_port_http
 }
 
 output "node_port_https" {
-  value = "${module.ingress-controller.node_port_https}"
+  value = module.ingress-controller.node_port_https
 }
