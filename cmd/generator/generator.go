@@ -1,25 +1,33 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
-	//"strconv"
+	"text/template"
+
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
 	"github.com/mingfang/terraform-provider-k8s/k8s"
-	"sort"
 )
-
-const indentString = "  "
 
 func main() {
 	argsWithoutProg := os.Args[1:]
 	if len(argsWithoutProg) < 1 {
 		mainPrintList()
 	} else {
-		mainPrintResource(argsWithoutProg[0])
+		resource := argsWithoutProg[0]
+		var count = ""
+		if len(argsWithoutProg) > 1 {
+			count = argsWithoutProg[1]
+		}
+		var lifecycle = ""
+		if len(argsWithoutProg) > 2 {
+			lifecycle = argsWithoutProg[2]
+		}
+		mainPrintResource(resource, count, lifecycle)
 	}
-
 }
 
 func mainPrintList() {
@@ -46,101 +54,156 @@ func mainPrintList() {
 	}
 }
 
-func mainPrintResource(resourceKey string) {
+type ResourceData struct {
+	ResourceKey string
+	Count       string
+	Lifecycle   string
+	Resource    *tfSchema.Resource
+}
+
+var resourceTemplate = `
+{{ define "main" -}}
+//GENERATE//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
+resource "{{ .ResourceKey }}" "this" {
+  {{ .Count }}
+
+  {{- $parameters := (printf "local.%v_parameters" .ResourceKey) }}
+  {{- range $name, $schema := .Resource.Schema }}
+    {{- with subResource $schema }}
+      {{- if (isStatic $name) }}
+        {{ template "static" dict "Name" $name "Schema" $schema "Resource" . "Parent" $parameters }}
+      {{- else }}
+        {{ template "dynamic" dict "Name" $name "Schema" $schema "Resource" . "Parent" $parameters }}
+      {{- end }}
+    {{- else }}
+      {{ template "schema" dict "Name" $name "Schema" $schema "Parent" $parameters }}
+    {{- end }}
+  {{- end }}
+
+  lifecycle {
+    {{ .Lifecycle }}
+  }
+}
+{{- end }}
+
+{{ define "static" }}
+  {{ .Name }} {
+    {{- $parent := .Parent }} 
+    {{- range $name, $schema := .Resource.Schema }}
+      {{- if not (isReadOnly $schema) }}
+        {{- with subResource $schema }}
+          {{- if (isStatic $name) }}
+            {{ template "static" dict "Name" $name "Schema" $schema "Resource" . "Parent" $parent }}
+          {{- else }}
+            {{ template "dynamic" dict "Name" $name "Schema" $schema "Resource" . "Parent" $parent }}
+          {{- end }}
+        {{- else -}}
+          {{ template "schema" dict "Name" $name "Schema" $schema "Parent" $parent }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  }
+{{- end }}
+
+{{ define "dynamic" }}
+  dynamic "{{ .Name }}" {
+    {{- $parent := .Parent }}
+    {{- $newParent := printf "%v%v" .Name ".value" }}
+    for_each = {{ if eq .Schema.MaxItems 1 -}}
+                 lookup({{ $parent }}, "{{ .Name }}", null) == null ? [] : [{{ $parent }}.{{ .Name }}]
+               {{- else -}}
+                 lookup({{ $parent }}, "{{ .Name }}", [])
+               {{- end }}
+    content {
+      {{- range $name, $schema := .Resource.Schema }}
+        {{- if not (isReadOnly $schema) }}
+          {{- with subResource $schema }}
+            {{- if (isStatic $name) }}
+              {{ template "static" dict "Name" $name "Schema" $schema "Resource" . "Parent" $newParent }}
+            {{- else -}}
+              {{ template "dynamic" dict "Name" $name "Schema" $schema "Resource" . "Parent" $newParent }}
+            {{- end }}
+          {{- else -}}
+            {{ template "schema" dict "Name" $name "Schema" $schema "Parent" $newParent }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    }
+  }
+{{- end }}
+
+{{ define "schema" }}
+  {{- if .Schema.Required }}
+      {{ .Name }} = {{ .Parent }}.{{ .Name }}
+  {{- else }}
+	{{- if isList .Schema }}
+      {{ .Name }} = contains(keys({{ .Parent }}), "{{ .Name }}") ? {{ .Parent }}.{{ .Name }} : []
+    {{- else }}
+      {{ .Name }} = lookup({{ .Parent }}, "{{ .Name }}", null)
+    {{- end }}
+  {{- end }}
+{{- end }}
+`
+
+func mainPrintResource(resourceKey string, count string, lifecycle string) {
 	resourcesMap := k8s.BuildResourcesMap()
 	resource := resourcesMap[resourceKey]
-	fmt.Printf("resource \"%s\" \"name\" {\n", resourceKey)
-	printResource(resource, 1)
-	fmt.Println("}")
-}
+	//k8s.Dump(resource)
 
-func printResource(resource *tfSchema.Resource, level int) {
-	//indent := strings.Repeat(fmt.Sprintf("%v%v", level, level), level)
-	indent := strings.Repeat(indentString, level)
-	keys := make([]string, 0, len(resource.Schema))
-	for k := range resource.Schema {
-		keys = append(keys, k)
+	t, err := template.New("").Funcs(template.FuncMap{
+		"dict": func(values ...interface{}) (map[string]interface{}, error) {
+			if len(values)%2 != 0 {
+				return nil, errors.New("invalid dict call")
+			}
+			dict := make(map[string]interface{}, len(values)/2)
+			for i := 0; i < len(values); i += 2 {
+				key, ok := values[i].(string)
+				if !ok {
+					return nil, errors.New("dict keys must be strings")
+				}
+				dict[key] = values[i+1]
+			}
+			return dict, nil
+		},
+		"subResource": func(schema *tfSchema.Schema) (resource *tfSchema.Resource) {
+			switch schema.Type {
+			case tfSchema.TypeList:
+				if resource, isResource := schema.Elem.(*tfSchema.Resource); isResource {
+					return resource
+				} else {
+					return nil
+				}
+			default:
+				return nil
+			}
+		},
+		"isReadOnly": func(schema *tfSchema.Schema) bool {
+			return strings.Contains(schema.Description, "Read-only")
+		},
+		"isStatic": func(name string) bool {
+			return name == "metadata" || name == "spec" || name == "template"
+		},
+		"isList": func(schema *tfSchema.Schema) bool {
+			switch schema.Type {
+			case tfSchema.TypeList:
+				return true
+			default:
+				return false
+			}
+		},
+	}).Parse(resourceTemplate)
+	if err != nil {
+		panic(err)
 	}
-	sort.Strings(keys)
-	for _, name := range keys {
-		schema := resource.Schema[name]
-		//fmt.Printf("%s// %s%s%s%s%s\n", indent,
-		//	schema.Type,
-		//	//whenTrue(schema.Type == tfSchema.TypeList, "[" + strconv.Itoa(schema.MinItems) + "/" + strconv.Itoa(schema.MaxItems) + "]"),
-		//	whenTrue(schema.Optional, " Opional"),
-		//	whenTrue(schema.Required, " Required"),
-		//	whenTrue(schema.Computed, " Computed"),
-		//	whenTrue(schema.ForceNew, " ForceNew"),
-		//	//schema.Description,
-		//)
-		fmt.Printf("%s%s%s", indent, name, open(schema, level))
 
-		fmt.Printf("%s", middle(schema, level))
-
-		fmt.Printf("%s", close(schema, level))
-
+	data := ResourceData{
+		ResourceKey: resourceKey,
+		Count:       count,
+		Lifecycle:   lifecycle,
+		Resource:    resource,
 	}
-}
-
-func open(schema *tfSchema.Schema, level int) string {
-	//indent := strings.Repeat(indentString, level)
-	switch schema.Type {
-	case tfSchema.TypeList:
-		if _, isResource := schema.Elem.(*tfSchema.Resource); isResource {
-			return " {\n"
-		} else {
-			return " = [\n"
-		}
-	case tfSchema.TypeMap:
-		return " {\n"
-	case tfSchema.TypeString:
-		return " = \"\"\n"
-	case tfSchema.TypeBool:
-		return " = true/false\n"
-	case tfSchema.TypeInt:
-		return " = 0\n"
-	}
-	return ""
-}
-
-func middle(schema *tfSchema.Schema, level int) string {
-	indent := strings.Repeat(indentString, level)
-	switch schema.Type {
-	case tfSchema.TypeList:
-		if resource, isResource := schema.Elem.(*tfSchema.Resource); isResource {
-			printResource(resource, level+1)
-		} else {
-			return fmt.Sprintf("%s%s\"\"\n", indent, indentString)
-		}
-	case tfSchema.TypeMap:
-		return fmt.Sprintf("%s%skey = \"\"\n", indent, indentString)
-	default:
-		return ""
-	}
-	return ""
-}
-
-func close(schema *tfSchema.Schema, level int) string {
-	indent := strings.Repeat(indentString, level)
-	switch schema.Type {
-	case tfSchema.TypeList:
-		if _, isResource := schema.Elem.(*tfSchema.Resource); isResource {
-			return indent + "}\n"
-		} else {
-			return indent + "]\n"
-		}
-	case tfSchema.TypeMap:
-		return indent + "}\n"
-	default:
-		return ""
-	}
-	return ""
-}
-
-func whenTrue(condition bool, value string) string {
-	if condition {
-		return value
-	} else {
-		return ""
+	err = t.ExecuteTemplate(os.Stdout, "main", data)
+	if err != nil {
+		panic(err)
 	}
 }
