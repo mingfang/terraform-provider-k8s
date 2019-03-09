@@ -1,3 +1,8 @@
+# NOTICE
+I'm actively working to convert everything to Terraform 0.12.
+
+Also be on the lookout for https://github.com/kubernetes/kubernetes/pull/71192.  I'm waiting for that feature to support resources for CRDs.
+
 # terraform-provider-k8s
 terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 
