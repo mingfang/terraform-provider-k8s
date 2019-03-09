@@ -5,109 +5,17 @@
  *
  */
 
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {}
-
-//list of name,port pairs
-variable ports {
-  type = "list"
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  labels = {
+    app     = var.parameters.name
+    name    = var.parameters.name
+    service = var.parameters.name
   }
-}
 
-/*
-output
-*/
+  selector = {
+    match_labels = local.labels
+  }
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "ports" {
-  value = "${k8s_core_v1_service.this.spec.0.ports}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
-}
-
-/*
-statefulset specific
-*/
-
-variable storage_class_name {}
-
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
+  k8s_core_v1_service_parameters      = merge({ labels = local.labels, selector = local.labels }, var.parameters)
+  k8s_apps_v1_stateful_set_parameters = merge({ labels = local.labels, selector = local.selector, service_name = var.parameters.name }, var.parameters)
 }
