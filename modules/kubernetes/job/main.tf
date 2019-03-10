@@ -1,5 +1,9 @@
 variable "name" {}
 
+variable "namespace" {
+  default = null
+}
+
 variable "command" {}
 
 variable image {
@@ -16,25 +20,20 @@ variable backoff_limit {
 
 resource "k8s_batch_v1_job" "this" {
   metadata {
-    name = "${var.name}"
+    name      = "${var.name}"
+    namespace = var.namespace
   }
 
   spec {
-    selector = {}
-
     template {
-      metadata = {}
-
       spec {
         containers {
-          name      = "base"
-          image     = "${var.image}"
-          command   = ["bash", "-cx", "${var.command}"]
-          resources = {}
+          name    = "base"
+          image   = "${var.image}"
+          command = ["bash", "-cx", "${var.command}"]
         }
 
-        restart_policy   = "${var.restart_policy}"
-        security_context = {}
+        restart_policy = "${var.restart_policy}"
       }
     }
 
