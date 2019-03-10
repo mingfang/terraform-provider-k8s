@@ -1,53 +1,27 @@
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = "default"
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "landoop/kafka-connect-ui"
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-/*
-service specific variables
-*/
-
-variable kafka_connect {}
-
 locals {
-  labels = {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports       = var.ports
+    containers = [
+      {
+        name  = "kafka-connect-ui"
+        image = var.image
+
+        env = concat([
+          {
+            name  = "CONNECT_URL"
+            value = var.kafka_connect
+          },
+        ], var.env)
+      },
+    ]
   }
 }
 
-/*
-service
-*/
-
-/*
-deployment
-*/
-
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
+module "deployment-service" {
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/deployment-service"
+  parameters = merge(local.parameters, var.overrides)
 }
