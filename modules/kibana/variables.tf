@@ -29,12 +29,12 @@ variable "env" {
 
 variable "annotations" {
   type    = map
-  default = null
+  default = {}
 }
 
 variable "node_selector" {
   type    = map
-  default = null
+  default = {}
 }
 
 variable "overrides" {
