@@ -11,12 +11,7 @@ locals {
     namespace   = var.namespace
     annotations = var.annotations
     replicas    = var.replicas
-    ports = [
-      {
-        name = "http"
-        port = var.port
-      },
-    ]
+    ports       = var.ports
     containers = [
       {
         name  = "prometheus"
@@ -36,7 +31,7 @@ locals {
 
           http_get = {
             path   = "/-/healthy"
-            port   = var.port
+            port   = var.ports.0.port
             scheme = "HTTP"
           }
         }
@@ -50,7 +45,7 @@ locals {
 
           http_get = {
             path   = "/-/ready"
-            port   = var.port
+            port   = var.ports.0.port
             scheme = "HTTP"
           }
         }

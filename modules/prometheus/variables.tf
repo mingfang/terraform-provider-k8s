@@ -8,22 +8,33 @@ variable "replicas" {
   default = 1
 }
 
-variable port {
-  default = 9090
+variable ports {
+  type = list
+  default = [
+    {
+      name = "http"
+      port = 9090
+    },
+  ]
 }
 
 variable image {
   default = "prom/prometheus"
 }
 
-variable "annotations" {
-  type    = map
-  default = {}
+variable "env" {
+  type    = list
+  default = []
 }
 
-variable "env" {
+variable "annotations" {
   type    = map
-  default = {}
+  default = null
+}
+
+variable "node_selector" {
+  type    = map
+  default = null
 }
 
 variable "storage" {}
