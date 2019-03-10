@@ -1,116 +1,85 @@
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "confluentinc/cp-kafka"
-}
-
-variable ports {
-  type = "list"
-
-  default = [
-    {
-      name = "tcp"
-      port = 9092
-    },
-  ]
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-variable "kafka_zookeeper_connect" {}
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports       = var.ports
+    containers = [
+      {
+        name  = "kafka"
+        image = var.image
+
+        env = concat([
+          {
+            name = "POD_NAME"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.name"
+              }
+            }
+          },
+          {
+            name  = "KAFKA_LOG_DIRS"
+            value = "/data/$(POD_NAME)"
+          },
+          {
+            name  = "KAFKA_ADVERTISED_LISTENERS"
+            value = "PLAINTEXT://$(POD_NAME).${var.name}.${var.namespace == null ? "default" : var.namespace}.svc.cluster.local:9092"
+          },
+          {
+            name  = "KAFKA_ZOOKEEPER_CONNECT"
+            value = var.kafka_zookeeper_connect
+          },
+        ], var.env)
+
+        liveness_probe = {
+          initial_delay_seconds = 1
+          timeout_seconds       = 3
+
+          exec = {
+            command = [
+              "sh",
+              "-ec",
+              "/usr/bin/jps | /bin/grep -q SupportedKafka",
+            ]
+          }
+        }
+
+        readiness_probe = {
+          tcp_socket = {
+            port = var.ports.0.port
+          }
+        }
+
+        volume_mounts = [
+          {
+            name       = var.volume_claim_template_name
+            mount_path = "/data"
+            sub_path   = var.name
+          },
+        ]
+      },
+    ]
+    volume_claim_templates = [
+      {
+        name               = var.volume_claim_template_name
+        storage_class_name = var.storage_class_name
+        access_modes       = ["ReadWriteOnce"]
+
+        resources = {
+          requests = {
+            storage = var.storage
+          }
+        }
+      }
+    ]
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "ports" {
-  value = "${k8s_core_v1_service.this.spec.0.ports}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
-}
-
-/*
-statefulset specific
-*/
-
-variable storage_class_name {}
-
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
+module "statefulset-service" {
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
+  parameters = merge(local.parameters, var.overrides)
 }
