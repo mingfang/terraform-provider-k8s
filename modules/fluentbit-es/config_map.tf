@@ -1,5 +1,5 @@
 resource "k8s_core_v1_config_map" "this" {
-  data {
+  data = {
     "fluent-bit.conf" = <<EOF
 [SERVICE]
   Flush         1
@@ -99,8 +99,8 @@ EOF
   }
 
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
+    name      = var.name
+    namespace = var.namespace
+    labels    = local.labels
   }
 }
