@@ -1,5 +1,5 @@
 resource "k8s_core_v1_config_map" "this" {
-  data {
+  data = {
     "config.toml" = <<-EOF
       concurrent = 4
       check_interval = 3
@@ -7,8 +7,8 @@ resource "k8s_core_v1_config_map" "this" {
   }
 
   metadata {
-    labels    = "${local.labels}"
-    name      = "${var.name}"
-    namespace = "${var.namespace}"
+    name = var.name
+    namespace = var.namespace
+    labels = local.labels
   }
 }

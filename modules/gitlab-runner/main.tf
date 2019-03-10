@@ -5,106 +5,98 @@
  *
  */
 
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "gitlab/gitlab-runner:latest"
-}
-
-variable port {
-  default = 80
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "service_account_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-variable "gitlab_url" {}
-
-variable "registration_token" {}
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  labels = {
+    app     = var.name
+    name    = var.name
+    service = var.name
+  }
+
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports       = var.ports
+    containers = [
+      {
+        name  = "runner"
+        image = "${var.image}"
+
+        command = [
+          "sh",
+          "-cex",
+          <<-EOF
+              mkdir -p /etc/gitlab-runner/
+              cp /config/config.toml /etc/gitlab-runner/
+              /entrypoint register \
+                --non-interactive \
+                --registration-token "${var.registration_token}" \
+                --url "${var.gitlab_url}" \
+                --executor "kubernetes" \
+                --kubernetes-privileged "true"
+              /entrypoint run
+              EOF
+          ,
+        ]
+
+        lifecycle = {
+          pre_stop = {
+            exec = {
+              command = [
+                "gitlab-runner",
+                "unregister",
+                "--all-runners",
+              ]
+            }
+          }
+        }
+
+        volume_mounts = [
+          {
+            name = "config"
+            mount_path = "/config"
+          },
+          {
+            name = "docker"
+            mount_path = "/var/run/docker.sock"
+          },
+          {
+            name = "etc-gitlab-runner"
+            mount_path = "/etc/gitlab-runner"
+          },
+        ]
+      },
+    ]
+    volumes = [
+      {
+        name = "config"
+
+        config_map = {
+          name = "${k8s_core_v1_config_map.this.metadata.0.name}"
+        }
+      },
+      {
+        name = "docker"
+
+        host_path = {
+          path = "/var/run/docker.sock"
+        }
+      },
+      {
+        name = "etc-gitlab-runner"
+
+        empty_dir = {
+          medium = "Memory"
+        }
+      },
+    ]
+    service_account_name = k8s_core_v1_service_account.this.metadata.0.name
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "deployment_uid" {
-  value = "${k8s_apps_v1_deployment.this.metadata.0.uid}"
+module "deployment-service" {
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/deployment-service"
+  parameters = merge(local.parameters, var.overrides)
 }

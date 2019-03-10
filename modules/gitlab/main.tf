@@ -5,65 +5,105 @@
  *
  */
 
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "gitlab/gitlab-ee:latest"
-}
-
-variable port {
-  default = 80
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-/*
-service specific variables
-*/
-
-variable "gitlab_root_password" {}
-variable "gitlab_runners_registration_token" {}
-variable "auto_devops_domain" {}
-variable "gitlab_external_url" {}
-variable "mattermost_external_url" {}
-variable "registry_external_url" {}
-
-/*
-statefulset specific
-*/
-
-variable storage_class_name {}
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
-}
-
-/*
-locals
-*/
 
 locals {
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports       = var.ports
+    containers = [
+      {
+        name  = "gitlab"
+        image = var.image
+        env = concat([
+          {
+            name = "POD_NAME"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.name"
+              }
+            }
+          },
+          {
+            name  = "GITLAB_ROOT_PASSWORD"
+            value = var.gitlab_root_password
+          },
+          {
+            name  = "GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN"
+            value = var.gitlab_runners_registration_token
+          },
+          {
+            name  = "AUTO_DEVOPS_DOMAIN"
+            value = var.auto_devops_domain
+          },
+          {
+            name  = "GITLAB_OMNIBUS_CONFIG"
+            value = local.gitlab_omnibus_config
+          },
+        ], var.env)
+
+        liveness_probe = {
+          failure_threshold     = 3
+          initial_delay_seconds = 600
+          period_seconds        = 10
+          success_threshold     = 1
+          timeout_seconds       = 1
+
+          http_get = {
+            path   = "/help"
+            port   = var.ports.0.port
+            scheme = "HTTP"
+          }
+        }
+
+        readiness_probe = {
+          failure_threshold = 3
+          period_seconds    = 10
+          success_threshold = 1
+          timeout_seconds   = 1
+
+          http_get = {
+            path   = "/help"
+            port   = var.ports.0.port
+            scheme = "HTTP"
+          }
+        }
+
+        volume_mounts = [
+          {
+            mount_path = "/var/opt/gitlab"
+            name       = var.volume_claim_template_name
+            sub_path   = "gitlab/var/opt/gitlab"
+          },
+          {
+            mount_path = "/etc/gitlab"
+            name       = var.volume_claim_template_name
+            sub_path   = "gitlab/etc/gitlab"
+          },
+        ]
+      },
+    ]
+
+    volume_claim_templates = [
+      {
+        name               = var.volume_claim_template_name
+        storage_class_name = var.storage_class_name
+        access_modes       = ["ReadWriteOnce"]
+
+        resources = {
+          requests = {
+            storage = var.storage
+          }
+        }
+      }
+    ]
+
+    service_account_name = module.rbac.service_account.metadata.0.name
+  }
+
   gitlab_omnibus_config = <<-EOF
     external_url '${var.gitlab_external_url}';
     gitlab_rails['lfs_enabled'] = true;
@@ -78,52 +118,59 @@ locals {
     EOF
 }
 
-locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
-  }
+
+module "statefulset-service" {
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
+  parameters = merge(local.parameters, var.overrides)
 }
 
-/*
-output
-*/
+module "rbac" {
+  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/rbac"
+  name = var.name
+  namespace = var.namespace
+  cluster_role_rules = [
+    {
+      api_groups = [
+        "",
+      ]
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
+      resources = [
+        "nodes",
+        "nodes/proxy",
+        "services",
+        "endpoints",
+        "pods",
+      ]
 
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
-}
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      api_groups = [
+        "extensions",
+      ]
 
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
+      resources = [
+        "ingresses",
+      ]
 
-output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
-}
+      verbs = [
+        "get",
+        "list",
+        "watch",
+      ]
+    },
+    {
+      non_resource_urls = [
+        "/metrics",
+      ]
 
-output "gitlab_runners_registration_token" {
-  value = "${var.gitlab_runners_registration_token}"
-}
-
-output "gitlab_external_url" {
-  value = "${var.gitlab_external_url}"
-}
-
-resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
-  metadata {
-    name = "${var.name}"
-  }
-
-  spec {
-    max_unavailable = 1
-
-    selector {
-      match_labels = "${local.labels}"
-    }
-  }
+      verbs = [
+        "get",
+      ]
+    },
+  ]
 }
