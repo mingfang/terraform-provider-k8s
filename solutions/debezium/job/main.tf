@@ -4,6 +4,10 @@
 
 variable "name" {}
 
+variable "namespace" {
+  default = null
+}
+
 variable "kafka_connect" {}
 
 variable "connector_name" {}
@@ -11,8 +15,9 @@ variable "connector_name" {}
 variable "connector_config" {}
 
 module "job" {
-  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/job"
+  source = "../../../modules/kubernetes/job"
   name   = "${var.name}"
+  namespace = var.namespace
 
   command = <<-EOF
     until curl -s -H 'Accept:application/json' ${var.kafka_connect}

@@ -82,21 +82,3 @@ output "cluster_ip" {
 output "statefulset_uid" {
   value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
 }
-
-/*
-statefulset specific
-*/
-
-resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
-  metadata {
-    name = "${var.name}"
-  }
-
-  spec {
-    max_unavailable = 1
-
-    selector {
-      match_labels = "${local.labels}"
-    }
-  }
-}

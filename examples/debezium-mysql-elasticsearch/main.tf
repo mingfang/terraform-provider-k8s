@@ -20,12 +20,12 @@
  * 3. Create a Terraform file to include this example, like this
  *    ```
  *    module "debezium-mysql-es" {
- *      source = "git::https://github.com/mingfang/terraform-provider-k8s.git//examples/debezium-mysql-elasticsearch"
+ *      source = "../../examples/debezium-mysql-elasticsearch"
  *      ingress_host = "<IP of any node, e.g. 192.168.2.146>"
  *    }
  *
  *    output "urls" {
- *      value = "${module.debezium-mysql-es.urls}"
+ *      value = module.debezium-mysql-es.urls
  *    }
  *    ```
  * 4. Run init to download the modules.
@@ -56,133 +56,127 @@
  *    ```
 */
 
-variable "name" {
-  default = "debezium-mysql-es"
-}
-
-//comma separated list of tables to sync
-variable "topics" {
-  default = "customers"
-}
-
-//The IP address of any node
-variable "ingress_host" {
-  default = "192.168.2.146"
-}
 
 module "nfs-server" {
-  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/nfs-server-empty-dir"
-  name   = "nfs-server"
+  source    = "../../modules/nfs-server-empty-dir"
+  name      = "nfs-server"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
 }
 
 module "zookeeper_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
-  name    = "${var.name}-zookeeper"
-  count   = 3
-  storage = "1Gi"
+  source    = "../../modules/kubernetes/storage-nfs"
+  name      = "${var.name}-zookeeper"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  replicas  = 3
+  storage   = "1Gi"
 
-  annotations {
-    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
-  }
-
-  nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${module.nfs-server.mount_options}"
+  nfs_server    = module.nfs-server.service.spec.0.cluster_ip
+  mount_options = module.nfs-server.mount_options
 }
 
 module "kafka_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
-  name    = "${var.name}-kafka"
-  count   = 3
-  storage = "1Gi"
+  source    = "../../modules/kubernetes/storage-nfs"
+  name      = "${var.name}-kafka"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  replicas  = 3
+  storage   = "1Gi"
 
-  annotations {
-    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
-  }
-
-  nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${module.nfs-server.mount_options}"
+  nfs_server    = module.nfs-server.service.spec.0.cluster_ip
+  mount_options = module.nfs-server.mount_options
 }
 
 module "elasticsearch_storage" {
-  source  = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
-  name    = "${var.name}-elasticsearch"
-  count   = 3
-  storage = "1Gi"
+  source    = "../../modules/kubernetes/storage-nfs"
+  name      = "${var.name}-elasticsearch"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  replicas  = 3
+  storage   = "1Gi"
 
-  annotations {
-    "nfs-server-uid" = "${module.nfs-server.deployment_uid}"
-  }
-
-  nfs_server    = "${module.nfs-server.cluster_ip}"
-  mount_options = "${module.nfs-server.mount_options}"
+  nfs_server    = module.nfs-server.service.spec.0.cluster_ip
+  mount_options = module.nfs-server.mount_options
 }
 
 module "mysql" {
-  source = "./mysql"
-  name   = "${var.name}-mysql"
+  source    = "./mysql"
+  name      = "${var.name}-mysql"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  image     = "debezium/example-mysql"
+
+  mysql_user          = "mysqluser"
+  mysql_password      = "mysqlpw"
+  mysql_database      = ""
+  mysql_root_password = "debezium"
 }
 
 module "elasticsearch" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
-  name               = "${var.name}-elasticsearch"
-  storage_class_name = "${module.elasticsearch_storage.storage_class_name}"
-  storage            = "${module.elasticsearch_storage.storage}"
-  replicas           = "${module.elasticsearch_storage.count}"
+  source    = "../../modules/elasticsearch"
+  name      = "${var.name}-elasticsearch"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  replicas  = module.elasticsearch_storage.replicas
+
+  storage_class_name = module.elasticsearch_storage.storage_class_name
+  storage            = module.elasticsearch_storage.storage
 }
 
 module "debezium" {
-  source                  = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium"
-  name                    = "${var.name}"
-  zookeeper_storage_class = "${module.zookeeper_storage.storage_class_name}"
-  zookeeper_storage       = "${module.zookeeper_storage.storage}"
-  zookeeper_count         = "${module.zookeeper_storage.count}"
-  kafka_storage_class     = "${module.kafka_storage.storage_class_name}"
-  kafka_storage           = "${module.kafka_storage.storage}"
-  kafka_count             = "${module.kafka_storage.count}"
+  source    = "../../solutions/debezium"
+  name      = var.name
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
+
+  zookeeper_storage_class = module.zookeeper_storage.storage_class_name
+  zookeeper_storage       = module.zookeeper_storage.storage
+  zookeeper_count         = module.zookeeper_storage.replicas
+  kafka_storage_class     = module.kafka_storage.storage_class_name
+  kafka_storage           = module.kafka_storage.storage
+  kafka_count             = module.kafka_storage.replicas
 }
 
+/*
 data "template_file" "source" {
   template = "${file("${path.module}/source.json")}"
 
-  vars {
+  vars = {
     name                                     = "${var.name}-source-connector"
-    database.hostname                        = "${module.mysql.name}"
-    database.port                            = "${module.mysql.port}"
-    database.user                            = "root"
-    database.password                        = "debezium"
-    database.server.id                       = "184054"
-    database.server.name                     = "dbserver1"
-    database.whitelist                       = "inventory"
-    database.history.kafka.bootstrap.servers = "${module.debezium.kafka_bootstrap_servers}"
-    database.history.kafka.topic             = "${var.name}.schema-changes"
+    database_hostname                        = module.mysql.name
+    database_port                            = module.mysql.port
+    database_user                            = "root"
+    database_password                        = "debezium"
+    database_server_id                       = "184054"
+    database_server_name                     = "dbserver1"
+    database_whitelist                       = "inventory"
+    database_history_kafka_bootstrap_servers = module.debezium.kafka_bootstrap_servers
+    database_history_kafka_topic             = "${var.name}.schema-changes"
   }
 }
 
 module "job_source" {
-  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
-  name   = "${var.name}-source-init"
+  source    = "../../solutions/debezium/job"
+  name      = "${var.name}-source-init"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
 
-  kafka_connect    = "${module.debezium.kafka_connect_source}"
-  connector_name   = "${module.mysql.name}"
-  connector_config = "${data.template_file.source.rendered}"
+  kafka_connect    = module.debezium.kafka_connect_source
+  connector_name   = module.mysql.name
+  connector_config = data.template_file.source.rendered
 }
 
 data "template_file" "sink" {
   template = "${file("${path.module}/sink.json")}"
 
-  vars {
+  vars = {
     name           = "elastic-sink"
-    topics         = "${var.topics}"
-    topics.regex   = ""
-    connection.url = "http://${module.elasticsearch.name}:9200"
+    topics         = var.topics
+    topics_regex   = ""
+    connection_url = "http://${module.elasticsearch.name}:9200"
   }
 }
 
 module "job_sink" {
-  source = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
-  name   = "${var.name}-sink-init"
+  source    = "../../solutions/debezium/job"
+  name      = "${var.name}-sink-init"
+  namespace = k8s_core_v1_namespace.this.metadata.0.name
 
-  kafka_connect    = "${module.debezium.kafka_connect_sink}"
-  connector_name   = "${module.elasticsearch.name}"
-  connector_config = "${data.template_file.sink.rendered}"
+  kafka_connect    = module.debezium.kafka_connect_sink
+  connector_name   = module.elasticsearch.name
+  connector_config = data.template_file.sink.rendered
 }
+*/
