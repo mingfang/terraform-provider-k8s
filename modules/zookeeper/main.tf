@@ -1,166 +1,145 @@
 /**
- * Module usage:
+ * Documentation
  *
- *     module "zookeeper" {
- *       source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/zookeeper"
- *       name               = "test-zookeeper"
- *       storage_class_name = "test-zookeeper"
- *       storage            = "100Gi"
- *       replicas           = "${k8s_core_v1_persistent_volume.test-zookeeper.count}"
- *     }
+ * terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md
  *
- *     resource "k8s_core_v1_persistent_volume" "test-zookeeper" {
- *       count = 3
- *
- *       metadata {
- *         name = "pvc-test-zookeeper-${count.index}"
- *       }
- *
- *       spec {
- *         storage_class_name               = "test-zookeeper"
- *         persistent_volume_reclaim_policy = "Retain"
- *         access_modes                     = ["ReadWriteOnce"]
- *
- *         capacity {
- *           storage = "100Gi"
- *         }
- *
- *         cephfs {
- *           user = "admin"
- *
- *           monitors = [
- *             "192.168.2.89",
- *             "192.168.2.39",
- *           ]
- *
- *           secret_ref {
- *             name      = "ceph-secret"
- *             namespace = "default"
- *           }
- *         }
- *       }
- *     }
  */
 
-/*
-common variables
-*/
-
-variable "name" {}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "zookeeper"
-}
-
-variable ports {
-  type = "list"
-
-  default = [
-    {
-      name = "client"
-      port = 2181
-    },
-    {
-      name = "server"
-      port = 2888
-    },
-    {
-      name = "leader-election"
-      port = 3888
-    },
-  ]
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name        = var.name
+    namespace   = var.namespace
+    annotations = var.annotations
+    replicas    = var.replicas
+    ports       = var.ports
+    containers = [
+      {
+        name  = "zookeeper"
+        image = var.image
+        env = concat([
+          {
+            name = "POD_NAME"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.name"
+              }
+            }
+          },
+          {
+            name  = "ZOO_DATA_DIR"
+            value = "/data/$(POD_NAME)"
+          },
+          {
+            name  = "ZOO_SERVERS"
+            value = "${join(" ", data.template_file.zoo-servers.*.rendered)}"
+          },
+        ], var.env)
+
+        command = [
+          "bash",
+          "-cx",
+          <<EOF
+          export ZOO_SERVERS=$$(echo $$ZOO_SERVERS|sed "s|$$POD_NAME.${var.name}|0.0.0.0|")
+          /docker-entrypoint.sh zkServer.sh start-foreground
+          EOF
+        ]
+
+        liveness_probe = {
+          initial_delay_seconds = 1
+          timeout_seconds = 3
+
+          exec = {
+            command = [
+              "/bin/bash",
+              "-cx",
+              "echo 'ruok' | nc localhost 2181 | grep imok",
+            ]
+          }
+        }
+
+        resources = {
+          requests = {
+            cpu = "500m"
+            memory = "1Gi"
+          }
+        }
+
+        volume_mounts = [
+          {
+            name = var.volume_claim_template_name
+            mount_path = "/data"
+            sub_path = var.name
+          }
+        ]
+      },
+    ]
+
+    init_containers = [
+      {
+        name = "set-myid"
+        image = var.image
+
+        env = [
+          {
+            name = "POD_NAME"
+
+            value_from = {
+              field_ref = {
+                field_path = "metadata.name"
+              }
+            }
+          },
+          {
+            name = "ZOO_DATA_DIR"
+            value = "/data/$(POD_NAME)"
+          },
+        ]
+
+        command = [
+          "bash",
+          "-cx",
+          "mkdir -p $ZOO_DATA_DIR; echo \"$${HOSTNAME//[^0-9]/}\" > $ZOO_DATA_DIR/myid",
+        ]
+
+        volume_mounts = [
+          {
+            name = var.volume_claim_template_name
+            mount_path = "/data"
+            sub_path = var.name
+          }
+        ]
+      },
+    ]
+
+    security_context = {
+      fsgroup = 1000
+      run_asuser = 1000
+    }
+
+    volume_claim_templates = [
+      {
+        name = var.volume_claim_template_name
+        storage_class_name = var.storage_class_name
+        access_modes = ["ReadWriteOnce"]
+
+        resources = {
+          requests = {
+            storage = var.storage
+          }
+        }
+      }
+    ]
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
+module "statefulset-service" {
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
+  parameters = merge(local.parameters, var.overrides)
 }
 
-output "ports" {
-  value = "${k8s_core_v1_service.this.spec.0.ports}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "statefulset_uid" {
-  value = "${k8s_apps_v1_stateful_set.this.metadata.0.uid}"
-}
-
-/*
-statefulset specific
-*/
-
-variable storage_class_name {}
-
-variable storage {}
-
-variable volume_claim_template_name {
-  default = "pvc"
+data "template_file" "zoo-servers" {
+  count = var.replicas
+  template = "server.${count.index}=${var.name}-${count.index}.${var.name}:2888:3888"
 }
