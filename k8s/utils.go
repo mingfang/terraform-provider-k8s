@@ -46,6 +46,7 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.status$`),          //this is actually not part of schema
 	regexp.MustCompile(`.*\.metadata\.cluster_name$`),
 	regexp.MustCompile(`.*\.metadata\.finalizers$`),
+	regexp.MustCompile(`.*\.metadata\.generate_name$`),
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
 	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //ignore kubernetes generated annotations
