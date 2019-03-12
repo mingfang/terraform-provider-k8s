@@ -89,7 +89,7 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 			schemaVistor.Schema.ForceNew = IsForceNewField(path)
 		} else {
 			schemaVistor.Schema.Required = false
-			schemaVistor.Schema.Computed = true
+			schemaVistor.Schema.Computed = (schemaVistor.Schema.Type != tfSchema.TypeMap) && (schemaVistor.Schema.Type != tfSchema.TypeList) || IsComputedField(path)
 			schemaVistor.Schema.Optional = true
 			schemaVistor.Schema.ForceNew = IsForceNewField(path)
 		}
