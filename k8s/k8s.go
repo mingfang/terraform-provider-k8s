@@ -21,12 +21,14 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 
 	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
 		if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
+			//skip resources without the create and get verbs
 			return
 		}
 
 		model := modelsMap[gvk]
 		if model == nil {
 			//log.Println("no model for:", apiResource, gvk)
+			//skip resources without a model
 			return
 		}
 
@@ -34,6 +36,7 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 		//log.Println("gvk:", gvk, "resource:", resourceKey)
 		if _, hasKey := resourcesMap[resourceKey]; hasKey {
 			//dups
+			//sometimes resources appear more than once
 			return
 		}
 
