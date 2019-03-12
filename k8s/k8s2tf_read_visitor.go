@@ -103,19 +103,24 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 	for _, key := range proto.Keys() {
 		//log.Println("VisitKind GetPath:", proto.GetPath(), "Key:", key)
 		snakeKey := ToSnake(key)
-		path := this.path + "." + snakeKey
-		//log.Println("VisitKind path:", path)
-		if IsSkipPath(path) {
+		keyPath := this.path + "." + snakeKey
+		//log.Println("K8S2TFReadVisitor VisitKind keyPath:", keyPath)
+		if IsSkipPath(keyPath) {
 			continue
 		}
 		if value, ok := this.context.(map[string]interface{})[key]; ok {
-			visitor := NewK8S2TFReadVisitor(path, value)
+			visitor := NewK8S2TFReadVisitor(keyPath, value)
 			field := proto.Fields[key]
 			field.Accept(visitor)
-			this.Object.([]interface{})[0].(map[string]interface{})[snakeKey] = visitor.Object
-		} else {
-			this.Object.([]interface{})[0].(map[string]interface{})[snakeKey] = nil
+			if visitor.Object != nil {
+				this.Object.([]interface{})[0].(map[string]interface{})[snakeKey] = visitor.Object
+			}
 		}
+	}
+
+	//k8s allows empty objects but terraform does not. setting nil here effective remove empty objects from k8s
+	if len(this.Object.([]interface{})[0].(map[string]interface{})) == 0 {
+		this.Object = nil
 	}
 }
 
