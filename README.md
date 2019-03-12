@@ -1,7 +1,6 @@
 # NOTICE
-I'm actively working to convert everything to Terraform 0.12.
 
-Also be on the lookout for https://github.com/kubernetes/kubernetes/pull/71192.  I'm waiting for that feature to support resources for CRDs.
+Kubernetes v1.14-beta2 is out with https://github.com/kubernetes/kubernetes/pull/71192. I'm testing it for CRD based resources. 
 
 # terraform-provider-k8s
 terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
@@ -18,6 +17,7 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 ## Requirements
 - Docker 
 - kubeconfig file in the current directory
+- Terraform 0.12
  
 ## Install
 1. ```docker pull registry.rebelsoft.com/terraform```
