@@ -40,17 +40,35 @@ func IsForceNewField(path string) bool {
 	return false
 }
 
+var computedPattern = []*regexp.Regexp{
+	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.strategy$`),
+	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.update_strategy$`),
+	regexp.MustCompile(`k8s_\w+_\w+_daemon_set\.spec\.update_strategy$`),
+	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec\.claim_ref$`),
+}
+
+// path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
+func IsComputedField(path string) bool {
+	for _, pattern := range computedPattern {
+		if pattern.MatchString(path) {
+			return true
+		}
+	}
+	return false
+}
+
 var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`^[\w]+\.api_version$`), //redundant; already in resourceKey
 	regexp.MustCompile(`^[\w]+\.kind$`),        //redundant; already in resourceKey
 	regexp.MustCompile(`.*\.status$`),          //this is actually not part of schema
 	regexp.MustCompile(`.*\.metadata\.cluster_name$`),
 	regexp.MustCompile(`.*\.metadata\.finalizers$`),
+	regexp.MustCompile(`.*\.spec\.finalizers$`),
 	regexp.MustCompile(`.*\.metadata\.generate_name$`),
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
-	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //ignore kubernetes generated annotations
-	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinit loop
+	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //broken, ignore kubernetes generated annotations
+	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinite loop
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
