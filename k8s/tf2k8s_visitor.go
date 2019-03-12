@@ -1,7 +1,6 @@
 package k8s
 
 import (
-	//"log"
 	"strconv"
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
@@ -29,8 +28,6 @@ func NewTF2K8SVisitor(resourceData *tfSchema.ResourceData, keyPath string, jsonP
 }
 
 func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
-	//log.Println("VisitArray", proto)
-	//log.Println("subtype:", proto.SubType)
 	//log.Println("VisitArray keyPath:", this.keyPath)
 	var oldLen int
 	var newLen int
@@ -92,7 +89,6 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 }
 
 func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
-	//log.Println("VisitMap", proto)
 	//log.Println("VisitMap keyPath:", this.keyPath)
 	if this.resourceData.HasChange(this.keyPath) {
 		_, newValue := this.resourceData.GetChange(this.keyPath)
@@ -172,10 +168,10 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 				//log.Println("VisitKind keyPath:", keyPath, " Object:", visitor.Object)
 			}
 
-			var add = false
+			var add = oldV == nil
 			switch oldV.(type) {
 			case []interface{}:
-				add = len(oldV.([]interface{})) == 0
+				add = (len(oldV.([]interface{})) == 0) || (oldV.([]interface{})[0] == nil)
 			case map[string]interface{}:
 				add = len(oldV.(map[string]interface{})) == 0
 			}
@@ -186,6 +182,9 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 					Value: visitor.Object,
 				})
 			} else {
+				//if len(visitor.ops) > 0 {
+				//	log.Println("VisitKind keyPath:", keyPath, " update:", visitor.Object, "oldV:", oldV)
+				//}
 				//update sub-object fields
 				for _, op := range visitor.ops {
 					this.ops = append(this.ops, op)
@@ -193,7 +192,7 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 			}
 		}
 	}
-
+	//log.Println("VisitKind keyPath:", this.keyPath, "ops:", this.ops)
 }
 
 func (this *TF2K8SVisitor) VisitReference(proto proto.Reference) {
