@@ -34,10 +34,10 @@ func (this *K8S2TFReadVisitor) VisitArray(proto *proto.Array) {
 			default:
 				this.Object.([]interface{})[i] = visitor.Object
 			}
-			//log.Println("VisitArray keyPath:", keyPath, " Object:", visitor.Object)
+			//log.Println("VisitArray path:", this.path, " Object:", visitor.Object)
 		}
 	}
-	if len(this.Object.([]interface{})) == 0 {
+	if (len(this.Object.([]interface{})) == 0) || (this.Object.([]interface{})[0] == nil) {
 		//log.Println("VisitArray empty path:", this.path)
 		this.Object = nil
 	}
