@@ -109,3 +109,10 @@ func (this *K8S2TFSchemaVisitor) VisitReference(proto proto.Reference) {
 	this.Schema.Description = proto.GetDescription()
 	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
+
+func (this *K8S2TFSchemaVisitor) VisitArbitrary(proto *proto.Arbitrary) {
+	//log.Println("VisitArbitrary path:", this.path)
+	this.Schema.Type = tfSchema.TypeString
+	this.Schema.Description = proto.GetDescription()
+	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
+}
