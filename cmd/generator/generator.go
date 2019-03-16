@@ -137,7 +137,7 @@ resource "{{ .ResourceKey }}" "this" {
       {{ .Name }} = {{ .Parent }}.{{ .Name }}
   {{- else }}
 	{{- if isList .Schema }}
-      {{ .Name }} = contains(keys({{ .Parent }}), "{{ .Name }}") ? {{ .Parent }}.{{ .Name }} : []
+      {{ .Name }} = contains(keys({{ .Parent }}), "{{ .Name }}") ? {{ .Parent }}.{{ .Name }} : null
     {{- else }}
       {{ .Name }} = lookup({{ .Parent }}, "{{ .Name }}", null)
     {{- end }}
