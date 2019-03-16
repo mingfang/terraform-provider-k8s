@@ -207,8 +207,8 @@ func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resource
 	var buf bytes.Buffer
 	name, _, _ := unstructured.NestedString(itemObject, "metadata", "name")
 	name = k8s.ToSnake(name)
-	fmt.Fprintf(&buf, "resource \"%s\" \"%s\"", resourceKey, name)
-	visitor := NewK8S2TFPrintVisitor(&buf, resourceKey, itemObject, 1, false)
+
+	visitor := NewK8S2TFPrintVisitor(&buf, fmt.Sprintf("resource \"%s\" \"%s\"", resourceKey, name), resourceKey, itemObject, 0, false)
 	model.Accept(visitor)
 
 	filename := k8s.ToSnake(gvk.Kind) + "-" + name + ".tf"

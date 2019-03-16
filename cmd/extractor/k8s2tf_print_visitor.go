@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	//"log"
 	"strconv"
 	"strings"
 
@@ -15,6 +14,7 @@ const indentString = "  "
 
 type K8S2TFPrintVisitor struct {
 	context interface{}
+	key     string
 	path    string
 	level   int
 	indent  string
@@ -22,10 +22,11 @@ type K8S2TFPrintVisitor struct {
 	buf     *bytes.Buffer
 }
 
-func NewK8S2TFPrintVisitor(buf *bytes.Buffer, path string, context interface{}, level int, isArray bool) *K8S2TFPrintVisitor {
+func NewK8S2TFPrintVisitor(buf *bytes.Buffer, key string, path string, context interface{}, level int, isArray bool) *K8S2TFPrintVisitor {
 	return &K8S2TFPrintVisitor{
 		buf:     buf,
 		context: context,
+		key:     key,
 		path:    path,
 		level:   level,
 		indent:  strings.Repeat(indentString, level),
@@ -33,16 +34,24 @@ func NewK8S2TFPrintVisitor(buf *bytes.Buffer, path string, context interface{}, 
 	}
 }
 
-func (this *K8S2TFPrintVisitor) VisitArray(proto *proto.Array) {
+func (this *K8S2TFPrintVisitor) VisitArray(array *proto.Array) {
 	//log.Println("VisitArray path:", this.path)
-	fmt.Fprintf(this.buf, "= [")
-	for _, value := range this.context.([]interface{}) {
-		fmt.Fprintf(this.buf, "\n%s", this.indent)
-		visitor := NewK8S2TFPrintVisitor(this.buf, this.path, value, this.level+1, true)
-		proto.SubType.Accept(visitor)
-		fmt.Fprint(this.buf, ",")
+	if _, isKind := array.SubType.(*proto.Ref); isKind {
+		for _, value := range this.context.([]interface{}) {
+			fmt.Fprintln(this.buf)
+			visitor := NewK8S2TFPrintVisitor(this.buf, this.key, this.path, value, this.level, false)
+			array.SubType.Accept(visitor)
+		}
+	} else {
+		fmt.Fprintf(this.buf, "%s%s = [", this.indent, this.key)
+		for _, value := range this.context.([]interface{}) {
+			fmt.Fprintf(this.buf, "\n%s%s", this.indent, indentString)
+			visitor := NewK8S2TFPrintVisitor(this.buf, this.key, this.path, value, this.level+1, true)
+			array.SubType.Accept(visitor)
+			fmt.Fprint(this.buf, ",")
+		}
+		fmt.Fprintf(this.buf, "\n%s]", this.indent)
 	}
-	fmt.Fprintf(this.buf, "\n%s]", strings.Repeat(indentString, this.level-1))
 }
 
 func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
@@ -50,7 +59,7 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 	if this.context == nil {
 		return
 	}
-	fmt.Fprint(this.buf, "{")
+	fmt.Fprintf(this.buf, "%s%s = {", this.indent, this.key)
 	for key := range this.context.(map[string]interface{}) {
 		path := this.path + "." + k8s.ToSnake(key)
 		//log.Println("VisitMap path:", path)
@@ -58,12 +67,12 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 			continue
 		}
 		if value, ok := this.context.(map[string]interface{})[key]; ok {
-			fmt.Fprintf(this.buf, "\n%s%s ", this.indent, strconv.Quote(key))
-			visitor := NewK8S2TFPrintVisitor(this.buf, this.path, value, this.level+1, false)
+			fmt.Fprintln(this.buf)
+			visitor := NewK8S2TFPrintVisitor(this.buf, strconv.Quote(key), this.path, value, this.level+1, false)
 			proto.SubType.Accept(visitor)
 		}
 	}
-	fmt.Fprintf(this.buf, "\n%s}", strings.Repeat(indentString, this.level-1))
+	fmt.Fprintf(this.buf, "\n%s}", this.indent)
 }
 
 func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
@@ -72,7 +81,7 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 		return
 	}
 	if !this.isArray {
-		fmt.Fprintf(this.buf, "= ")
+		fmt.Fprintf(this.buf, "%s%s = ", this.indent, this.key)
 	}
 	if proto.Format == "int-or-string" {
 		switch this.context.(type) {
@@ -98,14 +107,11 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 	//log.Println("VisitKind path:", this.path, "GetPath:", proto.GetPath())
 	if this.context == nil {
-		//log.Println("VisitKind GetPath:", proto.GetPath(), "context is nil")
 		return
 	}
-	fmt.Fprint(this.buf, "{")
+	fmt.Fprintf(this.buf, "%s%s {", this.indent, this.key)
 	for _, key := range proto.Keys() {
-		//log.Println("VisitKind GetPath:", proto.GetPath(), "Key:", key)
 		path := this.path + "." + k8s.ToSnake(key)
-		//log.Println("VisitKind path:", path)
 		if k8s.IsSkipPath(path) || IsSkipPrintPath(path) {
 			continue
 		}
@@ -113,17 +119,13 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 			if value == nil {
 				continue
 			}
-			fmt.Fprintf(this.buf, "\n%s%s ", this.indent, k8s.ToSnake(key))
-			visitor := NewK8S2TFPrintVisitor(this.buf, path, value, this.level+1, false)
+			fmt.Fprintln(this.buf)
+			visitor := NewK8S2TFPrintVisitor(this.buf, k8s.ToSnake(key), path, value, this.level+1, false)
 			field := proto.Fields[key]
 			field.Accept(visitor)
 		}
 	}
-	if this.level == 0 {
-		fmt.Fprintf(this.buf, "\n}\n")
-	} else {
-		fmt.Fprintf(this.buf, "\n%s}", strings.Repeat(indentString, this.level-1))
-	}
+	fmt.Fprintf(this.buf, "\n%s}", this.indent)
 }
 
 func (this *K8S2TFPrintVisitor) VisitReference(proto proto.Reference) {
