@@ -156,7 +156,7 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 	return resourceClient.List(metav1.ListOptions{})
 }
 
-func (this *K8SConfig) ForEachAPIResource(callback func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig)) {
+func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, schema.GroupVersionKind, map[schema.GroupVersionKind]proto.Schema, *K8SConfig)) {
 	lists, _ := this.DiscoveryClient.ServerResources()
 	for _, list := range lists {
 		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
