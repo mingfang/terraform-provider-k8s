@@ -1,5 +1,5 @@
 module "ingress-controller" {
-  source    = "../../modules/kubernetes/ingress-nginx"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-nginx"
   name      = "${var.name}-ingress"
   namespace = var.namespace
 
