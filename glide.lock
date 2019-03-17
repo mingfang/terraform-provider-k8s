@@ -1,5 +1,5 @@
 hash: 90fb85479d69e981a2767c1a6784dcaa54ad79a75d3c6b78a229491f9f55518e
-updated: 2019-03-14T22:01:53.302542404Z
+updated: 2019-03-17T02:11:00.70947368Z
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -202,7 +202,7 @@ imports:
   - compiler
   - extensions
 - name: github.com/gorilla/mux
-  version: 15a353a636720571d19e37b34a14499c3afa9991
+  version: c5c6c98bc25355028a63748a498942a6398ccd22
 - name: github.com/gorilla/websocket
   version: 0ec3d1bd7fe50c503d6df98ee649d81f4857c564
 - name: github.com/gregjones/httpcache
@@ -214,7 +214,7 @@ imports:
 - name: github.com/grpc-ecosystem/go-grpc-prometheus
   version: 68e3a13e41175110a447e67246a59873d6aca902
 - name: github.com/hashicorp/consul
-  version: 33d0922db3f7168bccde0446a4690a8406caf84d
+  version: 6ef970a191d37ba7a1dd168d64862262cc5cdf77
   subpackages:
   - api
 - name: github.com/hashicorp/errwrap
@@ -259,7 +259,7 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/hashicorp/hcl2
-  version: fdf8e232b64f68d5335fa1be449b0160dadacdb5
+  version: 956e03eb6ddaa1e736001b4aaa057fe5a33ef57f
   subpackages:
   - ext/dynblock
   - ext/typeexpr
@@ -284,7 +284,7 @@ imports:
   subpackages:
   - coordinate
 - name: github.com/hashicorp/terraform
-  version: 9d0d564ec7c041d859ea4eb0b504fddfcc9b3bda
+  version: f799a133e3c1a8c9756c37287bc646a545edfe89
   subpackages:
   - addrs
   - command/format
@@ -443,7 +443,7 @@ imports:
   subpackages:
   - net
 - name: github.com/zclconf/go-cty
-  version: 19dda139b164a5503de2051225fa6b94f5d39e05
+  version: 9463876af40c77e2133b2499232cb35fe9721d64
   subpackages:
   - cty
   - cty/convert
@@ -454,7 +454,7 @@ imports:
   - cty/msgpack
   - cty/set
 - name: go.opencensus.io
-  version: 4c51322deaf814004e48e541c32b0cf777d04f8d
+  version: 3b8e2721f2c3c01fa1bf4a2e455874e7b8319cd7
   subpackages:
   - exemplar
   - exporter/prometheus
@@ -549,7 +549,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: d037a07ec1414211370c91b4202681d74a7a999e
+  version: 1c80eec94674e565089c385972ea2b7a7a9c4c13
   subpackages:
   - gensupport
   - googleapi
@@ -637,7 +637,7 @@ imports:
   - policy/v1beta1
   - rbac/v1alpha1
 - name: istio.io/istio
-  version: 09c054d146a7588811930f6d9f4b2c318c3f6cfe
+  version: ead03bc259451e0d58d8dc24308ae4831d09d4af
   subpackages:
   - galley/pkg/metadata
   - galley/pkg/runtime/resource
@@ -743,7 +743,7 @@ imports:
   - storage/v1alpha1
   - storage/v1beta1
 - name: k8s.io/apiextensions-apiserver
-  version: 80ebb0f65ac12d9684d4789ecfd2ba32ceaedc0b
+  version: 5c9e5bbeace175582261f248e1ed7b24f527b99d
   subpackages:
   - pkg/apis/apiextensions
   - pkg/apis/apiextensions/v1beta1
