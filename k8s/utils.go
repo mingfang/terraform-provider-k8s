@@ -65,8 +65,10 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.metadata\.finalizers$`),
 	regexp.MustCompile(`.*\.spec\.finalizers$`),
 	regexp.MustCompile(`.*\.metadata\.generate_name$`),
+	regexp.MustCompile(`.*\.metadata\.generation$`),
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
+	regexp.MustCompile(`.*\.metadata\.resource_version$`),
 	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //broken, ignore kubernetes generated annotations
 	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinite loop
 }
