@@ -35,7 +35,7 @@ resource "k8s_apps_v1_deployment" "this" {
           content {
             key      = match_expressions.value.key
             operator = match_expressions.value.operator
-            values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+            values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
           }
         }
         match_labels = lookup(selector.value, "match_labels", null)
@@ -96,7 +96,7 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_expressions.value.key
                             operator = match_expressions.value.operator
-                            values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                            values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                           }
                         }
                         dynamic "match_fields" {
@@ -104,7 +104,7 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_fields.value.key
                             operator = match_fields.value.operator
-                            values   = contains(keys(match_fields.value), "values") ? match_fields.value.values : null
+                            values   = contains(keys(match_fields.value), "values") ? tolist(match_fields.value.values) : null
                           }
                         }
                       }
@@ -123,7 +123,7 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_expressions.value.key
                             operator = match_expressions.value.operator
-                            values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                            values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                           }
                         }
                         dynamic "match_fields" {
@@ -131,7 +131,7 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_fields.value.key
                             operator = match_fields.value.operator
-                            values   = contains(keys(match_fields.value), "values") ? match_fields.value.values : null
+                            values   = contains(keys(match_fields.value), "values") ? tolist(match_fields.value.values) : null
                           }
                         }
                       }
@@ -157,13 +157,13 @@ resource "k8s_apps_v1_deployment" "this" {
                               content {
                                 key      = match_expressions.value.key
                                 operator = match_expressions.value.operator
-                                values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                                values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                               }
                             }
                             match_labels = lookup(label_selector.value, "match_labels", null)
                           }
                         }
-                        namespaces   = contains(keys(pod_affinity_term.value), "namespaces") ? pod_affinity_term.value.namespaces : null
+                        namespaces   = contains(keys(pod_affinity_term.value), "namespaces") ? tolist(pod_affinity_term.value.namespaces) : null
                         topology_key = pod_affinity_term.value.topology_key
                       }
                     }
@@ -181,13 +181,13 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_expressions.value.key
                             operator = match_expressions.value.operator
-                            values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                            values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                           }
                         }
                         match_labels = lookup(label_selector.value, "match_labels", null)
                       }
                     }
-                    namespaces   = contains(keys(required_during_scheduling_ignored_during_execution.value), "namespaces") ? required_during_scheduling_ignored_during_execution.value.namespaces : null
+                    namespaces   = contains(keys(required_during_scheduling_ignored_during_execution.value), "namespaces") ? tolist(required_during_scheduling_ignored_during_execution.value.namespaces) : null
                     topology_key = required_during_scheduling_ignored_during_execution.value.topology_key
                   }
                 }
@@ -210,13 +210,13 @@ resource "k8s_apps_v1_deployment" "this" {
                               content {
                                 key      = match_expressions.value.key
                                 operator = match_expressions.value.operator
-                                values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                                values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                               }
                             }
                             match_labels = lookup(label_selector.value, "match_labels", null)
                           }
                         }
-                        namespaces   = contains(keys(pod_affinity_term.value), "namespaces") ? pod_affinity_term.value.namespaces : null
+                        namespaces   = contains(keys(pod_affinity_term.value), "namespaces") ? tolist(pod_affinity_term.value.namespaces) : null
                         topology_key = pod_affinity_term.value.topology_key
                       }
                     }
@@ -234,13 +234,13 @@ resource "k8s_apps_v1_deployment" "this" {
                           content {
                             key      = match_expressions.value.key
                             operator = match_expressions.value.operator
-                            values   = contains(keys(match_expressions.value), "values") ? match_expressions.value.values : null
+                            values   = contains(keys(match_expressions.value), "values") ? tolist(match_expressions.value.values) : null
                           }
                         }
                         match_labels = lookup(label_selector.value, "match_labels", null)
                       }
                     }
-                    namespaces   = contains(keys(required_during_scheduling_ignored_during_execution.value), "namespaces") ? required_during_scheduling_ignored_during_execution.value.namespaces : null
+                    namespaces   = contains(keys(required_during_scheduling_ignored_during_execution.value), "namespaces") ? tolist(required_during_scheduling_ignored_during_execution.value.namespaces) : null
                     topology_key = required_during_scheduling_ignored_during_execution.value.topology_key
                   }
                 }
@@ -253,8 +253,8 @@ resource "k8s_apps_v1_deployment" "this" {
         dynamic "containers" {
           for_each = lookup(local.k8s_apps_v1_deployment_parameters, "containers", [])
           content {
-            args    = contains(keys(containers.value), "args") ? containers.value.args : null
-            command = contains(keys(containers.value), "command") ? containers.value.command : null
+            args    = contains(keys(containers.value), "args") ? tolist(containers.value.args) : null
+            command = contains(keys(containers.value), "command") ? tolist(containers.value.command) : null
             dynamic "env" {
               for_each = lookup(containers.value, "env", [])
               content {
@@ -329,7 +329,7 @@ resource "k8s_apps_v1_deployment" "this" {
                     dynamic "exec" {
                       for_each = lookup(post_start.value, "exec", null) == null ? [] : [post_start.value.exec]
                       content {
-                        command = contains(keys(exec.value), "command") ? exec.value.command : null
+                        command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                       }
                     }
                     dynamic "http_get" {
@@ -363,7 +363,7 @@ resource "k8s_apps_v1_deployment" "this" {
                     dynamic "exec" {
                       for_each = lookup(pre_stop.value, "exec", null) == null ? [] : [pre_stop.value.exec]
                       content {
-                        command = contains(keys(exec.value), "command") ? exec.value.command : null
+                        command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                       }
                     }
                     dynamic "http_get" {
@@ -399,7 +399,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "exec" {
                   for_each = lookup(liveness_probe.value, "exec", null) == null ? [] : [liveness_probe.value.exec]
                   content {
-                    command = contains(keys(exec.value), "command") ? exec.value.command : null
+                    command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                   }
                 }
                 failure_threshold = lookup(liveness_probe.value, "failure_threshold", null)
@@ -449,7 +449,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "exec" {
                   for_each = lookup(readiness_probe.value, "exec", null) == null ? [] : [readiness_probe.value.exec]
                   content {
-                    command = contains(keys(exec.value), "command") ? exec.value.command : null
+                    command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                   }
                 }
                 failure_threshold = lookup(readiness_probe.value, "failure_threshold", null)
@@ -496,8 +496,8 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "capabilities" {
                   for_each = lookup(security_context.value, "capabilities", null) == null ? [] : [security_context.value.capabilities]
                   content {
-                    add  = contains(keys(capabilities.value), "add") ? capabilities.value.add : null
-                    drop = contains(keys(capabilities.value), "drop") ? capabilities.value.drop : null
+                    add  = contains(keys(capabilities.value), "add") ? tolist(capabilities.value.add) : null
+                    drop = contains(keys(capabilities.value), "drop") ? tolist(capabilities.value.drop) : null
                   }
                 }
                 privileged                = lookup(security_context.value, "privileged", null)
@@ -547,7 +547,7 @@ resource "k8s_apps_v1_deployment" "this" {
         dynamic "dns_config" {
           for_each = lookup(local.k8s_apps_v1_deployment_parameters, "dns_config", null) == null ? [] : [local.k8s_apps_v1_deployment_parameters.dns_config]
           content {
-            nameservers = contains(keys(dns_config.value), "nameservers") ? dns_config.value.nameservers : null
+            nameservers = contains(keys(dns_config.value), "nameservers") ? tolist(dns_config.value.nameservers) : null
             dynamic "options" {
               for_each = lookup(dns_config.value, "options", [])
               content {
@@ -555,7 +555,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 value = lookup(options.value, "value", null)
               }
             }
-            searches = contains(keys(dns_config.value), "searches") ? dns_config.value.searches : null
+            searches = contains(keys(dns_config.value), "searches") ? tolist(dns_config.value.searches) : null
           }
         }
         dns_policy           = lookup(local.k8s_apps_v1_deployment_parameters, "dns_policy", null)
@@ -564,7 +564,7 @@ resource "k8s_apps_v1_deployment" "this" {
         dynamic "host_aliases" {
           for_each = lookup(local.k8s_apps_v1_deployment_parameters, "host_aliases", [])
           content {
-            hostnames = contains(keys(host_aliases.value), "hostnames") ? host_aliases.value.hostnames : null
+            hostnames = contains(keys(host_aliases.value), "hostnames") ? tolist(host_aliases.value.hostnames) : null
             ip        = lookup(host_aliases.value, "ip", null)
           }
         }
@@ -583,8 +583,8 @@ resource "k8s_apps_v1_deployment" "this" {
         dynamic "init_containers" {
           for_each = lookup(local.k8s_apps_v1_deployment_parameters, "init_containers", [])
           content {
-            args    = contains(keys(init_containers.value), "args") ? init_containers.value.args : null
-            command = contains(keys(init_containers.value), "command") ? init_containers.value.command : null
+            args    = contains(keys(init_containers.value), "args") ? tolist(init_containers.value.args) : null
+            command = contains(keys(init_containers.value), "command") ? tolist(init_containers.value.command) : null
             dynamic "env" {
               for_each = lookup(init_containers.value, "env", [])
               content {
@@ -659,7 +659,7 @@ resource "k8s_apps_v1_deployment" "this" {
                     dynamic "exec" {
                       for_each = lookup(post_start.value, "exec", null) == null ? [] : [post_start.value.exec]
                       content {
-                        command = contains(keys(exec.value), "command") ? exec.value.command : null
+                        command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                       }
                     }
                     dynamic "http_get" {
@@ -693,7 +693,7 @@ resource "k8s_apps_v1_deployment" "this" {
                     dynamic "exec" {
                       for_each = lookup(pre_stop.value, "exec", null) == null ? [] : [pre_stop.value.exec]
                       content {
-                        command = contains(keys(exec.value), "command") ? exec.value.command : null
+                        command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                       }
                     }
                     dynamic "http_get" {
@@ -729,7 +729,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "exec" {
                   for_each = lookup(liveness_probe.value, "exec", null) == null ? [] : [liveness_probe.value.exec]
                   content {
-                    command = contains(keys(exec.value), "command") ? exec.value.command : null
+                    command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                   }
                 }
                 failure_threshold = lookup(liveness_probe.value, "failure_threshold", null)
@@ -779,7 +779,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "exec" {
                   for_each = lookup(readiness_probe.value, "exec", null) == null ? [] : [readiness_probe.value.exec]
                   content {
-                    command = contains(keys(exec.value), "command") ? exec.value.command : null
+                    command = contains(keys(exec.value), "command") ? tolist(exec.value.command) : null
                   }
                 }
                 failure_threshold = lookup(readiness_probe.value, "failure_threshold", null)
@@ -826,8 +826,8 @@ resource "k8s_apps_v1_deployment" "this" {
                 dynamic "capabilities" {
                   for_each = lookup(security_context.value, "capabilities", null) == null ? [] : [security_context.value.capabilities]
                   content {
-                    add  = contains(keys(capabilities.value), "add") ? capabilities.value.add : null
-                    drop = contains(keys(capabilities.value), "drop") ? capabilities.value.drop : null
+                    add  = contains(keys(capabilities.value), "add") ? tolist(capabilities.value.add) : null
+                    drop = contains(keys(capabilities.value), "drop") ? tolist(capabilities.value.drop) : null
                   }
                 }
                 privileged                = lookup(security_context.value, "privileged", null)
@@ -904,7 +904,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 user  = lookup(selinux_options.value, "user", null)
               }
             }
-            supplemental_groups = contains(keys(security_context.value), "supplemental_groups") ? security_context.value.supplemental_groups : null
+            supplemental_groups = contains(keys(security_context.value), "supplemental_groups") ? tolist(security_context.value.supplemental_groups) : null
             dynamic "sysctls" {
               for_each = lookup(security_context.value, "sysctls", [])
               content {
@@ -1064,8 +1064,8 @@ resource "k8s_apps_v1_deployment" "this" {
                 fstype      = lookup(fc.value, "fstype", null)
                 lun         = lookup(fc.value, "lun", null)
                 read_only   = lookup(fc.value, "read_only", null)
-                target_wwns = contains(keys(fc.value), "target_wwns") ? fc.value.target_wwns : null
-                wwids       = contains(keys(fc.value), "wwids") ? fc.value.wwids : null
+                target_wwns = contains(keys(fc.value), "target_wwns") ? tolist(fc.value.target_wwns) : null
+                wwids       = contains(keys(fc.value), "wwids") ? tolist(fc.value.wwids) : null
               }
             }
             dynamic "flex_volume" {
@@ -1132,7 +1132,7 @@ resource "k8s_apps_v1_deployment" "this" {
                 iqn                 = iscsi.value.iqn
                 iscsi_interface     = lookup(iscsi.value, "iscsi_interface", null)
                 lun                 = iscsi.value.lun
-                portals             = contains(keys(iscsi.value), "portals") ? iscsi.value.portals : null
+                portals             = contains(keys(iscsi.value), "portals") ? tolist(iscsi.value.portals) : null
                 read_only           = lookup(iscsi.value, "read_only", null)
                 dynamic "secret_ref" {
                   for_each = lookup(iscsi.value, "secret_ref", null) == null ? [] : [iscsi.value.secret_ref]

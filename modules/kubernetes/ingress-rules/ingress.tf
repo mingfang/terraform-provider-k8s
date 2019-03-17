@@ -5,8 +5,19 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
   metadata {
     annotations = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "annotations", null)
     labels      = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "labels", null)
-    name        = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "name", null)
-    namespace   = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "namespace", null)
+
+    dynamic "managed_fields" {
+      for_each = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "managed_fields", [])
+      content {
+        api_version = lookup(managed_fields.value, "api_version", null)
+        fields      = lookup(managed_fields.value, "fields", null)
+        manager     = lookup(managed_fields.value, "manager", null)
+        operation   = lookup(managed_fields.value, "operation", null)
+        time        = lookup(managed_fields.value, "time", null)
+      }
+    }
+    name      = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "name", null)
+    namespace = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "namespace", null)
   }
 
   spec {
@@ -47,7 +58,7 @@ resource "k8s_extensions_v1beta1_ingress" "this" {
     dynamic "tls" {
       for_each = lookup(local.k8s_extensions_v1beta1_ingress_parameters, "tls", [])
       content {
-        hosts       = contains(keys(tls.value), "hosts") ? tls.value.hosts : []
+        hosts       = contains(keys(tls.value), "hosts") ? tolist(tls.value.hosts) : null
         secret_name = lookup(tls.value, "secret_name", null)
       }
     }

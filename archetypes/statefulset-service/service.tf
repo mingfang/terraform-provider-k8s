@@ -22,12 +22,12 @@ resource "k8s_core_v1_service" "this" {
 
   spec {
     cluster_ip                  = lookup(local.k8s_core_v1_service_parameters, "cluster_ip", null)
-    external_ips                = contains(keys(local.k8s_core_v1_service_parameters), "external_ips") ? local.k8s_core_v1_service_parameters.external_ips : null
+    external_ips                = contains(keys(local.k8s_core_v1_service_parameters), "external_ips") ? tolist(local.k8s_core_v1_service_parameters.external_ips) : null
     external_name               = lookup(local.k8s_core_v1_service_parameters, "external_name", null)
     external_traffic_policy     = lookup(local.k8s_core_v1_service_parameters, "external_traffic_policy", null)
     health_check_node_port      = lookup(local.k8s_core_v1_service_parameters, "health_check_node_port", null)
     load_balancer_ip            = lookup(local.k8s_core_v1_service_parameters, "load_balancer_ip", null)
-    load_balancer_source_ranges = contains(keys(local.k8s_core_v1_service_parameters), "load_balancer_source_ranges") ? local.k8s_core_v1_service_parameters.load_balancer_source_ranges : null
+    load_balancer_source_ranges = contains(keys(local.k8s_core_v1_service_parameters), "load_balancer_source_ranges") ? tolist(local.k8s_core_v1_service_parameters.load_balancer_source_ranges) : null
 
     dynamic "ports" {
       for_each = lookup(local.k8s_core_v1_service_parameters, "ports", [])

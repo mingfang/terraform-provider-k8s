@@ -5,8 +5,19 @@ resource "k8s_rbac_authorization_k8s_io_v1_role_binding" "this" {
   metadata {
     annotations = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "annotations", null)
     labels      = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "labels", null)
-    name        = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "name", null)
-    namespace   = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "namespace", null)
+
+    dynamic "managed_fields" {
+      for_each = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "managed_fields", [])
+      content {
+        api_version = lookup(managed_fields.value, "api_version", null)
+        fields      = lookup(managed_fields.value, "fields", null)
+        manager     = lookup(managed_fields.value, "manager", null)
+        operation   = lookup(managed_fields.value, "operation", null)
+        time        = lookup(managed_fields.value, "time", null)
+      }
+    }
+    name      = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "name", null)
+    namespace = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_binding_parameters, "namespace", null)
   }
 
   dynamic "role_ref" {
