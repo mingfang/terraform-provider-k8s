@@ -20,7 +20,7 @@
  * 3. Create a Terraform file to include this example, like this
  *    ```
  *    module "debezium-mysql-es" {
- *      source = "../../examples/debezium-mysql-elasticsearch"
+ *      source = "git::https://github.com/mingfang/terraform-provider-k8s.git//examples/debezium-mysql-elasticsearch"
  *      ingress_host = "<IP of any node, e.g. 192.168.2.146>"
  *    }
  *
@@ -58,39 +58,51 @@
 
 
 module "nfs-server" {
-  source    = "../../modules/nfs-server-empty-dir"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/nfs-server-empty-dir"
   name      = "nfs-server"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 }
 
 module "zookeeper_storage" {
-  source    = "../../modules/kubernetes/storage-nfs"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name      = "${var.name}-zookeeper"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
   replicas  = 3
   storage   = "1Gi"
+
+  annotations = {
+    "nfs-server-uid" = "${module.nfs-server.deployment.metadata.0.uid}"
+  }
 
   nfs_server    = module.nfs-server.service.spec.0.cluster_ip
   mount_options = module.nfs-server.mount_options
 }
 
 module "kafka_storage" {
-  source    = "../../modules/kubernetes/storage-nfs"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name      = "${var.name}-kafka"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
   replicas  = 3
   storage   = "1Gi"
+
+  annotations = {
+    "nfs-server-uid" = "${module.nfs-server.deployment.metadata.0.uid}"
+  }
 
   nfs_server    = module.nfs-server.service.spec.0.cluster_ip
   mount_options = module.nfs-server.mount_options
 }
 
 module "elasticsearch_storage" {
-  source    = "../../modules/kubernetes/storage-nfs"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
   name      = "${var.name}-elasticsearch"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
   replicas  = 3
   storage   = "1Gi"
+
+  annotations = {
+    "nfs-server-uid" = "${module.nfs-server.deployment.metadata.0.uid}"
+  }
 
   nfs_server    = module.nfs-server.service.spec.0.cluster_ip
   mount_options = module.nfs-server.mount_options
@@ -109,7 +121,7 @@ module "mysql" {
 }
 
 module "elasticsearch" {
-  source    = "../../modules/elasticsearch"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/elasticsearch"
   name      = "${var.name}-elasticsearch"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
   replicas  = module.elasticsearch_storage.replicas
@@ -119,7 +131,7 @@ module "elasticsearch" {
 }
 
 module "debezium" {
-  source    = "../../solutions/debezium"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium"
   name      = var.name
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 
@@ -131,7 +143,6 @@ module "debezium" {
   kafka_count             = module.kafka_storage.replicas
 }
 
-/*
 data "template_file" "source" {
   template = "${file("${path.module}/source.json")}"
 
@@ -150,7 +161,7 @@ data "template_file" "source" {
 }
 
 module "job_source" {
-  source    = "../../solutions/debezium/job"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name      = "${var.name}-source-init"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 
@@ -171,7 +182,7 @@ data "template_file" "sink" {
 }
 
 module "job_sink" {
-  source    = "../../solutions/debezium/job"
+  source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//solutions/debezium/job"
   name      = "${var.name}-sink-init"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 
@@ -179,4 +190,3 @@ module "job_sink" {
   connector_name   = module.elasticsearch.name
   connector_config = data.template_file.sink.rendered
 }
-*/

@@ -63,6 +63,6 @@ locals {
 }
 
 module "deployment-service" {
-  source     = "../../archetypes/deployment-service"
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/deployment-service"
   parameters = merge(local.parameters, var.overrides)
 }
