@@ -117,11 +117,6 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 			}
 		}
 	}
-
-	//k8s allows empty objects but terraform does not. setting nil here effective remove empty objects from k8s
-	if len(this.Object.([]interface{})[0].(map[string]interface{})) == 0 {
-		this.Object = nil
-	}
 }
 
 func (this *K8S2TFReadVisitor) VisitReference(proto proto.Reference) {
