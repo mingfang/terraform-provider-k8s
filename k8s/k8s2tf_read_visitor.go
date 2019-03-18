@@ -123,3 +123,11 @@ func (this *K8S2TFReadVisitor) VisitReference(proto proto.Reference) {
 	//log.Println("VisitReference GetPath:", proto.GetPath())
 	proto.SubSchema().Accept(this)
 }
+
+func (this *K8S2TFReadVisitor) VisitArbitrary(proto *proto.Arbitrary) {
+	//log.Println("VisitArbitrary GetPath:", proto.GetPath())
+	if this.context == nil {
+		return
+	}
+	this.Object = this.context
+}

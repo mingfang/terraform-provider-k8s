@@ -198,3 +198,13 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 func (this *TF2K8SVisitor) VisitReference(proto proto.Reference) {
 	proto.SubSchema().Accept(this)
 }
+
+//same as VisitPrimitive for string type
+func (this *TF2K8SVisitor) VisitArbitrary(proto *proto.Arbitrary) {
+	//log.Println("VisitArbitrary path:", this.keyPath)
+	this.Object = this.context
+	this.ops = append(this.ops, &AddOperation{
+		Path:  this.jsonPath,
+		Value: this.Object,
+	})
+}
