@@ -22,12 +22,11 @@ import:
   - terraform
 
 - package: k8s.io/client-go
-  version: kubernetes-1.13.4
+  version: kubernetes-1.14.0-beta.2
   subpackages:
   - discovery
   - dynamic
 - package: k8s.io/apimachinery
-  version: kubernetes-1.13.4
   subpackages:
   - pkg/api/errors
   - pkg/api/meta
@@ -37,7 +36,6 @@ import:
   - pkg/types
   - pkg/util/yaml
 - package: k8s.io/cli-runtime
-  version: kubernetes-1.13.4
   subpackages:
   - pkg/genericclioptions
 - package: k8s.io/kube-openapi
