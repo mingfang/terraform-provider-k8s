@@ -157,9 +157,12 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 }
 
 func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, schema.GroupVersionKind, map[schema.GroupVersionKind]proto.Schema, *K8SConfig)) {
-	lists, _ := this.DiscoveryClient.ServerResources()
+	lists, _ := this.DiscoveryClient.ServerPreferredResources()
 	for _, list := range lists {
 		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
+		if len(list.APIResources) == 0 {
+			continue
+		}
 		gv, _ := schema.ParseGroupVersion(list.GroupVersion)
 		for _, apiResource := range list.APIResources {
 			gvk, _ := this.RESTMapper.KindFor(schema.GroupVersionResource{
@@ -170,7 +173,6 @@ func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, sche
 			callback(apiResource, gvk, this.ModelsMap, this)
 		}
 	}
-
 }
 
 func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[schema.GroupVersionKind]proto.Schema {
