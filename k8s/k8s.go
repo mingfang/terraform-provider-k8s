@@ -9,6 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/kube-openapi/pkg/util/proto"
 
@@ -18,10 +19,10 @@ import (
 
 func BuildResourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
+	resourceVerbs := []string{"create", "get"}
 
 	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
-		if !ContainsVerb(apiResource.Verbs, "create") || !ContainsVerb(apiResource.Verbs, "get") {
-			//skip resources without the create and get verbs
+		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
 
@@ -73,9 +74,10 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 
 func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
+	resourceVerbs := []string{"get"}
 
 	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
-		if !ContainsVerb(apiResource.Verbs, "get") {
+		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
 
@@ -150,6 +152,8 @@ func resourceCreate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 	visitor := NewTF2K8SVisitor(resourceData, "", "", resourceData)
 	model.Accept(visitor)
 	visitorObject := visitor.Object.(map[string]interface{})
+	visitorObject["apiVersion"] = gvk.Group + "/" + gvk.Version
+	visitorObject["kind"] = gvk.Kind
 
 	raw := unstructured.Unstructured{
 		Object: visitorObject,
@@ -213,7 +217,7 @@ func resourceUpdate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 	if isNamespaced {
 		resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
 	}
-	res, err := resourceClient.Patch(name, types.JSONPatchType, jsonBytes, metav1.UpdateOptions{})
+	res, err := resourceClient.Patch(name, types.JSONPatchType, jsonBytes, metav1.PatchOptions{})
 	if err != nil {
 		return err
 	}

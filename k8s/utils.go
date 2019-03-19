@@ -7,18 +7,7 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
-
-func ContainsVerb(verbs metav1.Verbs, verb string) bool {
-	for _, a := range verbs {
-		if a == verb {
-			return true
-		}
-	}
-	return false
-}
 
 var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_\w+\.metadata\.name$`),
@@ -52,8 +41,8 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
 	regexp.MustCompile(`.*\.metadata\.resource_version$`),
-	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`),         //broken, ignore kubernetes generated annotations
-	regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinite loop
+	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`), //broken, ignore kubernetes generated annotations
+	//regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinite loop
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
