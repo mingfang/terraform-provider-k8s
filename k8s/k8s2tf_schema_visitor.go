@@ -104,10 +104,21 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
-func (this *K8S2TFSchemaVisitor) VisitReference(proto proto.Reference) {
-	proto.SubSchema().Accept(this)
-	this.Schema.Description = proto.GetDescription()
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
+//loop detection, https://github.com/kubernetes/kubernetes/pull/70428/files
+var visitedReferences = map[string]struct{}{}
+
+func (this *K8S2TFSchemaVisitor) VisitReference(r proto.Reference) {
+	//log.Println("VisitReference path:", this.path)
+	if _, ok := visitedReferences[r.Reference()]; ok {
+		return
+	}
+
+	visitedReferences[r.Reference()] = struct{}{}
+	r.SubSchema().Accept(this)
+	delete(visitedReferences, r.Reference())
+
+	this.Schema.Description = r.GetDescription()
+	this.readOnly = strings.Contains(r.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) VisitArbitrary(proto *proto.Arbitrary) {
