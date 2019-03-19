@@ -41,7 +41,7 @@ The resource format is ```resource "k8s_<group>_<version>_<kind>" "<name>"```.
 Note the ```name``` here is the Terraform name and not the Kubernetes name.  
 
 All Kubernetes resources requires a name in the metadata like this
-```
+```hcl
 metadata {
   name = "nginx"
 }
@@ -56,7 +56,7 @@ The set of supported groups, versions and kinds are loaded dynamically from your
 
 For example, this gets the cluster_ip of the httpbin service.
 
-```
+```hcl
 data "k8s_core_v1_service" "httpbin" {
   metadata {
     name = "httpbin"
