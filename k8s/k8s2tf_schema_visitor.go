@@ -79,22 +79,26 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 		if IsSkipPath(path) {
 			continue
 		}
-		schemaVistor := NewK8S2TFSchemaVisitor(path)
-		v.Accept(schemaVistor)
-
-		if proto.IsRequired(key) {
-			schemaVistor.Schema.Required = true
-			schemaVistor.Schema.Computed = false
-			schemaVistor.Schema.Optional = false
-			schemaVistor.Schema.ForceNew = IsForceNewField(path)
-		} else {
-			schemaVistor.Schema.Required = false
-			schemaVistor.Schema.Computed = true
-			schemaVistor.Schema.Optional = true
-			schemaVistor.Schema.ForceNew = IsForceNewField(path)
+		schemaVisitor := NewK8S2TFSchemaVisitor(path)
+		v.Accept(schemaVisitor)
+		if schemaVisitor.Schema.Type == tfSchema.TypeInvalid {
+			//log.Println("VisitKind path:", path, "Skipping TypeInvalid")
+			continue
 		}
 
-		elements[ToSnake(key)] = &schemaVistor.Schema
+		if proto.IsRequired(key) {
+			schemaVisitor.Schema.Required = true
+			schemaVisitor.Schema.Computed = false
+			schemaVisitor.Schema.Optional = false
+			schemaVisitor.Schema.ForceNew = IsForceNewField(path)
+		} else {
+			schemaVisitor.Schema.Required = false
+			schemaVisitor.Schema.Computed = true
+			schemaVisitor.Schema.Optional = true
+			schemaVisitor.Schema.ForceNew = IsForceNewField(path)
+		}
+
+		elements[ToSnake(key)] = &schemaVisitor.Schema
 	}
 
 	this.Schema.Type = tfSchema.TypeList
