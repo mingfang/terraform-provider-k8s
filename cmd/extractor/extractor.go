@@ -16,6 +16,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/kube-openapi/pkg/util/proto"
@@ -110,6 +111,7 @@ func extractYamlBytes(yamlBytes []byte, kindFilter string, dir string) {
 func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 	systemNamePattern := regexp.MustCompile(`^system:`)
 	var dupDetector = map[string]struct{}{}
+	resourceVerbs := []string{"create", "get"}
 
 	k8sConfig := k8s.K8SConfig_Singleton()
 	k8sConfig.ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *k8s.K8SConfig) {
@@ -121,8 +123,7 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 			//log.Println("Skip kind:", gvk.Group, gvk.Version, gvk.Kind)
 			return
 		}
-		if !k8s.ContainsVerb(apiResource.Verbs, "create") || !k8s.ContainsVerb(apiResource.Verbs, "get") {
-			//log.Println("Skip Verbs:", gvk.Group, gvk.Version, gvk.Kind)
+		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
 		model := modelsMap[gvk]

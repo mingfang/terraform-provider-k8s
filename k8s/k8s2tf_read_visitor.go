@@ -1,9 +1,9 @@
 package k8s
 
 import (
-	"log"
+	"encoding/json"
+	"fmt"
 	"strconv"
-	//"strings"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -95,9 +95,20 @@ func (this *K8S2TFReadVisitor) VisitPrimitive(proto *proto.Primitive) {
 func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 	//log.Println("VisitKind path:", this.path, "GetPath:", proto.GetPath())
 	if this.context == nil {
-		log.Println("VisitKind GetPath:", proto.GetPath(), "context is nil")
 		return
 	}
+
+	//special handling for JSON data
+	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+		jsonBytes, err := json.Marshal(this.context)
+		if err != nil {
+			panic(err)
+			return
+		}
+		this.Object = fmt.Sprintf("%s", jsonBytes)
+		return
+	}
+
 	this.Object = make([]interface{}, 1)
 	this.Object.([]interface{})[0] = make(map[string]interface{})
 	for _, key := range proto.Keys() {

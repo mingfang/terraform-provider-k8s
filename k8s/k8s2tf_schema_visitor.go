@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/structure"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -71,6 +72,16 @@ func (this *K8S2TFSchemaVisitor) VisitPrimitive(proto *proto.Primitive) {
 
 func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 	//log.Println("VisitKind path:", this.path, "GetPath:", proto.GetPath())
+
+	//special handling for JSON data
+	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+		this.Schema.Type = tfSchema.TypeString
+		this.Schema.DiffSuppressFunc = structure.SuppressJsonDiff
+		this.Schema.Description = proto.GetDescription()
+		this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
+		return
+	}
+
 	elements := map[string]*tfSchema.Schema{}
 	for _, key := range proto.Keys() {
 		v := proto.Fields[key]

@@ -1,6 +1,8 @@
 package k8s
 
 import (
+	"encoding/json"
+	"fmt"
 	"strconv"
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
@@ -132,6 +134,22 @@ func (this *TF2K8SVisitor) VisitPrimitive(proto *proto.Primitive) {
 
 func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 	//log.Println("VisitKind keyPath:", this.keyPath)
+
+	//special handling for JSON data
+	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+		jsonBytes := []byte(fmt.Sprintf("%s", this.context))
+		jsonObject := map[string]interface{}{}
+		err := json.Unmarshal(jsonBytes, &jsonObject)
+		if err != nil {
+			panic(err)
+		}
+		this.Object = jsonObject
+		this.ops = append(this.ops, &AddOperation{
+			Path:  this.jsonPath,
+			Value: this.Object,
+		})
+		return
+	}
 
 	this.Object = map[string]interface{}{}
 	for _, key := range proto.Keys() {

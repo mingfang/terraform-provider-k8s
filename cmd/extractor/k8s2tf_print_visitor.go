@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -59,6 +60,7 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 	if this.context == nil {
 		return
 	}
+	//fmt.Fprintf(this.buf, "%s//VisitMap path: %s\n", this.indent, proto.GetPath())
 	fmt.Fprintf(this.buf, "%s%s = {", this.indent, this.key)
 	for key := range this.context.(map[string]interface{}) {
 		path := this.path + "." + k8s.ToSnake(key)
@@ -109,6 +111,20 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 	if this.context == nil {
 		return
 	}
+
+	//fmt.Fprintf(this.buf, "%s//VisitKind %s %s\n", this.indent, this.key, proto.GetPath())
+	//special handling for JSON data
+	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+		indent := this.indent + indentString
+		jsonBytes, err := json.MarshalIndent(this.context, indent, "  ")
+		if err != nil {
+			panic(err)
+			return
+		}
+		fmt.Fprintf(this.buf, "%s%s = <<JSON\n%s%s\n%sJSON", this.indent, this.key, indent, jsonBytes, indent)
+		return
+	}
+
 	fmt.Fprintf(this.buf, "%s%s {", this.indent, this.key)
 	for _, key := range proto.Keys() {
 		path := this.path + "." + k8s.ToSnake(key)
@@ -131,4 +147,13 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 func (this *K8S2TFPrintVisitor) VisitReference(proto proto.Reference) {
 	//log.Println("VisitReference GetPath:", proto.GetPath())
 	proto.SubSchema().Accept(this)
+}
+
+func (this *K8S2TFPrintVisitor) VisitArbitrary(proto *proto.Arbitrary) {
+	//log.Println("VisitArbitrary GetPath:", proto.GetPath())
+	if this.context == nil {
+		return
+	}
+	//fmt.Fprintf(this.buf, "%s//VisitArbitrary %s\n", this.indent, proto.GetPath())
+	fmt.Fprintf(this.buf, "%s%s = \"%s\"", this.indent, this.key, this.context)
 }
