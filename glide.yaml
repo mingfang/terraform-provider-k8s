@@ -22,7 +22,7 @@ import:
   - terraform
 
 - package: k8s.io/client-go
-  version: kubernetes-1.14.0-beta.2
+  version: kubernetes-1.14.0-rc.1
   subpackages:
   - discovery
   - dynamic

@@ -1,5 +1,5 @@
-hash: c9367a3f1f55c9830848f860610b5ad2095a8ea9724dde6fc582deab6bc29b0f
-updated: 2019-03-17T23:45:51.876259469Z
+hash: df05a96af7f27ecba6e025fb8a2f1571b4dafe37faf6378b523ac2d8a30f7224
+updated: 2019-03-22T18:08:44.818001781Z
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -39,7 +39,7 @@ imports:
   - internal/parser
   - internal/token
 - name: github.com/aws/aws-sdk-go
-  version: 06b6ff7a2d1360d3504c1ad6e7d3d073e1bc4619
+  version: d31940efdf938914a3b5e6f15acec6db963cf29e
   subpackages:
   - aws
   - aws/awserr
@@ -119,7 +119,6 @@ imports:
   - envoy/config/filter/network/mongo_proxy/v2
   - envoy/config/filter/network/mysql_proxy/v1alpha1
   - envoy/config/filter/network/rbac/v2
-  - envoy/config/filter/network/redis_proxy/v2
   - envoy/config/filter/network/tcp_proxy/v2
   - envoy/config/grpc_credential/v2alpha
   - envoy/config/metrics/v2
@@ -192,11 +191,11 @@ imports:
   - cmp/internal/function
   - cmp/internal/value
 - name: github.com/google/go-github
-  version: 81d50fb163cf55944ccd714d092c2baa656d1831
+  version: fc51e0a08ebd23dfaa8cacd77444a8ca57df151f
   subpackages:
   - github
 - name: github.com/google/go-querystring
-  version: 44c6ddd0a2342c386950e880b658017258da92fc
+  version: c8c88dbee036db4e4808d1f2ec8c2e15e11c3f80
   subpackages:
   - query
 - name: github.com/google/gofuzz
@@ -222,13 +221,13 @@ imports:
 - name: github.com/grpc-ecosystem/go-grpc-prometheus
   version: 68e3a13e41175110a447e67246a59873d6aca902
 - name: github.com/hashicorp/consul
-  version: 6ef970a191d37ba7a1dd168d64862262cc5cdf77
+  version: 6a78e2ae55819046b29722bbbfb9e2b4a23c55b0
   subpackages:
   - api
 - name: github.com/hashicorp/errwrap
   version: 8a6fb523712970c966eefc6b39ed2c5e74880354
 - name: github.com/hashicorp/go-cleanhttp
-  version: e8ab9daed8d1ddd2d3c4efba338fe2eeae2e4f18
+  version: eda1e5db218aad1db63ca4642c8906b26bcf2744
 - name: github.com/hashicorp/go-getter
   version: d9c5f687368ab14e686e0009a756480b2ea4611d
   subpackages:
@@ -240,7 +239,7 @@ imports:
 - name: github.com/hashicorp/go-multierror
   version: 886a7fbe3eb1c874d46f623bfa70af45f425b3d1
 - name: github.com/hashicorp/go-plugin
-  version: 3f118e8ee104b6f22aeb12453fab56aed1356186
+  version: 52e1c4730856c1438ced7597c9b5c585a7bd06a2
   subpackages:
   - internal/plugin
 - name: github.com/hashicorp/go-rootcerts
@@ -267,7 +266,7 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/hashicorp/hcl2
-  version: 956e03eb6ddaa1e736001b4aaa057fe5a33ef57f
+  version: f9f92da699d801c8beee28dbbb7c09e3dce2ae66
   subpackages:
   - ext/dynblock
   - ext/typeexpr
@@ -288,11 +287,11 @@ imports:
 - name: github.com/hashicorp/logutils
   version: a335183dfd075f638afcc820c90591ca3c97eba6
 - name: github.com/hashicorp/serf
-  version: b89a09ebd4b1b570e0076d5097272e67c10ac4f6
+  version: e516ab3e97c38fc10fb0dbde0437751823d08300
   subpackages:
   - coordinate
 - name: github.com/hashicorp/terraform
-  version: f799a133e3c1a8c9756c37287bc646a545edfe89
+  version: 2e15f6f5856c9aec1c239969bc7b51af2413bf00
   subpackages:
   - addrs
   - command/format
@@ -312,6 +311,7 @@ imports:
   - helper/plugin
   - helper/resource
   - helper/schema
+  - helper/structure
   - httpclient
   - internal/earlyconfig
   - internal/initwd
@@ -423,7 +423,7 @@ imports:
   subpackages:
   - go
 - name: github.com/prometheus/common
-  version: 8b748030788ea01a6ceb5068504cfa01d1b335b1
+  version: 1ab4d74fc89940cfbc3c2b3a89821336cdefa119
   subpackages:
   - expfmt
   - internal/bitbucket.org/ww/goautoneg
@@ -453,7 +453,7 @@ imports:
   - internal/xlog
   - lzma
 - name: github.com/vmihailenco/msgpack
-  version: b962d79429a3c5135cca9ed528943f1551ec04df
+  version: abe680308d0beea7c2c861876fdc269996e7662e
   subpackages:
   - codes
 - name: github.com/yl2chen/cidranger
@@ -461,7 +461,7 @@ imports:
   subpackages:
   - net
 - name: github.com/zclconf/go-cty
-  version: 9463876af40c77e2133b2499232cb35fe9721d64
+  version: fd76348b9329dc6f3bd4b87a45ae9e5fb72bffbc
   subpackages:
   - cty
   - cty/convert
@@ -472,15 +472,16 @@ imports:
   - cty/msgpack
   - cty/set
 - name: go.opencensus.io
-  version: 3b8e2721f2c3c01fa1bf4a2e455874e7b8319cd7
+  version: 5ae9166f90ff989c557e45fcb9592ac59afa0fa0
   subpackages:
-  - exemplar
   - exporter/prometheus
   - internal
   - internal/tagencoding
+  - metric/metricdata
   - plugin/ocgrpc
   - plugin/ochttp
   - plugin/ochttp/propagation/b3
+  - resource
   - stats
   - stats/internal
   - stats/view
@@ -573,7 +574,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 1c80eec94674e565089c385972ea2b7a7a9c4c13
+  version: 85344057ef9522151728c2e1f7f69e39706dc8a6
   subpackages:
   - gensupport
   - googleapi
@@ -603,11 +604,11 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: 5fe7a883aa19554f42890211544aa549836af7b7
+  version: e79c0c59cdb5e117ef82a6f885294df3d74065d5
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
-  version: 2fdaae294f38ed9a121193c51ec99fecd3b13eb7
+  version: 3507fb8e1a5ad030303c106fef3a47c9fdad16ad
   subpackages:
   - balancer
   - balancer/base
@@ -648,7 +649,7 @@ imports:
 - name: gopkg.in/yaml.v2
   version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 - name: istio.io/api
-  version: 8463cba039d858e8a849847b872ecea50b0994df
+  version: 785ea83cee806d5a68ceb25a46fde0f65e0b56c9
   subpackages:
   - authentication/v1alpha1
   - envoy/config/filter/http/authn/v2alpha1
@@ -661,7 +662,7 @@ imports:
   - policy/v1beta1
   - rbac/v1alpha1
 - name: istio.io/istio
-  version: a08434d79f8e277833cffa5e25a88beefb754e22
+  version: 28f2fbbbb0bb4910130b3362cc18c780e1fac87b
   subpackages:
   - galley/pkg/metadata
   - galley/pkg/runtime/resource
@@ -731,7 +732,7 @@ imports:
   - pkg/version
   - tests/util
 - name: k8s.io/api
-  version: aed3e58a5946ed43ef2008af9bc6d0d48e0682ea
+  version: 40a48860b5abbba9aa891b02b32da429b08d96a0
   subpackages:
   - admissionregistration/v1beta1
   - apps/v1
@@ -771,7 +772,7 @@ imports:
   - storage/v1alpha1
   - storage/v1beta1
 - name: k8s.io/apiextensions-apiserver
-  version: 5c9e5bbeace175582261f248e1ed7b24f527b99d
+  version: d0faca7dd5c47ceabf6b5a83ce8339ace6a16d22
   subpackages:
   - pkg/apis/apiextensions
   - pkg/apis/apiextensions/v1beta1
@@ -779,7 +780,7 @@ imports:
   - pkg/client/clientset/clientset/scheme
   - pkg/client/clientset/clientset/typed/apiextensions/v1beta1
 - name: k8s.io/apimachinery
-  version: 52b84f9b724722e77633d2fe022d2d8d57bb16a9
+  version: d7deff9243b165ee192f5551710ea4285dcfd615
   subpackages:
   - pkg/api/equality
   - pkg/api/errors
@@ -843,7 +844,7 @@ imports:
   - pkg/printers
   - pkg/resource
 - name: k8s.io/client-go
-  version: 94c2b28f7daad3bd8a35083cc4f8cbe93f027cb3
+  version: 6ee68ca5fd8355d024d02f9db0b3b667e8357a0f
   subpackages:
   - discovery
   - discovery/cached/disk
