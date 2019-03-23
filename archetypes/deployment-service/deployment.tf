@@ -1,4 +1,4 @@
-//GENERATE//k8s_apps_v1_deployment////ignore_changes = [metadata]
+//GENERATE DYNAMIC//k8s_apps_v1_deployment////ignore_changes = [metadata]
 resource "k8s_apps_v1_deployment" "this" {
 
 

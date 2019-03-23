@@ -1,4 +1,4 @@
-//GENERATE//k8s_core_v1_service_account////
+//GENERATE DYNAMIC//k8s_core_v1_service_account////
 resource "k8s_core_v1_service_account" "this" {
 
 

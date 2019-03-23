@@ -1,4 +1,4 @@
-//GENERATE//k8s_apps_v1_daemon_set////
+//GENERATE DYNAMIC//k8s_apps_v1_daemon_set////
 resource "k8s_apps_v1_daemon_set" "this" {
 
 

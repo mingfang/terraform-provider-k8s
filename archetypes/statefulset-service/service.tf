@@ -1,4 +1,4 @@
-//GENERATE//k8s_core_v1_service////
+//GENERATE DYNAMIC//k8s_core_v1_service////
 resource "k8s_core_v1_service" "this" {
 
 

@@ -19,7 +19,7 @@ locals {
   }
 
   cluster_role_rules = var.cluster_role_rules == null ? [] : var.cluster_role_rules
-  role_rules = var.role_rules == null ? [] : var.role_rules
+  role_rules         = var.role_rules == null ? [] : var.role_rules
 
   cluster_role_ref = {
     api_group = "rbac.authorization.k8s.io"

@@ -1,4 +1,4 @@
-//GENERATE//k8s_apps_v1_stateful_set////
+//GENERATE DYNAMIC//k8s_apps_v1_stateful_set////
 resource "k8s_apps_v1_stateful_set" "this" {
 
 

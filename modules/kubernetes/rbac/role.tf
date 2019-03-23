@@ -1,4 +1,4 @@
-//GENERATE//k8s_rbac_authorization_k8s_io_v1_role//count = var.role_rules == null ? 0 : 1//ignore_changes = [metadata]
+//GENERATE DYNAMIC//k8s_rbac_authorization_k8s_io_v1_role//count = var.role_rules == null ? 0 : 1//ignore_changes = [metadata]
 resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
   count = var.role_rules == null ? 0 : 1
 

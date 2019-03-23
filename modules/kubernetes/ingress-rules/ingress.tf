@@ -1,4 +1,4 @@
-//GENERATE//k8s_extensions_v1beta1_ingress////
+//GENERATE DYNAMIC//k8s_extensions_v1beta1_ingress////
 resource "k8s_extensions_v1beta1_ingress" "this" {
 
 
