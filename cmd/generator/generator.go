@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"sort"
@@ -13,20 +14,19 @@ import (
 )
 
 func main() {
-	argsWithoutProg := os.Args[1:]
-	if len(argsWithoutProg) < 1 {
+	var count, lifecycle, block string
+
+	flag.StringVar(&count, "count", "", "count expression")
+	flag.StringVar(&lifecycle, "lifecycle", "", "lifecycle expression")
+	flag.StringVar(&block, "block", "static", "static or dynamic block type")
+	flag.Parse()
+
+	args := flag.Args()
+	if len(args) < 1 {
 		mainPrintList()
 	} else {
-		resource := argsWithoutProg[0]
-		var count = ""
-		if len(argsWithoutProg) > 1 {
-			count = argsWithoutProg[1]
-		}
-		var lifecycle = ""
-		if len(argsWithoutProg) > 2 {
-			lifecycle = argsWithoutProg[2]
-		}
-		mainPrintResource(resource, count, lifecycle)
+		resource := args[0]
+		mainPrintResource(resource, count, lifecycle, block)
 	}
 }
 
@@ -61,9 +61,9 @@ type ResourceData struct {
 	Resource    *tfSchema.Resource
 }
 
-var resourceTemplate = `
+var resourceTemplateDynamic = `
 {{ define "main" -}}
-//GENERATE//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
+//GENERATE DYNAMIC//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
 resource "{{ .ResourceKey }}" "this" {
   {{ .Count }}
 
@@ -145,10 +145,68 @@ resource "{{ .ResourceKey }}" "this" {
 {{- end }}
 `
 
-func mainPrintResource(resourceKey string, count string, lifecycle string) {
+var resourceTemplateStatic = `
+{{ define "main" -}}
+//GENERATE STATIC//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
+resource "{{ .ResourceKey }}" "this" {
+  {{ .Count }}
+
+  {{- range $name, $schema := .Resource.Schema }}
+    {{- with subResource $schema }}
+      {{ template "static" dict "Name" $name "Schema" $schema "Resource" . }}
+    {{- else }}
+      {{ template "schema" dict "Name" $name "Schema" $schema  }}
+    {{- end }}
+  {{- end }}
+
+  lifecycle {
+    {{ .Lifecycle }}
+  }
+}
+{{- end }}
+
+{{ define "static" }}
+  {{- if .Schema.Required }}
+    // Required
+  {{- end }}
+  {{ .Name }} {
+    {{- range $name, $schema := .Resource.Schema }}
+      {{- if not (isReadOnly $schema) }}
+        {{- with subResource $schema }}
+          {{ template "static" dict "Name" $name "Schema" $schema "Resource" . }}
+        {{- else -}}
+          {{ template "schema" dict "Name" $name "Schema" $schema }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  }
+{{- end }}
+
+{{ define "schema" }}
+  {{- if .Schema.Required }}
+    // Required
+  {{- end }}
+  {{- if isList .Schema }}
+    {{ .Name }} = [ "{{ .Schema.Elem.Type }}" ]
+  {{- else if isMap .Schema }}
+    {{ .Name }} = { "key" = "{{ .Schema.Elem.Type }}" }
+  {{- else }}
+    {{ .Name }} = "{{ .Schema.Type }}"
+  {{- end }}
+{{- end }}
+`
+
+func mainPrintResource(resourceKey, count, lifecycle, block string) {
 	resourcesMap := k8s.BuildResourcesMap()
 	resource := resourcesMap[resourceKey]
 	//k8s.Dump(resource)
+
+	var resourceTemplate string
+	if block == "static" {
+		resourceTemplate = resourceTemplateStatic
+	} else {
+		resourceTemplate = resourceTemplateDynamic
+	}
 
 	t, err := template.New("").Funcs(template.FuncMap{
 		"dict": func(values ...interface{}) (map[string]interface{}, error) {
@@ -184,12 +242,10 @@ func mainPrintResource(resourceKey string, count string, lifecycle string) {
 			return name == "metadata" || name == "spec" || name == "template"
 		},
 		"isList": func(schema *tfSchema.Schema) bool {
-			switch schema.Type {
-			case tfSchema.TypeList:
-				return true
-			default:
-				return false
-			}
+			return schema.Type == tfSchema.TypeList
+		},
+		"isMap": func(schema *tfSchema.Schema) bool {
+			return schema.Type == tfSchema.TypeMap
 		},
 	}).Parse(resourceTemplate)
 	if err != nil {
