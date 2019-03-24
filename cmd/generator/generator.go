@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -18,24 +19,65 @@ import (
 
 func main() {
 	var count, lifecycle string
-	var doc, dynamic bool
+	var doc, dynamic, site bool
 
 	flag.StringVar(&count, "count", "", "count expression")
 	flag.StringVar(&lifecycle, "lifecycle", "", "lifecycle expression")
 	flag.BoolVar(&dynamic, "dynamic", false, "generate dynamic blocks")
 	flag.BoolVar(&doc, "doc", false, "generate markdown documentation")
+	flag.BoolVar(&site, "site", false, "generate entire documentation site")
 	flag.Parse()
-
 	args := flag.Args()
-	if len(args) < 1 {
-		mainPrintList()
+
+	if site {
+		generateSite()
+	} else if len(args) > 0 {
+		resourceKey := args[0]
+		resourcesMap := k8s.BuildResourcesMap()
+		resource := resourcesMap[resourceKey]
+		generateResource(resourceKey, resource, count, lifecycle, dynamic, doc, os.Stdout)
 	} else {
-		resource := args[0]
-		mainPrintResource(resource, count, lifecycle, dynamic, doc)
+		listResources()
 	}
 }
 
-func mainPrintList() {
+func generateSite() {
+	var baseDir = "./site"
+	CreateDirIfNotExist(baseDir)
+	toc, err := os.OpenFile(baseDir+"/"+"README.md", os.O_WRONLY|os.O_CREATE, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	resourcesMap := k8s.BuildResourcesMap()
+	keys := make([]string, 0, len(resourcesMap))
+	for k := range resourcesMap {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, resourceKey := range keys {
+		dir := baseDir + "/" + resourceKey
+		CreateDirIfNotExist(dir)
+		fmt.Fprintf(toc, "##### [%s](%s)\n\n", resourceKey, "./"+resourceKey)
+		file, err := os.OpenFile(dir+"/"+"README.md", os.O_WRONLY|os.O_CREATE, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+		resource := resourcesMap[resourceKey]
+		generateResource(resourceKey, resource, "", "", false, true, file)
+	}
+}
+
+func CreateDirIfNotExist(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func listResources() {
 	resourcesMap := k8s.BuildResourcesMap()
 	keys := make([]string, 0, len(resourcesMap))
 	for k := range resourcesMap {
@@ -284,9 +326,7 @@ const docTemplate = `
 {{- end }}
 `
 
-func mainPrintResource(resourceKey string, count string, lifecycle string, dynamic bool, doc bool) {
-	resourcesMap := k8s.BuildResourcesMap()
-	resource := resourcesMap[resourceKey]
+func generateResource(resourceKey string, resource *tfSchema.Resource, count string, lifecycle string, dynamic bool, doc bool, writer io.Writer) {
 	//k8s.Dump(resource)
 
 	var resourceTemplate string
@@ -373,7 +413,7 @@ func mainPrintResource(resourceKey string, count string, lifecycle string, dynam
 		Lifecycle:   lifecycle,
 		Resource:    resource,
 	}
-	err = t.ExecuteTemplate(os.Stdout, templateName, data)
+	err = t.ExecuteTemplate(writer, templateName, data)
 	if err != nil {
 		panic(err)
 	}
