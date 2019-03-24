@@ -6,8 +6,8 @@ Kubernetes v1.14-beta2 is out with https://github.com/kubernetes/kubernetes/pull
 terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 
 ## Features
-- Uses the Kubernetes client-go library to dynamically discover available resources
-- Supports multiple versions of the same resource kinds, including alpha and beta versions
+- Uses the Kubernetes [client-go](https://github.com/kubernetes/client-go) library to dynamically discover available resources
+- Supports all Kubernetes [resources](./site), including alpha and beta versions
 - Supports the latest version of Kubernetes
 - Auto extract from live Kubernetes cluster and import as Terraform state
 - Convert Kubernetes manifests to Terraform files
