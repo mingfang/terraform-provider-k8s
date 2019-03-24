@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 	"sort"
 	"strings"
 	"text/template"
@@ -14,11 +17,13 @@ import (
 )
 
 func main() {
-	var count, lifecycle, block string
+	var count, lifecycle string
+	var doc, dynamic bool
 
 	flag.StringVar(&count, "count", "", "count expression")
 	flag.StringVar(&lifecycle, "lifecycle", "", "lifecycle expression")
-	flag.StringVar(&block, "block", "static", "static or dynamic block type")
+	flag.BoolVar(&dynamic, "dynamic", false, "generate dynamic blocks")
+	flag.BoolVar(&doc, "doc", false, "generate markdown documentation")
 	flag.Parse()
 
 	args := flag.Args()
@@ -26,7 +31,7 @@ func main() {
 		mainPrintList()
 	} else {
 		resource := args[0]
-		mainPrintResource(resource, count, lifecycle, block)
+		mainPrintResource(resource, count, lifecycle, dynamic, doc)
 	}
 }
 
@@ -61,8 +66,12 @@ type ResourceData struct {
 	Resource    *tfSchema.Resource
 }
 
-var resourceTemplateDynamic = `
-{{ define "main" -}}
+const resourceTemplateDynamic = `
+{{ define "main" }}
+{{- execute "resource_dynamic" (dict "ResourceKey" .ResourceKey "Resource" .Resource "Count" "" "Lifecycle" "") | fmt}}
+{{ end }}
+
+{{ define "resource_dynamic" -}}
 //GENERATE DYNAMIC//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
 resource "{{ .ResourceKey }}" "this" {
   {{ .Count }}
@@ -145,8 +154,12 @@ resource "{{ .ResourceKey }}" "this" {
 {{- end }}
 `
 
-var resourceTemplateStatic = `
-{{ define "main" -}}
+const resourceTemplateStatic = `
+{{ define "main" }}
+{{- execute "resource_static" (dict "ResourceKey" .ResourceKey "Resource" .Resource "Count" "" "Lifecycle" "") | fmt}}
+{{ end }}
+
+{{ define "resource_static" -}}
 //GENERATE STATIC//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
 resource "{{ .ResourceKey }}" "this" {
   {{ .Count }}
@@ -196,18 +209,101 @@ resource "{{ .ResourceKey }}" "this" {
 {{- end }}
 `
 
-func mainPrintResource(resourceKey, count, lifecycle, block string) {
+const docTemplate = `
+{{ define "main_doc" }}
+# resource "{{ .ResourceKey }}"
+
+  {{- range $name, $schema := .Resource.Schema }}
+    {{- with subResource $schema }}
+      {{- template "resource_doc_toc" dict "Name" $name "Schema" $schema "Resource" . }}
+    {{- end }}
+  {{- end }}
+
+<details>
+<summary>example</summary><blockquote>
+
+{{ backtick }}hcl
+{{ execute "main" (dict "ResourceKey" .ResourceKey "Resource" .Resource "Count" "" "Lifecycle" "")}}
+{{ backtick }}
+
+</details>
+
+  {{ range $name, $schema := .Resource.Schema }}
+    {{- with subResource $schema }}
+      {{- template "resource_doc" dict "Name" $name "Schema" $schema "Resource" . }}
+    {{- else }}
+      {{- template "schema_doc" dict "Name" $name "Schema" $schema  }}
+    {{- end }}
+  {{- end }}
+
+{{- end }}
+
+{{ define "resource_doc_toc" }}
+<details>
+<summary>{{ .Name }}</summary><blockquote>
+
+    {{ range $name, $schema := .Resource.Schema }}
+        {{- with subResource $schema }}
+        {{- else }}
+          {{- template "schema_doc_toc" dict "Name" $name "Schema" $schema }}
+        {{- end }}
+    {{- end }}
+
+    {{ range $name, $schema := .Resource.Schema }}
+        {{- with subResource $schema }}
+          {{- template "resource_doc_toc" dict "Name" $name "Schema" $schema "Resource" . }}
+        {{- end }}
+    {{- end }}
+</details>
+{{ end }}
+
+{{ define "schema_doc_toc" }}
+- [{{ .Name }}](#{{ .Name }}){{ if .Schema.Required }}*{{ end }} 
+{{- end }}
+
+{{ define "resource_doc" }}
+## {{ .Name }}
+
+{{ .Schema.Description }}
+
+    {{ range $name, $schema := .Resource.Schema }}
+        {{- with subResource $schema }}
+          {{- template "resource_doc" dict "Name" $name "Schema" $schema "Resource" . }}
+        {{- else }}
+          {{- template "schema_doc" dict "Name" $name "Schema" $schema }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+
+{{ define "schema_doc" }}
+#### {{ .Name }}
+
+###### {{ if .Schema.Required }}Required • {{ end }} {{ if (isReadOnly .Schema) }}ReadOnly • {{ end }}{{ .Schema.Type }}
+
+{{ .Schema.Description }}
+{{- end }}
+`
+
+func mainPrintResource(resourceKey string, count string, lifecycle string, dynamic bool, doc bool) {
 	resourcesMap := k8s.BuildResourcesMap()
 	resource := resourcesMap[resourceKey]
 	//k8s.Dump(resource)
 
 	var resourceTemplate string
-	if block == "static" {
-		resourceTemplate = resourceTemplateStatic
-	} else {
+	if dynamic {
 		resourceTemplate = resourceTemplateDynamic
+	} else {
+		resourceTemplate = resourceTemplateStatic
 	}
 
+	var templateName string
+	if doc {
+		templateName = "main_doc"
+	} else {
+		templateName = "main"
+	}
+
+	var t *template.Template
 	t, err := template.New("").Funcs(template.FuncMap{
 		"dict": func(values ...interface{}) (map[string]interface{}, error) {
 			if len(values)%2 != 0 {
@@ -247,7 +343,26 @@ func mainPrintResource(resourceKey, count, lifecycle, block string) {
 		"isMap": func(schema *tfSchema.Schema) bool {
 			return schema.Type == tfSchema.TypeMap
 		},
-	}).Parse(resourceTemplate)
+		"backtick": func() string {
+			return "```"
+		},
+		"fmt": func(code string) (string, error) {
+			var b bytes.Buffer
+			b.Write([]byte(code))
+			command := exec.Command("terraform", "fmt", "-")
+			command.Stdin = &b
+			cmdOut, err := command.CombinedOutput()
+			if err != nil {
+				log.Fatalln(string(cmdOut))
+			}
+			return string(cmdOut), err
+		},
+		"execute": func(data ...interface{}) (string, error) {
+			buf := &bytes.Buffer{}
+			err := t.ExecuteTemplate(buf, data[0].(string), data[1])
+			return buf.String(), err
+		},
+	}).Parse(resourceTemplate + docTemplate)
 	if err != nil {
 		panic(err)
 	}
@@ -258,7 +373,7 @@ func mainPrintResource(resourceKey, count, lifecycle, block string) {
 		Lifecycle:   lifecycle,
 		Resource:    resource,
 	}
-	err = t.ExecuteTemplate(os.Stdout, "main", data)
+	err = t.ExecuteTemplate(os.Stdout, templateName, data)
 	if err != nil {
 		panic(err)
 	}
