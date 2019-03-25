@@ -1,5 +1,9 @@
 
 # resource "k8s_autoscaling_v1_horizontal_pod_autoscaler"
+
+configuration of a horizontal pod autoscaler.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

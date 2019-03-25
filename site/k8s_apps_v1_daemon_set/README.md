@@ -1,5 +1,9 @@
 
 # resource "k8s_apps_v1_daemon_set"
+
+DaemonSet represents the configuration of a daemon set.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

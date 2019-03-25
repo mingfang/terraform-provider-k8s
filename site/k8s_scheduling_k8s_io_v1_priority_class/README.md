@@ -1,5 +1,9 @@
 
 # resource "k8s_scheduling_k8s_io_v1_priority_class"
+
+PriorityClass defines mapping from a priority class name to the priority integer value. The value can be any valid integer.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

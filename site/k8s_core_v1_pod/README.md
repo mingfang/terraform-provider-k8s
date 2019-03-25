@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_pod"
+
+Pod is a collection of containers that can run on a host. This resource is created by clients and scheduled onto hosts.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

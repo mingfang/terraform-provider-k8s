@@ -1,5 +1,9 @@
 
 # resource "k8s_apps_v1_replica_set"
+
+ReplicaSet ensures that a specified number of pod replicas are running at any given time.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

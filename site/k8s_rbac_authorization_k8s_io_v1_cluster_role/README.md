@@ -1,5 +1,9 @@
 
 # resource "k8s_rbac_authorization_k8s_io_v1_cluster_role"
+
+ClusterRole is a cluster level, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding or ClusterRoleBinding.
+
+  
 <details>
 <summary>aggregation_rule</summary><blockquote>
 

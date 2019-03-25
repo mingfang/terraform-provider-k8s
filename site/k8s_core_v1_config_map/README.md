@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_config_map"
+
+ConfigMap holds configuration data for pods to consume.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

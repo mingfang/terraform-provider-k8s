@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_limit_range"
+
+LimitRange sets resource usage limits for each kind of resource in a Namespace.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

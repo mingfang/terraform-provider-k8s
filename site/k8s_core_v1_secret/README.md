@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_secret"
+
+Secret holds secret data of a certain type. The total bytes of the values in the Data field must be less than MaxSecretSize bytes.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

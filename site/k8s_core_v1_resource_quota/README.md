@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_resource_quota"
+
+ResourceQuota sets aggregate quota restrictions enforced per namespace
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

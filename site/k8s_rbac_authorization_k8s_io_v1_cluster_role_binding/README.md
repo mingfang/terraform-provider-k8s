@@ -1,5 +1,9 @@
 
 # resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding"
+
+ClusterRoleBinding references a ClusterRole, but not contain it.  It can reference a ClusterRole in the global namespace, and adds who information via Subject.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

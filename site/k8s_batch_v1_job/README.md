@@ -1,5 +1,9 @@
 
 # resource "k8s_batch_v1_job"
+
+Job represents the configuration of a single job.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

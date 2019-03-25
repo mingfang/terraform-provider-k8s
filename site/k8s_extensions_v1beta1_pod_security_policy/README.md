@@ -1,5 +1,9 @@
 
 # resource "k8s_extensions_v1beta1_pod_security_policy"
+
+PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container. Deprecated: use PodSecurityPolicy from policy API Group instead.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

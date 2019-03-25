@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_service_account"
+
+ServiceAccount binds together: * a name, understood by users, and perhaps by peripheral systems, for an identity * a principal that can be authenticated and authorized * a set of secrets
+
+  
 <details>
 <summary>image_pull_secrets</summary><blockquote>
 

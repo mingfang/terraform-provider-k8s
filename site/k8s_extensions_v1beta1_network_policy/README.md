@@ -1,5 +1,9 @@
 
 # resource "k8s_extensions_v1beta1_network_policy"
+
+DEPRECATED 1.9 - This group version of NetworkPolicy is deprecated by networking/v1/NetworkPolicy. NetworkPolicy describes what network traffic is allowed for a set of Pods
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

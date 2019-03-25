@@ -1,5 +1,9 @@
 
 # resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition"
+
+CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format <.spec.name>.<.spec.group>.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

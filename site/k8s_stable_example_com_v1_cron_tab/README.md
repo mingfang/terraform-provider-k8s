@@ -1,5 +1,9 @@
 
 # resource "k8s_stable_example_com_v1_cron_tab"
+
+
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

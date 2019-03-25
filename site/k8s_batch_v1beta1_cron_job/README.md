@@ -1,5 +1,9 @@
 
 # resource "k8s_batch_v1beta1_cron_job"
+
+CronJob represents the configuration of a single cron job.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

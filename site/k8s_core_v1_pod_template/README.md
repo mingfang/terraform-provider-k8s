@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_pod_template"
+
+PodTemplate describes a template for creating copies of a predefined pod.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

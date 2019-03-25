@@ -1,5 +1,9 @@
 
 # resource "k8s_policy_v1beta1_pod_disruption_budget"
+
+PodDisruptionBudget is an object to define the max disruption that can be caused to a collection of pods
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

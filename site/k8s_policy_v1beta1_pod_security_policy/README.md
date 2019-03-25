@@ -1,5 +1,9 @@
 
 # resource "k8s_policy_v1beta1_pod_security_policy"
+
+PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

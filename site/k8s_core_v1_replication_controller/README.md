@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_replication_controller"
+
+ReplicationController represents the configuration of a replication controller.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

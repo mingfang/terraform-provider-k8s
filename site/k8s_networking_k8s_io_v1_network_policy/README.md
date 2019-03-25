@@ -1,5 +1,9 @@
 
 # resource "k8s_networking_k8s_io_v1_network_policy"
+
+NetworkPolicy describes what network traffic is allowed for a set of Pods
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

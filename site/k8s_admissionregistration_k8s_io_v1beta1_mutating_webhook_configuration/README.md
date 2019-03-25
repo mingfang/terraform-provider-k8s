@@ -1,5 +1,9 @@
 
 # resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration"
+
+MutatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and may change the object.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

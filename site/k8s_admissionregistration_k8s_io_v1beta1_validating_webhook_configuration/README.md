@@ -1,5 +1,9 @@
 
 # resource "k8s_admissionregistration_k8s_io_v1beta1_validating_webhook_configuration"
+
+ValidatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and object without changing it.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

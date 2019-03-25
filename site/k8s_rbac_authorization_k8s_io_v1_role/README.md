@@ -1,5 +1,9 @@
 
 # resource "k8s_rbac_authorization_k8s_io_v1_role"
+
+Role is a namespaced, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

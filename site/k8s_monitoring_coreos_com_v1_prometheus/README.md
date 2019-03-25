@@ -1,5 +1,9 @@
 
 # resource "k8s_monitoring_coreos_com_v1_prometheus"
+
+
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

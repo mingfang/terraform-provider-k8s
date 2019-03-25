@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_namespace"
+
+Namespace provides a scope for Names. Use of multiple namespaces is optional.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

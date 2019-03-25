@@ -1,5 +1,9 @@
 
 # resource "k8s_apps_v1_deployment"
+
+Deployment enables declarative updates for Pods and ReplicaSets.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

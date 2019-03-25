@@ -1,5 +1,11 @@
 
 # resource "k8s_storage_k8s_io_v1_volume_attachment"
+
+VolumeAttachment captures the intent to attach or detach the specified volume to/from the specified node.
+
+VolumeAttachment objects are non-namespaced.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

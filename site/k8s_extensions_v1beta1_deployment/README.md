@@ -1,5 +1,9 @@
 
 # resource "k8s_extensions_v1beta1_deployment"
+
+DEPRECATED - This group version of Deployment is deprecated by apps/v1beta2/Deployment. See the release notes for more information. Deployment enables declarative updates for Pods and ReplicaSets.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

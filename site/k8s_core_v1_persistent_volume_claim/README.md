@@ -1,5 +1,9 @@
 
 # resource "k8s_core_v1_persistent_volume_claim"
+
+PersistentVolumeClaim is a user's request for and claim to a persistent volume
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

@@ -1,5 +1,9 @@
 
 # resource "k8s_settings_k8s_io_v1alpha1_pod_preset"
+
+PodPreset is a policy resource that defines additional runtime requirements for a Pod.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 

@@ -1,5 +1,9 @@
 
 # resource "k8s_extensions_v1beta1_ingress"
+
+Ingress is a collection of rules that allow inbound connections to reach the endpoints defined by a backend. An Ingress can be configured to give services externally-reachable urls, load balance traffic, terminate SSL, offer name based virtual hosting etc. DEPRECATED - This group version of Ingress is deprecated by networking.k8s.io/v1beta1 Ingress. See the release notes for more information.
+
+  
 <details>
 <summary>metadata</summary><blockquote>
 
