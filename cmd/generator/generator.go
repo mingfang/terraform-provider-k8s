@@ -35,7 +35,8 @@ func main() {
 		resourceKey := args[0]
 		resourcesMap := k8s.BuildResourcesMap()
 		resource := resourcesMap[resourceKey]
-		generateResource(resourceKey, resource, count, lifecycle, dynamic, doc, os.Stdout)
+		schema := k8s.K8SConfig_Singleton().TFSchemasMap[resourceKey]
+		generateResource(resourceKey, resource, schema, count, lifecycle, dynamic, doc, os.Stdout)
 	} else {
 		listResources()
 	}
@@ -64,7 +65,8 @@ func generateSite() {
 			log.Fatal(err)
 		}
 		resource := resourcesMap[resourceKey]
-		generateResource(resourceKey, resource, "", "", false, true, file)
+		schema := k8s.K8SConfig_Singleton().TFSchemasMap[resourceKey]
+		generateResource(resourceKey, resource, schema, "", "", false, true, file)
 	}
 }
 
@@ -105,6 +107,7 @@ type ResourceData struct {
 	ResourceKey string
 	Count       string
 	Lifecycle   string
+	Schema      *tfSchema.Schema
 	Resource    *tfSchema.Resource
 }
 
@@ -255,7 +258,9 @@ const docTemplate = `
 {{ define "main_doc" }}
 # resource "{{ .ResourceKey }}"
 
-  {{- range $name, $schema := .Resource.Schema }}
+{{ .Schema.Description }}
+
+  {{ range $name, $schema := .Resource.Schema }}
     {{- with subResource $schema }}
       {{- template "resource_doc_toc" dict "Name" $name "Schema" $schema "Resource" . }}
     {{- end }}
@@ -326,7 +331,7 @@ const docTemplate = `
 {{- end }}
 `
 
-func generateResource(resourceKey string, resource *tfSchema.Resource, count string, lifecycle string, dynamic bool, doc bool, writer io.Writer) {
+func generateResource(resourceKey string, resource *tfSchema.Resource, schema *tfSchema.Schema, count string, lifecycle string, dynamic bool, doc bool, writer io.Writer) {
 	//k8s.Dump(resource)
 
 	var resourceTemplate string
@@ -411,6 +416,7 @@ func generateResource(resourceKey string, resource *tfSchema.Resource, count str
 		ResourceKey: resourceKey,
 		Count:       count,
 		Lifecycle:   lifecycle,
+		Schema:      schema,
 		Resource:    resource,
 	}
 	err = t.ExecuteTemplate(writer, templateName, data)

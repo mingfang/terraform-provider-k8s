@@ -4,6 +4,7 @@ import (
 	"log"
 	"sync"
 
+	tfSchema "github.com/hashicorp/terraform/helper/schema"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -53,12 +54,14 @@ func newK8SConfig() *K8SConfig {
 	}
 
 	modelsMap := buildModelsMap(discoveryClient)
+	tfSchemasMap := buildTFSchemasMap(modelsMap)
 
 	return &K8SConfig{
 		RESTMapper:      RESTMapper,
 		DynamicClient:   dynamicClient,
 		DiscoveryClient: discoveryClient,
 		ModelsMap:       modelsMap,
+		TFSchemasMap:    tfSchemasMap,
 	}
 }
 
@@ -71,6 +74,7 @@ type K8SConfig struct {
 	countdownLatch  sync.Map
 	mutex           sync.Mutex
 	ModelsMap       map[schema.GroupVersionKind]proto.Schema
+	TFSchemasMap    map[string]*tfSchema.Schema
 }
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
@@ -156,7 +160,7 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 	return resourceClient.List(metav1.ListOptions{})
 }
 
-func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, schema.GroupVersionKind, map[schema.GroupVersionKind]proto.Schema, *K8SConfig)) {
+func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, schema.GroupVersionKind)) {
 	lists, _ := this.DiscoveryClient.ServerPreferredResources()
 	for _, list := range lists {
 		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
@@ -170,7 +174,7 @@ func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, sche
 				Version:  gv.Version,
 				Resource: apiResource.Kind,
 			})
-			callback(apiResource, gvk, this.ModelsMap, this)
+			callback(apiResource, gvk)
 		}
 	}
 }
@@ -196,6 +200,24 @@ func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[sche
 		}
 	}
 	return modelsMap
+}
+
+func buildTFSchemasMap(modelsMap map[schema.GroupVersionKind]proto.Schema) map[string]*tfSchema.Schema {
+	schemasMap := map[string]*tfSchema.Schema{}
+	for gvk, model := range modelsMap {
+		resourceKey := ResourceKey(gvk.Group, gvk.Version, gvk.Kind)
+		//log.Println("gvk:", gvk, "resource:", resourceKey)
+		if _, hasKey := schemasMap[resourceKey]; hasKey {
+			//dups
+			//sometimes resources appear more than once
+			continue
+		}
+
+		schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
+		model.Accept(schemaVisitor)
+		schemasMap[resourceKey] = &schemaVisitor.Schema
+	}
+	return schemasMap
 }
 
 const groupVersionKindExtensionKey = "x-kubernetes-group-version-kind"

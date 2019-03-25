@@ -21,12 +21,12 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
 	resourceVerbs := []string{"create", "get"}
 
-	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind) {
 		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
 
-		model := modelsMap[gvk]
+		model := K8SConfig_Singleton().ModelsMap[gvk]
 		if model == nil {
 			//log.Println("no model for:", apiResource, gvk)
 			//skip resources without a model
@@ -41,10 +41,12 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 			return
 		}
 
-		schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
-		model.Accept(schemaVisitor)
-		//todo: lost the top level description here
-		resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
+		resourceSchema := K8SConfig_Singleton().TFSchemasMap[resourceKey]
+		if resourceSchema == nil {
+			log.Fatalln("Schema not found for:" + resourceKey)
+		}
+
+		resource := resourceSchema.Elem.(*tfSchema.Resource)
 		isNamespaced := apiResource.Namespaced
 
 		resource.Exists = func(resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
@@ -76,14 +78,15 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
 	resourceVerbs := []string{"get"}
 
-	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *K8SConfig) {
+	K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind) {
 		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
 
-		model := modelsMap[gvk]
+		model := K8SConfig_Singleton().ModelsMap[gvk]
 		if model == nil {
 			//log.Println("no model for:", apiResource, gvk)
+			//skip resources without a model
 			return
 		}
 
@@ -91,13 +94,16 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 		//log.Println("gvk:", gvk, "resource:", resourceKey)
 		if _, hasKey := resourcesMap[resourceKey]; hasKey {
 			//dups
+			//sometimes resources appear more than once
 			return
 		}
 
-		schemaVisitor := NewK8S2TFSchemaVisitor(resourceKey)
-		model.Accept(schemaVisitor)
-		//todo: lost the top level description here
-		resource := schemaVisitor.Schema.Elem.(*tfSchema.Resource)
+		resourceSchema := K8SConfig_Singleton().TFSchemasMap[resourceKey]
+		if resourceSchema == nil {
+			log.Fatalln("Schema not found for:" + resourceKey)
+		}
+
+		resource := resourceSchema.Elem.(*tfSchema.Resource)
 		isNamespaced := apiResource.Namespaced
 
 		resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {

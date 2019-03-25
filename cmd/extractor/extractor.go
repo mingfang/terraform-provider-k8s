@@ -113,8 +113,7 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 	var dupDetector = map[string]struct{}{}
 	resourceVerbs := []string{"create", "get"}
 
-	k8sConfig := k8s.K8SConfig_Singleton()
-	k8sConfig.ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind, modelsMap map[schema.GroupVersionKind]proto.Schema, k8sConfig *k8s.K8SConfig) {
+	k8s.K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind) {
 		if gvk.Version == "v1beta1" {
 			//log.Println("Skip v1beta1:", gvk.Group, gvk.Version, gvk.Kind)
 			return
@@ -126,7 +125,7 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 		if len(apiResource.Verbs) > 0 && !sets.NewString(apiResource.Verbs...).HasAll(resourceVerbs...) {
 			return
 		}
-		model := modelsMap[gvk]
+		model := k8s.K8SConfig_Singleton().ModelsMap[gvk]
 		if model == nil {
 			//log.Println("No Model For:", gvk)
 			return
@@ -147,10 +146,10 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 			return
 		}
 
-		RESTMapping, _ := k8sConfig.RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
+		RESTMapping, _ := k8s.K8SConfig_Singleton().RESTMapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
 		//todo: get namespace from command line
 		var resourceClient dynamic.ResourceInterface
-		resourceClient = k8sConfig.DynamicClient.Resource(RESTMapping.Resource)
+		resourceClient = k8s.K8SConfig_Singleton().DynamicClient.Resource(RESTMapping.Resource)
 		if apiResource.Namespaced {
 			resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
 		}
