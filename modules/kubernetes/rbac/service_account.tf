@@ -14,19 +14,8 @@ resource "k8s_core_v1_service_account" "this" {
   metadata {
     annotations = lookup(local.k8s_core_v1_service_account_parameters, "annotations", null)
     labels      = lookup(local.k8s_core_v1_service_account_parameters, "labels", null)
-
-    dynamic "managed_fields" {
-      for_each = lookup(local.k8s_core_v1_service_account_parameters, "managed_fields", [])
-      content {
-        api_version = lookup(managed_fields.value, "api_version", null)
-        fields      = lookup(managed_fields.value, "fields", null)
-        manager     = lookup(managed_fields.value, "manager", null)
-        operation   = lookup(managed_fields.value, "operation", null)
-        time        = lookup(managed_fields.value, "time", null)
-      }
-    }
-    name      = lookup(local.k8s_core_v1_service_account_parameters, "name", null)
-    namespace = lookup(local.k8s_core_v1_service_account_parameters, "namespace", null)
+    name        = lookup(local.k8s_core_v1_service_account_parameters, "name", null)
+    namespace   = lookup(local.k8s_core_v1_service_account_parameters, "namespace", null)
   }
 
   dynamic "secrets" {
@@ -46,3 +35,4 @@ resource "k8s_core_v1_service_account" "this" {
 
   }
 }
+

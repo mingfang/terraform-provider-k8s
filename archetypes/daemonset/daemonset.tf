@@ -5,19 +5,8 @@ resource "k8s_apps_v1_daemon_set" "this" {
   metadata {
     annotations = lookup(local.k8s_apps_v1_daemon_set_parameters, "annotations", null)
     labels      = lookup(local.k8s_apps_v1_daemon_set_parameters, "labels", null)
-
-    dynamic "managed_fields" {
-      for_each = lookup(local.k8s_apps_v1_daemon_set_parameters, "managed_fields", [])
-      content {
-        api_version = lookup(managed_fields.value, "api_version", null)
-        fields      = lookup(managed_fields.value, "fields", null)
-        manager     = lookup(managed_fields.value, "manager", null)
-        operation   = lookup(managed_fields.value, "operation", null)
-        time        = lookup(managed_fields.value, "time", null)
-      }
-    }
-    name      = lookup(local.k8s_apps_v1_daemon_set_parameters, "name", null)
-    namespace = lookup(local.k8s_apps_v1_daemon_set_parameters, "namespace", null)
+    name        = lookup(local.k8s_apps_v1_daemon_set_parameters, "name", null)
+    namespace   = lookup(local.k8s_apps_v1_daemon_set_parameters, "namespace", null)
   }
 
   spec {
@@ -44,19 +33,8 @@ resource "k8s_apps_v1_daemon_set" "this" {
       metadata {
         annotations = lookup(local.k8s_apps_v1_daemon_set_parameters, "annotations", null)
         labels      = lookup(local.k8s_apps_v1_daemon_set_parameters, "labels", null)
-
-        dynamic "managed_fields" {
-          for_each = lookup(local.k8s_apps_v1_daemon_set_parameters, "managed_fields", [])
-          content {
-            api_version = lookup(managed_fields.value, "api_version", null)
-            fields      = lookup(managed_fields.value, "fields", null)
-            manager     = lookup(managed_fields.value, "manager", null)
-            operation   = lookup(managed_fields.value, "operation", null)
-            time        = lookup(managed_fields.value, "time", null)
-          }
-        }
-        name      = lookup(local.k8s_apps_v1_daemon_set_parameters, "name", null)
-        namespace = lookup(local.k8s_apps_v1_daemon_set_parameters, "namespace", null)
+        name        = lookup(local.k8s_apps_v1_daemon_set_parameters, "name", null)
+        namespace   = lookup(local.k8s_apps_v1_daemon_set_parameters, "namespace", null)
       }
 
       spec {
@@ -1345,3 +1323,4 @@ resource "k8s_apps_v1_daemon_set" "this" {
 
   }
 }
+

@@ -5,19 +5,8 @@ resource "k8s_apps_v1_deployment" "this" {
   metadata {
     annotations = lookup(local.k8s_apps_v1_deployment_parameters, "annotations", null)
     labels      = lookup(local.k8s_apps_v1_deployment_parameters, "labels", null)
-
-    dynamic "managed_fields" {
-      for_each = lookup(local.k8s_apps_v1_deployment_parameters, "managed_fields", [])
-      content {
-        api_version = lookup(managed_fields.value, "api_version", null)
-        fields      = lookup(managed_fields.value, "fields", null)
-        manager     = lookup(managed_fields.value, "manager", null)
-        operation   = lookup(managed_fields.value, "operation", null)
-        time        = lookup(managed_fields.value, "time", null)
-      }
-    }
-    name      = lookup(local.k8s_apps_v1_deployment_parameters, "name", null)
-    namespace = lookup(local.k8s_apps_v1_deployment_parameters, "namespace", null)
+    name        = lookup(local.k8s_apps_v1_deployment_parameters, "name", null)
+    namespace   = lookup(local.k8s_apps_v1_deployment_parameters, "namespace", null)
   }
 
   spec {
@@ -61,19 +50,8 @@ resource "k8s_apps_v1_deployment" "this" {
       metadata {
         annotations = lookup(local.k8s_apps_v1_deployment_parameters, "annotations", null)
         labels      = lookup(local.k8s_apps_v1_deployment_parameters, "labels", null)
-
-        dynamic "managed_fields" {
-          for_each = lookup(local.k8s_apps_v1_deployment_parameters, "managed_fields", [])
-          content {
-            api_version = lookup(managed_fields.value, "api_version", null)
-            fields      = lookup(managed_fields.value, "fields", null)
-            manager     = lookup(managed_fields.value, "manager", null)
-            operation   = lookup(managed_fields.value, "operation", null)
-            time        = lookup(managed_fields.value, "time", null)
-          }
-        }
-        name      = lookup(local.k8s_apps_v1_deployment_parameters, "name", null)
-        namespace = lookup(local.k8s_apps_v1_deployment_parameters, "namespace", null)
+        name        = lookup(local.k8s_apps_v1_deployment_parameters, "name", null)
+        namespace   = lookup(local.k8s_apps_v1_deployment_parameters, "namespace", null)
       }
 
       spec {
@@ -1349,3 +1327,4 @@ resource "k8s_apps_v1_deployment" "this" {
     ignore_changes = [metadata]
   }
 }
+

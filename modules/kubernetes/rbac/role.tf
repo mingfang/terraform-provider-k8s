@@ -5,19 +5,8 @@ resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
   metadata {
     annotations = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "annotations", null)
     labels      = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "labels", null)
-
-    dynamic "managed_fields" {
-      for_each = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "managed_fields", [])
-      content {
-        api_version = lookup(managed_fields.value, "api_version", null)
-        fields      = lookup(managed_fields.value, "fields", null)
-        manager     = lookup(managed_fields.value, "manager", null)
-        operation   = lookup(managed_fields.value, "operation", null)
-        time        = lookup(managed_fields.value, "time", null)
-      }
-    }
-    name      = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "name", null)
-    namespace = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "namespace", null)
+    name        = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "name", null)
+    namespace   = lookup(local.k8s_rbac_authorization_k8s_io_v1_role_parameters, "namespace", null)
   }
 
   dynamic "rules" {
@@ -35,3 +24,4 @@ resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
     ignore_changes = [metadata]
   }
 }
+
