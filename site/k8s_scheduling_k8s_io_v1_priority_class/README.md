@@ -26,9 +26,7 @@ PriorityClass defines mapping from a priority class name to the priority integer
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_scheduling_k8s_io_v1_priority_class////
 resource "k8s_scheduling_k8s_io_v1_priority_class" "this" {
-
 
   description = "TypeString"
 
@@ -41,12 +39,7 @@ resource "k8s_scheduling_k8s_io_v1_priority_class" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
-  value = "TypeInt"
-
-  lifecycle {
-
-  }
+  value = "TypeInt*"
 }
 
 
@@ -127,7 +120,7 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 
 ###### Required •  TypeInt
 
-The value of this priority class. This is the actual priority that pods receive when they have the name of this class in their pod spec.nagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
+The value of this priority class. This is the actual priority that pods receive when they have the name of this class in their pod spec.is the actual priority that pods receive when they have the name of this class in their pod spec.nagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
 #### time
 
 ######  TypeString

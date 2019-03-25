@@ -34,9 +34,7 @@ Namespace provides a scope for Names. Use of multiple namespaces is optional.
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_namespace////
 resource "k8s_core_v1_namespace" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -46,10 +44,6 @@ resource "k8s_core_v1_namespace" "this" {
   }
 
   spec {
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -120,6 +114,8 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 ## spec
 
 Spec defines the behavior of the Namespace. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+
+    munity/contributors/devel/api-conventions.md#spec-and-status
 
     tion which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
 #### time

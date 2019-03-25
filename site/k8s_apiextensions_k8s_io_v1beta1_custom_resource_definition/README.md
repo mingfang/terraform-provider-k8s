@@ -177,9 +177,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition////
 resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -188,64 +186,50 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   spec {
 
     additional_printer_columns {
       description = "TypeString"
       format      = "TypeString"
-      // Required
-      json_path = "TypeString"
-      // Required
-      name     = "TypeString"
-      priority = "TypeInt"
-      // Required
-      type = "TypeString"
+      json_path   = "TypeString*"
+      name        = "TypeString*"
+      priority    = "TypeInt"
+      type        = "TypeString*"
     }
 
     conversion {
       conversion_review_versions = ["TypeString"]
-      // Required
-      strategy = "TypeString"
+      strategy                   = "TypeString*"
 
       webhook_client_config {
         cabundle = "TypeString"
 
         service {
-          // Required
-          name = "TypeString"
-          // Required
-          namespace = "TypeString"
+          name      = "TypeString*"
+          namespace = "TypeString*"
           path      = "TypeString"
         }
         url = "TypeString"
       }
     }
-    // Required
-    group = "TypeString"
+    group = "TypeString*"
 
-    // Required
     names {
-      categories = ["TypeString"]
-      // Required
-      kind      = "TypeString"
-      list_kind = "TypeString"
-      // Required
-      plural      = "TypeString"
+      categories  = ["TypeString"]
+      kind        = "TypeString*"
+      list_kind   = "TypeString"
+      plural      = "TypeString*"
       short_names = ["TypeString"]
       singular    = "TypeString"
     }
-    // Required
-    scope = "TypeString"
+    scope = "TypeString*"
 
     subresources {
 
       scale {
-        label_selector_path = "TypeString"
-        // Required
-        spec_replicas_path = "TypeString"
-        // Required
-        status_replicas_path = "TypeString"
+        label_selector_path  = "TypeString"
+        spec_replicas_path   = "TypeString*"
+        status_replicas_path = "TypeString*"
       }
     }
 
@@ -259,40 +243,28 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
       additional_printer_columns {
         description = "TypeString"
         format      = "TypeString"
-        // Required
-        json_path = "TypeString"
-        // Required
-        name     = "TypeString"
-        priority = "TypeInt"
-        // Required
-        type = "TypeString"
+        json_path   = "TypeString*"
+        name        = "TypeString*"
+        priority    = "TypeInt"
+        type        = "TypeString*"
       }
-      // Required
-      name = "TypeString"
+      name = "TypeString*"
 
       schema {
         open_apiv3_schema = "TypeString"
       }
-      // Required
-      served = "TypeBool"
-      // Required
-      storage = "TypeBool"
+      served  = "TypeBool*"
+      storage = "TypeBool*"
 
       subresources {
 
         scale {
-          label_selector_path = "TypeString"
-          // Required
-          spec_replicas_path = "TypeString"
-          // Required
-          status_replicas_path = "TypeString"
+          label_selector_path  = "TypeString"
+          spec_replicas_path   = "TypeString*"
+          status_replicas_path = "TypeString*"
         }
       }
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -634,6 +606,11 @@ LabelSelectorPath defines the JSON path inside of a CustomResource that correspo
 ###### Required •  TypeString
 
 SpecReplicasPath defines the JSON path inside of a CustomResource that corresponds to Scale.Spec.Replicas. Only JSON paths without the array notation are allowed. Must be a JSON Path under .spec. If there is no value under the given path in the CustomResource, the /scale subresource will return an error on GET.
+#### status_replicas_path
+
+###### Required •  TypeString
+
+StatusReplicasPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Replicas. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status. If there is no value under the given path in the CustomResource, the status replica value in the /scale subresource will default to 0.ource will return an error on GET.
 #### status_replicas_path
 
 ###### Required •  TypeString

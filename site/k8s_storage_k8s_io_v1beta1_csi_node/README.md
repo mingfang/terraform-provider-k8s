@@ -45,9 +45,7 @@ CSINode holds information about all CSI drivers installed on a node. CSI drivers
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_storage_k8s_io_v1beta1_csi_node////
 resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -56,21 +54,13 @@ resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   spec {
 
-    // Required
     drivers {
-      // Required
-      name = "TypeString"
-      // Required
-      node_id       = "TypeString"
+      name          = "TypeString*"
+      node_id       = "TypeString*"
       topology_keys = ["TypeString"]
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -162,7 +152,7 @@ nodeID of the node from the driver point of view. This field enables Kubernetes 
 
 ######  TypeList
 
-topologyKeys is the list of keys supported by the driver. When a driver is initialized on a cluster, it provides a set of topology keys that it understands (e.g. "company.com/zone", "company.com/region"). When a driver is initialized on a node, it provides the same topology keys along with values. Kubelet will expose these topology keys as labels on its own node object. When Kubernetes does topology aware provisioning, it can use this list to determine which labels it should retrieve from the node object and pass back to the driver. It is possible for different nodes to use different topology keys. This can be empty if driver does not support topology.fication of CSINode
+topologyKeys is the list of keys supported by the driver. When a driver is initialized on a cluster, it provides a set of topology keys that it understands (e.g. "company.com/zone", "company.com/region"). When a driver is initialized on a node, it provides the same topology keys along with values. Kubelet will expose these topology keys as labels on its own node object. When Kubernetes does topology aware provisioning, it can use this list to determine which labels it should retrieve from the node object and pass back to the driver. It is possible for different nodes to use different topology keys. This can be empty if driver does not support topology.o the driver. It is possible for different nodes to use different topology keys. This can be empty if driver does not support topology.fication of CSINode
 
     
 ## drivers

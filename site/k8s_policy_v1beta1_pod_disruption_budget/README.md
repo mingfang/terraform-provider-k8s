@@ -56,9 +56,7 @@ PodDisruptionBudget is an object to define the max disruption that can be caused
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_policy_v1beta1_pod_disruption_budget////
 resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -74,18 +72,12 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
     selector {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -197,7 +189,7 @@ values is an array of string values. If the operator is In or NotIn, the values 
 
 ######  TypeMap
 
-matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.PodDisruptionBudget.
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.hose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.PodDisruptionBudget.
 
     
 #### max_unavailable

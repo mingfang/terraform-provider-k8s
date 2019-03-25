@@ -47,9 +47,7 @@ VolumeAttachment objects are non-namespaced.
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_storage_k8s_io_v1_volume_attachment////
 resource "k8s_storage_k8s_io_v1_volume_attachment" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -58,21 +56,13 @@ resource "k8s_storage_k8s_io_v1_volume_attachment" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   spec {
-    // Required
-    attacher = "TypeString"
-    // Required
-    node_name = "TypeString"
+    attacher  = "TypeString*"
+    node_name = "TypeString*"
 
-    // Required
     source {
       persistent_volume_name = "TypeString"
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -158,6 +148,13 @@ The node that the volume should be attached to.
 ## source
 
 Source represents the volume that should be attached.
+
+    
+#### persistent_volume_name
+
+######  TypeString
+
+Name of the persistent volume to attach. represents the volume that should be attached.
 
     
 #### persistent_volume_name

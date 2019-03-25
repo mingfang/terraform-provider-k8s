@@ -39,9 +39,7 @@ Role is a namespaced, logical grouping of PolicyRules that can be referenced as 
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_rbac_authorization_k8s_io_v1_role////
 resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -55,12 +53,7 @@ resource "k8s_rbac_authorization_k8s_io_v1_role" "this" {
     non_resource_urls = ["TypeString"]
     resource_names    = ["TypeString"]
     resources         = ["TypeString"]
-    // Required
-    verbs = ["TypeString"]
-  }
-
-  lifecycle {
-
+    verbs             = ["TypeString*"]
   }
 }
 
@@ -157,7 +150,7 @@ Resources is a list of resources this rule applies to.  ResourceAll represents a
 
 ###### Required •  TypeList
 
-Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds. self_link
+Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.inds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds. self_link
 
 ######  ReadOnly • TypeString
 

@@ -480,9 +480,7 @@ PersistentVolume (PV) is a storage resource provisioned by an administrator. It 
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_persistent_volume////
 resource "k8s_core_v1_persistent_volume" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -498,34 +496,28 @@ resource "k8s_core_v1_persistent_volume" "this" {
       fstype    = "TypeString"
       partition = "TypeInt"
       read_only = "TypeBool"
-      // Required
-      volume_id = "TypeString"
+      volume_id = "TypeString*"
     }
 
     azure_disk {
       caching_mode = "TypeString"
-      // Required
-      disk_name = "TypeString"
-      // Required
-      disk_uri  = "TypeString"
-      fstype    = "TypeString"
-      kind      = "TypeString"
-      read_only = "TypeBool"
+      disk_name    = "TypeString*"
+      disk_uri     = "TypeString*"
+      fstype       = "TypeString"
+      kind         = "TypeString"
+      read_only    = "TypeBool"
     }
 
     azure_file {
-      read_only = "TypeBool"
-      // Required
-      secret_name      = "TypeString"
+      read_only        = "TypeBool"
+      secret_name      = "TypeString*"
       secret_namespace = "TypeString"
-      // Required
-      share_name = "TypeString"
+      share_name       = "TypeString*"
     }
     capacity = { "key" = "TypeString" }
 
     cephfs {
-      // Required
-      monitors    = ["TypeString"]
+      monitors    = ["TypeString*"]
       path        = "TypeString"
       read_only   = "TypeBool"
       secret_file = "TypeString"
@@ -545,8 +537,7 @@ resource "k8s_core_v1_persistent_volume" "this" {
         name      = "TypeString"
         namespace = "TypeString"
       }
-      // Required
-      volume_id = "TypeString"
+      volume_id = "TypeString*"
     }
 
     claim_ref {
@@ -565,8 +556,7 @@ resource "k8s_core_v1_persistent_volume" "this" {
         name      = "TypeString"
         namespace = "TypeString"
       }
-      // Required
-      driver = "TypeString"
+      driver = "TypeString*"
       fstype = "TypeString"
 
       node_publish_secret_ref {
@@ -580,8 +570,7 @@ resource "k8s_core_v1_persistent_volume" "this" {
       }
       read_only         = "TypeBool"
       volume_attributes = { "key" = "TypeString" }
-      // Required
-      volume_handle = "TypeString"
+      volume_handle     = "TypeString*"
     }
 
     fc {
@@ -593,8 +582,7 @@ resource "k8s_core_v1_persistent_volume" "this" {
     }
 
     flex_volume {
-      // Required
-      driver    = "TypeString"
+      driver    = "TypeString*"
       fstype    = "TypeString"
       options   = { "key" = "TypeString" }
       read_only = "TypeBool"
@@ -613,23 +601,19 @@ resource "k8s_core_v1_persistent_volume" "this" {
     gce_persistent_disk {
       fstype    = "TypeString"
       partition = "TypeInt"
-      // Required
-      pdname    = "TypeString"
+      pdname    = "TypeString*"
       read_only = "TypeBool"
     }
 
     glusterfs {
-      // Required
-      endpoints           = "TypeString"
+      endpoints           = "TypeString*"
       endpoints_namespace = "TypeString"
-      // Required
-      path      = "TypeString"
-      read_only = "TypeBool"
+      path                = "TypeString*"
+      read_only           = "TypeBool"
     }
 
     host_path {
-      // Required
-      path = "TypeString"
+      path = "TypeString*"
       type = "TypeString"
     }
 
@@ -638,57 +622,46 @@ resource "k8s_core_v1_persistent_volume" "this" {
       chap_auth_session   = "TypeBool"
       fstype              = "TypeString"
       initiator_name      = "TypeString"
-      // Required
-      iqn             = "TypeString"
-      iscsi_interface = "TypeString"
-      // Required
-      lun       = "TypeInt"
-      portals   = ["TypeString"]
-      read_only = "TypeBool"
+      iqn                 = "TypeString*"
+      iscsi_interface     = "TypeString"
+      lun                 = "TypeInt*"
+      portals             = ["TypeString"]
+      read_only           = "TypeBool"
 
       secret_ref {
         name      = "TypeString"
         namespace = "TypeString"
       }
-      // Required
-      target_portal = "TypeString"
+      target_portal = "TypeString*"
     }
 
     local {
       fstype = "TypeString"
-      // Required
-      path = "TypeString"
+      path   = "TypeString*"
     }
     mount_options = ["TypeString"]
 
     nfs {
-      // Required
-      path      = "TypeString"
+      path      = "TypeString*"
       read_only = "TypeBool"
-      // Required
-      server = "TypeString"
+      server    = "TypeString*"
     }
 
     node_affinity {
 
       required {
 
-        // Required
         node_selector_terms {
 
           match_expressions {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
 
           match_fields {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
         }
@@ -698,35 +671,29 @@ resource "k8s_core_v1_persistent_volume" "this" {
 
     photon_persistent_disk {
       fstype = "TypeString"
-      // Required
-      pdid = "TypeString"
+      pdid   = "TypeString*"
     }
 
     portworx_volume {
       fstype    = "TypeString"
       read_only = "TypeBool"
-      // Required
-      volume_id = "TypeString"
+      volume_id = "TypeString*"
     }
 
     quobyte {
       group     = "TypeString"
       read_only = "TypeBool"
-      // Required
-      registry = "TypeString"
-      tenant   = "TypeString"
-      user     = "TypeString"
-      // Required
-      volume = "TypeString"
+      registry  = "TypeString*"
+      tenant    = "TypeString"
+      user      = "TypeString"
+      volume    = "TypeString*"
     }
 
     rbd {
-      fstype = "TypeString"
-      // Required
-      image   = "TypeString"
-      keyring = "TypeString"
-      // Required
-      monitors  = ["TypeString"]
+      fstype    = "TypeString"
+      image     = "TypeString*"
+      keyring   = "TypeString"
+      monitors  = ["TypeString*"]
       pool      = "TypeString"
       read_only = "TypeBool"
 
@@ -738,13 +705,11 @@ resource "k8s_core_v1_persistent_volume" "this" {
     }
 
     scale_io {
-      fstype = "TypeString"
-      // Required
-      gateway           = "TypeString"
+      fstype            = "TypeString"
+      gateway           = "TypeString*"
       protection_domain = "TypeString"
       read_only         = "TypeBool"
 
-      // Required
       secret_ref {
         name      = "TypeString"
         namespace = "TypeString"
@@ -752,9 +717,8 @@ resource "k8s_core_v1_persistent_volume" "this" {
       ssl_enabled  = "TypeBool"
       storage_mode = "TypeString"
       storage_pool = "TypeString"
-      // Required
-      system      = "TypeString"
-      volume_name = "TypeString"
+      system       = "TypeString*"
+      volume_name  = "TypeString"
     }
     storage_class_name = "TypeString"
 
@@ -780,13 +744,8 @@ resource "k8s_core_v1_persistent_volume" "this" {
       fstype              = "TypeString"
       storage_policy_id   = "TypeString"
       storage_policy_name = "TypeString"
-      // Required
-      volume_path = "TypeString"
+      volume_path         = "TypeString*"
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -1737,6 +1696,28 @@ volumeMode defines if a volume is intended to be used with a formatted filesyste
 ## vsphere_volume
 
 VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine
+
+    
+#### fstype
+
+######  TypeString
+
+Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
+#### storage_policy_id
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.
+#### storage_policy_name
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile name.
+#### volume_path
+
+###### Required •  TypeString
+
+Path that identifies vSphere volume vmdk on kubelets host machine
 
     
 #### fstype

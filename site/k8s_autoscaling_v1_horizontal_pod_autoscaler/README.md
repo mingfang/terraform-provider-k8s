@@ -48,9 +48,7 @@ configuration of a horizontal pod autoscaler.
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_autoscaling_v1_horizontal_pod_autoscaler////
 resource "k8s_autoscaling_v1_horizontal_pod_autoscaler" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -60,23 +58,15 @@ resource "k8s_autoscaling_v1_horizontal_pod_autoscaler" "this" {
   }
 
   spec {
-    // Required
-    max_replicas = "TypeInt"
+    max_replicas = "TypeInt*"
     min_replicas = "TypeInt"
 
-    // Required
     scale_target_ref {
       api_version = "TypeString"
-      // Required
-      kind = "TypeString"
-      // Required
-      name = "TypeString"
+      kind        = "TypeString*"
+      name        = "TypeString*"
     }
     target_cpu_utilization_percentage = "TypeInt"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -183,7 +173,7 @@ Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifier
 
 ######  TypeInt
 
-target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.io/docs/user-guide/namespaces
+target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.io/docs/user-guide/namespaces
 #### self_link
 
 ######  ReadOnly • TypeString

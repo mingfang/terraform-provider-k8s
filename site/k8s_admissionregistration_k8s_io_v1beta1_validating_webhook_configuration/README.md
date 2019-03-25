@@ -93,9 +93,7 @@ ValidatingWebhookConfiguration describes the configuration of and admission webh
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_admissionregistration_k8s_io_v1beta1_validating_webhook_configuration////
 resource "k8s_admissionregistration_k8s_io_v1beta1_validating_webhook_configuration" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -107,30 +105,24 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_validating_webhook_configurat
   webhooks {
     admission_review_versions = ["TypeString"]
 
-    // Required
     client_config {
       cabundle = "TypeString"
 
       service {
-        // Required
-        name = "TypeString"
-        // Required
-        namespace = "TypeString"
+        name      = "TypeString*"
+        namespace = "TypeString*"
         path      = "TypeString"
       }
       url = "TypeString"
     }
     failure_policy = "TypeString"
-    // Required
-    name = "TypeString"
+    name           = "TypeString*"
 
     namespace_selector {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
@@ -145,10 +137,6 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_validating_webhook_configurat
     }
     side_effects    = "TypeString"
     timeout_seconds = "TypeInt"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -390,7 +378,7 @@ SideEffects states whether this webhookk has side effects. Acceptable values are
 
 ######  TypeInt
 
-TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds. resources this rule applies to.
+TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds.or this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds. resources this rule applies to.
 
 For example: 'pods' means pods. 'pods/log' means the log subresource of pods. '*' means all resources, but not subresources. 'pods/*' means all subresources of pods. '*/scale' means all scale subresources. '*/*' means all resources and their subresources.
 

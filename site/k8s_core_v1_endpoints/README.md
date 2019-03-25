@@ -108,9 +108,7 @@ Endpoints is a collection of endpoints that implement the actual service. Exampl
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_endpoints////
 resource "k8s_core_v1_endpoints" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -122,9 +120,8 @@ resource "k8s_core_v1_endpoints" "this" {
   subsets {
 
     addresses {
-      hostname = "TypeString"
-      // Required
-      ip        = "TypeString"
+      hostname  = "TypeString"
+      ip        = "TypeString*"
       node_name = "TypeString"
 
       target_ref {
@@ -139,9 +136,8 @@ resource "k8s_core_v1_endpoints" "this" {
     }
 
     not_ready_addresses {
-      hostname = "TypeString"
-      // Required
-      ip        = "TypeString"
+      hostname  = "TypeString"
+      ip        = "TypeString*"
       node_name = "TypeString"
 
       target_ref {
@@ -156,15 +152,10 @@ resource "k8s_core_v1_endpoints" "this" {
     }
 
     ports {
-      name = "TypeString"
-      // Required
-      port     = "TypeInt"
+      name     = "TypeString"
+      port     = "TypeInt*"
       protocol = "TypeString"
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -372,6 +363,11 @@ The name of this port (corresponds to ServicePort.Name). Must be a DNS_LABEL. Op
 ###### Required •  TypeInt
 
 The port number of the endpoint.
+#### protocol
+
+######  TypeString
+
+The IP protocol for this port. Must be UDP, TCP, or SCTP. Default is TCP.t.
 #### protocol
 
 ######  TypeString

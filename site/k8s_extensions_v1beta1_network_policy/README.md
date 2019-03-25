@@ -207,9 +207,7 @@ DEPRECATED 1.9 - This group version of NetworkPolicy is deprecated by networking
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_extensions_v1beta1_network_policy////
 resource "k8s_extensions_v1beta1_network_policy" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -230,18 +228,15 @@ resource "k8s_extensions_v1beta1_network_policy" "this" {
       to {
 
         ipblock {
-          // Required
-          cidr   = "TypeString"
+          cidr   = "TypeString*"
           except = ["TypeString"]
         }
 
         namespace_selector {
 
           match_expressions {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
           match_labels = { "key" = "TypeString" }
@@ -250,10 +245,8 @@ resource "k8s_extensions_v1beta1_network_policy" "this" {
         pod_selector {
 
           match_expressions {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
           match_labels = { "key" = "TypeString" }
@@ -266,18 +259,15 @@ resource "k8s_extensions_v1beta1_network_policy" "this" {
       from {
 
         ipblock {
-          // Required
-          cidr   = "TypeString"
+          cidr   = "TypeString*"
           except = ["TypeString"]
         }
 
         namespace_selector {
 
           match_expressions {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
           match_labels = { "key" = "TypeString" }
@@ -286,10 +276,8 @@ resource "k8s_extensions_v1beta1_network_policy" "this" {
         pod_selector {
 
           match_expressions {
-            // Required
-            key = "TypeString"
-            // Required
-            operator = "TypeString"
+            key      = "TypeString*"
+            operator = "TypeString*"
             values   = ["TypeString"]
           }
           match_labels = { "key" = "TypeString" }
@@ -302,23 +290,16 @@ resource "k8s_extensions_v1beta1_network_policy" "this" {
       }
     }
 
-    // Required
     pod_selector {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
     }
     policy_types = ["TypeString"]
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -633,7 +614,7 @@ matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabe
 
 ######  TypeList
 
-List of rule types that the NetworkPolicy relates to. Valid options are "Ingress", "Egress", or "Ingress,Egress". If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8or requirements. The requirements are ANDed.
+List of rule types that the NetworkPolicy relates to. Valid options are "Ingress", "Egress", or "Ingress,Egress". If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8or requirements. The requirements are ANDed.
 
     
 #### key

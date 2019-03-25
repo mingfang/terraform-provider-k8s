@@ -36,9 +36,7 @@ CSIDriver captures information about a Container Storage Interface (CSI) volume 
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_storage_k8s_io_v1beta1_csi_driver////
 resource "k8s_storage_k8s_io_v1beta1_csi_driver" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -47,14 +45,9 @@ resource "k8s_storage_k8s_io_v1beta1_csi_driver" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   spec {
     attach_required  = "TypeBool"
     pod_info_onmount = "TypeBool"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -136,7 +129,7 @@ attachRequired indicates this CSI volume driver requires an attach operation (be
 
 ######  TypeBool
 
-If set to true, podInfoOnMount indicates this CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations. If set to false, pod information will not be passed on mount. Default is false. The CSI driver specifies podInfoOnMount as part of driver deployment. If true, Kubelet will pass pod information as VolumeContext in the CSI NodePublishVolume() calls. The CSI driver is responsible for parsing and validating the information passed in as VolumeContext. The following VolumeConext will be passed if podInfoOnMount is set to true. This list might grow, but the prefix will be used. "csi.storage.k8s.io/pod.name": pod.Name "csi.storage.k8s.io/pod.namespace": pod.Namespace "csi.storage.k8s.io/pod.uid": string(pod.UID)T operations.
+If set to true, podInfoOnMount indicates this CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations. If set to false, pod information will not be passed on mount. Default is false. The CSI driver specifies podInfoOnMount as part of driver deployment. If true, Kubelet will pass pod information as VolumeContext in the CSI NodePublishVolume() calls. The CSI driver is responsible for parsing and validating the information passed in as VolumeContext. The following VolumeConext will be passed if podInfoOnMount is set to true. This list might grow, but the prefix will be used. "csi.storage.k8s.io/pod.name": pod.Name "csi.storage.k8s.io/pod.namespace": pod.Namespace "csi.storage.k8s.io/pod.uid": string(pod.UID) "csi.storage.k8s.io/pod.namespace": pod.Namespace "csi.storage.k8s.io/pod.uid": string(pod.UID)T operations.
 
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec

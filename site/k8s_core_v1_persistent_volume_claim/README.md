@@ -79,9 +79,7 @@ PersistentVolumeClaim is a user's request for and claim to a persistent volume
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_persistent_volume_claim////
 resource "k8s_core_v1_persistent_volume_claim" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -95,10 +93,8 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
 
     data_source {
       api_group = "TypeString"
-      // Required
-      kind = "TypeString"
-      // Required
-      name = "TypeString"
+      kind      = "TypeString*"
+      name      = "TypeString*"
     }
 
     resources {
@@ -109,10 +105,8 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
     selector {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
@@ -120,10 +114,6 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
     storage_class_name = "TypeString"
     volume_mode        = "TypeString"
     volume_name        = "TypeString"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -276,6 +266,11 @@ Name of the StorageClass required by the claim. More info: https://kubernetes.io
 ######  TypeString
 
 volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec. This is a beta feature.
+#### volume_name
+
+######  TypeString
+
+VolumeName is the binding reference to the PersistentVolume backing this claim. is a beta feature.
 #### volume_name
 
 ######  TypeString

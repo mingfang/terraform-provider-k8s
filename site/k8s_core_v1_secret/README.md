@@ -26,9 +26,7 @@ Secret holds secret data of a certain type. The total bytes of the values in the
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_secret////
 resource "k8s_core_v1_secret" "this" {
-
 
   data = { "key" = "TypeString" }
 
@@ -42,10 +40,6 @@ resource "k8s_core_v1_secret" "this" {
   string_data = { "key" = "TypeString" }
 
   type = "TypeString"
-
-  lifecycle {
-
-  }
 }
 
 
@@ -125,6 +119,8 @@ stringData allows specifying non-binary secret data in string form. It is provid
 #### type
 
 ######  TypeString
+
+Used to facilitate programmatic handling of secret data.tring
 
 Used to facilitate programmatic handling of secret data. Operation is 'Apply'
 #### name

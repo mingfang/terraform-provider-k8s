@@ -75,9 +75,7 @@ Service is a named abstraction of software service (for example, mysql) consisti
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_service////
 resource "k8s_core_v1_service" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -96,10 +94,9 @@ resource "k8s_core_v1_service" "this" {
     load_balancer_source_ranges = ["TypeString"]
 
     ports {
-      name      = "TypeString"
-      node_port = "TypeInt"
-      // Required
-      port        = "TypeInt"
+      name        = "TypeString"
+      node_port   = "TypeInt"
+      port        = "TypeInt*"
       protocol    = "TypeString"
       target_port = "TypeString"
     }
@@ -114,10 +111,6 @@ resource "k8s_core_v1_service" "this" {
       }
     }
     type = "TypeString"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -289,7 +282,7 @@ timeoutSeconds specifies the seconds of ClientIP type session sticky time. The v
 
 ######  TypeString
 
-type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. "ExternalName" maps to the specified externalName. "ClusterIP" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object. If clusterIP is "None", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a stable IP. "NodePort" builds on ClusterIP and allocates a port on every node which routes to the clusterIP. "LoadBalancer" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the clusterIP. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-typesoncepts/services-networking/service/
+type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. "ExternalName" maps to the specified externalName. "ClusterIP" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object. If clusterIP is "None", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a stable IP. "NodePort" builds on ClusterIP and allocates a port on every node which routes to the clusterIP. "LoadBalancer" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the clusterIP. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types/docs/concepts/services-networking/service/#publishing-services-service-typesoncepts/services-networking/service/
 #### session_affinity
 
 ######  TypeString

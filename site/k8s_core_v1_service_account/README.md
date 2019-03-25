@@ -50,9 +50,7 @@ ServiceAccount binds together: * a name, understood by users, and perhaps by per
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_service_account////
 resource "k8s_core_v1_service_account" "this" {
-
 
   automount_service_account_token = "TypeBool"
 
@@ -75,10 +73,6 @@ resource "k8s_core_v1_service_account" "this" {
     namespace        = "TypeString"
     resource_version = "TypeString"
     uid              = "TypeString"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -200,7 +194,7 @@ Specific resourceVersion to which this reference is made, if any. More info: htt
 
 ######  TypeString
 
-UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uidsifiers#uids
+UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uidsifiers#uids
 ## secrets
 
 Secrets is the list of secrets allowed to be used by pods running using this ServiceAccount. More info: https://kubernetes.io/docs/concepts/configuration/secret

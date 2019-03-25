@@ -67,19 +67,15 @@ ClusterRole is a cluster level, logical grouping of PolicyRules that can be refe
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_rbac_authorization_k8s_io_v1_cluster_role////
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role" "this" {
-
 
   aggregation_rule {
 
     cluster_role_selectors {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
@@ -98,12 +94,7 @@ resource "k8s_rbac_authorization_k8s_io_v1_cluster_role" "this" {
     non_resource_urls = ["TypeString"]
     resource_names    = ["TypeString"]
     resources         = ["TypeString"]
-    // Required
-    verbs = ["TypeString"]
-  }
-
-  lifecycle {
-
+    verbs             = ["TypeString*"]
   }
 }
 
@@ -235,7 +226,7 @@ Resources is a list of resources this rule applies to.  ResourceAll represents a
 
 ###### Required •  TypeList
 
-Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.ink
+Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds. of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.ink
 
 ######  ReadOnly • TypeString
 

@@ -49,9 +49,7 @@ RoleBinding references a role, but does not contain it.  It can reference a Role
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_rbac_authorization_k8s_io_v1_role_binding////
 resource "k8s_rbac_authorization_k8s_io_v1_role_binding" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -60,27 +58,17 @@ resource "k8s_rbac_authorization_k8s_io_v1_role_binding" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   role_ref {
-    // Required
-    api_group = "TypeString"
-    // Required
-    kind = "TypeString"
-    // Required
-    name = "TypeString"
+    api_group = "TypeString*"
+    kind      = "TypeString*"
+    name      = "TypeString*"
   }
 
   subjects {
     api_group = "TypeString"
-    // Required
-    kind = "TypeString"
-    // Required
-    name      = "TypeString"
+    kind      = "TypeString*"
+    name      = "TypeString*"
     namespace = "TypeString"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -192,7 +180,7 @@ Name of the object being referenced.
 
 ######  TypeString
 
-Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty the Authorizer should report an error.is object. Populated by the system. Read-only.
+Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty the Authorizer should report an error.espace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty the Authorizer should report an error.is object. Populated by the system. Read-only.
 #### uid
 
 ######  ReadOnly • TypeString

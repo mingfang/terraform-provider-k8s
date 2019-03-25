@@ -90,9 +90,7 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_networking_k8s_io_v1beta1_ingress////
 resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -104,10 +102,8 @@ resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
   spec {
 
     backend {
-      // Required
-      service_name = "TypeString"
-      // Required
-      service_port = "TypeString"
+      service_name = "TypeString*"
+      service_port = "TypeString*"
     }
 
     rules {
@@ -115,15 +111,11 @@ resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
 
       http {
 
-        // Required
         paths {
 
-          // Required
           backend {
-            // Required
-            service_name = "TypeString"
-            // Required
-            service_port = "TypeString"
+            service_name = "TypeString*"
+            service_port = "TypeString*"
           }
           path = "TypeString"
         }
@@ -134,10 +126,6 @@ resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
       hosts       = ["TypeString"]
       secret_name = "TypeString"
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -284,7 +272,7 @@ Hosts are a list of hosts included in the TLS certificate. The values in this li
 
 ######  TypeString
 
-SecretName is the name of the secret used to terminate SSL traffic on 443. Field is left optional to allow SSL routing based on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing.referenced service endpoint to which the traffic will be forwarded to.
+SecretName is the name of the secret used to terminate SSL traffic on 443. Field is left optional to allow SSL routing based on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing.d on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing.referenced service endpoint to which the traffic will be forwarded to.
 
     
 #### service_name

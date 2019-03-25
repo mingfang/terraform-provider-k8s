@@ -26,9 +26,7 @@
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_monitoring_coreos_com_v1_prometheus////
 resource "k8s_monitoring_coreos_com_v1_prometheus" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -38,10 +36,6 @@ resource "k8s_monitoring_coreos_com_v1_prometheus" "this" {
   }
 
   spec = "TypeString"
-
-  lifecycle {
-
-  }
 }
 
 
@@ -112,7 +106,7 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 
 ######  TypeString
 
-PrometheusSpec is a specification of the desired behavior of the Prometheus cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-statusfor this field are 'Apply' and 'Update'.
+PrometheusSpec is a specification of the desired behavior of the Prometheus cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-statusbernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-statusfor this field are 'Apply' and 'Update'.
 #### time
 
 ######  TypeString

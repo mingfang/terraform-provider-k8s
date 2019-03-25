@@ -49,9 +49,7 @@ ClusterRoleBinding references a ClusterRole, but not contain it.  It can referen
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_rbac_authorization_k8s_io_v1_cluster_role_binding////
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -60,27 +58,17 @@ resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "this" {
     namespace   = "TypeString"
   }
 
-  // Required
   role_ref {
-    // Required
-    api_group = "TypeString"
-    // Required
-    kind = "TypeString"
-    // Required
-    name = "TypeString"
+    api_group = "TypeString*"
+    kind      = "TypeString*"
+    name      = "TypeString*"
   }
 
   subjects {
     api_group = "TypeString"
-    // Required
-    kind = "TypeString"
-    // Required
-    name      = "TypeString"
+    kind      = "TypeString*"
+    name      = "TypeString*"
     namespace = "TypeString"
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -191,6 +179,8 @@ Name of the object being referenced.
 #### namespace
 
 ######  TypeString
+
+Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty the Authorizer should report an error.ing
 
 Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty the Authorizer should report an error.fLink is a URL representing this object. Populated by the system. Read-only.
 #### uid

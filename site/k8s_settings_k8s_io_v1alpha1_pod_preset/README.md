@@ -724,9 +724,7 @@ PodPreset is a policy resource that defines additional runtime requirements for 
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_settings_k8s_io_v1alpha1_pod_preset////
 resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -738,35 +736,30 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
   spec {
 
     env {
-      // Required
-      name  = "TypeString"
+      name  = "TypeString*"
       value = "TypeString"
 
       value_from {
 
         config_map_keyref {
-          // Required
-          key      = "TypeString"
+          key      = "TypeString*"
           name     = "TypeString"
           optional = "TypeBool"
         }
 
         field_ref {
           api_version = "TypeString"
-          // Required
-          field_path = "TypeString"
+          field_path  = "TypeString*"
         }
 
         resource_field_ref {
           container_name = "TypeString"
           divisor        = "TypeString"
-          // Required
-          resource = "TypeString"
+          resource       = "TypeString*"
         }
 
         secret_key_ref {
-          // Required
-          key      = "TypeString"
+          key      = "TypeString*"
           name     = "TypeString"
           optional = "TypeBool"
         }
@@ -790,24 +783,20 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
     selector {
 
       match_expressions {
-        // Required
-        key = "TypeString"
-        // Required
-        operator = "TypeString"
+        key      = "TypeString*"
+        operator = "TypeString*"
         values   = ["TypeString"]
       }
       match_labels = { "key" = "TypeString" }
     }
 
     volume_mounts {
-      // Required
-      mount_path        = "TypeString"
+      mount_path        = "TypeString*"
       mount_propagation = "TypeString"
-      // Required
-      name          = "TypeString"
-      read_only     = "TypeBool"
-      sub_path      = "TypeString"
-      sub_path_expr = "TypeString"
+      name              = "TypeString*"
+      read_only         = "TypeBool"
+      sub_path          = "TypeString"
+      sub_path_expr     = "TypeString"
     }
 
     volumes {
@@ -816,32 +805,26 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         fstype    = "TypeString"
         partition = "TypeInt"
         read_only = "TypeBool"
-        // Required
-        volume_id = "TypeString"
+        volume_id = "TypeString*"
       }
 
       azure_disk {
         caching_mode = "TypeString"
-        // Required
-        disk_name = "TypeString"
-        // Required
-        disk_uri  = "TypeString"
-        fstype    = "TypeString"
-        kind      = "TypeString"
-        read_only = "TypeBool"
+        disk_name    = "TypeString*"
+        disk_uri     = "TypeString*"
+        fstype       = "TypeString"
+        kind         = "TypeString"
+        read_only    = "TypeBool"
       }
 
       azure_file {
-        read_only = "TypeBool"
-        // Required
-        secret_name = "TypeString"
-        // Required
-        share_name = "TypeString"
+        read_only   = "TypeBool"
+        secret_name = "TypeString*"
+        share_name  = "TypeString*"
       }
 
       cephfs {
-        // Required
-        monitors    = ["TypeString"]
+        monitors    = ["TypeString*"]
         path        = "TypeString"
         read_only   = "TypeBool"
         secret_file = "TypeString"
@@ -859,27 +842,23 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         secret_ref {
           name = "TypeString"
         }
-        // Required
-        volume_id = "TypeString"
+        volume_id = "TypeString*"
       }
 
       config_map {
         default_mode = "TypeInt"
 
         items {
-          // Required
-          key  = "TypeString"
+          key  = "TypeString*"
           mode = "TypeInt"
-          // Required
-          path = "TypeString"
+          path = "TypeString*"
         }
         name     = "TypeString"
         optional = "TypeBool"
       }
 
       csi {
-        // Required
-        driver = "TypeString"
+        driver = "TypeString*"
         fstype = "TypeString"
 
         node_publish_secret_ref {
@@ -896,18 +875,15 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
           field_ref {
             api_version = "TypeString"
-            // Required
-            field_path = "TypeString"
+            field_path  = "TypeString*"
           }
           mode = "TypeInt"
-          // Required
-          path = "TypeString"
+          path = "TypeString*"
 
           resource_field_ref {
             container_name = "TypeString"
             divisor        = "TypeString"
-            // Required
-            resource = "TypeString"
+            resource       = "TypeString*"
           }
         }
       }
@@ -926,8 +902,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       }
 
       flex_volume {
-        // Required
-        driver    = "TypeString"
+        driver    = "TypeString*"
         fstype    = "TypeString"
         options   = { "key" = "TypeString" }
         read_only = "TypeBool"
@@ -945,29 +920,24 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       gce_persistent_disk {
         fstype    = "TypeString"
         partition = "TypeInt"
-        // Required
-        pdname    = "TypeString"
+        pdname    = "TypeString*"
         read_only = "TypeBool"
       }
 
       git_repo {
-        directory = "TypeString"
-        // Required
-        repository = "TypeString"
+        directory  = "TypeString"
+        repository = "TypeString*"
         revision   = "TypeString"
       }
 
       glusterfs {
-        // Required
-        endpoints = "TypeString"
-        // Required
-        path      = "TypeString"
+        endpoints = "TypeString*"
+        path      = "TypeString*"
         read_only = "TypeBool"
       }
 
       host_path {
-        // Required
-        path = "TypeString"
+        path = "TypeString*"
         type = "TypeString"
       }
 
@@ -976,64 +946,52 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         chap_auth_session   = "TypeBool"
         fstype              = "TypeString"
         initiator_name      = "TypeString"
-        // Required
-        iqn             = "TypeString"
-        iscsi_interface = "TypeString"
-        // Required
-        lun       = "TypeInt"
-        portals   = ["TypeString"]
-        read_only = "TypeBool"
+        iqn                 = "TypeString*"
+        iscsi_interface     = "TypeString"
+        lun                 = "TypeInt*"
+        portals             = ["TypeString"]
+        read_only           = "TypeBool"
 
         secret_ref {
           name = "TypeString"
         }
-        // Required
-        target_portal = "TypeString"
+        target_portal = "TypeString*"
       }
-      // Required
-      name = "TypeString"
+      name = "TypeString*"
 
       nfs {
-        // Required
-        path      = "TypeString"
+        path      = "TypeString*"
         read_only = "TypeBool"
-        // Required
-        server = "TypeString"
+        server    = "TypeString*"
       }
 
       persistent_volume_claim {
-        // Required
-        claim_name = "TypeString"
+        claim_name = "TypeString*"
         read_only  = "TypeBool"
       }
 
       photon_persistent_disk {
         fstype = "TypeString"
-        // Required
-        pdid = "TypeString"
+        pdid   = "TypeString*"
       }
 
       portworx_volume {
         fstype    = "TypeString"
         read_only = "TypeBool"
-        // Required
-        volume_id = "TypeString"
+        volume_id = "TypeString*"
       }
 
       projected {
         default_mode = "TypeInt"
 
-        // Required
         sources {
 
           config_map {
 
             items {
-              // Required
-              key  = "TypeString"
+              key  = "TypeString*"
               mode = "TypeInt"
-              // Required
-              path = "TypeString"
+              path = "TypeString*"
             }
             name     = "TypeString"
             optional = "TypeBool"
@@ -1045,18 +1003,15 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
               field_ref {
                 api_version = "TypeString"
-                // Required
-                field_path = "TypeString"
+                field_path  = "TypeString*"
               }
               mode = "TypeInt"
-              // Required
-              path = "TypeString"
+              path = "TypeString*"
 
               resource_field_ref {
                 container_name = "TypeString"
                 divisor        = "TypeString"
-                // Required
-                resource = "TypeString"
+                resource       = "TypeString*"
               }
             }
           }
@@ -1064,11 +1019,9 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
           secret {
 
             items {
-              // Required
-              key  = "TypeString"
+              key  = "TypeString*"
               mode = "TypeInt"
-              // Required
-              path = "TypeString"
+              path = "TypeString*"
             }
             name     = "TypeString"
             optional = "TypeBool"
@@ -1077,8 +1030,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
           service_account_token {
             audience           = "TypeString"
             expiration_seconds = "TypeInt"
-            // Required
-            path = "TypeString"
+            path               = "TypeString*"
           }
         }
       }
@@ -1086,21 +1038,17 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       quobyte {
         group     = "TypeString"
         read_only = "TypeBool"
-        // Required
-        registry = "TypeString"
-        tenant   = "TypeString"
-        user     = "TypeString"
-        // Required
-        volume = "TypeString"
+        registry  = "TypeString*"
+        tenant    = "TypeString"
+        user      = "TypeString"
+        volume    = "TypeString*"
       }
 
       rbd {
-        fstype = "TypeString"
-        // Required
-        image   = "TypeString"
-        keyring = "TypeString"
-        // Required
-        monitors  = ["TypeString"]
+        fstype    = "TypeString"
+        image     = "TypeString*"
+        keyring   = "TypeString"
+        monitors  = ["TypeString*"]
         pool      = "TypeString"
         read_only = "TypeBool"
 
@@ -1111,33 +1059,28 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       }
 
       scale_io {
-        fstype = "TypeString"
-        // Required
-        gateway           = "TypeString"
+        fstype            = "TypeString"
+        gateway           = "TypeString*"
         protection_domain = "TypeString"
         read_only         = "TypeBool"
 
-        // Required
         secret_ref {
           name = "TypeString"
         }
         ssl_enabled  = "TypeBool"
         storage_mode = "TypeString"
         storage_pool = "TypeString"
-        // Required
-        system      = "TypeString"
-        volume_name = "TypeString"
+        system       = "TypeString*"
+        volume_name  = "TypeString"
       }
 
       secret {
         default_mode = "TypeInt"
 
         items {
-          // Required
-          key  = "TypeString"
+          key  = "TypeString*"
           mode = "TypeInt"
-          // Required
-          path = "TypeString"
+          path = "TypeString*"
         }
         optional    = "TypeBool"
         secret_name = "TypeString"
@@ -1158,14 +1101,9 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         fstype              = "TypeString"
         storage_policy_id   = "TypeString"
         storage_policy_name = "TypeString"
-        // Required
-        volume_path = "TypeString"
+        volume_path         = "TypeString*"
       }
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -2423,6 +2361,31 @@ VolumeName is the human-readable name of the StorageOS volume.  Volume names are
 ######  TypeString
 
 VolumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to "default" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created.
+## vsphere_volume
+
+VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine
+
+    
+#### fstype
+
+######  TypeString
+
+Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
+#### storage_policy_id
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.
+#### storage_policy_name
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile name.
+#### volume_path
+
+###### Required •  TypeString
+
+Path that identifies vSphere volume vmdklumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to "default" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created.
 ## vsphere_volume
 
 VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine

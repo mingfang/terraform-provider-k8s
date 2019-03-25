@@ -183,9 +183,7 @@ PodSecurityPolicy governs the ability to make requests that affect the Security 
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_policy_v1beta1_pod_security_policy////
 resource "k8s_policy_v1beta1_pod_security_policy" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -199,13 +197,11 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
     allowed_capabilities       = ["TypeString"]
 
     allowed_csi_drivers {
-      // Required
-      name = "TypeString"
+      name = "TypeString*"
     }
 
     allowed_flex_volumes {
-      // Required
-      driver = "TypeString"
+      driver = "TypeString*"
     }
 
     allowed_host_paths {
@@ -218,14 +214,11 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
     default_allow_privilege_escalation = "TypeBool"
     forbidden_sysctls                  = ["TypeString"]
 
-    // Required
     fsgroup {
 
       ranges {
-        // Required
-        max = "TypeInt"
-        // Required
-        min = "TypeInt"
+        max = "TypeInt*"
+        min = "TypeInt*"
       }
       rule = "TypeString"
     }
@@ -234,10 +227,8 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
     host_pid     = "TypeBool"
 
     host_ports {
-      // Required
-      max = "TypeInt"
-      // Required
-      min = "TypeInt"
+      max = "TypeInt*"
+      min = "TypeInt*"
     }
     privileged                 = "TypeBool"
     read_only_root_filesystem  = "TypeBool"
@@ -246,32 +237,23 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
     run_asgroup {
 
       ranges {
-        // Required
-        max = "TypeInt"
-        // Required
-        min = "TypeInt"
+        max = "TypeInt*"
+        min = "TypeInt*"
       }
-      // Required
-      rule = "TypeString"
+      rule = "TypeString*"
     }
 
-    // Required
     run_asuser {
 
       ranges {
-        // Required
-        max = "TypeInt"
-        // Required
-        min = "TypeInt"
+        max = "TypeInt*"
+        min = "TypeInt*"
       }
-      // Required
-      rule = "TypeString"
+      rule = "TypeString*"
     }
 
-    // Required
     selinux {
-      // Required
-      rule = "TypeString"
+      rule = "TypeString*"
 
       selinux_options {
         level = "TypeString"
@@ -281,22 +263,15 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
       }
     }
 
-    // Required
     supplemental_groups {
 
       ranges {
-        // Required
-        max = "TypeInt"
-        // Required
-        min = "TypeInt"
+        max = "TypeInt*"
+        min = "TypeInt*"
       }
       rule = "TypeString"
     }
     volumes = ["TypeString"]
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -613,6 +588,23 @@ ranges are the allowed ranges of supplemental groups.  If you would like to forc
 #### max
 
 ###### Required •  TypeInt
+
+max is the end of the range, inclusive.
+#### min
+
+###### Required •  TypeInt
+
+min is the start of the range, inclusive.
+#### rule
+
+######  TypeString
+
+rule is the strategy that will dictate what supplemental groups is used in the SecurityContext.
+#### volumes
+
+######  TypeList
+
+volumes is a white list of allowed volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'.nt
 
 max is the end of the range, inclusive.
 #### min

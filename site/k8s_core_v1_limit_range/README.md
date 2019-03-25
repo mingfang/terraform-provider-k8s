@@ -48,9 +48,7 @@ LimitRange sets resource usage limits for each kind of resource in a Namespace.
 <summary>example</summary><blockquote>
 
 ```hcl
-//GENERATE STATIC//k8s_core_v1_limit_range////
 resource "k8s_core_v1_limit_range" "this" {
-
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -61,7 +59,6 @@ resource "k8s_core_v1_limit_range" "this" {
 
   spec {
 
-    // Required
     limits {
       default                 = { "key" = "TypeString" }
       default_request         = { "key" = "TypeString" }
@@ -70,10 +67,6 @@ resource "k8s_core_v1_limit_range" "this" {
       min                     = { "key" = "TypeString" }
       type                    = "TypeString"
     }
-  }
-
-  lifecycle {
-
   }
 }
 
@@ -176,6 +169,11 @@ MaxLimitRequestRatio if specified, the named resource must have a request and li
 ######  TypeMap
 
 Min usage constraints on this kind by resource name.
+#### type
+
+######  TypeString
+
+Type of resource that this limit applies to.ce name.
 #### type
 
 ######  TypeString
