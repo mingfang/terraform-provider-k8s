@@ -189,46 +189,4 @@ values is an array of string values. If the operator is In or NotIn, the values 
 
 ######  TypeMap
 
-matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.hose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.PodDisruptionBudget.
-
-    
-#### max_unavailable
-
-######  TypeString
-
-An eviction is allowed if at most "maxUnavailable" pods selected by "selector" are unavailable after the eviction, i.e. even in absence of the evicted pod. For example, one can prevent all voluntary evictions by specifying 0. This is a mutually exclusive setting with "minAvailable".
-#### min_available
-
-######  TypeString
-
-An eviction is allowed if at least "minAvailable" pods selected by "selector" will still be available after the eviction, i.e. even in the absence of the evicted pod.  So for example you can prevent all voluntary evictions by specifying "100%".
-## selector
-
-Label query over pods whose evictions are managed by the disruption budget.
-
-    
-## match_expressions
-
-matchExpressions is a list of label selector requirements. The requirements are ANDed.
-
-    
-#### key
-
-###### Required •  TypeString
-
-key is the label key that the selector applies to.
-#### operator
-
-###### Required •  TypeString
-
-operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
-#### values
-
-######  TypeList
-
-values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
-#### match_labels
-
-######  TypeMap
-
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
