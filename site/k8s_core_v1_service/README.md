@@ -19,19 +19,6 @@ Service is a named abstraction of software service (for example, mysql) consisti
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -95,16 +82,8 @@ resource "k8s_core_v1_service" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   spec {
@@ -182,38 +161,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -318,6 +265,31 @@ publishNotReadyAddresses, when set to true, indicates that DNS implementations m
 ######  TypeMap
 
 Route service traffic to pods with label keys and values matching this selector. If empty or not present, the service is assumed to have an external process managing its endpoints, which Kubernetes will not modify. Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type is ExternalName. More info: https://kubernetes.io/docs/concepts/services-networking/service/
+#### session_affinity
+
+######  TypeString
+
+Supports "ClientIP" and "None". Used to maintain session affinity. Enable client IP based session affinity. Must be ClientIP or None. Defaults to None. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+## session_affinity_config
+
+sessionAffinityConfig contains the configurations of session affinity.
+
+    
+## client_ip
+
+clientIP contains the configurations of Client IP based session affinity.
+
+    
+#### timeout_seconds
+
+######  TypeInt
+
+timeoutSeconds specifies the seconds of ClientIP type session sticky time. The value must be >0 && <=86400(for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800(for 3 hours).
+#### type
+
+######  TypeString
+
+type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. "ExternalName" maps to the specified externalName. "ClusterIP" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object. If clusterIP is "None", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a stable IP. "NodePort" builds on ClusterIP and allocates a port on every node which routes to the clusterIP. "LoadBalancer" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the clusterIP. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-typesoncepts/services-networking/service/
 #### session_affinity
 
 ######  TypeString

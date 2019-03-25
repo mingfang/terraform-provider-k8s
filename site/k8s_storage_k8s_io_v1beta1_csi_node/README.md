@@ -19,19 +19,6 @@ CSINode holds information about all CSI drivers installed on a node. CSI drivers
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -65,16 +52,8 @@ resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   // Required
@@ -135,38 +114,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -194,6 +141,28 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 ## spec
 
 spec is the specification of CSINode
+
+    
+## drivers
+
+drivers is a list of information of all CSI Drivers existing on a node. If all drivers in the list are uninstalled, this can become empty.
+
+    
+#### name
+
+###### Required •  TypeString
+
+This is the name of the CSI driver that this object refers to. This MUST be the same name returned by the CSI GetPluginName() call for that driver.
+#### node_id
+
+###### Required •  TypeString
+
+nodeID of the node from the driver point of view. This field enables Kubernetes to communicate with storage systems that do not share the same nomenclature for nodes. For example, Kubernetes may refer to a given node as "node1", but the storage system may refer to the same node as "nodeA". When Kubernetes issues a command to the storage system to attach a volume to a specific node, it can use this field to refer to the node name using the ID that the storage system will understand, e.g. "nodeA" instead of "node1". This field is required.
+#### topology_keys
+
+######  TypeList
+
+topologyKeys is the list of keys supported by the driver. When a driver is initialized on a cluster, it provides a set of topology keys that it understands (e.g. "company.com/zone", "company.com/region"). When a driver is initialized on a node, it provides the same topology keys along with values. Kubelet will expose these topology keys as labels on its own node object. When Kubernetes does topology aware provisioning, it can use this list to determine which labels it should retrieve from the node object and pass back to the driver. It is possible for different nodes to use different topology keys. This can be empty if driver does not support topology.fication of CSINode
 
     
 ## drivers

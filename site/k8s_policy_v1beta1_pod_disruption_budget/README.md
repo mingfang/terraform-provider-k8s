@@ -19,19 +19,6 @@ PodDisruptionBudget is an object to define the max disruption that can be caused
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -76,16 +63,8 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   spec {
@@ -150,38 +129,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -209,6 +156,48 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 ## spec
 
 Specification of the desired behavior of the PodDisruptionBudget.
+
+    
+#### max_unavailable
+
+######  TypeString
+
+An eviction is allowed if at most "maxUnavailable" pods selected by "selector" are unavailable after the eviction, i.e. even in absence of the evicted pod. For example, one can prevent all voluntary evictions by specifying 0. This is a mutually exclusive setting with "minAvailable".
+#### min_available
+
+######  TypeString
+
+An eviction is allowed if at least "minAvailable" pods selected by "selector" will still be available after the eviction, i.e. even in the absence of the evicted pod.  So for example you can prevent all voluntary evictions by specifying "100%".
+## selector
+
+Label query over pods whose evictions are managed by the disruption budget.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.PodDisruptionBudget.
 
     
 #### max_unavailable

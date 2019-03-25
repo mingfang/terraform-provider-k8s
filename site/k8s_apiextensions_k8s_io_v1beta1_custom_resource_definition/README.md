@@ -19,19 +19,6 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -197,16 +184,8 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   // Required
@@ -357,38 +336,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -667,6 +614,31 @@ Served is a flag enabling/disabling this version from being served via REST APIs
 ###### Required •  TypeBool
 
 Storage flags the version as storage version. There must be exactly one flagged as storage version.
+## subresources
+
+Subresources describes the subresources for CustomResource Top-level and per-version subresources are mutually exclusive. Per-version subresources must not all be set to identical values (top-level subresources should be used instead) This field is alpha-level and is only honored by servers that enable the CustomResourceWebhookConversion feature.
+
+    
+## scale
+
+Scale denotes the scale subresource for CustomResources
+
+    
+#### label_selector_path
+
+######  TypeString
+
+LabelSelectorPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Selector. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status. Must be set to work with HPA. If there is no value under the given path in the CustomResource, the status label selector value in the /scale subresource will default to the empty string.
+#### spec_replicas_path
+
+###### Required •  TypeString
+
+SpecReplicasPath defines the JSON path inside of a CustomResource that corresponds to Scale.Spec.Replicas. Only JSON paths without the array notation are allowed. Must be a JSON Path under .spec. If there is no value under the given path in the CustomResource, the /scale subresource will return an error on GET.
+#### status_replicas_path
+
+###### Required •  TypeString
+
+StatusReplicasPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Replicas. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status. If there is no value under the given path in the CustomResource, the status replica value in the /scale subresource will default to 0.s storage version.
 ## subresources
 
 Subresources describes the subresources for CustomResource Top-level and per-version subresources are mutually exclusive. Per-version subresources must not all be set to identical values (top-level subresources should be used instead) This field is alpha-level and is only honored by servers that enable the CustomResourceWebhookConversion feature.

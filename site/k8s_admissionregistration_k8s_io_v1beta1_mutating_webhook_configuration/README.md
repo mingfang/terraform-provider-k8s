@@ -19,19 +19,6 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -113,16 +100,8 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   webhooks {
@@ -213,38 +192,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -423,6 +370,27 @@ Operations is the operations the admission hook cares about - CREATE, UPDATE, or
 ######  TypeList
 
 Resources is a list of resources this rule applies to.
+
+For example: 'pods' means pods. 'pods/log' means the log subresource of pods. '*' means all resources, but not subresources. 'pods/*' means all subresources of pods. '*/scale' means all scale subresources. '*/*' means all resources and their subresources.
+
+If wildcard is present, the validation rule will ensure resources do not overlap with each other.
+
+Depending on the enclosing object, subresources might not be allowed. Required.
+#### scope
+
+######  TypeString
+
+scope specifies the scope of this rule. Valid values are "Cluster", "Namespaced", and "*" "Cluster" means that only cluster-scoped resources will match this rule. Namespace API objects are cluster-scoped. "Namespaced" means that only namespaced resources will match this rule. "*" means that there are no scope restrictions. Subresources match the scope of their parent resource. Default is "*".
+#### side_effects
+
+######  TypeString
+
+SideEffects states whether this webhookk has side effects. Acceptable values are: Unknown, None, Some, NoneOnDryRun Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission change and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some. Defaults to Unknown.
+#### timeout_seconds
+
+######  TypeInt
+
+TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds. resources this rule applies to.
 
 For example: 'pods' means pods. 'pods/log' means the log subresource of pods. '*' means all resources, but not subresources. 'pods/*' means all subresources of pods. '*/scale' means all scale subresources. '*/*' means all resources and their subresources.
 

@@ -19,19 +19,6 @@ PodPreset is a policy resource that defines additional runtime requirements for 
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -744,16 +731,8 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   spec {
@@ -1230,38 +1209,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -2454,6 +2401,53 @@ Filesystem type to mount. Must be a filesystem type supported by the host operat
 #### read_only
 
 ######  TypeBool
+
+Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+## secret_ref
+
+SecretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted.
+
+    
+#### name
+
+######  TypeString
+
+Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+#### volume_name
+
+######  TypeString
+
+VolumeName is the human-readable name of the StorageOS volume.  Volume names are only unique within a namespace.
+#### volume_namespace
+
+######  TypeString
+
+VolumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to "default" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created.
+## vsphere_volume
+
+VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine
+
+    
+#### fstype
+
+######  TypeString
+
+Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
+#### storage_policy_id
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.
+#### storage_policy_name
+
+######  TypeString
+
+Storage Policy Based Management (SPBM) profile name.
+#### volume_path
+
+###### Required •  TypeString
+
+Path that identifies vSphere volume vmdkeBool
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 ## secret_ref

@@ -22,19 +22,6 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -88,19 +75,6 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -1897,19 +1871,6 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -1981,16 +1942,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   spec {
@@ -2019,16 +1972,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
       metadata {
         annotations = { "key" = "TypeString" }
         labels      = { "key" = "TypeString" }
-
-        managed_fields {
-          api_version = "TypeString"
-          fields      = { "key" = "TypeString" }
-          manager     = "TypeString"
-          operation   = "TypeString"
-          time        = "TypeString"
-        }
-        name      = "TypeString"
-        namespace = "TypeString"
+        name        = "TypeString"
+        namespace   = "TypeString"
       }
 
       spec {
@@ -3110,16 +3055,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
       metadata {
         annotations = { "key" = "TypeString" }
         labels      = { "key" = "TypeString" }
-
-        managed_fields {
-          api_version = "TypeString"
-          fields      = { "key" = "TypeString" }
-          manager     = "TypeString"
-          operation   = "TypeString"
-          time        = "TypeString"
-        }
-        name      = "TypeString"
-        namespace = "TypeString"
+        name        = "TypeString"
+        namespace   = "TypeString"
       }
 
       spec {
@@ -3201,38 +3138,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -3351,38 +3256,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -6495,33 +6368,120 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
+#### name
 
 ######  TypeString
 
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
+Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names
+#### namespace
+
+######  TypeString
+
+Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+
+Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### self_link
+
+######  ReadOnly • TypeString
+
+SelfLink is a URL representing this object. Populated by the system. Read-only.
+#### uid
+
+######  ReadOnly • TypeString
+
+UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
+
+Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+## spec
+
+Spec defines the desired characteristics of a volume requested by a pod author. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
+
+    
+#### access_modes
+
+######  TypeList
+
+AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+## data_source
+
+This field requires the VolumeSnapshotDataSource alpha feature gate to be enabled and currently VolumeSnapshot is the only supported data source. If the provisioner can support VolumeSnapshot data source, it will create a new volume and data will be restored to the volume at the same time. If the provisioner does not support VolumeSnapshot data source, volume will not be created and the failure will be reported as an event. In the future, we plan to support more data source types and the behavior of the provisioner may change.
+
+    
+#### api_group
+
+######  TypeString
+
+APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+#### kind
+
+###### Required •  TypeString
+
+Kind is the type of resource being referenced
+#### name
+
+###### Required •  TypeString
+
+Name is the name of resource being referenced
+## resources
+
+Resources represents the minimum resources the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources
+
+    
+#### limits
 
 ######  TypeMap
 
-Fields identifies a set of fields.
-#### manager
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+#### requests
+
+######  TypeMap
+
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## selector
+
+A label query over volumes to consider for binding.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+#### storage_class_name
 
 ######  TypeString
 
-Manager is an identifier of the workflow managing these fields.
-#### operation
+Name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
+#### volume_mode
 
 ######  TypeString
 
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
+volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec. This is a beta feature.
+#### volume_name
+
+######  TypeString
+
+VolumeName is the binding reference to the PersistentVolume backing this claim. which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
 #### time
 
 ######  TypeString

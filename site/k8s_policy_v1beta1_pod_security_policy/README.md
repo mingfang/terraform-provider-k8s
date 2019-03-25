@@ -19,19 +19,6 @@ PodSecurityPolicy governs the ability to make requests that affect the Security 
 - [uid](#uid)
 
     
-<details>
-<summary>managed_fields</summary><blockquote>
-
-    
-- [api_version](#api_version)
-- [fields](#fields)
-- [manager](#manager)
-- [operation](#operation)
-- [time](#time)
-
-    
-</details>
-
 </details>
 
 <details>
@@ -203,16 +190,8 @@ resource "k8s_policy_v1beta1_pod_security_policy" "this" {
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
-
-    managed_fields {
-      api_version = "TypeString"
-      fields      = { "key" = "TypeString" }
-      manager     = "TypeString"
-      operation   = "TypeString"
-      time        = "TypeString"
-    }
-    name      = "TypeString"
-    namespace = "TypeString"
+    name        = "TypeString"
+    namespace   = "TypeString"
   }
 
   spec {
@@ -361,38 +340,6 @@ Populated by the system when a graceful deletion is requested. Read-only. More i
 ######  TypeMap
 
 Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
-## managed_fields
-
-ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
-
-This field is alpha and can be changed or removed without notice.
-
-    
-#### api_version
-
-######  TypeString
-
-APIVersion defines the version of this resource that this field set applies to. The format is "group/version" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.
-#### fields
-
-######  TypeMap
-
-Fields identifies a set of fields.
-#### manager
-
-######  TypeString
-
-Manager is an identifier of the workflow managing these fields.
-#### operation
-
-######  TypeString
-
-Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.
-#### time
-
-######  TypeString
-
-Time is timestamp of when these fields were set. It should always be empty if Operation is 'Apply'
 #### name
 
 ######  TypeString
@@ -616,6 +563,73 @@ min is the start of the range, inclusive.
 #### rule
 
 ###### Required •  TypeString
+
+rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+## selinux
+
+seLinux is the strategy that will dictate the allowable labels that may be set.
+
+    
+#### rule
+
+###### Required •  TypeString
+
+rule is the strategy that will dictate the allowable labels that may be set.
+## selinux_options
+
+seLinuxOptions required to run as; required for MustRunAs More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+    
+#### level
+
+######  TypeString
+
+Level is SELinux level label that applies to the container.
+#### role
+
+######  TypeString
+
+Role is a SELinux role label that applies to the container.
+#### type
+
+######  TypeString
+
+Type is a SELinux type label that applies to the container.
+#### user
+
+######  TypeString
+
+User is a SELinux user label that applies to the container.
+## supplemental_groups
+
+supplementalGroups is the strategy that will dictate what supplemental groups are used by the SecurityContext.
+
+    
+## ranges
+
+ranges are the allowed ranges of supplemental groups.  If you would like to force a single supplemental group then supply a single range with the same start and end. Required for MustRunAs.
+
+    
+#### max
+
+###### Required •  TypeInt
+
+max is the end of the range, inclusive.
+#### min
+
+###### Required •  TypeInt
+
+min is the start of the range, inclusive.
+#### rule
+
+######  TypeString
+
+rule is the strategy that will dictate what supplemental groups is used in the SecurityContext.
+#### volumes
+
+######  TypeList
+
+volumes is a white list of allowed volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'.red •  TypeString
 
 rule is the strategy that will dictate the allowable RunAsUser values that may be set.
 ## selinux
