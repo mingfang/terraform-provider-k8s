@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
+	tfSchema "github.com/hashicorp/terraform/helper/schema"
 )
 
 var forceNewPattern = []*regexp.Regexp{
@@ -59,13 +60,13 @@ func IsSkipPath(path string) bool {
 }
 
 var skipKinds = map[string]struct{}{
-	"APIService":                struct{}{},
-	"CertificateSigningRequest": struct{}{},
-	"ControllerRevision":        struct{}{},
-	"Event":                     struct{}{},
-	"Node":                      struct{}{},
-	"Lease":                     struct{}{},
-	"StorageClass":              struct{}{}, //todo: this caused resource k8s_storage_class: provisioner is a reserved field name
+	"APIService":                {},
+	"CertificateSigningRequest": {},
+	"ControllerRevision":        {},
+	"Event":                     {},
+	"Node":                      {},
+	"Lease":                     {},
+	"StorageClass":              {}, //todo: this caused resource k8s_storage_class: provisioner is a reserved field name
 }
 
 func IsSkipKind(kind string) bool {
@@ -161,8 +162,12 @@ func Dump(object interface{}) {
 
 func PrintKeys(data map[string]struct{}) {
 	keys := make([]string, len(data))
-	for key, _ := range data {
+	for key := range data {
 		keys = append(keys, key)
 	}
 	log.Println("keys:", strings.Join(keys, ","))
+}
+
+func IsDeprecated(schema *tfSchema.Schema) bool {
+	return strings.Contains(schema.Description, "DEPRECATED")
 }
