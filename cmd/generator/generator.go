@@ -113,7 +113,7 @@ type ResourceData struct {
 
 const resourceTemplateDynamic = `
 {{ define "main" }}
-{{- execute "resource_dynamic" (dict "ResourceKey" .ResourceKey "Resource" .Resource "Count" "" "Lifecycle" "") | fmt}}
+{{- execute "resource_dynamic" (dict "ResourceKey" .ResourceKey "Resource" .Resource "Count" .Count "Lifecycle" .Lifecycle) | fmt}}
 {{ end }}
 
 {{ define "resource_dynamic" -}}
@@ -205,10 +205,7 @@ const resourceTemplateStatic = `
 {{ end }}
 
 {{ define "resource_static" -}}
-//GENERATE STATIC//{{ .ResourceKey }}//{{ .Count }}//{{ .Lifecycle }}
 resource "{{ .ResourceKey }}" "this" {
-  {{ .Count }}
-
   {{- range $name, $schema := .Resource.Schema }}
     {{- with subResource $schema }}
       {{ template "static" dict "Name" $name "Schema" $schema "Resource" . }}
@@ -216,17 +213,10 @@ resource "{{ .ResourceKey }}" "this" {
       {{ template "schema" dict "Name" $name "Schema" $schema  }}
     {{- end }}
   {{- end }}
-
-  lifecycle {
-    {{ .Lifecycle }}
-  }
 }
 {{- end }}
 
 {{ define "static" }}
-  {{- if .Schema.Required }}
-    // Required
-  {{- end }}
   {{ .Name }} {
     {{- range $name, $schema := .Resource.Schema }}
       {{- if not (isReadOnly $schema) }}
@@ -241,15 +231,12 @@ resource "{{ .ResourceKey }}" "this" {
 {{- end }}
 
 {{ define "schema" }}
-  {{- if .Schema.Required }}
-    // Required
-  {{- end }}
   {{- if isList .Schema }}
-    {{ .Name }} = [ "{{ .Schema.Elem.Type }}" ]
+    {{ .Name }} = [ "{{ .Schema.Elem.Type }}{{ if .Schema.Required }}*{{ end }}" ]
   {{- else if isMap .Schema }}
-    {{ .Name }} = { "key" = "{{ .Schema.Elem.Type }}" }
+    {{ .Name }} = { "key" = "{{ .Schema.Elem.Type }}{{ if .Schema.Required }}*{{ end }}" }
   {{- else }}
-    {{ .Name }} = "{{ .Schema.Type }}"
+    {{ .Name }} = "{{ .Schema.Type }}{{ if .Schema.Required }}*{{ end }}"
   {{- end }}
 {{- end }}
 `
