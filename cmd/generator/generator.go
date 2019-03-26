@@ -20,14 +20,14 @@ import (
 func main() {
 	var count, lifecycle string
 	var doc, dynamic, site bool
-
-	flag.StringVar(&count, "count", "", "count expression")
-	flag.StringVar(&lifecycle, "lifecycle", "", "lifecycle expression")
-	flag.BoolVar(&dynamic, "dynamic", false, "generate dynamic blocks")
-	flag.BoolVar(&doc, "doc", false, "generate markdown documentation")
-	flag.BoolVar(&site, "site", false, "generate entire documentation site")
-	flag.Parse()
-	args := flag.Args()
+	f := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	f.StringVar(&count, "count", "", "count expression")
+	f.StringVar(&lifecycle, "lifecycle", "", "lifecycle expression")
+	f.BoolVar(&dynamic, "dynamic", false, "generate dynamic blocks; defaults to standard blocks")
+	f.BoolVar(&doc, "doc", false, "generate markdown documentation")
+	f.BoolVar(&site, "site", false, "generate entire documentation site")
+	f.Parse(os.Args[1:])
+	args := f.Args()
 
 	if site {
 		generateSite()

@@ -28,14 +28,18 @@ func main() {
 	var filename, namespace, kind, name, dir, url string
 	var isImport bool
 
-	flag.StringVar(&filename, "filename", "", "name of file to extract")
-	flag.StringVar(&dir, "dir", "", "destination directory")
-	flag.StringVar(&url, "url", "", "source url")
-	flag.StringVar(&namespace, "namespace", "default", "namespace of resources to extract")
-	flag.StringVar(&kind, "kind", "", "kind of resources to extract")
-	flag.StringVar(&name, "name", "", "name of resources to extract")
-	flag.BoolVar(&isImport, "import", false, "automatically import resources")
-	flag.Parse()
+	f := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	f.StringVar(&filename, "filename", "", "name of file to extract")
+	f.StringVar(&filename, "file", "", "name of file to extract")
+	f.StringVar(&filename, "f", "", "name of file to extract")
+	f.StringVar(&dir, "dir", "", "destination directory")
+	f.StringVar(&url, "url", "", "source url")
+	f.StringVar(&namespace, "namespace", "default", "namespace of resources to extract")
+	f.StringVar(&namespace, "ns", "default", "namespace of resources to extract")
+	f.StringVar(&kind, "kind", "", "kind of resources to extract")
+	f.StringVar(&name, "name", "", "name of resources to extract")
+	f.BoolVar(&isImport, "import", false, "automatically import resources")
+	f.Parse(os.Args[1:])
 
 	if url != "" {
 		extractURL(url, kind, dir)
