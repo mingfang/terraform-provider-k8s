@@ -46,7 +46,7 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 			log.Fatalln("Schema not found for:" + resourceKey)
 		}
 
-		resource := resourceSchema.Elem.(*tfSchema.Resource)
+		resource := tfSchema.Resource{Schema: resourceSchema.Elem.(*tfSchema.Resource).Schema}
 		isNamespaced := apiResource.Namespaced
 
 		resource.Exists = func(resourceData *tfSchema.ResourceData, meta interface{}) (bool, error) {
@@ -68,7 +68,7 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 			State: tfSchema.ImportStatePassthrough,
 		}
 
-		resourcesMap[resourceKey] = resource
+		resourcesMap[resourceKey] = &resource
 	})
 
 	return resourcesMap
@@ -103,14 +103,14 @@ func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 			log.Fatalln("Schema not found for:" + resourceKey)
 		}
 
-		resource := resourceSchema.Elem.(*tfSchema.Resource)
+		resource := tfSchema.Resource{Schema: resourceSchema.Elem.(*tfSchema.Resource).Schema}
 		isNamespaced := apiResource.Namespaced
 
 		resource.Read = func(resourceData *tfSchema.ResourceData, meta interface{}) error {
 			return datasourceRead(resourceKey, &gvk, isNamespaced, model, resourceData, meta)
 		}
 
-		resourcesMap[resourceKey] = resource
+		resourcesMap[resourceKey] = &resource
 	})
 
 	return resourcesMap
