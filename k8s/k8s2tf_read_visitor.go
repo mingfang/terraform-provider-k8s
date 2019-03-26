@@ -3,6 +3,7 @@ package k8s
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
@@ -100,12 +101,7 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 
 	//special handling for JSON data
 	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
-		jsonBytes, err := json.Marshal(this.context)
-		if err != nil {
-			panic(err)
-			return
-		}
-		this.Object = fmt.Sprintf("%s", jsonBytes)
+		this.handleJSON()
 		return
 	}
 
@@ -137,8 +133,18 @@ func (this *K8S2TFReadVisitor) VisitReference(proto proto.Reference) {
 
 func (this *K8S2TFReadVisitor) VisitArbitrary(proto *proto.Arbitrary) {
 	//log.Println("VisitArbitrary GetPath:", proto.GetPath())
+	this.handleJSON()
+}
+
+func (this *K8S2TFReadVisitor) handleJSON() {
+	//log.Println("handleJSON path:", this.path)
 	if this.context == nil {
 		return
 	}
-	this.Object = this.context
+	jsonBytes, err := json.Marshal(this.context)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	this.Object = fmt.Sprintf("%s", jsonBytes)
 }

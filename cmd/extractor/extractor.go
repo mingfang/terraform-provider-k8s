@@ -118,10 +118,6 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 	resourceVerbs := []string{"create", "get"}
 
 	k8s.K8SConfig_Singleton().ForEachAPIResource(func(apiResource metav1.APIResource, gvk schema.GroupVersionKind) {
-		if gvk.Version == "v1beta1" {
-			//log.Println("Skip v1beta1:", gvk.Group, gvk.Version, gvk.Kind)
-			return
-		}
 		if kind != "" && strings.ToLower(kind) != strings.ToLower(apiResource.Kind) {
 			//log.Println("Skip kind:", gvk.Group, gvk.Version, gvk.Kind)
 			return

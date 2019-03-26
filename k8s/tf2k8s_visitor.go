@@ -1,11 +1,12 @@
 package k8s
 
 import (
-	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/structure"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -137,17 +138,7 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 
 	//special handling for JSON data
 	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
-		jsonBytes := []byte(fmt.Sprintf("%s", this.context))
-		jsonObject := map[string]interface{}{}
-		err := json.Unmarshal(jsonBytes, &jsonObject)
-		if err != nil {
-			panic(err)
-		}
-		this.Object = jsonObject
-		this.ops = append(this.ops, &AddOperation{
-			Path:  this.jsonPath,
-			Value: this.Object,
-		})
+		this.handleJSON()
 		return
 	}
 
@@ -220,7 +211,16 @@ func (this *TF2K8SVisitor) VisitReference(proto proto.Reference) {
 //same as VisitPrimitive for string type
 func (this *TF2K8SVisitor) VisitArbitrary(proto *proto.Arbitrary) {
 	//log.Println("VisitArbitrary path:", this.keyPath)
-	this.Object = this.context
+	this.handleJSON()
+}
+
+func (this *TF2K8SVisitor) handleJSON() {
+	//log.Println("handleJSON path:", this.keyPath)
+	jsonObject, err := structure.ExpandJsonFromString(fmt.Sprintf("%s", this.context))
+	if err != nil {
+		log.Fatal(err)
+	}
+	this.Object = jsonObject
 	this.ops = append(this.ops, &AddOperation{
 		Path:  this.jsonPath,
 		Value: this.Object,

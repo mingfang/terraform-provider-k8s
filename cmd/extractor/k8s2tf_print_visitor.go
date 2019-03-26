@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -115,13 +116,8 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 	//fmt.Fprintf(this.buf, "%s//VisitKind %s %s\n", this.indent, this.key, proto.GetPath())
 	//special handling for JSON data
 	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
-		indent := this.indent + indentString
-		jsonBytes, err := json.MarshalIndent(this.context, indent, "  ")
-		if err != nil {
-			panic(err)
-			return
-		}
-		fmt.Fprintf(this.buf, "%s%s = <<JSON\n%s%s\n%sJSON", this.indent, this.key, indent, jsonBytes, indent)
+		//log.Println("VisitKind JSON:", this.path)
+		this.handleJSON()
 		return
 	}
 
@@ -151,9 +147,19 @@ func (this *K8S2TFPrintVisitor) VisitReference(proto proto.Reference) {
 
 func (this *K8S2TFPrintVisitor) VisitArbitrary(proto *proto.Arbitrary) {
 	//log.Println("VisitArbitrary GetPath:", proto.GetPath())
+	this.handleJSON()
+}
+
+func (this *K8S2TFPrintVisitor) handleJSON() {
+	//log.Println("handleJSON path:", this.path)
 	if this.context == nil {
 		return
 	}
-	//fmt.Fprintf(this.buf, "%s//VisitArbitrary %s\n", this.indent, proto.GetPath())
-	fmt.Fprintf(this.buf, "%s%s = \"%s\"", this.indent, this.key, this.context)
+	indent := this.indent + indentString
+	jsonBytes, err := json.MarshalIndent(this.context, indent, "  ")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	fmt.Fprintf(this.buf, "%s%s = <<JSON\n%s%s\n%sJSON", this.indent, this.key, indent, jsonBytes, indent)
 }

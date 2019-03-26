@@ -174,6 +174,7 @@ func resourceCreate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 	if isNamespaced {
 		resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
 	}
+	log.Println("create req:", raw)
 	res, err := resourceClient.Create(&raw, metav1.CreateOptions{})
 	if err != nil {
 		return err

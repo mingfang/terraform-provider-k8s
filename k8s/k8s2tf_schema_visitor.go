@@ -75,8 +75,7 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 
 	//special handling for JSON data
 	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
-		this.Schema.Type = tfSchema.TypeString
-		this.Schema.DiffSuppressFunc = structure.SuppressJsonDiff
+		this.handleJSON()
 		this.Schema.Description = proto.GetDescription()
 		this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 		return
@@ -138,7 +137,17 @@ func (this *K8S2TFSchemaVisitor) VisitReference(r proto.Reference) {
 
 func (this *K8S2TFSchemaVisitor) VisitArbitrary(proto *proto.Arbitrary) {
 	//log.Println("VisitArbitrary path:", this.path)
-	this.Schema.Type = tfSchema.TypeString
+	this.handleJSON()
 	this.Schema.Description = proto.GetDescription()
 	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
+}
+
+func (this *K8S2TFSchemaVisitor) handleJSON() {
+	//log.Println("handleJSON path:", this.path)
+	this.Schema.Type = tfSchema.TypeString
+	this.Schema.StateFunc = func(v interface{}) string {
+		json, _ := structure.NormalizeJsonString(v.(string))
+		return json
+	}
+	this.Schema.DiffSuppressFunc = structure.SuppressJsonDiff
 }
