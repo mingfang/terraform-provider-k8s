@@ -185,6 +185,8 @@ func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[sche
 		log.Fatal(err)
 	}
 	models, _ := proto.NewOpenAPIData(doc)
+	//get metadata from this for crd resources without spec
+	nsModel := models.LookupModel("io.k8s.api.core.v1.Namespace").(*proto.Kind)
 	modelsMap := map[schema.GroupVersionKind]proto.Schema{}
 	for _, modelName := range models.ListModels() {
 		model := models.LookupModel(modelName)
@@ -195,7 +197,18 @@ func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[sche
 		gvkList := parseGroupVersionKind(model)
 		for _, gvk := range gvkList {
 			if len(gvk.Kind) > 0 && !IsSkipKind(gvk.Kind) {
-				modelsMap[gvk] = model
+				//check for crd resources without spec
+				if _, isMap := model.(*proto.Map); isMap {
+					modelsMap[gvk] = &proto.Kind{
+						BaseSchema: model.(*proto.Map).BaseSchema,
+						Fields: map[string]proto.Schema{
+							"metadata": nsModel.Fields["metadata"],
+							"spec":     model.(*proto.Map).SubType, //must be type Arbitrary
+						},
+					}
+				} else {
+					modelsMap[gvk] = model
+				}
 			}
 		}
 	}
