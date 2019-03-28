@@ -161,7 +161,9 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 		//log.Println("read res:", res)
 
 		//skip existing resources
-		execCommand("terraform", []string{"init"})
+		if isImport {
+			execCommand("terraform", []string{"init"})
+		}
 		stateList, execErr := execCommand("terraform", []string{"state", "list"})
 		if execErr != nil {
 			log.Println(string(stateList))
@@ -174,23 +176,25 @@ func extractCluster(namespace, kind, name string, isImport bool, dir string) {
 			}
 			saveK8SasTF(item.Object, model, resourceKey, gvk, dir)
 
+			if !isImport {
+				continue
+			}
+
 			//import
 			stateName := resourceKey + "." + k8s.ToSnake(itemName)
 			if strings.Contains(stateList, stateName) {
 				log.Println("skip import:", stateName)
 				continue
 			}
-			if isImport {
-				var id string
-				if apiResource.Namespaced {
-					id = k8s.CreateId(namespace, gvk.Kind, itemName)
-				} else {
-					id = k8s.CreateId("", gvk.Kind, itemName)
-				}
-				log.Printf("terraform import %s.%s %s\n", resourceKey, itemName, id)
-				if cmdOut, execErr := execCommand("terraform", []string{"import", stateName, id}); execErr != nil {
-					log.Println(string(cmdOut))
-				}
+			var id string
+			if apiResource.Namespaced {
+				id = k8s.CreateId(namespace, gvk.Kind, itemName)
+			} else {
+				id = k8s.CreateId("", gvk.Kind, itemName)
+			}
+			log.Printf("terraform import %s.%s %s\n", resourceKey, itemName, id)
+			if cmdOut, execErr := execCommand("terraform", []string{"import", stateName, id}); execErr != nil {
+				log.Println(string(cmdOut))
 			}
 		}
 	})
