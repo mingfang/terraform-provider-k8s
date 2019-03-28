@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"log"
-	"strings"
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/helper/structure"
@@ -35,7 +34,6 @@ func (this *K8S2TFSchemaVisitor) VisitArray(proto *proto.Array) {
 	} else {
 		this.Schema.Elem = schemaVisitor.Schema.Elem
 	}
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) VisitMap(proto *proto.Map) {
@@ -50,7 +48,6 @@ func (this *K8S2TFSchemaVisitor) VisitMap(proto *proto.Map) {
 	} else {
 		this.Schema.Elem = schemaVisitor.Schema.Elem
 	}
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) VisitPrimitive(proto *proto.Primitive) {
@@ -67,7 +64,6 @@ func (this *K8S2TFSchemaVisitor) VisitPrimitive(proto *proto.Primitive) {
 		log.Fatal("Invalid proto.Type:", proto.Type)
 	}
 	this.Schema.Description = proto.GetDescription()
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
@@ -77,7 +73,6 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
 		this.handleJSON()
 		this.Schema.Description = proto.GetDescription()
-		this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 		return
 	}
 
@@ -115,7 +110,6 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 	this.Schema.Description = proto.GetDescription()
 	this.Schema.Elem = &tfSchema.Resource{Schema: elements}
 	this.Schema.MaxItems = 1
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
 //loop detection, https://github.com/kubernetes/kubernetes/pull/70428/files
@@ -132,14 +126,12 @@ func (this *K8S2TFSchemaVisitor) VisitReference(r proto.Reference) {
 	delete(visitedReferences, r.Reference())
 
 	this.Schema.Description = r.GetDescription()
-	this.readOnly = strings.Contains(r.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) VisitArbitrary(proto *proto.Arbitrary) {
 	//log.Println("VisitArbitrary path:", this.path)
 	this.handleJSON()
 	this.Schema.Description = proto.GetDescription()
-	this.readOnly = strings.Contains(proto.GetDescription(), "Read-only")
 }
 
 func (this *K8S2TFSchemaVisitor) handleJSON() {
