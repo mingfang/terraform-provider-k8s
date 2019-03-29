@@ -77,7 +77,7 @@ func extractYamlBytes(yamlBytes []byte, kindFilter string, dir string) {
 	modelsMap := k8sConfig.ModelsMap
 
 	decoder := yaml.NewYAMLToJSONDecoder(bytes.NewReader(yamlBytes))
-	object := map[string]interface{}{}
+	var object map[string]interface{}
 	var decodeErr error
 	for {
 		decodeErr = decoder.Decode(&object)
@@ -88,24 +88,36 @@ func extractYamlBytes(yamlBytes []byte, kindFilter string, dir string) {
 			continue
 		}
 		//log.Println(object)
-		group, version, _ := k8s.SplitGroupVersion(object["apiVersion"].(string))
 		kind := object["kind"].(string)
-		if kindFilter != "" && strings.ToLower(kindFilter) != strings.ToLower(kind) {
-			//log.Println("Skip kind:", kind)
-			continue
+		var items []interface{}
+		if kind == "List" {
+			items = object["items"].([]interface{})
+		} else {
+			items = []interface{}{object}
 		}
-		resourceKey := k8s.ResourceKey(group, version, kind)
-		gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
-			Group:    group,
-			Version:  version,
-			Resource: kind,
-		})
-		model := modelsMap[gvk]
-		if model == nil {
-			log.Println("No Model For:", kind, gvk)
-			continue
+
+		for _, each := range items {
+			item := each.(map[string]interface{})
+			kind = item["kind"].(string)
+			if kindFilter != "" && strings.ToLower(kindFilter) != strings.ToLower(kind) {
+				//log.Println("Skip kind:", kind)
+				continue
+			}
+
+			group, version, _ := k8s.SplitGroupVersion(item["apiVersion"].(string))
+			resourceKey := k8s.ResourceKey(group, version, kind)
+			gvk, _ := k8sConfig.RESTMapper.KindFor(schema.GroupVersionResource{
+				Group:    group,
+				Version:  version,
+				Resource: kind,
+			})
+			model := modelsMap[gvk]
+			if model == nil {
+				log.Println("No Model For:", kind, gvk)
+				continue
+			}
+			saveK8SasTF(item, model, resourceKey, gvk, dir)
 		}
-		saveK8SasTF(object, model, resourceKey, gvk, dir)
 	}
 	if decodeErr != nil && decodeErr != io.EOF {
 		log.Println(decodeErr)
@@ -215,7 +227,7 @@ func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resource
 	visitor := NewK8S2TFPrintVisitor(&buf, fmt.Sprintf("resource \"%s\" \"%s\"", resourceKey, name), resourceKey, itemObject, 0, false)
 	model.Accept(visitor)
 
-	filename := k8s.ToSnake(gvk.Kind) + "-" + name + ".tf"
+	filename := name + "-" + k8s.ToSnake(gvk.Kind) + ".tf"
 	if dir != "" {
 		filename = dir + "/" + filename
 	}
