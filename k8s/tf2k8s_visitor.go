@@ -158,25 +158,34 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 				jsonPath = this.jsonPath + "/" + key
 			}
 		}
-		if IsSkipPath(keyPath) {
-			continue
-		}
-		var oldV interface{}
-		if this.resourceData.HasChange(keyPath) {
-			oldV, _ = this.resourceData.GetChange(keyPath)
-		} else {
+		if IsSkipPath(keyPath) || !this.resourceData.HasChange(keyPath) {
 			continue
 		}
 
 		if value, exists := this.resourceData.GetOkExists(keyPath); exists {
+			/* for create only */
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
 			v := proto.Fields[key]
 			v.Accept(visitor)
 			if visitor.Object != nil {
-				this.Object.(map[string]interface{})[key] = visitor.Object
+				//filter out empty blocks when creating
+				switch visitor.Object.(type) {
+				case []interface{}:
+					if len(visitor.Object.([]interface{})) > 0 {
+						this.Object.(map[string]interface{})[key] = visitor.Object
+					}
+				case map[string]interface{}:
+					if len(visitor.Object.(map[string]interface{})) > 0 {
+						this.Object.(map[string]interface{})[key] = visitor.Object
+					}
+				default:
+					this.Object.(map[string]interface{})[key] = visitor.Object
+				}
 				//log.Println("VisitKind keyPath:", keyPath, " Object:", visitor.Object)
 			}
 
+			/* for update only */
+			oldV, _ := this.resourceData.GetChange(keyPath)
 			var add = oldV == nil
 			switch oldV.(type) {
 			case []interface{}:
