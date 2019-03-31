@@ -89,18 +89,31 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 	if proto.Format == "int-or-string" {
 		switch this.context.(type) {
 		case int:
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.Itoa(this.context.(int))))
+			fmt.Fprintf(this.buf, "%s", strconv.Quote(strconv.Itoa(this.context.(int))))
 		case int64:
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.FormatInt(this.context.(int64), 10)))
+			fmt.Fprintf(this.buf, "%s", strconv.Quote(strconv.FormatInt(this.context.(int64), 10)))
 		case float64:
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(strconv.FormatFloat(this.context.(float64), 'f', -1, 64)))
+			fmt.Fprintf(this.buf, "%s", strconv.Quote(strconv.FormatFloat(this.context.(float64), 'f', -1, 64)))
 		default:
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(this.context.(string)))
+			fmt.Fprintf(this.buf, "%s", strconv.Quote(strings.Replace(this.context.(string), "${", "$${", -1)))
 		}
 	} else {
 		if proto.Type == "string" {
 			//escape ${
-			fmt.Fprintf(this.buf, "%v", strconv.Quote(strings.Replace(this.context.(string), "${", "$${", -1)))
+			value := strings.Replace(this.context.(string), "${", "$${", -1)
+			if strings.Contains(value, "\n") || strings.Contains(value, "\"") {
+				if this.isArray {
+					indent := this.indent
+					indentedValue := strings.Replace(value, "\n", "\n"+indent, -1)
+					fmt.Fprintf(this.buf, "<<EOF\n%s%s\n%sEOF\n%s", indent, indentedValue, indent, indent)
+				} else {
+					indent := this.indent + indentString
+					indentedValue := strings.Replace(value, "\n", "\n"+indent, -1)
+					fmt.Fprintf(this.buf, "<<EOF\n%s%s\n%sEOF", indent, indentedValue, indent)
+				}
+			} else {
+				fmt.Fprintf(this.buf, "%s", strconv.Quote(value))
+			}
 		} else {
 			fmt.Fprintf(this.buf, "%v", this.context)
 		}
