@@ -101,15 +101,16 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 		if proto.Type == "string" {
 			//escape ${
 			value := strings.Replace(this.context.(string), "${", "$${", -1)
+			value = strings.Replace(value, "%{", "%%{", -1)
 			if strings.Contains(value, "\n") || strings.Contains(value, "\"") {
 				if this.isArray {
 					indent := this.indent
 					indentedValue := strings.Replace(value, "\n", "\n"+indent, -1)
-					fmt.Fprintf(this.buf, "<<EOF\n%s%s\n%sEOF\n%s", indent, indentedValue, indent, indent)
+					fmt.Fprintf(this.buf, "<<-EOF\n%s%s\n%sEOF\n%s", indent, indentedValue, indent, indent)
 				} else {
 					indent := this.indent + indentString
 					indentedValue := strings.Replace(value, "\n", "\n"+indent, -1)
-					fmt.Fprintf(this.buf, "<<EOF\n%s%s\n%sEOF", indent, indentedValue, indent)
+					fmt.Fprintf(this.buf, "<<-EOF\n%s%s\n%sEOF", indent, indentedValue, indent)
 				}
 			} else {
 				fmt.Fprintf(this.buf, "%s", strconv.Quote(value))
@@ -174,5 +175,5 @@ func (this *K8S2TFPrintVisitor) handleJSON() {
 		log.Fatal(err)
 		return
 	}
-	fmt.Fprintf(this.buf, "%s%s = <<JSON\n%s%s\n%sJSON", this.indent, this.key, indent, jsonBytes, indent)
+	fmt.Fprintf(this.buf, "%s%s = <<-JSON\n%s%s\n%sJSON", this.indent, this.key, indent, jsonBytes, indent)
 }
