@@ -77,9 +77,9 @@ func extractYamlBytes(yamlBytes []byte, kindFilter string, dir string) {
 	modelsMap := k8sConfig.ModelsMap
 
 	decoder := yaml.NewYAMLToJSONDecoder(bytes.NewReader(yamlBytes))
-	var object map[string]interface{}
 	var decodeErr error
 	for {
+		var object map[string]interface{}
 		decodeErr = decoder.Decode(&object)
 		if decodeErr != nil {
 			break
@@ -235,4 +235,9 @@ func saveK8SasTF(itemObject map[string]interface{}, model proto.Schema, resource
 	if err := ioutil.WriteFile(filename, buf.Bytes(), 0644); err != nil {
 		log.Fatal("WriteFile err:", err)
 	}
+	//fmt
+	if cmdOut, execErr := execCommand("terraform", []string{"fmt", filename}); execErr != nil {
+		log.Println(string(cmdOut))
+	}
+
 }
