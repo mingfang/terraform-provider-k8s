@@ -39,7 +39,7 @@ locals {
         command = [
           "bash",
           "-cx",
-          <<EOF
+          <<-EOF
           export ZOO_SERVERS=$$(echo $$ZOO_SERVERS|sed "s|$$POD_NAME.${var.name}|0.0.0.0|")
           /docker-entrypoint.sh zkServer.sh start-foreground
           EOF
