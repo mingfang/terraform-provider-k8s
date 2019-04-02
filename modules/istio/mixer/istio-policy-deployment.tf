@@ -1,11 +1,11 @@
 resource "k8s_extensions_v1beta1_deployment" "istio-policy" {
   metadata {
     labels = {
-      "istio"    = "mixer"
-      "release"  = "istio"
       "app"      = "istio-mixer"
       "chart"    = "mixer"
       "heritage" = "Tiller"
+      "istio"    = "mixer"
+      "release"  = "istio"
     }
     name      = "istio-policy"
     namespace = "${var.namespace}"
@@ -30,12 +30,12 @@ resource "k8s_extensions_v1beta1_deployment" "istio-policy" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
+          "app"              = "policy"
           "chart"            = "mixer"
           "heritage"         = "Tiller"
           "istio"            = "mixer"
           "istio-mixer-type" = "policy"
           "release"          = "istio"
-          "app"              = "policy"
         }
       }
       spec {
@@ -214,8 +214,8 @@ resource "k8s_extensions_v1beta1_deployment" "istio-policy" {
           }
           resources {
             limits = {
-              "memory" = "128Mi"
               "cpu"    = "2"
+              "memory" = "128Mi"
             }
             requests = {
               "cpu"    = "10m"

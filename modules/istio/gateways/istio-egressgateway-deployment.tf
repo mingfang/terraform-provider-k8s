@@ -18,11 +18,11 @@ resource "k8s_extensions_v1beta1_deployment" "istio-egressgateway" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
+          "app"      = "istio-egressgateway"
           "chart"    = "gateways"
           "heritage" = "Tiller"
           "istio"    = "egressgateway"
           "release"  = "istio"
-          "app"      = "istio-egressgateway"
         }
       }
       spec {

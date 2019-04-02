@@ -22,9 +22,10 @@ tfextract -dir modules/istio-install/install -f modules/istio-install/istio-1.1.
 #remove dup crds
 rm modules/istio-install/install/*custom_resource_definition.tf
 
+#fix non-namespaced resource
+sed  -i -e 's|namespace = "istio-system"||' modules/istio-install/install/*-mutating_webhook_configuration.tf
+
 #namespace
-#mkdir -p modules/istio/istio
-#mv modules/istio-install/install/istio-system-namespace.tf modules/istio/istio
 sed -i -e 's|namespace = "istio-system"|namespace = "${var.namespace}"|g' modules/istio-install/install/*.tf
 sed -i -e 's| istio-system| ${var.namespace}|g' modules/istio-install/install/*.tf
 sed -i -e 's|=istio-system|=${var.namespace}|g' modules/istio-install/install/*.tf
@@ -40,9 +41,6 @@ sed -i -e 's|type = "LoadBalancer"|type = "${var.type}"|g' modules/istio-install
 sed -i -e 's|"2000m"|"2"|g' modules/istio-install/install/*.tf
 sed -i -e 's|"2048Mi"|"2Gi"|g' modules/istio-install/install/*.tf
 
-#fix non-namespaced resource
-sed  -i -e 's|namespace = "istio-system"||' modules/istio/sidecarInjectorWebhook/istio-sidecar-injector-mutating_webhook_configuration.tf
-
 #move files according to their app label
 grep -o -h '"chart" *= ".*"' modules/istio-install/install/*tf \
   | uniq | awk -F '"' '{printf "%s\n%s\n", $0, $4}' \
@@ -50,13 +48,13 @@ grep -o -h '"chart" *= ".*"' modules/istio-install/install/*tf \
       'mkdir -p modules/istio/$1; grep -l "$0" modules/istio-install/install/*tf | xargs -r -I{} mv {} modules/istio/$1'
 
 #istio
-mv modules/istio-install/install/istio-reader-cluster_role.tf modules/istio/istio
-mv modules/istio-install/install/istio-multi-*.tf modules/istio/istio
+mv modules/istio-install/install/istio-reader-cluster_role.tf modules/istio/istio-1.1.0
+mv modules/istio-install/install/istio-multi-*.tf modules/istio/istio-1.1.0
 
 #mixer
 mv modules/istio-install/install/promtcpconnection*.tf modules/istio/mixer
 mv modules/istio-install/install/tcpconnections*.tf modules/istio/mixer
 
 #ingressgateway
-mv modules/istio-install/install/*ingressgateway*.tf modules/istio/istio-ingressgateway
+mv modules/istio-install/install/*ingressgateway*.tf modules/istio/gateways
 

@@ -5,10 +5,10 @@ resource "k8s_core_v1_secret" "kiali" {
   }
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "kiali"
       "chart"    = "kiali"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "kiali"
     namespace = "${var.namespace}"

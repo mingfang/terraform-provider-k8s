@@ -1,11 +1,11 @@
 resource "k8s_core_v1_service" "istio-pilot" {
   metadata {
     labels = {
-      "istio"    = "pilot"
-      "release"  = "istio"
       "app"      = "pilot"
       "chart"    = "pilot"
       "heritage" = "Tiller"
+      "istio"    = "pilot"
+      "release"  = "istio"
     }
     name      = "istio-pilot"
     namespace = "${var.namespace}"

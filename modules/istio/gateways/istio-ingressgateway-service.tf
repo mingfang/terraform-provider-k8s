@@ -1,11 +1,11 @@
 resource "k8s_core_v1_service" "istio-ingressgateway" {
   metadata {
     labels = {
-      "release"  = "istio"
       "app"      = "istio-ingressgateway"
       "chart"    = "gateways"
       "heritage" = "Tiller"
       "istio"    = "ingressgateway"
+      "release"  = "istio"
     }
     name      = "istio-ingressgateway"
     namespace = "${var.namespace}"

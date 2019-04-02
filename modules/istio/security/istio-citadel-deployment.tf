@@ -1,11 +1,11 @@
 resource "k8s_extensions_v1beta1_deployment" "istio-citadel" {
   metadata {
     labels = {
-      "release"  = "istio"
       "app"      = "security"
       "chart"    = "security"
       "heritage" = "Tiller"
       "istio"    = "citadel"
+      "release"  = "istio"
     }
     name      = "istio-citadel"
     namespace = "${var.namespace}"
@@ -25,11 +25,11 @@ resource "k8s_extensions_v1beta1_deployment" "istio-citadel" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
-          "release"  = "istio"
           "app"      = "security"
           "chart"    = "security"
           "heritage" = "Tiller"
           "istio"    = "citadel"
+          "release"  = "istio"
         }
       }
       spec {

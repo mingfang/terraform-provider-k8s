@@ -4,10 +4,10 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "meshpoli
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "release"  = "istio"
       "app"      = "istio-citadel"
       "chart"    = "istio"
       "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name = "meshpolicies.authentication.istio.io"
   }

@@ -4,10 +4,10 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "sidecars
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
+      "app"      = "istio-pilot"
       "chart"    = "istio"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "istio-pilot"
     }
     name = "sidecars.networking.istio.io"
   }

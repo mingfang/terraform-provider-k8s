@@ -13,17 +13,17 @@ resource "k8s_extensions_v1beta1_deployment" "istio-tracing" {
     template {
       metadata {
         annotations = {
-          "scheduler.alpha.kubernetes.io/critical-pod" = ""
-          "sidecar.istio.io/inject"                    = "false"
           "prometheus.io/path"                         = "/jaeger/metrics"
           "prometheus.io/port"                         = "16686"
           "prometheus.io/scrape"                       = "true"
+          "scheduler.alpha.kubernetes.io/critical-pod" = ""
+          "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
-          "release"  = "istio"
           "app"      = "jaeger"
           "chart"    = "tracing"
           "heritage" = "Tiller"
+          "release"  = "istio"
         }
       }
       spec {

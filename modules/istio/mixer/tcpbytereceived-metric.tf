@@ -1,10 +1,10 @@
 resource "k8s_config_istio_io_v1alpha2_metric" "tcpbytereceived" {
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "mixer"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "tcpbytereceived"
     namespace = "${var.namespace}"

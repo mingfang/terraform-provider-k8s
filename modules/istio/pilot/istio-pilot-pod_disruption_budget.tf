@@ -14,9 +14,9 @@ resource "k8s_policy_v1beta1_pod_disruption_budget" "istio-pilot" {
     min_available = "1"
     selector {
       match_labels = {
+        "app"     = "pilot"
         "istio"   = "pilot"
         "release" = "istio"
-        "app"     = "pilot"
       }
     }
   }

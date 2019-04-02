@@ -1,11 +1,11 @@
 resource "k8s_core_v1_service" "jaeger-query" {
   metadata {
     labels = {
-      "jaeger-infra" = "jaeger-service"
-      "release"      = "istio"
       "app"          = "jaeger"
       "chart"        = "tracing"
       "heritage"     = "Tiller"
+      "jaeger-infra" = "jaeger-service"
+      "release"      = "istio"
     }
     name      = "jaeger-query"
     namespace = "${var.namespace}"

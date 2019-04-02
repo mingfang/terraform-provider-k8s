@@ -1,10 +1,10 @@
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "istio-grafana-post-install-role-binding-istio-system" {
   metadata {
     labels = {
+      "app"      = "grafana"
       "chart"    = "grafana"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "grafana"
     }
     name = "istio-grafana-post-install-role-binding-istio-system"
   }

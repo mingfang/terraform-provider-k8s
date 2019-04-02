@@ -32,8 +32,8 @@ resource "k8s_core_v1_service" "istio-telemetry" {
       port = 42422
     }
     selector = {
-      "istio-mixer-type" = "telemetry"
       "istio"            = "mixer"
+      "istio-mixer-type" = "telemetry"
     }
   }
 }

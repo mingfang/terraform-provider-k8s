@@ -4,12 +4,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "checknot
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "istio"    = "mixer-instance"
-      "package"  = "checknothing"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "istio"
       "heritage" = "Tiller"
+      "istio"    = "mixer-instance"
+      "package"  = "checknothing"
+      "release"  = "istio"
     }
     name = "checknothings.config.istio.io"
   }

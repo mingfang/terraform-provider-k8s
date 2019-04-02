@@ -4,12 +4,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "attribut
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
+      "app"      = "mixer"
       "chart"    = "istio"
       "heritage" = "Tiller"
       "istio"    = "core"
       "package"  = "istio.io.mixer"
       "release"  = "istio"
-      "app"      = "mixer"
     }
     name = "attributemanifests.config.istio.io"
   }

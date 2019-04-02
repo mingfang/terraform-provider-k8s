@@ -1,10 +1,10 @@
 resource "k8s_networking_istio_io_v1alpha3_destination_rule" "istio-telemetry" {
   metadata {
     labels = {
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "mixer"
       "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "istio-telemetry"
     namespace = "${var.namespace}"

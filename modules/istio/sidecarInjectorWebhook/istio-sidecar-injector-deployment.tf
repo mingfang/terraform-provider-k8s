@@ -25,11 +25,11 @@ resource "k8s_extensions_v1beta1_deployment" "istio-sidecar-injector" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
+          "app"      = "sidecarInjectorWebhook"
+          "chart"    = "sidecarInjectorWebhook"
           "heritage" = "Tiller"
           "istio"    = "sidecar-injector"
           "release"  = "istio"
-          "app"      = "sidecarInjectorWebhook"
-          "chart"    = "sidecarInjectorWebhook"
         }
       }
       spec {

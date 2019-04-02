@@ -6,10 +6,10 @@ resource "k8s_rbac_authorization_k8s_io_v1_cluster_role" "istio-cleanup-secrets-
       "helm.sh/hook-weight"        = "1"
     }
     labels = {
+      "app"      = "security"
       "chart"    = "security"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "security"
     }
     name = "istio-cleanup-secrets-istio-system"
   }

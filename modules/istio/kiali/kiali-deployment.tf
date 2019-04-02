@@ -23,10 +23,10 @@ resource "k8s_extensions_v1beta1_deployment" "kiali" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
+          "app"      = "kiali"
           "chart"    = "kiali"
           "heritage" = "Tiller"
           "release"  = "istio"
-          "app"      = "kiali"
         }
         name = "kiali"
       }

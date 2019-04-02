@@ -4,10 +4,10 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "clusterr
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "istio"    = "rbac"
-      "release"  = "istio"
       "app"      = "istio-pilot"
       "heritage" = "Tiller"
+      "istio"    = "rbac"
+      "release"  = "istio"
     }
     name = "clusterrbacconfigs.rbac.istio.io"
   }

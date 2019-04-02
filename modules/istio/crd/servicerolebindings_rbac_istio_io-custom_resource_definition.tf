@@ -4,12 +4,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "servicer
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "istio"    = "rbac"
-      "package"  = "istio.io.mixer"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "istio"
       "heritage" = "Tiller"
+      "istio"    = "rbac"
+      "package"  = "istio.io.mixer"
+      "release"  = "istio"
     }
     name = "servicerolebindings.rbac.istio.io"
   }

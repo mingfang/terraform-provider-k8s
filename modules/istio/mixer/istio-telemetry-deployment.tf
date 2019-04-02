@@ -227,8 +227,8 @@ resource "k8s_extensions_v1beta1_deployment" "istio-telemetry" {
               "memory" = "128Mi"
             }
             requests = {
-              "memory" = "40Mi"
               "cpu"    = "10m"
+              "memory" = "40Mi"
             }
           }
 

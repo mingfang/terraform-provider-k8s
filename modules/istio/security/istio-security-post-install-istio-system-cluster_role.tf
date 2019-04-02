@@ -1,10 +1,10 @@
 resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "istio-security-post-install-istio-system" {
   metadata {
     labels = {
+      "app"      = "security"
       "chart"    = "security"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "security"
     }
     name = "istio-security-post-install-istio-system"
   }

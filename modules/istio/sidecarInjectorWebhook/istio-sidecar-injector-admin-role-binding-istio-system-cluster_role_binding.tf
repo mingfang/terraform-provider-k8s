@@ -1,11 +1,11 @@
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "istio-sidecar-injector-admin-role-binding-istio-system" {
   metadata {
     labels = {
+      "app"      = "sidecarInjectorWebhook"
+      "chart"    = "sidecarInjectorWebhook"
       "heritage" = "Tiller"
       "istio"    = "sidecar-injector"
       "release"  = "istio"
-      "app"      = "sidecarInjectorWebhook"
-      "chart"    = "sidecarInjectorWebhook"
     }
     name = "istio-sidecar-injector-admin-role-binding-istio-system"
   }

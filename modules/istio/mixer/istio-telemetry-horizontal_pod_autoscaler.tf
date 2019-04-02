@@ -1,10 +1,10 @@
 resource "k8s_autoscaling_v2beta1_horizontal_pod_autoscaler" "istio-telemetry" {
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "mixer"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "istio-telemetry"
     namespace = "${var.namespace}"

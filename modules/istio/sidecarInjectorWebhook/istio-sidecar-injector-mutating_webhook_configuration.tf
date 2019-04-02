@@ -1,12 +1,13 @@
 resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration" "istio-sidecar-injector" {
   metadata {
     labels = {
+      "app"      = "sidecarInjectorWebhook"
       "chart"    = "sidecarInjectorWebhook"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "sidecarInjectorWebhook"
     }
     name      = "istio-sidecar-injector"
+    
   }
 
   webhooks {

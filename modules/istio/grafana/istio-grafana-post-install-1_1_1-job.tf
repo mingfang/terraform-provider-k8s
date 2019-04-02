@@ -5,10 +5,10 @@ resource "k8s_batch_v1_job" "istio-grafana-post-install-1_1_1" {
       "helm.sh/hook-delete-policy" = "hook-succeeded"
     }
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "grafana"
       "chart"    = "grafana"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "istio-grafana-post-install-1.1.1"
     namespace = "${var.namespace}"

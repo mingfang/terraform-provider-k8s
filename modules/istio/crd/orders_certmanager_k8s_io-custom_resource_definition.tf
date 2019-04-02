@@ -4,10 +4,10 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "release"  = "istio"
       "app"      = "certmanager"
       "chart"    = "certmanager"
       "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name = "orders.certmanager.k8s.io"
   }

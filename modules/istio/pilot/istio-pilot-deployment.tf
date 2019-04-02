@@ -4,11 +4,11 @@ resource "k8s_extensions_v1beta1_deployment" "istio-pilot" {
       "checksum/config-volume" = "f8da08b6b8c170dde721efd680270b2901e750d4aa186ebb6c22bef5b78a43f9"
     }
     labels = {
+      "app"      = "pilot"
+      "chart"    = "pilot"
       "heritage" = "Tiller"
       "istio"    = "pilot"
       "release"  = "istio"
-      "app"      = "pilot"
-      "chart"    = "pilot"
     }
     name      = "istio-pilot"
     namespace = "${var.namespace}"
@@ -28,8 +28,8 @@ resource "k8s_extensions_v1beta1_deployment" "istio-pilot" {
     template {
       metadata {
         annotations = {
-          "sidecar.istio.io/inject"                    = "false"
           "scheduler.alpha.kubernetes.io/critical-pod" = ""
+          "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
           "app"      = "pilot"

@@ -306,10 +306,10 @@ resource "k8s_core_v1_config_map" "prometheus" {
   }
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release" = "istio"
       "app" = "prometheus"
       "chart" = "prometheus"
+      "heritage" = "Tiller"
+      "release" = "istio"
     }
     name = "prometheus"
     namespace = "${var.namespace}"

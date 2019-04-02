@@ -6,11 +6,11 @@ resource "k8s_core_v1_config_map" "istio-grafana-configuration-dashboards-mixer-
   }
   metadata {
     labels = {
+      "app" = "grafana"
       "chart" = "grafana"
       "heritage" = "Tiller"
       "istio" = "grafana"
       "release" = "istio"
-      "app" = "grafana"
     }
     name = "istio-grafana-configuration-dashboards-mixer-dashboard"
     namespace = "${var.namespace}"

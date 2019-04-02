@@ -1,10 +1,10 @@
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role_binding" "istio-mixer-admin-role-binding-istio-system" {
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "mixer"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name = "istio-mixer-admin-role-binding-istio-system"
   }

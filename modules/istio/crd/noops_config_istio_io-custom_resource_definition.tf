@@ -4,12 +4,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "noops_co
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "istio"    = "mixer-adapter"
-      "package"  = "noop"
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "istio"
       "heritage" = "Tiller"
+      "istio"    = "mixer-adapter"
+      "package"  = "noop"
+      "release"  = "istio"
     }
     name = "noops.config.istio.io"
   }

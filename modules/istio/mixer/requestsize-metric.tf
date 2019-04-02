@@ -1,10 +1,10 @@
 resource "k8s_config_istio_io_v1alpha2_metric" "requestsize" {
   metadata {
     labels = {
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "mixer"
       "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "requestsize"
     namespace = "${var.namespace}"

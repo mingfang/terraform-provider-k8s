@@ -4,9 +4,9 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "zipkins_
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "package" = "zipkin"
       "app"     = "mixer"
       "istio"   = "mixer-adapter"
+      "package" = "zipkin"
     }
     name = "zipkins.config.istio.io"
   }

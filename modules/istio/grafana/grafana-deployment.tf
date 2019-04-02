@@ -1,10 +1,10 @@
 resource "k8s_extensions_v1beta1_deployment" "grafana" {
   metadata {
     labels = {
-      "release"  = "istio"
       "app"      = "grafana"
       "chart"    = "grafana"
       "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "grafana"
     namespace = "${var.namespace}"

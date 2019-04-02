@@ -1,11 +1,11 @@
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role" "istio-sidecar-injector-istio-system" {
   metadata {
     labels = {
+      "app"      = "sidecarInjectorWebhook"
       "chart"    = "sidecarInjectorWebhook"
       "heritage" = "Tiller"
       "istio"    = "sidecar-injector"
       "release"  = "istio"
-      "app"      = "sidecarInjectorWebhook"
     }
     name = "istio-sidecar-injector-istio-system"
   }

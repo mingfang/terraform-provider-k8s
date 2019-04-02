@@ -1,7 +1,6 @@
 resource "k8s_core_v1_config_map" "istio" {
   data = {
-    "meshNetworks" = "networks: {}"
-    "mesh"         = <<-EOF
+    "mesh" = <<-EOF
       # Set the following variable to true to disable policy checks by the Mixer.
       # Note that metrics will still be reported to the Mixer.
       disablePolicyChecks: false
@@ -120,6 +119,7 @@ resource "k8s_core_v1_config_map" "istio" {
         # Address where istio Pilot service is running
         discoveryAddress: istio-pilot.${var.namespace}:15010
       EOF
+    "meshNetworks" = "networks: {}"
   }
   metadata {
     labels = {

@@ -1,10 +1,10 @@
 resource "k8s_core_v1_service" "kiali" {
   metadata {
     labels = {
-      "heritage" = "Tiller"
-      "release"  = "istio"
       "app"      = "kiali"
       "chart"    = "kiali"
+      "heritage" = "Tiller"
+      "release"  = "istio"
     }
     name      = "kiali"
     namespace = "${var.namespace}"

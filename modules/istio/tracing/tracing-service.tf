@@ -1,10 +1,10 @@
 resource "k8s_core_v1_service" "tracing" {
   metadata {
     labels = {
+      "app"      = "jaeger"
       "chart"    = "tracing"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "jaeger"
     }
     name      = "tracing"
     namespace = "${var.namespace}"

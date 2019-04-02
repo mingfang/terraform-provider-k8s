@@ -1,13 +1,13 @@
 resource "k8s_policy_v1beta1_pod_disruption_budget" "istio-policy" {
   metadata {
     labels = {
-      "istio-mixer-type" = "policy"
-      "release"          = "istio"
-      "version"          = "1.1.0"
       "app"              = "policy"
       "chart"            = "mixer"
       "heritage"         = "Tiller"
       "istio"            = "mixer"
+      "istio-mixer-type" = "policy"
+      "release"          = "istio"
+      "version"          = "1.1.0"
     }
     name      = "istio-policy"
     namespace = "${var.namespace}"

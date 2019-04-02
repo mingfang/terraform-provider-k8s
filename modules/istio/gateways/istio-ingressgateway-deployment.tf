@@ -1,11 +1,11 @@
 resource "k8s_extensions_v1beta1_deployment" "istio-ingressgateway" {
   metadata {
     labels = {
+      "app"      = "istio-ingressgateway"
+      "chart"    = "gateways"
       "heritage" = "Tiller"
       "istio"    = "ingressgateway"
       "release"  = "istio"
-      "app"      = "istio-ingressgateway"
-      "chart"    = "gateways"
     }
     name      = "istio-ingressgateway"
     namespace = "${var.namespace}"
@@ -18,11 +18,11 @@ resource "k8s_extensions_v1beta1_deployment" "istio-ingressgateway" {
           "sidecar.istio.io/inject"                    = "false"
         }
         labels = {
-          "istio"    = "ingressgateway"
-          "release"  = "istio"
           "app"      = "istio-ingressgateway"
           "chart"    = "gateways"
           "heritage" = "Tiller"
+          "istio"    = "ingressgateway"
+          "release"  = "istio"
         }
       }
       spec {

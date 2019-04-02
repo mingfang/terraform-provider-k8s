@@ -1,10 +1,10 @@
 resource "k8s_autoscaling_v2beta1_horizontal_pod_autoscaler" "istio-egressgateway" {
   metadata {
     labels = {
+      "app"      = "egressgateway"
       "chart"    = "gateways"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "egressgateway"
     }
     name      = "istio-egressgateway"
     namespace = "${var.namespace}"

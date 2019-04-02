@@ -4,12 +4,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "rbacs_co
       "helm.sh/resource-policy" = "keep"
     }
     labels = {
-      "release"  = "istio"
       "app"      = "mixer"
       "chart"    = "istio"
       "heritage" = "Tiller"
       "istio"    = "mixer-adapter"
       "package"  = "rbac"
+      "release"  = "istio"
     }
     name = "rbacs.config.istio.io"
   }

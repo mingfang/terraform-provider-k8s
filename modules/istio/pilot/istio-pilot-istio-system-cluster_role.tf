@@ -1,10 +1,10 @@
 resource "k8s_rbac_authorization_k8s_io_v1_cluster_role" "istio-pilot-istio-system" {
   metadata {
     labels = {
+      "app"      = "pilot"
       "chart"    = "pilot"
       "heritage" = "Tiller"
       "release"  = "istio"
-      "app"      = "pilot"
     }
     name = "istio-pilot-istio-system"
   }
