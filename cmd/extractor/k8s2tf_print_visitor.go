@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -63,7 +64,12 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 	}
 	//fmt.Fprintf(this.buf, "%s//VisitMap path: %s\n", this.indent, proto.GetPath())
 	fmt.Fprintf(this.buf, "%s%s = {", this.indent, this.key)
-	for key := range this.context.(map[string]interface{}) {
+	keys := make([]string, 0, len(this.context.(map[string]interface{})))
+	for k := range this.context.(map[string]interface{}) {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
 		path := this.path + "." + k8s.ToSnake(key)
 		//log.Println("VisitMap path:", path)
 		if k8s.IsSkipPath(path) || IsSkipPrintPath(path) {
