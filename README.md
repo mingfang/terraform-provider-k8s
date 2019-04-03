@@ -19,10 +19,10 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
  
 ## Install
 ```sh
-docker pull registry.rebelsoft.com/terraform
-alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform terraform'
-alias tfextract='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform extractor'
-alias tfgenerate='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform generator'
+docker pull registry.rebelsoft.com/terraform-provider-k8s
+alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s terraform'
+alias tfextract='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s extractor'
+alias tfgenerate='docker run -v `pwd`/kubeconfig:/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s generator'
 ```
 
 ## Init
