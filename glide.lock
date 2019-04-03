@@ -1,5 +1,5 @@
 hash: 8005f37bcb04c7fa3b777e0d036128ff87d31732bd3b25751c402541a878126e
-updated: 2019-03-26T00:11:03.466666732Z
+updated: 2019-04-02T21:40:37.303552836Z
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -39,7 +39,7 @@ imports:
   - internal/parser
   - internal/token
 - name: github.com/aws/aws-sdk-go
-  version: 7798c2e0edc02ba058f7672d32f4ebf6603b5fc6
+  version: 530b5b3f5425f7e8b4a5dc25cbf84d656e34e749
   subpackages:
   - aws
   - aws/awserr
@@ -98,7 +98,7 @@ imports:
   subpackages:
   - log
 - name: github.com/envoyproxy/go-control-plane
-  version: 0ad6fa1cf0b9b6ca8f3617a7188a568e81f40b87
+  version: 6c74b8fb2a6fa2995232e30093bad21b678c2859
   subpackages:
   - envoy/admin/v2alpha
   - envoy/api/v2
@@ -123,7 +123,6 @@ imports:
   - envoy/config/grpc_credential/v2alpha
   - envoy/config/metrics/v2
   - envoy/config/overload/v2alpha
-  - envoy/config/ratelimit/v2
   - envoy/config/rbac/v2alpha
   - envoy/config/trace/v2
   - envoy/service/discovery/v2
@@ -191,7 +190,7 @@ imports:
   - cmp/internal/function
   - cmp/internal/value
 - name: github.com/google/go-github
-  version: fc51e0a08ebd23dfaa8cacd77444a8ca57df151f
+  version: 14c49e15859cee6aa620bfac2dad50899379c20e
   subpackages:
   - github
 - name: github.com/google/go-querystring
@@ -201,7 +200,7 @@ imports:
 - name: github.com/google/gofuzz
   version: 24818f796faf91cd76ec7bddd72458fbced7a6c1
 - name: github.com/google/uuid
-  version: 0cd6bf5da1e1c83f8b45653022c74f71af0538a4
+  version: 8c31c18f31ede9fc8eae72290a7e7a8064e9b3e3
 - name: github.com/googleapis/gnostic
   version: 0c5108395e2debce0d731cf0287ddf7242066aba
   subpackages:
@@ -219,9 +218,9 @@ imports:
 - name: github.com/grpc-ecosystem/go-grpc-middleware
   version: cfaf5686ec79ff8344257723b6f5ba1ae0ffeb4d
 - name: github.com/grpc-ecosystem/go-grpc-prometheus
-  version: 68e3a13e41175110a447e67246a59873d6aca902
+  version: ae0d8660c5f2108ca70a3776dbe0fb53cf79f1da
 - name: github.com/hashicorp/consul
-  version: 74c31c540f9ca88ccaf2c8fba861a17e3338b613
+  version: c2da314eeb7ba30cc7f5fafb28c8c869d4eae8a1
   subpackages:
   - api
 - name: github.com/hashicorp/errwrap
@@ -229,7 +228,7 @@ imports:
 - name: github.com/hashicorp/go-cleanhttp
   version: eda1e5db218aad1db63ca4642c8906b26bcf2744
 - name: github.com/hashicorp/go-getter
-  version: d9c5f687368ab14e686e0009a756480b2ea4611d
+  version: 69dec094fde6ac8d2659bff743fc0b2096ccb54f
   subpackages:
   - helper/url
 - name: github.com/hashicorp/go-hclog
@@ -266,7 +265,7 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/hashicorp/hcl2
-  version: f9f92da699d801c8beee28dbbb7c09e3dce2ae66
+  version: 8b450a7d58f92d440d1a68555738727908ecc089
   subpackages:
   - ext/dynblock
   - ext/typeexpr
@@ -291,7 +290,7 @@ imports:
   subpackages:
   - coordinate
 - name: github.com/hashicorp/terraform
-  version: d5bb09b13b661a660fc5bfa8bd92fedd2f4da6c1
+  version: 7ced46425eba13ce5ad2c836f9124d6441520449
   subpackages:
   - addrs
   - command/format
@@ -318,6 +317,7 @@ imports:
   - internal/modsdir
   - internal/tfplugin5
   - lang
+  - lang/blocktoattr
   - lang/funcs
   - moduledeps
   - plans
@@ -339,7 +339,7 @@ imports:
   - tfdiags
   - version
 - name: github.com/hashicorp/terraform-config-inspect
-  version: b0707673339c3783277b0c74d4d849ab58750421
+  version: 8022a2663a706bf2f36bfaf7968a9234f9e5a571
   subpackages:
   - tfconfig
 - name: github.com/hashicorp/yamux
@@ -423,15 +423,13 @@ imports:
   subpackages:
   - go
 - name: github.com/prometheus/common
-  version: 1ab4d74fc89940cfbc3c2b3a89821336cdefa119
+  version: 3a34257982869c0624da7d3ec18755eb081df04f
   subpackages:
   - expfmt
   - internal/bitbucket.org/ww/goautoneg
   - model
 - name: github.com/prometheus/procfs
-  version: 65c1f6f8f0fc1e2185eb9863a3bc751496404259
-  subpackages:
-  - xfs
+  version: af7bedc223fba51343f25a6fa7aba84355d0357a
 - name: github.com/prometheus/prom2json
   version: 47e3ee600b5a838d6b19b887fc51d4b77c52fd4e
 - name: github.com/PuerkitoBio/purell
@@ -439,7 +437,7 @@ imports:
 - name: github.com/PuerkitoBio/urlesc
   version: 5bd2802263f21d8788851d5305584c82a5c75d7e
 - name: github.com/spf13/afero
-  version: f4711e4db9e9a1d3887343acb72b2bbfc2f686f5
+  version: 588a75ec4f32903aa5e39a2619ba6a4631e28424
   subpackages:
   - mem
 - name: github.com/spf13/cobra
@@ -453,7 +451,7 @@ imports:
   - internal/xlog
   - lzma
 - name: github.com/vmihailenco/msgpack
-  version: abe680308d0beea7c2c861876fdc269996e7662e
+  version: c2fc210f30a2aca9db880cc017a92c169c999253
   subpackages:
   - codes
 - name: github.com/yl2chen/cidranger
@@ -472,12 +470,13 @@ imports:
   - cty/msgpack
   - cty/set
 - name: go.opencensus.io
-  version: 5ae9166f90ff989c557e45fcb9592ac59afa0fa0
+  version: d0e431e6d06ef7615294bf1e2e29fc509c0ab03e
   subpackages:
   - exporter/prometheus
   - internal
   - internal/tagencoding
   - metric/metricdata
+  - metric/metricproducer
   - plugin/ocgrpc
   - plugin/ochttp
   - plugin/ochttp/propagation/b3
@@ -574,7 +573,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: a5a891a283eab185c3f0493093b80f60e319aab1
+  version: c30064f755a065acb7c5446e8b69067240dcdd39
   subpackages:
   - gensupport
   - googleapi
@@ -604,7 +603,7 @@ imports:
   - socket
   - urlfetch
 - name: google.golang.org/genproto
-  version: e79c0c59cdb5e117ef82a6f885294df3d74065d5
+  version: f467c93bbac2133ff463e1f93d18d8f9f3f04451
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
@@ -649,7 +648,7 @@ imports:
 - name: gopkg.in/yaml.v2
   version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 - name: istio.io/api
-  version: 785ea83cee806d5a68ceb25a46fde0f65e0b56c9
+  version: 8a1240dcc36930d13abf4fbcb05f3ceb8bc04c39
   subpackages:
   - authentication/v1alpha1
   - envoy/config/filter/http/authn/v2alpha1
@@ -662,7 +661,7 @@ imports:
   - policy/v1beta1
   - rbac/v1alpha1
 - name: istio.io/istio
-  version: 506dffeb7e66282a2de662e6c301e9f64f942800
+  version: e4d174a8625e0ce63cc47c65354df619f4047846
   subpackages:
   - galley/pkg/metadata
   - galley/pkg/runtime/resource
@@ -703,7 +702,7 @@ imports:
   - pilot/pkg/serviceregistry/external
   - pilot/pkg/serviceregistry/kube
   - pilot/pkg/serviceregistry/memory
-  - pkg/adsc
+  - pkg/annotations
   - pkg/appsignals
   - pkg/bootstrap
   - pkg/bootstrap/platform
@@ -774,7 +773,7 @@ imports:
   - storage/v1alpha1
   - storage/v1beta1
 - name: k8s.io/apiextensions-apiserver
-  version: 1c09d17c135214f70b41ba7f027246a6bcdd87ce
+  version: 4cac3cbacb4e2d131a0c467d1d8f23026ee6d552
   subpackages:
   - pkg/apis/apiextensions
   - pkg/apis/apiextensions/v1beta1
