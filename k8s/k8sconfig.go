@@ -161,7 +161,7 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 }
 
 func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, schema.GroupVersionKind)) {
-	lists, _ := this.DiscoveryClient.ServerPreferredResources()
+	lists, _ := this.DiscoveryClient.ServerResources()
 	for _, list := range lists {
 		//log.Println("name:", group.Name, "group:", group.PreferredVersion.GroupVersion, "version:", group.PreferredVersion.Version)
 		if len(list.APIResources) == 0 {
