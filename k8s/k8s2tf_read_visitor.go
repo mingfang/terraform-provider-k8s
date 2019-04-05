@@ -24,6 +24,10 @@ func NewK8S2TFReadVisitor(path string, context interface{}) *K8S2TFReadVisitor {
 
 func (this *K8S2TFReadVisitor) VisitArray(proto *proto.Array) {
 	//log.Println("VisitArray path:", this.path)
+	if this.context == nil {
+		return
+	}
+
 	this.Object = make([]interface{}, len(this.context.([]interface{})))
 	for i, v := range this.context.([]interface{}) {
 		visitor := NewK8S2TFReadVisitor(this.path, v)
