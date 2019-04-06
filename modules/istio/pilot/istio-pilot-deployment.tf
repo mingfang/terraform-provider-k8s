@@ -146,7 +146,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-pilot" {
             name  = "PILOT_DISABLE_XDS_MARSHALING_TO_ANY"
             value = "1"
           }
-          image             = "docker.io/istio/pilot:1.1.1"
+          image             = "docker.io/istio/pilot:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "discovery"
 
@@ -222,7 +222,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-pilot" {
               }
             }
           }
-          image             = "docker.io/istio/proxyv2:1.1.1"
+          image             = "docker.io/istio/proxyv2:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "istio-proxy"
 

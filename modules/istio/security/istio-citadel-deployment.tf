@@ -103,7 +103,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-citadel" {
             "--monitoring-port=15014",
             "--self-signed-ca=true",
           ]
-          image             = "docker.io/istio/citadel:1.1.1"
+          image             = "docker.io/istio/citadel:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "citadel"
           resources {

@@ -118,7 +118,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-policy" {
             name  = "GOMAXPROCS"
             value = "6"
           }
-          image             = "docker.io/istio/mixer:1.1.1"
+          image             = "docker.io/istio/mixer:1.1.2"
           image_pull_policy = "IfNotPresent"
           liveness_probe {
             http_get {
@@ -197,7 +197,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-policy" {
               }
             }
           }
-          image             = "docker.io/istio/proxyv2:1.1.1"
+          image             = "docker.io/istio/proxyv2:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "istio-proxy"
 

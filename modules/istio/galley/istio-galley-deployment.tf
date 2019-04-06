@@ -107,7 +107,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-galley" {
             "/etc/config/validatingwebhookconfiguration.yaml",
             "--monitoringPort=15014",
           ]
-          image             = "docker.io/istio/galley:1.1.1"
+          image             = "docker.io/istio/galley:1.1.2"
           image_pull_policy = "IfNotPresent"
           liveness_probe {
             exec {

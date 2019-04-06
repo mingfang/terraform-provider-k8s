@@ -162,7 +162,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-egressgateway" {
             name  = "ISTIO_META_ROUTER_MODE"
             value = "sni-dnat"
           }
-          image             = "docker.io/istio/proxyv2:1.1.1"
+          image             = "docker.io/istio/proxyv2:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "istio-proxy"
 

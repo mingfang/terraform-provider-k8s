@@ -4,20 +4,21 @@ mkdir -p modules/istio/crd
 mkdir -p modules/istio-install/install
 
 alias tfextract='go run cmd/extractor/*go'
+VERSION="1.1.2"
 
 #must extract and apply CRDs first
 
-tfextract -dir modules/istio/crd -file modules/istio-install/istio-1.1.1/install/kubernetes/helm/istio-init/files/crd-10.yaml
+tfextract -dir modules/istio/crd -file modules/istio-install/istio-${VERSION}/install/kubernetes/helm/istio-init/files/crd-10.yaml
 
-tfextract -dir modules/istio/crd -file modules/istio-install/istio-1.1.1/install/kubernetes/helm/istio-init/files/crd-11.yaml
+tfextract -dir modules/istio/crd -file modules/istio-install/istio-${VERSION}/install/kubernetes/helm/istio-init/files/crd-11.yaml
 
 
-tfextract -dir modules/istio/crd -f modules/istio-install/istio-1.1.1/install/kubernetes/helm/istio-init/files/crd-certmanager-10.yaml
+tfextract -dir modules/istio/crd -f modules/istio-install/istio-${VERSION}/install/kubernetes/helm/istio-init/files/crd-certmanager-10.yaml
 
-tfextract -dir modules/istio/crd -f modules/istio-install/istio-1.1.1/install/kubernetes/helm/istio-init/files/crd-certmanager-11.yaml
+tfextract -dir modules/istio/crd -f modules/istio-install/istio-${VERSION}/install/kubernetes/helm/istio-init/files/crd-certmanager-11.yaml
 
 #extract demo
-tfextract -dir modules/istio-install/install -f modules/istio-install/istio-1.1.1/install/kubernetes/istio-demo.yaml
+tfextract -dir modules/istio-install/install -f modules/istio-install/istio-${VERSION}/install/kubernetes/istio-demo.yaml
 
 #remove dup crds
 rm modules/istio-install/install/*custom_resource_definition.tf

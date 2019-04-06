@@ -7,7 +7,7 @@ resource "k8s_core_v1_config_map" "istio-sidecar-injector" {
         initContainers:
         [[ if ne (annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode) "NONE" ]]
         - name: istio-init
-          image: "docker.io/istio/proxy_init:1.1.1"
+          image: "docker.io/istio/proxy_init:1.1.2"
           args:
           - "-p"
           - [[ .MeshConfig.ProxyListenPort ]]
@@ -43,7 +43,7 @@ resource "k8s_core_v1_config_map" "istio-sidecar-injector" {
         [[ end -]]
         containers:
         - name: istio-proxy
-          image: [[ annotation .ObjectMeta `sidecar.istio.io/proxyImage`  "docker.io/istio/proxyv2:1.1.1"  ]]
+          image: [[ annotation .ObjectMeta `sidecar.istio.io/proxyImage`  "docker.io/istio/proxyv2:1.1.2"  ]]
           ports:
           - containerPort: 15090
             protocol: TCP

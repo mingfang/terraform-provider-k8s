@@ -103,7 +103,7 @@ resource "k8s_extensions_v1beta1_deployment" "istio-sidecar-injector" {
             "--healthCheckInterval=2s",
             "--healthCheckFile=/health",
           ]
-          image             = "docker.io/istio/sidecar_injector:1.1.1"
+          image             = "docker.io/istio/sidecar_injector:1.1.2"
           image_pull_policy = "IfNotPresent"
           liveness_probe {
             exec {
