@@ -3,6 +3,8 @@ package k8s
 import (
 	"fmt"
 	"log"
+	"reflect"
+	"unsafe"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -15,6 +17,7 @@ import (
 
 	"github.com/hashicorp/terraform/helper/resource"
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/terraform"
 )
 
 func BuildResourcesMap() map[string]*tfSchema.Resource {
@@ -66,6 +69,30 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 		}
 		resource.Importer = &tfSchema.ResourceImporter{
 			State: tfSchema.ImportStatePassthrough,
+		}
+
+		resource.CustomizeDiff = func(d *tfSchema.ResourceDiff, _ interface{}) error {
+			//https://stackoverflow.com/questions/42664837/access-unexported-fields-in-golang-reflect
+			rd := reflect.ValueOf(d).Elem()
+			rdiff := rd.FieldByName("diff")
+			diff := reflect.NewAt(rdiff.Type(), unsafe.Pointer(rdiff.UnsafeAddr())).Elem().Interface().(*terraform.InstanceDiff)
+			rconfig := rd.FieldByName("config")
+			config := reflect.NewAt(rconfig.Type(), unsafe.Pointer(rconfig.UnsafeAddr())).Elem().Interface().(*terraform.ResourceConfig)
+			id := config.Config["id"]
+			create := id == nil
+			//HACK AROUND THIS https://github.com/hashicorp/terraform/commit/7b6710540795f20b7d36affd735b9b0dcd3c7520
+
+			// if we're not creating a new resource, remove any new computed fields
+			if !create {
+				for attr, d := range diff.Attributes {
+					// If there's no change, then don't let this go through as NewComputed.
+					// This usually only happens when Old and New are both empty.
+					if d.NewComputed && d.Old == d.New {
+						delete(diff.Attributes, attr)
+					}
+				}
+			}
+			return nil
 		}
 
 		resourcesMap[resourceKey] = &resource
