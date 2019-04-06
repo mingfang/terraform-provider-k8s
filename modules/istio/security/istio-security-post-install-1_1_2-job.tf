@@ -1,4 +1,4 @@
-resource "k8s_batch_v1_job" "istio-security-post-install-1_1_1" {
+resource "k8s_batch_v1_job" "istio-security-post-install-1_1_2" {
   metadata {
     annotations = {
       "helm.sh/hook"               = "post-install"
@@ -10,7 +10,7 @@ resource "k8s_batch_v1_job" "istio-security-post-install-1_1_1" {
       "heritage" = "Tiller"
       "release"  = "istio"
     }
-    name      = "istio-security-post-install-1.1.1"
+    name      = "istio-security-post-install-1.1.2"
     namespace = "${var.namespace}"
   }
   spec {
@@ -91,7 +91,7 @@ resource "k8s_batch_v1_job" "istio-security-post-install-1_1_1" {
             "/tmp/security/run.sh",
             "/tmp/security/custom-resources.yaml",
           ]
-          image             = "docker.io/istio/kubectl:1.1.1"
+          image             = "docker.io/istio/kubectl:1.1.2"
           image_pull_policy = "IfNotPresent"
           name              = "kubectl"
 
@@ -111,9 +111,5 @@ resource "k8s_batch_v1_job" "istio-security-post-install-1_1_1" {
         }
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [spec]
   }
 }

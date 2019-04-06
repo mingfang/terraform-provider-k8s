@@ -1,4 +1,4 @@
-resource "k8s_batch_v1_job" "istio-cleanup-secrets-1_1_1" {
+resource "k8s_batch_v1_job" "istio-cleanup-secrets-1_1_2" {
   metadata {
     annotations = {
       "helm.sh/hook"               = "post-delete"
@@ -11,7 +11,7 @@ resource "k8s_batch_v1_job" "istio-cleanup-secrets-1_1_1" {
       "heritage" = "Tiller"
       "release"  = "istio"
     }
-    name      = "istio-cleanup-secrets-1.1.1"
+    name      = "istio-cleanup-secrets-1.1.2"
     namespace = "${var.namespace}"
   }
   spec {
@@ -100,7 +100,7 @@ resource "k8s_batch_v1_job" "istio-cleanup-secrets-1_1_1" {
             EOF
             ,
           ]
-          image = "docker.io/istio/kubectl:1.1.1"
+          image = "docker.io/istio/kubectl:1.1.2"
           image_pull_policy = "IfNotPresent"
           name = "kubectl"
         }
@@ -108,9 +108,5 @@ resource "k8s_batch_v1_job" "istio-cleanup-secrets-1_1_1" {
         service_account_name = "istio-cleanup-secrets-service-account"
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [spec]
   }
 }
