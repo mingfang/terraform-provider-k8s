@@ -1,7 +1,7 @@
 variable "name" {}
 
 variable "namespace" {
-  default = ""
+  default = null
 }
 
 variable "replicas" {}
