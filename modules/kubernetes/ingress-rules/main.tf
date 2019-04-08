@@ -9,9 +9,7 @@ locals {
     name      = var.name
     namespace = var.namespace
     labels    = local.labels
-    annotations = {
-      "kubernetes.io/ingress.class" = var.ingress_class
-    }
+    annotations = merge({ "kubernetes.io/ingress.class" = var.ingress_class }, var.annotations)
     rules = var.rules == null ? [] : var.rules
   }
 
