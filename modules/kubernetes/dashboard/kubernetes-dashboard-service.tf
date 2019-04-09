@@ -3,7 +3,7 @@ resource "k8s_core_v1_service" "kubernetes-dashboard" {
     labels = {
       "k8s-app" = "${var.name}"
     }
-    name = "${var.name}"
+    name      = "${var.name}"
     namespace = "${var.namespace}"
   }
   spec {

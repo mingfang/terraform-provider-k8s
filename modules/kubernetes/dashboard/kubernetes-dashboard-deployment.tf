@@ -3,7 +3,7 @@ resource "k8s_apps_v1_deployment" "kubernetes-dashboard" {
     labels = {
       "k8s-app" = "${var.name}"
     }
-    name = "${var.name}"
+    name      = "${var.name}"
     namespace = "${var.namespace}"
   }
   spec {
@@ -44,7 +44,7 @@ resource "k8s_apps_v1_deployment" "kubernetes-dashboard" {
 
           volume_mounts {
             mount_path = "/certs"
-            name = "${var.name}-certs"
+            name       = "${var.name}-certs"
           }
           volume_mounts {
             mount_path = "/tmp"
