@@ -27,6 +27,7 @@ import:
   - discovery
   - dynamic
 - package: k8s.io/apimachinery
+  version: kubernetes-1.14.0
   subpackages:
   - pkg/api/errors
   - pkg/api/meta
@@ -36,6 +37,7 @@ import:
   - pkg/types
   - pkg/util/yaml
 - package: k8s.io/cli-runtime
+  version: kubernetes-1.14.0
   subpackages:
   - pkg/genericclioptions
 - package: k8s.io/kube-openapi
