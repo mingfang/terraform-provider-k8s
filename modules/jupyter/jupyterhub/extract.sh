@@ -16,15 +16,17 @@ helm template ${DIR}/jupyterhub \
   --set hub.db.type="sqlite" \
   --set singleuser.storage.type="static" \
   --set singleuser.defaultUrl="/lab" \
-  --set hub.extraConfig.jupyterlab="c.Spawner.cmd = ['jupyter-labhub']" \
   --namespace='${var.namespace}' \
   --set singleuser.image.name='${var.singleuser_image_name}' \
   --set singleuser.image.tag='${var.singleuser_image_tag}' \
   --set singleuser.storage.static.pvcName='${var.singleuser_storage_static_pvcName}' \
+  --set singleuser.profileList='${jsonencode(var.singleuser_profile_list)}' \
   > ${DIR}/jupyterhub/extract/jupyterhub.yaml
 
 tfextract -dir ${DIR}/jupyterhub/extract -f ${DIR}/jupyterhub/extract/jupyterhub.yaml
 sed -i -e 's|$${|${|g' ${DIR}/jupyterhub/extract/hub-config-config_map.tf
+sed -i -e "s|extraConfig: {}|extraConfig: \${jsonencode(merge({jupyterlab=\"c.Spawner.cmd = ['jupyter-labhub']\"}, var.hub_extraConfig))}|" ${DIR}/jupyterhub/extract/hub-config-config_map.tf
+sed -i -e "s|extraEnv: {}|extraEnv: \${jsonencode(var.singleuser_extraEnv)}|" ${DIR}/jupyterhub/extract/hub-config-config_map.tf
 
 terraform fmt -recursive ${DIR}/jupyterhub/extract
 

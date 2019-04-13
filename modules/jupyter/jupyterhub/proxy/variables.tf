@@ -4,6 +4,10 @@ variable "namespace" {
   default = null
 }
 
+variable "annotations" {
+  default = null
+}
+
 variable "replicas" {
   default = 1
 }

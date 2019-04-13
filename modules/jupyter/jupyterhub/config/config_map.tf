@@ -57,8 +57,7 @@ resource "k8s_core_v1_config_map" "this" {
         deploymentStrategy:
           rollingUpdate: null
           type: Recreate
-        extraConfig:
-          jupyterlab: c.Spawner.cmd = ['jupyter-labhub']
+        extraConfig: ${jsonencode(merge({jupyterlab="c.Spawner.cmd = ['jupyter-labhub']"}, var.hub_extraConfig))}
         extraContainers: []
         extraVolumeMounts: []
         extraVolumes: []
@@ -139,7 +138,7 @@ resource "k8s_core_v1_config_map" "this" {
         events: true
         extraAnnotations: {}
         extraContainers: []
-        extraEnv: {}
+        extraEnv: ${jsonencode(var.singleuser_extraEnv)}
         extraLabels:
           hub.jupyter.org/network-access-hub: "true"
         extraNodeAffinity:
@@ -183,6 +182,7 @@ resource "k8s_core_v1_config_map" "this" {
             name: jupyterhub/k8s-network-tools
             tag: 0.8.2
         nodeSelector: {}
+        profileList: ${jsonencode(var.singleuser_profile_list)}
         serviceAccountName: null
         startTimeout: 300
         storage:
