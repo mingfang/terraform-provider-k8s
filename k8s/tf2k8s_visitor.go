@@ -49,10 +49,10 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 		}
 
 		//resize to smaller
-		//todo: resize smaller seems to be buggy
+		//note in jsonpatch, removing shifts all elements so removing same index(newLen) actually removes different elements
 		for i := newLen; i < oldLen; i++ {
 			this.ops = append(this.ops, &RemoveOperation{
-				Path: this.jsonPath + "/" + strconv.Itoa(newLen-1),
+				Path: this.jsonPath + "/" + strconv.Itoa(newLen),
 			})
 		}
 	}
@@ -62,10 +62,7 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 		keyPath := this.keyPath + "." + strconv.Itoa(i)
 		jsonPath := this.jsonPath + "/" + strconv.Itoa(i)
 		//log.Println("VisitArray keyPath:", keyPath)
-		if this.resourceData.HasChange(keyPath) {
-			//oldV, newV := this.resourceData.GetChange(keyPath)
-			//log.Println("VisitArray HasChange:", keyPath, "old:", oldV, "new:", newV)
-		} else {
+		if !this.resourceData.HasChange(keyPath) {
 			continue
 		}
 		if resourceValue, exists := this.resourceData.GetOkExists(keyPath); exists {
@@ -74,17 +71,18 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 			if visitor.Object != nil {
 				this.Object.([]interface{})[i] = visitor.Object
 				//log.Println("VisitArray keyPath:", keyPath, " Object:", visitor.Object)
-				if i >= oldLen {
-					//add the entire sub-object
-					this.ops = append(this.ops, &AddOperation{
+				if i < oldLen {
+					//replace
+					this.ops = append(this.ops, &ReplaceOperation{
 						Path:  jsonPath,
 						Value: visitor.Object,
 					})
 				} else {
-					//update sub-object fields
-					for _, op := range visitor.ops {
-						this.ops = append(this.ops, op)
-					}
+					//add
+					this.ops = append(this.ops, &AddOperation{
+						Path:  jsonPath,
+						Value: visitor.Object,
+					})
 				}
 			}
 		}
