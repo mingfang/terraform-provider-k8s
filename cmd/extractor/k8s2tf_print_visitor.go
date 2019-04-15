@@ -85,7 +85,7 @@ func (this *K8S2TFPrintVisitor) VisitMap(proto *proto.Map) {
 }
 
 func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
-	//log.Println("VisitPrimitive GetPath:", proto.GetPath())
+	//log.Println("VisitPrimitive", "path:", this.path, "GetPath:", proto.GetPath())
 	if this.context == nil {
 		return
 	}
@@ -106,7 +106,8 @@ func (this *K8S2TFPrintVisitor) VisitPrimitive(proto *proto.Primitive) {
 	} else {
 		if proto.Type == "string" {
 			//escape ${
-			value := strings.Replace(this.context.(string), "${", "$${", -1)
+			value := fmt.Sprintf("%s", this.context)
+			value = strings.Replace(value, "${", "$${", -1)
 			value = strings.Replace(value, "%{", "%%{", -1)
 			if strings.Contains(value, "\n") || strings.Contains(value, "\"") {
 				if this.isArray {
