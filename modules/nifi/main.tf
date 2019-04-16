@@ -5,100 +5,57 @@
  *
  */
 
-/*
-common variables
-*/
-
-variable "name" {
-  default = "nifi"
-}
-
-variable "namespace" {
-  default = ""
-}
-
-variable "replicas" {
-  default = 1
-}
-
-variable image {
-  default = "apache/nifi:latest"
-}
-
-variable port {
-  default = 8080
-}
-
-variable "annotations" {
-  type    = "map"
-  default = {}
-}
-
-variable "node_selector" {
-  type    = "map"
-  default = {}
-}
-
-variable "dns_policy" {
-  default = ""
-}
-
-variable "priority_class_name" {
-  default = ""
-}
-
-variable "restart_policy" {
-  default = ""
-}
-
-variable "scheduler_name" {
-  default = ""
-}
-
-variable "termination_grace_period_seconds" {
-  default = 30
-}
-
-variable "session_affinity" {
-  default = ""
-}
-
-variable "service_type" {
-  default = ""
-}
-
-/*
-service specific variables
-*/
-
-/*
-locals
-*/
-
 locals {
-  labels {
-    app     = "${var.name}"
-    name    = "${var.name}"
-    service = "${var.name}"
+  parameters = {
+    name      = var.name
+    namespace = var.namespace
+    replicas  = var.replicas
+    ports     = var.ports
+    containers = [
+      {
+        name  = "nifi"
+        image = var.image
+        env = concat([
+          {
+            name  = "NIFI_ELECTION_MAX_WAIT"
+            value = "30 secs"
+          },
+          {
+            name  = "NIFI_CLUSTER_NODE_PROTOCOL_PORT"
+            value = "1025"
+          },
+          {
+            name = "NIFI_CLUSTER_ADDRESS"
+            value_from = {
+              field_ref = {
+                field_path = "status.podIP"
+              }
+            }
+          },
+          {
+            name = "NIFI_WEB_HTTP_HOST"
+            value_from = {
+              field_ref = {
+                field_path = "status.podIP"
+              }
+            }
+          },
+          {
+            name = "NIFI_REMOTE_INPUT_HOST"
+            value_from = {
+              field_ref = {
+                field_path = "status.podIP"
+              }
+            }
+          },
+        ], var.env)
+      },
+    ]
   }
 }
 
-/*
-output
-*/
 
-output "name" {
-  value = "${k8s_core_v1_service.this.metadata.0.name}"
-}
-
-output "port" {
-  value = "${k8s_core_v1_service.this.spec.0.ports.0.port}"
-}
-
-output "cluster_ip" {
-  value = "${k8s_core_v1_service.this.spec.0.cluster_ip}"
-}
-
-output "deployment_uid" {
-  value = "${k8s_apps_v1_deployment.this.metadata.0.uid}"
+module "statefulset-service" {
+  source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
+  parameters = merge(local.parameters, var.overrides)
 }
