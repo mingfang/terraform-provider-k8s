@@ -42,8 +42,8 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.managed_fields$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
-	regexp.MustCompile(`.*\.metadata\.annotations\..+\.kubernetes\.io`), //broken, ignore kubernetes generated annotations
-	//regexp.MustCompile(`.*_custom_resource_definition\..*\.open_apiv3_schema$`), //this causes infinite loop
+	regexp.MustCompile(`.*\.metadata\.annotations\..*_kubernetes_io`),
+	regexp.MustCompile(`.*\.metadata\.annotations\..*_template_generation`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
