@@ -62,51 +62,39 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 		keyPath := this.keyPath + "." + strconv.Itoa(i)
 		jsonPath := this.jsonPath + "/" + strconv.Itoa(i)
 		//log.Println("VisitArray keyPath:", keyPath)
-		if !this.resourceData.HasChange(keyPath) {
-			continue
-		}
 		if resourceValue, exists := this.resourceData.GetOkExists(keyPath); exists {
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, resourceValue)
 			proto.SubType.Accept(visitor)
 			if visitor.Object != nil {
 				this.Object.([]interface{})[i] = visitor.Object
 				//log.Println("VisitArray keyPath:", keyPath, " Object:", visitor.Object)
-				if i < oldLen {
-					//replace
-					this.ops = append(this.ops, &ReplaceOperation{
-						Path:  jsonPath,
-						Value: visitor.Object,
-					})
-				} else {
-					//add
-					this.ops = append(this.ops, &AddOperation{
-						Path:  jsonPath,
-						Value: visitor.Object,
-					})
+
+				/*update element*/
+				if this.resourceData.HasChange(keyPath) {
+					if i < oldLen {
+						//replace
+						this.ops = append(this.ops, &ReplaceOperation{
+							Path:  jsonPath,
+							Value: visitor.Object,
+						})
+					} else {
+						//add
+						this.ops = append(this.ops, &AddOperation{
+							Path:  jsonPath,
+							Value: visitor.Object,
+						})
+					}
 				}
 			}
 		}
 	}
+	//log.Println("VisitArray keyPath:", this.keyPath, "ops", this.ops)
 }
 
 func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap keyPath:", this.keyPath)
-	if this.resourceData.HasChange(this.keyPath) {
-		_, newValue := this.resourceData.GetChange(this.keyPath)
-		//log.Println("VisitMap HasChange:", this.keyPath, "old:", oldV, "new:", newValue)
-		if len(newValue.(map[string]interface{})) == 0 {
-			//deleted
-			this.ops = append(this.ops, &RemoveOperation{
-				Path: this.jsonPath,
-			})
-		} else {
-			//add or update
-			this.Object = newValue
-			this.ops = append(this.ops, &AddOperation{
-				Path:  this.jsonPath,
-				Value: this.Object,
-			})
-		}
+	if value, exists := this.resourceData.GetOk(this.keyPath); exists {
+		this.Object = value
 	}
 }
 
@@ -124,11 +112,6 @@ func (this *TF2K8SVisitor) VisitPrimitive(proto *proto.Primitive) {
 	} else {
 		this.Object = this.context
 	}
-	this.ops = append(this.ops, &AddOperation{
-		Path:  this.jsonPath,
-		Value: this.Object,
-	})
-
 }
 
 func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
@@ -156,11 +139,11 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 				jsonPath = this.jsonPath + "/" + key
 			}
 		}
-		if IsSkipPath(keyPath) || !this.resourceData.HasChange(keyPath) {
+		if IsSkipPath(keyPath) {
 			continue
 		}
 
-		if value, exists := this.resourceData.GetOkExists(keyPath); exists {
+		if value, exists := this.resourceData.GetOk(keyPath); exists {
 			/* for create only */
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
 			v := proto.Fields[key]
@@ -179,33 +162,20 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 				default:
 					this.Object.(map[string]interface{})[key] = visitor.Object
 				}
-				//log.Println("VisitKind keyPath:", keyPath, " Object:", visitor.Object)
 			}
 
 			/* for update only */
-			oldV, _ := this.resourceData.GetChange(keyPath)
-			var add = oldV == nil
-			switch oldV.(type) {
-			case []interface{}:
-				add = (len(oldV.([]interface{})) == 0) || (oldV.([]interface{})[0] == nil)
-			case map[string]interface{}:
-				add = len(oldV.(map[string]interface{})) == 0
-			}
-			if add {
-				//add the entire sub-object
-				this.ops = append(this.ops, &AddOperation{
-					Path:  jsonPath,
-					Value: visitor.Object,
-				})
-			} else {
-				//if len(visitor.ops) > 0 {
-				//	log.Println("VisitKind keyPath:", keyPath, " update:", visitor.Object, "oldV:", oldV)
-				//}
-				//update sub-object fields
-				for _, op := range visitor.ops {
-					this.ops = append(this.ops, op)
+			if this.resourceData.HasChange(keyPath) {
+				if len(visitor.ops) > 0 {
+					this.ops = append(this.ops, visitor.ops...)
+				} else {
+					this.ops = append(this.ops, &AddOperation{
+						Path:  jsonPath,
+						Value: visitor.Object,
+					})
 				}
 			}
+			//log.Println("VisitKind keyPath:", keyPath, " Object:", visitor.Object, "ops:", visitor.ops)
 		}
 	}
 	//log.Println("VisitKind keyPath:", this.keyPath, "ops:", this.ops)
@@ -228,8 +198,4 @@ func (this *TF2K8SVisitor) handleJSON() {
 		log.Fatal(err)
 	}
 	this.Object = jsonObject
-	this.ops = append(this.ops, &AddOperation{
-		Path:  this.jsonPath,
-		Value: this.Object,
-	})
 }
