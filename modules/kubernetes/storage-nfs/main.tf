@@ -29,10 +29,6 @@ resource "k8s_core_v1_persistent_volume" "this" {
 
     mount_options = var.mount_options
   }
-
-  lifecycle {
-    ignore_changes = ["metadata"]
-  }
 }
 
 resource "k8s_core_v1_persistent_volume_claim" "this" {
@@ -54,9 +50,5 @@ resource "k8s_core_v1_persistent_volume_claim" "this" {
         storage = element(k8s_core_v1_persistent_volume.this.*.spec.0.capacity.storage, count.index)
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [metadata]
   }
 }

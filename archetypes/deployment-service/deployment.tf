@@ -1,4 +1,4 @@
-//GENERATE DYNAMIC//k8s_apps_v1_deployment////ignore_changes = [metadata]
+//GENERATE DYNAMIC//k8s_apps_v1_deployment////
 resource "k8s_apps_v1_deployment" "this" {
 
 
@@ -1324,7 +1324,7 @@ resource "k8s_apps_v1_deployment" "this" {
   }
 
   lifecycle {
-    ignore_changes = [metadata]
+
   }
 }
 

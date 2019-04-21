@@ -1,4 +1,4 @@
-//GENERATE DYNAMIC//k8s_rbac_authorization_k8s_io_v1_role_binding//count = var.role_rules == null ? 0 : 1//ignore_changes = [metadata]
+//GENERATE DYNAMIC//k8s_rbac_authorization_k8s_io_v1_role_binding//count = var.role_rules == null ? 0 : 1//
 resource "k8s_rbac_authorization_k8s_io_v1_role_binding" "this" {
   count = var.role_rules == null ? 0 : 1
 
@@ -29,7 +29,7 @@ resource "k8s_rbac_authorization_k8s_io_v1_role_binding" "this" {
   }
 
   lifecycle {
-    ignore_changes = [metadata]
+
   }
 }
 

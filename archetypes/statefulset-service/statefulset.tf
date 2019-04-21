@@ -1,4 +1,4 @@
-//GENERATE DYNAMIC//k8s_apps_v1_stateful_set////ignore_changes = [metadata]
+//GENERATE DYNAMIC//k8s_apps_v1_stateful_set////
 resource "k8s_apps_v1_stateful_set" "this" {
 
 
@@ -1376,7 +1376,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
   }
 
   lifecycle {
-    ignore_changes = [metadata]
+
   }
 }
 
