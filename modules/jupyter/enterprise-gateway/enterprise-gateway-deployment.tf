@@ -39,7 +39,7 @@ resource "k8s_apps_v1beta2_deployment" "enterprise-gateway" {
           }
           env {
             name  = "EG_SHARED_NAMESPACE"
-            value = "False"
+            value = "True"
           }
           env {
             name  = "EG_MIRROR_WORKING_DIRS"
@@ -51,7 +51,7 @@ resource "k8s_apps_v1beta2_deployment" "enterprise-gateway" {
           }
           env {
             name  = "EG_LOG_LEVEL"
-            value = "DEBUG"
+            value = "INFO"
           }
           env {
             name  = "EG_KERNEL_LAUNCH_TIMEOUT"
@@ -61,8 +61,12 @@ resource "k8s_apps_v1beta2_deployment" "enterprise-gateway" {
             name  = "EG_KERNEL_WHITELIST"
             value = "['r_kubernetes','python_kubernetes','python_tf_kubernetes','python_tf_gpu_kubernetes','scala_kubernetes','spark_r_kubernetes','spark_python_kubernetes','spark_scala_kubernetes']"
           }
+          env {
+            name = "EG_UID_BLACKLIST"
+            value = "-1"
+          }
           image             = "elyra/enterprise-gateway:dev"
-          image_pull_policy = "IfNotPresent"
+          image_pull_policy = "Always"
           name              = "enterprise-gateway"
 
           ports {

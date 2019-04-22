@@ -13,5 +13,6 @@ sed -i -e 's|namespace *= "enterprise-gateway"|namespace = k8s_core_v1_service.e
 sed -i -e 's|namespace *= "enterprise-gateway"|namespace = var.namespace|g' ${DIR}/*.tf
 sed -i -e 's|value *= "enterprise-gateway"|value = var.namespace|g' ${DIR}/*deployment.tf
 sed -i -e 's|type *= "NodePort"||g' ${DIR}/*.tf
+sed -i -e 's|image_pull_policy *= "IfNotPresent"|image_pull_policy = "Always"|g' ${DIR}/*.tf
 
 terraform fmt -recursive ${DIR}
