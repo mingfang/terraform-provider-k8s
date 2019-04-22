@@ -17,7 +17,7 @@ module "nfs-server" {
 
 module "minio-storage" {
   source        = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/storage-nfs"
-  name          = "${var.name}-minio"
+  name          = "${var.name}"
   namespace     = k8s_core_v1_namespace.this.metadata.0.name
   replicas      = 4
   mount_options = module.nfs-server.mount_options
@@ -31,7 +31,7 @@ module "minio-storage" {
 
 module "minio" {
   source    = "../../modules/minio"
-  name      = "${var.name}-minio"
+  name      = "${var.name}"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 
   replicas           = module.minio-storage.replicas
