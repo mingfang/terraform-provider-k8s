@@ -61,6 +61,11 @@ module "ingress-rules" {
   name          = var.name
   namespace     = k8s_core_v1_namespace.this.metadata.0.name
   ingress_class = "nginx"
+  annotations = {
+    "nginx.ingress.kubernetes.io/configuration-snippet" = <<-EOF
+      proxy_set_header X-ProxyPort ${var.ingress-node-port};
+      EOF
+  }
   rules = [
     {
       host = "${var.name}.${var.ingress-ip}.nip.io"
