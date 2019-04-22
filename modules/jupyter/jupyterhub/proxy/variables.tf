@@ -17,7 +17,7 @@ variable "port" {
 }
 
 variable "image" {
-  default = "jupyterhub/configurable-http-proxy:3.0.0"
+  default = "jupyterhub/configurable-http-proxy:latest"
 }
 
 variable "overrides" {
