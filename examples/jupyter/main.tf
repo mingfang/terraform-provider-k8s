@@ -27,7 +27,6 @@ resource "k8s_core_v1_namespace" "this" {
     labels = {
       "istio-injection" = "disabled"
     }
-
     name = var.namespace
   }
 }
@@ -39,54 +38,38 @@ module "nfs-server" {
 }
 
 resource "k8s_core_v1_persistent_volume" "jupyter-users" {
-
   metadata {
     name = var.name
   }
-
   spec {
     storage_class_name               = var.name
     persistent_volume_reclaim_policy = "Retain"
     access_modes                     = ["ReadWriteOnce"]
-
     capacity = {
       storage = var.user_storage
     }
-
     nfs {
       path   = "/"
       server = module.nfs-server.service.spec.0.cluster_ip
     }
-
     mount_options = module.nfs-server.mount_options
-  }
-
-  lifecycle {
-    ignore_changes = [metadata]
   }
 }
 
 resource "k8s_core_v1_persistent_volume_claim" "jupyter-users" {
-
   metadata {
     name      = var.user_pvc_name
     namespace = var.namespace
   }
-
   spec {
     storage_class_name = k8s_core_v1_persistent_volume.jupyter-users.spec.0.storage_class_name
     volume_name        = k8s_core_v1_persistent_volume.jupyter-users.metadata.0.name
     access_modes       = ["ReadWriteOnce"]
-
     resources {
       requests = {
         storage = var.user_storage
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [metadata]
   }
 }
 
@@ -100,9 +83,10 @@ module "config" {
   }
   singleuser_extraEnv = {
     "KG_URL"             = "http://enterprise-gateway:8888",
+    "KG_REQUEST_TIMEOUT" = "60",
     "KG_HTTP_USER"       = "jovyan",
     "KERNEL_USERNAME"    = "jovyan",
-    "KG_REQUEST_TIMEOUT" = "60",
+    "KERNEL_UID"         = "0",
   }
   singleuser_image_name = "jupyter/minimal-notebook"
   singleuser_image_tag  = "latest"
@@ -116,21 +100,54 @@ module "config" {
       "display_name" = "Datascience environment",
       "description"  = "If you want the additional bells and whistles: Python, R, and Julia.",
       "kubespawner_override" = {
-        "image" = "jupyter/datascience-notebook:latest",
+        "image"        = "jupyter/datascience-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
       }
     },
     {
       "display_name" = "Spark environment",
       description    = "The Jupyter Stacks spark image!",
       kubespawner_override = {
-        image = "jupyter/all-spark-notebook:latest",
+        image          = "jupyter/all-spark-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "Deep Learning Stack",
+      description    = "Jupyter Notebook Scientific Python Stack w/ Tensorflow",
+      kubespawner_override = {
+        image          = "jupyter/tensorflow-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "R Stack",
+      description    = "Jupyter Notebook R Stack",
+      kubespawner_override = {
+        image          = "jupyter/r-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "Scientific Python Stack",
+      description    = "Jupyter Notebook Scientific Python Stack",
+      kubespawner_override = {
+        image          = "jupyter/scipy-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
       }
     },
     {
       "display_name" = "elyra/nb2kg",
       description    = "elyra/nb2kg",
       kubespawner_override = {
-        image = "elyra/nb2kg:dev",
+        image          = "elyra/nb2kg:dev",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
       }
     },
   ]
@@ -196,38 +213,87 @@ module "ingress-rules" {
 module "preloader" {
   source = "../../archetypes/daemonset"
   parameters = {
-    name      = "${var.name}-preloader"
-    namespace = k8s_core_v1_namespace.this.metadata.0.name
+    name                             = "${var.name}-preloader"
+    namespace                        = k8s_core_v1_namespace.this.metadata.0.name
+    termination_grace_period_seconds = 1
     containers = [
       {
-        command = ["sleep", "infinity"]
-        image   = "jupyter/minimal-notebook"
-        name    = "minimal-notebook"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/minimal-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "minimal-notebook"
       },
       {
-        command = ["sleep", "infinity"]
-        image   = "jupyter/datascience-notebook:latest"
-        name    = "datascience-notebook"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/datascience-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "datascience-notebook"
       },
       {
-        command = ["sleep", "infinity"]
-        image   = "jupyter/all-spark-notebook:latest"
-        name    = "all-spark-notebook"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/all-spark-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "all-spark-notebook"
       },
       {
-        command = ["sleep", "infinity"]
-        image   = "elyra/nb2kg:dev"
-        name    = "nb2kg"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/tensorflow-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "tensorflow-notebook"
       },
       {
-        command = ["sleep", "infinity"]
-        image   = "elyra/enterprise-gateway:2.0.0rc1"
-        name    = "enterprise-gateway"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/r-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "r-notebook"
       },
       {
-        command = ["sleep", "infinity"]
-        image   = "elyra/kernel-py:2.0.0rc1"
-        name    = "kernel-py"
+        command           = ["sleep", "86400"]
+        image             = "jupyter/scipy-notebook:latest"
+        image_pull_policy = "Always"
+        name              = "scipy-notebook"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/nb2kg:dev"
+        image_pull_policy = "Always"
+        name              = "nb2kg"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-py:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-py"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-spark-py:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-spark-py"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-tf-py:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-tf-py"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-scala:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-scala"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-r:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-r"
+      },
+      {
+        command           = ["sleep", "86400"]
+        image             = "elyra/kernel-spark-r:dev"
+        image_pull_policy = "Always"
+        name              = "kernel-spark-r"
       },
     ]
   }
