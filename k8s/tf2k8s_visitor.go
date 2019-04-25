@@ -93,7 +93,7 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 
 func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap keyPath:", this.keyPath)
-	if value, exists := this.resourceData.GetOkExists(this.keyPath); exists {
+	if value, exists := this.resourceData.GetOk(this.keyPath); exists {
 		this.Object = value
 	}
 }
@@ -143,7 +143,7 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 			continue
 		}
 
-		if value, exists := this.resourceData.GetOkExists(keyPath); exists {
+		if value, exists := this.resourceData.GetOk(keyPath); exists {
 			/* for create only */
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
 			v := proto.Fields[key]
