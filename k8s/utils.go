@@ -42,7 +42,8 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.metadata\.initializers$`),
 	regexp.MustCompile(`.*\.metadata\.managed_fields$`),
 	regexp.MustCompile(`.*\.metadata\.owner_references$`),
-	regexp.MustCompile(`.*\.metadata\.annotations\..*_kubernetes_io`),
+	regexp.MustCompile(`.*\.metadata\.annotations\..*_kubernetes_io/revision`),
+	regexp.MustCompile(`.*\.metadata\.annotations\.pv_kubernetes_io`),
 	regexp.MustCompile(`.*\.metadata\.annotations\..*_template_generation`),
 }
 
