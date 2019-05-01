@@ -20,10 +20,9 @@ locals {
 
     containers = [
       {
-        args = [
+        args = concat([
           "server",
-          "http://${var.name}-{0...${var.replicas - 1}}.${var.name}.${var.namespace}.svc.cluster.local/data-$POD_NAME",
-        ]
+        ], data.template_file.this.*.rendered)
         env = concat([
           {
             name = "POD_NAME"
@@ -77,4 +76,9 @@ locals {
 module "statefulset-service" {
   source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
   parameters = merge(local.parameters, var.overrides)
+}
+
+data "template_file" "this" {
+  count = var.replicas
+  template = "http://${var.name}-${count.index}.${var.name}.${var.namespace}.svc.cluster.local/data/${var.name}-${count.index}"
 }
