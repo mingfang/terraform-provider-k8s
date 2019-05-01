@@ -59,7 +59,7 @@ func (this *K8S2TFSchemaVisitor) VisitPrimitive(proto *proto.Primitive) {
 	case "string":
 		this.Schema.Type = tfSchema.TypeString
 	case "boolean":
-		this.Schema.Type = tfSchema.TypeBool
+		this.Schema.Type = tfSchema.TypeString
 	default:
 		log.Fatal("Invalid proto.Type:", proto.Type)
 	}

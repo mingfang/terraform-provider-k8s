@@ -62,7 +62,7 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 		keyPath := this.keyPath + "." + strconv.Itoa(i)
 		jsonPath := this.jsonPath + "/" + strconv.Itoa(i)
 		//log.Println("VisitArray keyPath:", keyPath)
-		if resourceValue, exists := this.resourceData.GetOkExists(keyPath); exists {
+		if resourceValue, ok := this.resourceData.GetOk(keyPath); ok {
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, resourceValue)
 			proto.SubType.Accept(visitor)
 			if visitor.Object != nil {
@@ -99,17 +99,23 @@ func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
 }
 
 func (this *TF2K8SVisitor) VisitPrimitive(proto *proto.Primitive) {
-	//log.Println("VisitPrimitive", proto)
 	//log.Println("VisitPrimitive keyPath:", this.keyPath, "Type:", proto.Type, "Format:", proto.Format)
-	if proto.Type == "string" && proto.Format == "int-or-string" {
-		if asInt, err := strconv.Atoi(this.context.(string)); err == nil {
-			this.Object = asInt
-			//log.Println("asInt:", asInt)
-		} else {
+	switch proto.Type {
+	case "string":
+		if proto.Format == "int-or-string" {
+			if asInt, err := strconv.Atoi(this.context.(string)); err == nil {
+				this.Object = asInt
+			} else {
+				this.Object = this.context
+			}
+		}else{
 			this.Object = this.context
-			//log.Println("Not asInt:", this.context, "err:", err)
 		}
-	} else {
+	case "boolean":
+		if value, err := strconv.ParseBool(this.context.(string)); err == nil {
+			this.Object = value
+		}
+	default:
 		this.Object = this.context
 	}
 }
@@ -142,9 +148,18 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 		if IsSkipPath(keyPath) {
 			continue
 		}
-
-		if value, exists := this.resourceData.GetOk(keyPath); exists {
-			/* for create only */
+		/*
+		valueGet := this.resourceData.Get(keyPath)
+		valueGetOk, ok := this.resourceData.GetOk(keyPath)
+		valueGetOkExists, exists := this.resourceData.GetOkExists(keyPath)
+		switch valueGet.(type) {
+		case []interface{}:
+		case map[string]interface{}:
+		default:
+			log.Println("VisitKind keyPath:", keyPath, "HasChange:", this.resourceData.HasChange(keyPath), "Get:", valueGet, "GetOK:", valueGetOk, ok, "GetOkExists:", valueGetOkExists, exists)
+		}
+		*/
+		if value, ok := this.resourceData.GetOk(keyPath); ok {
 			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
 			v := proto.Fields[key]
 			v.Accept(visitor)

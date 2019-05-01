@@ -79,21 +79,24 @@ func (this *K8S2TFReadVisitor) VisitPrimitive(proto *proto.Primitive) {
 	if this.context == nil {
 		return
 	}
-	if proto.Format == "int-or-string" {
-		switch this.context.(type) {
-		case int:
-			this.Object = strconv.Itoa(this.context.(int))
-		case int64:
-			this.Object = strconv.FormatInt(this.context.(int64), 10)
-		default:
-			this.Object = this.context
-		}
-	} else {
-		if proto.Type == "string" {
+	switch proto.Type {
+	case "string":
+		if proto.Format == "int-or-string" {
+			switch this.context.(type) {
+			case int:
+				this.Object = strconv.Itoa(this.context.(int))
+			case int64:
+				this.Object = strconv.FormatInt(this.context.(int64), 10)
+			default:
+				this.Object = this.context
+			}
+		}else{
 			this.Object = this.context.(string)
-		} else {
-			this.Object = this.context
 		}
+	case "boolean":
+		this.Object = strconv.FormatBool(this.context.(bool))
+	default:
+		this.Object = this.context
 	}
 }
 
