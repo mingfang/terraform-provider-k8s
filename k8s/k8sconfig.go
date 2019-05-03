@@ -79,7 +79,7 @@ type K8SConfig struct {
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
 	id := CreateId(namespace, gvk.Kind, name)
-	log.Println("Get name:", name, "gvk:", gvk, "id:", id)
+	//log.Println("Get name:", name, "gvk:", gvk, "id:", id)
 	//try getting without lock first
 	if item, ok := this.cache.Load(id); ok {
 		return item.(*unstructured.Unstructured), nil
@@ -145,7 +145,7 @@ func (this *K8SConfig) GetOne(name string, gvk *schema.GroupVersionKind, namespa
 	if err != nil {
 		return nil, err
 	}
-	log.Println("GetOne name:", name, "gvk:", gvk)
+	//log.Println("GetOne name:", name, "gvk:", gvk)
 	return res, nil
 }
 
@@ -156,7 +156,7 @@ func (this *K8SConfig) GetAll(gvk *schema.GroupVersionKind, namespace string) (*
 	if namespace != "" {
 		resourceClient = resourceClient.(dynamic.NamespaceableResourceInterface).Namespace(namespace)
 	}
-	log.Println("GetAll gvk:", gvk)
+	//log.Println("GetAll gvk:", gvk)
 	return resourceClient.List(metav1.ListOptions{})
 }
 
