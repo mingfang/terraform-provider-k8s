@@ -3,7 +3,7 @@ resource "k8s_core_v1_config_map" "this" {
     "values.yaml" = <<-EOF
       Chart:
         Name: jupyterhub
-        Version: 0.8.2
+        Version: 0.9-b51ffeb
       Release:
         Name: release-name
         Namespace: ${var.namespace}
@@ -64,7 +64,7 @@ resource "k8s_core_v1_config_map" "this" {
         fsGid: 1000
         image:
           name: jupyterhub/k8s-hub
-          tag: 0.8.2
+          tag: 0.9-b51ffeb
         imagePullPolicy: IfNotPresent
         imagePullSecret:
           email: null
@@ -180,7 +180,7 @@ resource "k8s_core_v1_config_map" "this" {
         networkTools:
           image:
             name: jupyterhub/k8s-network-tools
-            tag: 0.8.2
+            tag: 0.9-b51ffeb
         nodeSelector: {}
         profileList: ${jsonencode(var.singleuser_profile_list)}
         serviceAccountName: null
@@ -194,8 +194,8 @@ resource "k8s_core_v1_config_map" "this" {
             storageClass: null
             volumeNameTemplate: volume-{username}{servername}
           extraLabels: {}
-          extraVolumeMounts: []
-          extraVolumes: []
+          extraVolumeMounts: ${jsonencode(var.singleuser_storage_extra_volume_mounts)}
+          extraVolumes: ${jsonencode(var.singleuser_storage_extra_volumes)}
           homeMountPath: /home/jovyan
           static:
             pvcName: ${var.singleuser_storage_static_pvcName}

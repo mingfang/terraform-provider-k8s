@@ -27,3 +27,11 @@ variable "singleuser_profile_list" {
 variable "singleuser_storage_static_pvcName" {
   default = "jupyter-users"
 }
+
+variable "singleuser_storage_extra_volume_mounts" {
+  default = []
+}
+
+variable "singleuser_storage_extra_volumes" {
+  default = []
+}
