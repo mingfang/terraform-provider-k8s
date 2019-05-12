@@ -21,24 +21,28 @@ locals {
       {
         name  = "spark"
         image = var.image
+
         command = [
           "/spark/sbin/start-slave.sh",
           var.master_url,
         ]
+
         env = concat([
-        {
-          name = "SPARK_LOCAL_IP"
-          value_from = {
-            field_ref = {
-              field_path = "status.podIP"
+          {
+            name = "SPARK_LOCAL_IP"
+            value_from = {
+              field_ref = {
+                field_path = "status.podIP"
+              }
             }
-          }
-        },
+          },
           {
             name  = "SPARK_WORKER_WEBUI_PORT"
             value = var.spark_worker_webui_port
           },
         ], var.env)
+
+        volume_mounts = lookup(var.overrides, "volume_mounts", [])
       }
     ]
   }
