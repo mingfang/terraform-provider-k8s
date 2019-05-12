@@ -1,11 +1,7 @@
 output "name" {
-  value = module.deployment-service.name
+  value = module.daemonset.name
 }
 
-output "service" {
-  value = module.deployment-service.service
-}
-
-output "deployment" {
-  value = module.deployment-service.deployment
+output "daemonset" {
+  value = module.daemonset.daemonset
 }
