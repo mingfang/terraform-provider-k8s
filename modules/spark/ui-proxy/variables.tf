@@ -5,7 +5,7 @@ variable "namespace" {
 }
 
 variable "image" {
-  default = "elsonrodriguez/spark-ui-proxy:1.0"
+  default = "ursuad/spark-ui-proxy"
 }
 
 variable "overrides" {
