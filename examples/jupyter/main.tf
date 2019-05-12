@@ -73,6 +73,96 @@ resource "k8s_core_v1_persistent_volume_claim" "jupyter-users" {
   }
 }
 
+locals {
+  profile_list = [
+    {
+      display_name  = "minimal-notebook",
+      "description" = "command line tools useful when working in Jupyter applications",
+      "default"     = "true",
+      kubespawner_override = {
+        image          = "jupyter/minimal-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "scipy-notebook",
+      description    = "includes popular packages from the scientific Python ecosystem",
+      kubespawner_override = {
+        image          = "jupyter/scipy-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "r-notebook",
+      description    = "includes popular packages from the R ecosystem",
+      kubespawner_override = {
+        image          = "jupyter/r-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "tensorflow-notebook",
+      description    = "includes popular Python deep learning libraries",
+      kubespawner_override = {
+        image          = "jupyter/tensorflow-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "datascience-notebook",
+      "description"  = "includes libraries for data analysis from the Julia, Python, and R communities",
+      "kubespawner_override" = {
+        "image"        = "jupyter/datascience-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "pyspark-notebook",
+      description    = "includes Python support for Apache Spark",
+      kubespawner_override = {
+        image          = "jupyter/pyspark-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "all-spark-notebook",
+      description    = "includes Python, R, and Scala support for Apache Spark",
+      kubespawner_override = {
+        image          = "jupyter/all-spark-notebook:latest",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+    {
+      "display_name" = "elyra/nb2kg",
+      description    = "Use Enterprise Gateway",
+      kubespawner_override = {
+        image          = "elyra/nb2kg:dev",
+        args           = ["--allow-root"],
+        singleuser_uid = 0,
+      }
+    },
+  ]
+
+  preload_images = concat(
+    local.profile_list[*].kubespawner_override.image,
+    [
+      "elyra/kernel-py:dev",
+      "elyra/kernel-spark-py:dev",
+      "elyra/kernel-tf-py:dev",
+      "elyra/kernel-scala:dev",
+      "elyra/kernel-r:dev",
+      "elyra/kernel-spark-r:dev",
+    ]
+  )
+}
+
 module "config" {
   source    = "../../modules/jupyter/jupyterhub/config"
   name      = var.name
@@ -88,70 +178,25 @@ module "config" {
     "KERNEL_USERNAME"    = "jovyan",
     "KERNEL_UID"         = "0",
   }
-  singleuser_image_name = "jupyter/minimal-notebook"
-  singleuser_image_tag  = "latest"
-  singleuser_profile_list = [
-    {
-      display_name  = "Minimal environment",
-      "description" = "To avoid too much bells and whistles: Python.",
-      "default"     = "true",
-    },
-    {
-      "display_name" = "Datascience environment",
-      "description"  = "If you want the additional bells and whistles: Python, R, and Julia.",
-      "kubespawner_override" = {
-        "image"        = "jupyter/datascience-notebook:latest",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-    {
-      "display_name" = "Spark environment",
-      description    = "The Jupyter Stacks spark image!",
-      kubespawner_override = {
-        image          = "jupyter/all-spark-notebook:latest",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-    {
-      "display_name" = "Deep Learning Stack",
-      description    = "Jupyter Notebook Scientific Python Stack w/ Tensorflow",
-      kubespawner_override = {
-        image          = "jupyter/tensorflow-notebook:latest",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-    {
-      "display_name" = "R Stack",
-      description    = "Jupyter Notebook R Stack",
-      kubespawner_override = {
-        image          = "jupyter/r-notebook:latest",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-    {
-      "display_name" = "Scientific Python Stack",
-      description    = "Jupyter Notebook Scientific Python Stack",
-      kubespawner_override = {
-        image          = "jupyter/scipy-notebook:latest",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-    {
-      "display_name" = "elyra/nb2kg",
-      description    = "elyra/nb2kg",
-      kubespawner_override = {
-        image          = "elyra/nb2kg:dev",
-        args           = ["--allow-root"],
-        singleuser_uid = 0,
-      }
-    },
-  ]
+  singleuser_image_name             = "jupyter/minimal-notebook:latest"
+  singleuser_image_tag              = "latest"
+  singleuser_profile_list           = local.profile_list
   singleuser_storage_static_pvcName = var.user_pvc_name
+  singleuser_storage_extra_volume_mounts = [
+    {
+      name       = "alluxio-fuse-mount"
+      mount_path = "/alluxio"
+    }
+  ]
+  singleuser_storage_extra_volumes = [
+    {
+      name = "alluxio-fuse-mount"
+      host_path = {
+        path = "/alluxio-fuse"
+        type = "Directory"
+      }
+    }
+  ]
 }
 
 module "proxy" {
@@ -216,85 +261,13 @@ module "preloader" {
     name                             = "${var.name}-preloader"
     namespace                        = k8s_core_v1_namespace.this.metadata.0.name
     termination_grace_period_seconds = 1
-    containers = [
+    containers = [for entry in local.preload_images :
       {
         command           = ["sleep", "86400"]
-        image             = "jupyter/minimal-notebook:latest"
+        image             = entry
         image_pull_policy = "Always"
-        name              = "minimal-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "jupyter/datascience-notebook:latest"
-        image_pull_policy = "Always"
-        name              = "datascience-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "jupyter/all-spark-notebook:latest"
-        image_pull_policy = "Always"
-        name              = "all-spark-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "jupyter/tensorflow-notebook:latest"
-        image_pull_policy = "Always"
-        name              = "tensorflow-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "jupyter/r-notebook:latest"
-        image_pull_policy = "Always"
-        name              = "r-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "jupyter/scipy-notebook:latest"
-        image_pull_policy = "Always"
-        name              = "scipy-notebook"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/nb2kg:dev"
-        image_pull_policy = "Always"
-        name              = "nb2kg"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-py:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-py"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-spark-py:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-spark-py"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-tf-py:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-tf-py"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-scala:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-scala"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-r:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-r"
-      },
-      {
-        command           = ["sleep", "86400"]
-        image             = "elyra/kernel-spark-r:dev"
-        image_pull_policy = "Always"
-        name              = "kernel-spark-r"
-      },
+        name              = replace(replace(entry, "/", "-"), ":", "-")
+      }
     ]
   }
 }
