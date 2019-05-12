@@ -4,9 +4,8 @@ variable "namespace" {
   default = null
 }
 
-variable "annotations" {
-  type    = map
-  default = {}
+variable "image" {
+  default = "dremio/dremio-oss:latest"
 }
 
 variable "env" {
@@ -14,8 +13,9 @@ variable "env" {
   default = []
 }
 
-variable "image" {
-  default = "dremio/dremio-oss:latest"
+variable "annotations" {
+  type    = map
+  default = {}
 }
 
 variable "node_selector" {
@@ -33,6 +33,6 @@ variable "overrides" {
 
 variable "config_map" {}
 
-variable "master-cordinator" {}
-
 variable "zookeeper" {}
+
+variable "master-cordinator" {}
