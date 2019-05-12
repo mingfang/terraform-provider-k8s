@@ -76,24 +76,46 @@ module "master-cordinator-storage" {
   mount_options = module.nfs-server.mount_options
 }
 
+locals {
+  overrides = {
+    volume_mounts = [
+      {
+        name       = "alluxio-fuse-mount"
+        mount_path = "/alluxio"
+      }
+    ]
+    volumes = [
+      {
+        name = "alluxio-fuse-mount"
+        host_path = {
+          path = "/alluxio-fuse"
+          type = "Directory"
+        }
+      }
+    ]
+  }
+}
+
 module "master-cordinator" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/dremio/master-cordinator"
+  source             = "../../modules/dremio/master-cordinator"
   name               = "${var.name}-master-cordinator"
   namespace          = k8s_core_v1_namespace.this.metadata.0.name
   storage            = module.master-cordinator-storage.storage
   storage_class_name = module.master-cordinator-storage.storage_class_name
   config_map         = module.config.config_map
   zookeeper          = "${module.zookeeper.name}:${lookup(module.zookeeper.ports[0], "port")}"
+  overrides          = local.overrides
 }
 
 module "cordinator" {
-  source            = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/dremio/cordinator"
+  source            = "../../modules/dremio/cordinator"
   name              = "${var.name}-cordinator"
   namespace         = k8s_core_v1_namespace.this.metadata.0.name
   replicas          = 2
   config_map        = module.config.config_map
   master-cordinator = module.master-cordinator.service.metadata.0.name
   zookeeper         = "${module.zookeeper.name}:${lookup(module.zookeeper.ports[0], "port")}"
+  overrides         = local.overrides
 }
 
 module "ingress-rules" {
@@ -140,7 +162,7 @@ module "executor-storage" {
 }
 
 module "executor" {
-  source             = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/dremio/executor"
+  source             = "../../modules/dremio/executor"
   name               = "${var.name}-executor"
   namespace          = k8s_core_v1_namespace.this.metadata.0.name
   replicas           = module.executor-storage.replicas
@@ -148,4 +170,5 @@ module "executor" {
   storage_class_name = module.executor-storage.storage_class_name
   config_map         = module.config.config_map
   zookeeper          = "${module.zookeeper.name}:${lookup(module.zookeeper.ports[0], "port")}"
+  overrides          = local.overrides
 }

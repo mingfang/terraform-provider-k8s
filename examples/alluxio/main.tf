@@ -28,7 +28,6 @@ module "master" {
   source    = "../../modules/alluxio/master"
   name      = "${var.name}-master"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
-  image     = "alluxio/alluxio:2.0.0-preview"
   overrides = {
     image_pull_policy = "Always"
   }
@@ -68,7 +67,6 @@ module "worker" {
   source    = "../../modules/alluxio/worker"
   name      = "${var.name}-worker"
   namespace = k8s_core_v1_namespace.this.metadata.0.name
-  image     = "alluxio/alluxio:2.0.0-preview"
   overrides = {
     image_pull_policy = "Always"
   }
@@ -98,7 +96,6 @@ module "worker" {
   alluxio_master_port     = module.master.service.spec.0.ports.0.port
 }
 
-/*
 module "fuse" {
   source                  = "../../modules/alluxio/fuse"
   name                    = "${var.name}-fuse"
@@ -109,7 +106,6 @@ module "fuse" {
     image_pull_policy = "Always"
   }
 }
-*/
 
 module "ingress-rules" {
   source        = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-rules"

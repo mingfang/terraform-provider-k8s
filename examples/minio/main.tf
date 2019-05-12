@@ -45,9 +45,6 @@ module "ingress-rules" {
   source    = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-rules"
   name      = var.name
   namespace = k8s_core_v1_namespace.this.metadata.0.name
-  annotations = {
-    "nginx.ingress.kubernetes.io/proxy-body-size" = "1024m",
-  }
   ingress_class = "nginx"
   rules = [
     {

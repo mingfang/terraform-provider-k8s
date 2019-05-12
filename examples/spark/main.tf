@@ -33,8 +33,24 @@ module "worker" {
   source     = "../../modules/spark/worker"
   name       = "${var.name}-worker"
   namespace  = k8s_core_v1_namespace.this.metadata.0.name
-  replicas   = 1
   master_url = module.master.master_url
+  overrides = {
+    volume_mounts = [
+      {
+        name       = "alluxio-fuse-mount"
+        mount_path = "/alluxio"
+      }
+    ]
+    volumes = [
+      {
+        name = "alluxio-fuse-mount"
+        host_path = {
+          path = "/alluxio-fuse"
+          type = "Directory"
+        }
+      }
+    ]
+  }
 }
 
 module "ui-proxy" {
