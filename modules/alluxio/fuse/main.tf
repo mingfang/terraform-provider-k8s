@@ -7,24 +7,42 @@
 
 locals {
   parameters = {
-    name      = var.name
-    namespace = var.namespace
+    name                 = var.name
+    namespace            = var.namespace
     enable_service_links = false
     containers = [
       {
         name  = "alluxio"
         image = var.image
+
         args = [
           "fuse"
         ]
+
         env = [
           {
-            name = "ALLUXIO_MASTER_HOSTNAME"
+            name  = "ALLUXIO_MASTER_HOSTNAME"
             value = var.alluxio_master_hostname
           },
           {
-            name = "ALLUXIO_MASTER_PORT"
+            name  = "ALLUXIO_MASTER_PORT"
             value = var.alluxio_master_port
+          },
+          {
+            name  = "ALLUXIO_WORKER_DATA_SERVER_DOMAIN_SOCKET_ADDRESS"
+            value = "/opt/domain"
+          },
+          {
+            name  = "ALLUXIO_WORKER_DATA_SERVER_DOMAIN_SOCKET_AS_UUID"
+            value = "true"
+          },
+          {
+            name  = "ALLUXIO_LOCALITY_NODE"
+            value_from = {
+              field_ref = {
+                field_path = "spec.nodeName"
+              }
+            }
           },
         ]
         lifecycle = {
@@ -44,14 +62,18 @@ locals {
         }
         volume_mounts = [
           {
-            name = "alluxio-fuse-device"
+            name       = "alluxio-fuse-device"
             mount_path = "/dev/fuse"
           },
           {
-            name = "alluxio-fuse-mount"
-            mount_path = "/alluxio-fuse"
+            name              = "alluxio-fuse-mount"
+            mount_path        = "/alluxio-fuse"
             mount_propagation = "Bidirectional"
-          }
+          },
+          {
+            name       = "alluxio-domain"
+            mount_path = "/opt/domain"
+          },
         ]
       }
     ]
@@ -69,7 +91,14 @@ locals {
           path = "/alluxio-fuse"
           type = "DirectoryOrCreate"
         }
-      }
+      },
+      {
+        name = "alluxio-domain"
+        host_path = {
+          path    = "/tmp/domain"
+          type = "DirectoryOrCreate"
+        }
+      },
     ]
   }
 }
