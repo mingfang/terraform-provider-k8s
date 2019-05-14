@@ -30,12 +30,19 @@ resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
 
         containers {
           args = [
-            "/nginx-ingress-controller", "--election-id=${var.name}", "--ingress-class=${var.ingress_class}", join(",", var.extra_args),
+            "/nginx-ingress-controller",
+            "--election-id=${var.name}",
+            "--ingress-class=${var.ingress_class}",
             "--configmap=$(POD_NAMESPACE)/${var.name}-nginx-configuration",
             "--tcp-services-configmap=$(POD_NAMESPACE)/${var.name}-tcp-services",
             "--udp-services-configmap=$(POD_NAMESPACE)/${var.name}-udp-services",
-            "--publish-service=$(POD_NAMESPACE)/${var.name}",
             "--annotations-prefix=nginx.ingress.kubernetes.io",
+            var.service_type == "NodePort" ?
+              "--report-node-internal-ip-address" :
+              "--publish-service=$(POD_NAMESPACE)/${var.name}",
+            "--update-status=true",
+            "--update-status-on-shutdown",
+            join(",", var.extra_args),
           ]
 
           env {
