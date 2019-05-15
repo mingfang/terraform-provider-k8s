@@ -12,6 +12,10 @@ variable "ingress_class" {
   default = "nginx"
 }
 
+variable "load_balancer_ip" {
+  default = null
+}
+
 variable "node_port_http" {
   default = 30000
 }
