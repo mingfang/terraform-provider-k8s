@@ -11,14 +11,15 @@ import (
 )
 
 var forceNewPattern = []*regexp.Regexp{
-	regexp.MustCompile(`k8s_\w+_\w+_\w+\.metadata\.name$`),
-	regexp.MustCompile(`k8s_\w+_\w+_\w+\.metadata\.namespace$`),
+	regexp.MustCompile(`k8s_.*\.metadata\.name$`),
+	regexp.MustCompile(`k8s_.*\.metadata\.namespace$`),
 	regexp.MustCompile(`k8s_\w+_\w+_service\.spec\.cluster_ip$`),
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.selector\.match_labels$`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
 	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec`),
 	regexp.MustCompile(`k8s_\w+_\w+_role_binding\.role_ref`),
+	regexp.MustCompile(`k8s_.*\.spec.access_modes`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
