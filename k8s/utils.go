@@ -18,6 +18,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
 	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec`),
+	regexp.MustCompile(`k8s_\w+_\w+_role_binding\.role_ref`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
@@ -59,6 +60,19 @@ func IsSkipPath(path string) bool {
 	return false
 }
 
+var keywords = []*regexp.Regexp{
+	regexp.MustCompile(`^provisioner`),
+}
+
+func IsKeyword(path string) bool {
+	for _, pattern := range keywords {
+		if pattern.MatchString(path) {
+			return true
+		}
+	}
+	return false
+}
+
 var skipKinds = map[string]struct{}{
 	"APIService":                {},
 	"CertificateSigningRequest": {},
@@ -66,7 +80,6 @@ var skipKinds = map[string]struct{}{
 	"Event":                     {},
 	"Node":                      {},
 	"Lease":                     {},
-	"StorageClass":              {}, //todo: this caused resource k8s_storage_class: provisioner is a reserved field name
 }
 
 func IsSkipKind(kind string) bool {
@@ -132,6 +145,12 @@ func ToSnake(s string) string {
 	}
 
 	n = strings.ToLower(n)
+
+	// avoid conflict with Terraform keywords
+	if IsKeyword(n) {
+		n = "_" + n
+	}
+
 	return n
 }
 
