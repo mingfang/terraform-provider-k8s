@@ -76,8 +76,30 @@ module "master-cordinator-storage" {
   mount_options = module.nfs-server.mount_options
 }
 
+resource "k8s_core_v1_persistent_volume_claim" "this" {
+
+  metadata {
+    name        = var.name
+    namespace   = var.namespace
+  }
+
+  spec {
+    access_modes = ["ReadWriteMany"]
+
+    resources {
+      requests = { "storage" = "5Gi" }
+    }
+
+    storage_class_name = "alluxio"
+  }
+}
+
+
 locals {
   overrides = {
+    annotations = {
+      "pvc" = k8s_core_v1_persistent_volume_claim.this.metadata.0.resource_version
+    }
     volume_mounts = [
       {
         name       = "alluxio-fuse-mount"
@@ -87,9 +109,8 @@ locals {
     volumes = [
       {
         name = "alluxio-fuse-mount"
-        host_path = {
-          path = "/alluxio-fuse"
-          type = "Directory"
+        persistent_volume_claim = {
+          claim_name = k8s_core_v1_persistent_volume_claim.this.metadata.0.name
         }
       }
     ]
@@ -128,7 +149,7 @@ module "ingress-rules" {
   ingress_class = "nginx"
   rules = [
     {
-      host = "${var.name}.${var.ingress-ip}.nip.io"
+      host = "${var.name}.rebelsoft.com"
 
       http = {
         paths = [
