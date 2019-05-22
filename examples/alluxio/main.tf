@@ -111,13 +111,12 @@ module "fuse" {
 
 module "csi" {
   source    = "../../modules/alluxio/csi"
-  namespace = k8s_core_v1_namespace.this.metadata.0.name
+  namespace = k8s_core_v1_namespace.this.metadata.0.namespace
 }
 
 resource "k8s_storage_k8s_io_v1_storage_class" "this" {
   metadata {
     name      = var.name
-    namespace = var.namespace
   }
 
   _provisioner = "alluxio"
