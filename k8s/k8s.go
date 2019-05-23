@@ -71,35 +71,45 @@ func BuildResourcesMap() map[string]*tfSchema.Resource {
 			State: tfSchema.ImportStatePassthrough,
 		}
 
-		resource.CustomizeDiff = func(d *tfSchema.ResourceDiff, _ interface{}) error {
-			//https://stackoverflow.com/questions/42664837/access-unexported-fields-in-golang-reflect
-			rd := reflect.ValueOf(d).Elem()
-			rdiff := rd.FieldByName("diff")
-			diff := reflect.NewAt(rdiff.Type(), unsafe.Pointer(rdiff.UnsafeAddr())).Elem().Interface().(*terraform.InstanceDiff)
-			rconfig := rd.FieldByName("config")
-			config := reflect.NewAt(rconfig.Type(), unsafe.Pointer(rconfig.UnsafeAddr())).Elem().Interface().(*terraform.ResourceConfig)
-			id := config.Config["id"]
-			create := id == nil
-			//HACK AROUND THIS https://github.com/hashicorp/terraform/commit/7b6710540795f20b7d36affd735b9b0dcd3c7520
-
-			// if we're not creating a new resource, remove any new computed fields
-			if !create {
-				for attr, d := range diff.Attributes {
-					// If there's no change, then don't let this go through as NewComputed.
-					// This usually only happens when Old and New are both empty.
-					if d.NewComputed && d.Old == d.New {
-						delete(diff.Attributes, attr)
-					}
-				}
-			}
-			return nil
-		}
-
+		resource.CustomizeDiff = customizeDiff
 		resourcesMap[resourceKey] = &resource
 	})
 
 	return resourcesMap
 }
+
+// callback to enable making changes to the proposed plan
+func customizeDiff(d *tfSchema.ResourceDiff, meta interface{}) error {
+	//https://stackoverflow.com/questions/42664837/access-unexported-fields-in-golang-reflect
+	rd := reflect.ValueOf(d).Elem()
+	rdiff := rd.FieldByName("diff")
+	diff := reflect.NewAt(rdiff.Type(), unsafe.Pointer(rdiff.UnsafeAddr())).Elem().Interface().(*terraform.InstanceDiff)
+	rconfig := rd.FieldByName("config")
+	config := reflect.NewAt(rconfig.Type(), unsafe.Pointer(rconfig.UnsafeAddr())).Elem().Interface().(*terraform.ResourceConfig)
+	id := config.Config["id"]
+	create := id == nil
+
+	// config.Raw contains the original config needed for making updates
+	k8sConfig := meta.(*K8SConfig)
+	if id != nil {
+		k8sConfig.StoreResourceConfig(id.(string), config)
+	}
+	//Dump(config.Raw)
+
+	//HACK AROUND THIS https://github.com/hashicorp/terraform/commit/7b6710540795f20b7d36affd735b9b0dcd3c7520
+	// if we're not creating a new resource, remove any new computed fields
+	if !create {
+		for attr, d := range diff.Attributes {
+			// If there's no change, then don't let this go through as NewComputed.
+			// This usually only happens when Old and New are both empty.
+			if d.NewComputed && d.Old == d.New {
+				delete(diff.Attributes, attr)
+			}
+		}
+	}
+	return nil
+}
+
 
 func BuildDataSourcesMap() map[string]*tfSchema.Resource {
 	resourcesMap := map[string]*tfSchema.Resource{}
@@ -182,7 +192,7 @@ func resourceCreate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 	}
 	namespace := getNamespace(isNamespaced, resourceData, k8sConfig)
 
-	visitor := NewTF2K8SVisitor(resourceData, "", "", resourceData)
+	visitor := NewTF2K8SVisitor(resourceData, nil, "", "", nil)
 	model.Accept(visitor)
 	visitorObject := visitor.Object.(map[string]interface{})
 	visitorObject["apiVersion"] = gvk.Group + "/" + gvk.Version
@@ -236,7 +246,8 @@ func resourceUpdate(resourceKey string, gvk *schema.GroupVersionKind, isNamespac
 		return nameErr
 	}
 
-	visitor := NewTF2K8SVisitor(resourceData, "", "", resourceData)
+	resourceConfig, _ := k8sConfig.LoadResourceConfig(resourceData.Id())
+	visitor := NewTF2K8SVisitor(resourceData, resourceConfig, "", "", nil)
 	model.Accept(visitor)
 	log.Println("ops:", visitor.ops)
 

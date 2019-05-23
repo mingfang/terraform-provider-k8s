@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"github.com/hashicorp/terraform/terraform"
 	"log"
 	"sync"
 
@@ -18,12 +19,13 @@ import (
 
 var (
 	singleton *K8SConfig
+	once sync.Once
 )
 
 func K8SConfig_Singleton() *K8SConfig {
-	if singleton == nil {
+	once.Do(func() {
 		singleton = newK8SConfig()
-	}
+	})
 	return singleton
 }
 
@@ -75,6 +77,7 @@ type K8SConfig struct {
 	mutex           sync.Mutex
 	ModelsMap       map[schema.GroupVersionKind]proto.Schema
 	TFSchemasMap    map[string]*tfSchema.Schema
+	resourceConfigMap sync.Map //*terraform.ResourceConfig
 }
 
 func (this *K8SConfig) Get(name string, getOption metav1.GetOptions, gvk *schema.GroupVersionKind, namespace string) (*unstructured.Unstructured, error) {
@@ -177,6 +180,15 @@ func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, sche
 			callback(apiResource, gvk)
 		}
 	}
+}
+
+func (this *K8SConfig) LoadResourceConfig(id string) (*terraform.ResourceConfig, bool){
+	value, ok:= this.resourceConfigMap.Load(id)
+	return value.(*terraform.ResourceConfig), ok
+}
+
+func (this *K8SConfig) StoreResourceConfig(id string, resourceConfig *terraform.ResourceConfig){
+	this.resourceConfigMap.Store(id, resourceConfig)
 }
 
 func buildModelsMap(DiscoveryClient discovery.CachedDiscoveryInterface) map[schema.GroupVersionKind]proto.Schema {

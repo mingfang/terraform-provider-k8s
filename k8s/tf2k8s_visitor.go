@@ -7,26 +7,29 @@ import (
 
 	tfSchema "github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/helper/structure"
+	"github.com/hashicorp/terraform/terraform"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
 
 type TF2K8SVisitor struct {
-	Object       interface{}
-	context      interface{}
-	resourceData *tfSchema.ResourceData
-	keyPath      string
-	jsonPath     string
-	ops          []PatchOperation
+	Object         interface{}
+	context        interface{}
+	resourceData   *tfSchema.ResourceData
+	resourceConfig *terraform.ResourceConfig
+	keyPath        string
+	jsonPath       string
+	ops            []PatchOperation
 }
 
-func NewTF2K8SVisitor(resourceData *tfSchema.ResourceData, keyPath string, jsonPath string, context interface{}) *TF2K8SVisitor {
+func NewTF2K8SVisitor(resourceData *tfSchema.ResourceData, resourceConfig *terraform.ResourceConfig, keyPath string, jsonPath string, context interface{}) *TF2K8SVisitor {
 	return &TF2K8SVisitor{
-		resourceData: resourceData,
-		keyPath:      keyPath,
-		jsonPath:     jsonPath,
-		context:      context,
-		ops:          make([]PatchOperation, 0, 0),
+		resourceData:   resourceData,
+		resourceConfig: resourceConfig,
+		keyPath:        keyPath,
+		jsonPath:       jsonPath,
+		context:        context,
+		ops:            make([]PatchOperation, 0, 0),
 	}
 }
 
@@ -34,7 +37,7 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 	//log.Println("VisitArray keyPath:", this.keyPath)
 	var oldLen int
 	var newLen int
-	if this.resourceData.HasChange(this.keyPath) {
+	if !this.resourceData.IsNewResource() && this.resourceData.HasChange(this.keyPath) {
 		oldV, newV := this.resourceData.GetChange(this.keyPath)
 		oldLen = len(oldV.([]interface{}))
 		newLen = len(newV.([]interface{}))
@@ -62,8 +65,8 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 		keyPath := this.keyPath + "." + strconv.Itoa(i)
 		jsonPath := this.jsonPath + "/" + strconv.Itoa(i)
 		//log.Println("VisitArray keyPath:", keyPath)
-		if resourceValue, ok := this.resourceData.GetOk(keyPath); ok {
-			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, resourceValue)
+		if resourceValue, ok := this.getOk(keyPath); ok {
+			visitor := NewTF2K8SVisitor(this.resourceData, this.resourceConfig, keyPath, jsonPath, resourceValue)
 			proto.SubType.Accept(visitor)
 			if visitor.Object != nil {
 				this.Object.([]interface{})[i] = visitor.Object
@@ -93,7 +96,7 @@ func (this *TF2K8SVisitor) VisitArray(proto *proto.Array) {
 
 func (this *TF2K8SVisitor) VisitMap(proto *proto.Map) {
 	//log.Println("VisitMap keyPath:", this.keyPath)
-	if value, exists := this.resourceData.GetOk(this.keyPath); exists {
+	if value, ok := this.getOk(this.keyPath); ok {
 		this.Object = value
 	}
 }
@@ -148,19 +151,16 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 		if IsSkipPath(keyPath) {
 			continue
 		}
-		/*
-		valueGet := this.resourceData.Get(keyPath)
-		valueGetOk, ok := this.resourceData.GetOk(keyPath)
-		valueGetOkExists, exists := this.resourceData.GetOkExists(keyPath)
-		switch valueGet.(type) {
-		case []interface{}:
-		case map[string]interface{}:
-		default:
-			log.Println("VisitKind keyPath:", keyPath, "HasChange:", this.resourceData.HasChange(keyPath), "Get:", valueGet, "GetOK:", valueGetOk, ok, "GetOkExists:", valueGetOkExists, exists)
-		}
-		*/
-		if value, ok := this.resourceData.GetOk(keyPath); ok {
-			visitor := NewTF2K8SVisitor(this.resourceData, keyPath, jsonPath, value)
+
+		//switch value.(type) {
+		//case []interface{}:
+		//case map[string]interface{}:
+		//default:
+		//	log.Println("VisitKind", "keyPath:", keyPath, "isComputed:", "ok:", ok, "value:", value)
+		//}
+
+		if value, ok := this.getOk(keyPath); ok {
+			visitor := NewTF2K8SVisitor(this.resourceData, this.resourceConfig, keyPath, jsonPath, value)
 			v := proto.Fields[key]
 			v.Accept(visitor)
 			if visitor.Object != nil {
@@ -213,4 +213,17 @@ func (this *TF2K8SVisitor) handleJSON() {
 		log.Fatal(err)
 	}
 	this.Object = jsonObject
+}
+
+func (this *TF2K8SVisitor) getOk(path string) (interface{}, bool){
+	var value interface{}
+	var ok bool
+
+	if this.resourceData.IsNewResource() {
+		value, ok = this.resourceData.GetOkExists(path)
+	}else{
+		config := this.resourceConfig
+		value, ok = config.GetRaw(path)
+	}
+	return value, ok
 }
