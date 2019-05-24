@@ -15,6 +15,7 @@ PodPreset is a policy resource that defines additional runtime requirements for 
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -744,7 +745,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         config_map_keyref {
           key      = "TypeString*"
           name     = "TypeString"
-          optional = "TypeBool"
+          optional = "TypeString"
         }
 
         field_ref {
@@ -761,7 +762,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         secret_key_ref {
           key      = "TypeString*"
           name     = "TypeString"
-          optional = "TypeBool"
+          optional = "TypeString"
         }
       }
     }
@@ -770,13 +771,13 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
       config_map_ref {
         name     = "TypeString"
-        optional = "TypeBool"
+        optional = "TypeString"
       }
       prefix = "TypeString"
 
       secret_ref {
         name     = "TypeString"
-        optional = "TypeBool"
+        optional = "TypeString"
       }
     }
 
@@ -794,7 +795,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       mount_path        = "TypeString*"
       mount_propagation = "TypeString"
       name              = "TypeString*"
-      read_only         = "TypeBool"
+      read_only         = "TypeString"
       sub_path          = "TypeString"
       sub_path_expr     = "TypeString"
     }
@@ -804,7 +805,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       aws_elastic_block_store {
         fstype    = "TypeString"
         partition = "TypeInt"
-        read_only = "TypeBool"
+        read_only = "TypeString"
         volume_id = "TypeString*"
       }
 
@@ -814,11 +815,11 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         disk_uri     = "TypeString*"
         fstype       = "TypeString"
         kind         = "TypeString"
-        read_only    = "TypeBool"
+        read_only    = "TypeString"
       }
 
       azure_file {
-        read_only   = "TypeBool"
+        read_only   = "TypeString"
         secret_name = "TypeString*"
         share_name  = "TypeString*"
       }
@@ -826,7 +827,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       cephfs {
         monitors    = ["TypeString*"]
         path        = "TypeString"
-        read_only   = "TypeBool"
+        read_only   = "TypeString"
         secret_file = "TypeString"
 
         secret_ref {
@@ -837,7 +838,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
       cinder {
         fstype    = "TypeString"
-        read_only = "TypeBool"
+        read_only = "TypeString"
 
         secret_ref {
           name = "TypeString"
@@ -854,7 +855,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
           path = "TypeString*"
         }
         name     = "TypeString"
-        optional = "TypeBool"
+        optional = "TypeString"
       }
 
       csi {
@@ -864,7 +865,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         node_publish_secret_ref {
           name = "TypeString"
         }
-        read_only         = "TypeBool"
+        read_only         = "TypeString"
         volume_attributes = { "key" = "TypeString" }
       }
 
@@ -896,7 +897,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       fc {
         fstype      = "TypeString"
         lun         = "TypeInt"
-        read_only   = "TypeBool"
+        read_only   = "TypeString"
         target_wwns = ["TypeString"]
         wwids       = ["TypeString"]
       }
@@ -905,7 +906,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         driver    = "TypeString*"
         fstype    = "TypeString"
         options   = { "key" = "TypeString" }
-        read_only = "TypeBool"
+        read_only = "TypeString"
 
         secret_ref {
           name = "TypeString"
@@ -921,7 +922,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         fstype    = "TypeString"
         partition = "TypeInt"
         pdname    = "TypeString*"
-        read_only = "TypeBool"
+        read_only = "TypeString"
       }
 
       git_repo {
@@ -933,7 +934,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       glusterfs {
         endpoints = "TypeString*"
         path      = "TypeString*"
-        read_only = "TypeBool"
+        read_only = "TypeString"
       }
 
       host_path {
@@ -942,15 +943,15 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
       }
 
       iscsi {
-        chap_auth_discovery = "TypeBool"
-        chap_auth_session   = "TypeBool"
+        chap_auth_discovery = "TypeString"
+        chap_auth_session   = "TypeString"
         fstype              = "TypeString"
         initiator_name      = "TypeString"
         iqn                 = "TypeString*"
         iscsi_interface     = "TypeString"
         lun                 = "TypeInt*"
         portals             = ["TypeString"]
-        read_only           = "TypeBool"
+        read_only           = "TypeString"
 
         secret_ref {
           name = "TypeString"
@@ -961,13 +962,13 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
       nfs {
         path      = "TypeString*"
-        read_only = "TypeBool"
+        read_only = "TypeString"
         server    = "TypeString*"
       }
 
       persistent_volume_claim {
         claim_name = "TypeString*"
-        read_only  = "TypeBool"
+        read_only  = "TypeString"
       }
 
       photon_persistent_disk {
@@ -977,7 +978,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
       portworx_volume {
         fstype    = "TypeString"
-        read_only = "TypeBool"
+        read_only = "TypeString"
         volume_id = "TypeString*"
       }
 
@@ -994,7 +995,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
               path = "TypeString*"
             }
             name     = "TypeString"
-            optional = "TypeBool"
+            optional = "TypeString"
           }
 
           downward_api {
@@ -1024,7 +1025,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
               path = "TypeString*"
             }
             name     = "TypeString"
-            optional = "TypeBool"
+            optional = "TypeString"
           }
 
           service_account_token {
@@ -1037,7 +1038,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
 
       quobyte {
         group     = "TypeString"
-        read_only = "TypeBool"
+        read_only = "TypeString"
         registry  = "TypeString*"
         tenant    = "TypeString"
         user      = "TypeString"
@@ -1050,7 +1051,7 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         keyring   = "TypeString"
         monitors  = ["TypeString*"]
         pool      = "TypeString"
-        read_only = "TypeBool"
+        read_only = "TypeString"
 
         secret_ref {
           name = "TypeString"
@@ -1062,12 +1063,12 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
         fstype            = "TypeString"
         gateway           = "TypeString*"
         protection_domain = "TypeString"
-        read_only         = "TypeBool"
+        read_only         = "TypeString"
 
         secret_ref {
           name = "TypeString"
         }
-        ssl_enabled  = "TypeBool"
+        ssl_enabled  = "TypeString"
         storage_mode = "TypeString"
         storage_pool = "TypeString"
         system       = "TypeString*"
@@ -1082,13 +1083,13 @@ resource "k8s_settings_k8s_io_v1alpha1_pod_preset" "this" {
           mode = "TypeInt"
           path = "TypeString*"
         }
-        optional    = "TypeBool"
+        optional    = "TypeString"
         secret_name = "TypeString"
       }
 
       storageos {
         fstype    = "TypeString"
-        read_only = "TypeBool"
+        read_only = "TypeString"
 
         secret_ref {
           name = "TypeString"
@@ -1159,6 +1160,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
@@ -1213,7 +1221,7 @@ The key to select.
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the ConfigMap or it's key must be defined
 ## field_ref
@@ -1268,7 +1276,7 @@ The key of the secret to select from.  Must be a valid secret key.
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the Secret or it's key must be defined
 ## env_from
@@ -1288,7 +1296,7 @@ The ConfigMap to select from
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the ConfigMap must be defined
 #### prefix
@@ -1308,7 +1316,7 @@ The Secret to select from
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the Secret must be defined
 ## selector
@@ -1363,7 +1371,7 @@ mountPropagation determines how mounts are propagated from the host to container
 This must match the Name of a Volume.
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false.
 #### sub_path
@@ -1398,7 +1406,7 @@ Filesystem type of the volume that you want to mount. Tip: Ensure that the files
 The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty).
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Specify "true" to force and set the ReadOnly property in VolumeMounts to "true". If omitted, the default is "false". More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
 #### volume_id
@@ -1438,7 +1446,7 @@ Filesystem type to mount. Must be a filesystem type supported by the host operat
 Expected values Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 ## azure_file
@@ -1448,7 +1456,7 @@ AzureFile represents an Azure File Service mount on the host and bind mount to t
     
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 #### secret_name
@@ -1478,7 +1486,7 @@ Required: Monitors is a collection of Ceph monitors More info: https://releases.
 Optional: Used as the mounted root, rather than the full Ceph tree, default is /
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
 #### secret_file
@@ -1513,7 +1521,7 @@ Cinder represents a cinder volume attached and mounted on kubelets host machine 
 Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
 ## secret_ref
@@ -1568,7 +1576,7 @@ The relative path of the file to map the key to. May not be an absolute path. Ma
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the ConfigMap or it's keys must be defined
 ## csi
@@ -1598,7 +1606,7 @@ NodePublishSecretRef is a reference to the secret object containing sensitive in
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Specifies a read-only configuration for the volume. Defaults to false (read/write).
 #### volume_attributes
@@ -1698,7 +1706,7 @@ Filesystem type to mount. Must be a filesystem type supported by the host operat
 Optional: FC target lun number
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 #### target_wwns
@@ -1733,7 +1741,7 @@ Filesystem type to mount. Must be a filesystem type supported by the host operat
 Optional: Extra command options if any.
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 ## secret_ref
@@ -1783,7 +1791,7 @@ The partition in the volume that you want to mount. If omitted, the default is t
 Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
 ## git_repo
@@ -1823,7 +1831,7 @@ EndpointsName is the endpoint name that details Glusterfs topology. More info: h
 Path is the Glusterfs volume path. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
 ## host_path
@@ -1848,12 +1856,12 @@ ISCSI represents an ISCSI Disk resource that is attached to a kubelet's host mac
     
 #### chap_auth_discovery
 
-######  TypeBool
+######  TypeString
 
 whether support iSCSI Discovery CHAP authentication
 #### chap_auth_session
 
-######  TypeBool
+######  TypeString
 
 whether support iSCSI Session CHAP authentication
 #### fstype
@@ -1888,7 +1896,7 @@ iSCSI Target Lun number.
 iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false.
 ## secret_ref
@@ -1923,7 +1931,7 @@ NFS represents an NFS mount on the host that shares a pod's lifetime More info: 
 Path that is exported by the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the NFS export to be mounted with read-only permissions. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
 #### server
@@ -1943,7 +1951,7 @@ PersistentVolumeClaimVolumeSource represents a reference to a PersistentVolumeCl
 ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Will force the ReadOnly setting in VolumeMounts. Default false.
 ## photon_persistent_disk
@@ -1973,7 +1981,7 @@ PortworxVolume represents a portworx volume attached and mounted on kubelets hos
 FSType represents the filesystem type to mount Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs". Implicitly inferred to be "ext4" if unspecified.
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 #### volume_id
@@ -2028,7 +2036,7 @@ The relative path of the file to map the key to. May not be an absolute path. Ma
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the ConfigMap or it's keys must be defined
 ## downward_api
@@ -2118,7 +2126,7 @@ The relative path of the file to map the key to. May not be an absolute path. Ma
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the Secret or its key must be defined
 ## service_account_token
@@ -2153,7 +2161,7 @@ Quobyte represents a Quobyte mount on the host that shares a pod's lifetime
 Group to map volume access to Default is no group
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the Quobyte volume to be mounted with read-only permissions. Defaults to false.
 #### registry
@@ -2208,7 +2216,7 @@ A collection of Ceph monitors. More info: https://releases.k8s.io/HEAD/examples/
 The rados pool name. Default is rbd. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
 ## secret_ref
@@ -2248,7 +2256,7 @@ The host address of the ScaleIO API Gateway.
 The name of the ScaleIO Protection Domain for the configured storage.
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 ## secret_ref
@@ -2263,7 +2271,7 @@ SecretRef references to the secret for ScaleIO user and other sensitive informat
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 #### ssl_enabled
 
-######  TypeBool
+######  TypeString
 
 Flag to enable/disable SSL communication with Gateway, default false
 #### storage_mode
@@ -2318,7 +2326,7 @@ Optional: mode bits to use on this file, must be a value between 0 and 0777. If 
 The relative path of the file to map the key to. May not be an absolute path. May not contain the path element '..'. May not start with the string '..'.
 #### optional
 
-######  TypeBool
+######  TypeString
 
 Specify whether the Secret or it's keys must be defined
 #### secret_name
@@ -2338,7 +2346,7 @@ StorageOS represents a StorageOS volume attached and mounted on Kubernetes nodes
 Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
 ## secret_ref

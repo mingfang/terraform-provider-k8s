@@ -15,6 +15,7 @@ Service is a named abstraction of software service (for example, mysql) consisti
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -100,7 +101,7 @@ resource "k8s_core_v1_service" "this" {
       protocol    = "TypeString"
       target_port = "TypeString"
     }
-    publish_not_ready_addresses = "TypeBool"
+    publish_not_ready_addresses = "TypeString"
     selector                    = { "key" = "TypeString" }
     session_affinity            = "TypeString"
 
@@ -166,6 +167,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
@@ -250,7 +258,7 @@ The IP protocol for this port. Supports "TCP", "UDP", and "SCTP". Default is TCP
 Number or name of the port to access on the pods targeted by the service. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME. If this is a string, it will be looked up as a named port in the target Pod's container ports. If this is not specified, the value of the 'port' field is used (an identity map). This field is ignored for services with clusterIP=None, and should be omitted or set equal to the 'port' field. More info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
 #### publish_not_ready_addresses
 
-######  TypeBool
+######  TypeString
 
 publishNotReadyAddresses, when set to true, indicates that DNS implementations must publish the notReadyAddresses of subsets for the Endpoints associated with the Service. The default value is false. The primary use case for setting this field is to use a StatefulSet's Headless Service to propagate SRV records for its Pods without respect to their readiness for purpose of peer discovery.
 #### selector

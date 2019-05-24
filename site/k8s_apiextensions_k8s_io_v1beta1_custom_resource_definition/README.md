@@ -15,6 +15,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -253,8 +254,8 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
       schema {
         open_apiv3_schema = "TypeString"
       }
-      served  = "TypeBool*"
-      storage = "TypeBool*"
+      served  = "TypeString*"
+      storage = "TypeString*"
 
       subresources {
 
@@ -320,6 +321,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
@@ -578,12 +586,12 @@ Schema describes the schema for CustomResource used in validation, pruning, and 
 OpenAPIV3Schema is the OpenAPI v3 schema to be validated against.
 #### served
 
-###### Required •  TypeBool
+###### Required •  TypeString
 
 Served is a flag enabling/disabling this version from being served via REST APIs
 #### storage
 
-###### Required •  TypeBool
+###### Required •  TypeString
 
 Storage flags the version as storage version. There must be exactly one flagged as storage version.
 ## subresources

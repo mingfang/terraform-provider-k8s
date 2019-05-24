@@ -24,6 +24,7 @@ ServiceAccount binds together: * a name, understood by users, and perhaps by per
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -52,7 +53,7 @@ ServiceAccount binds together: * a name, understood by users, and perhaps by per
 ```hcl
 resource "k8s_core_v1_service_account" "this" {
 
-  automount_service_account_token = "TypeBool"
+  automount_service_account_token = "TypeString"
 
   image_pull_secrets {
     name = "TypeString"
@@ -84,7 +85,7 @@ resource "k8s_core_v1_service_account" "this" {
   
 #### automount_service_account_token
 
-######  TypeBool
+######  TypeString
 
 AutomountServiceAccountToken indicates whether pods running as this service account should have an API token automatically mounted. Can be overridden at the pod level.
 ## image_pull_secrets
@@ -143,6 +144,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString

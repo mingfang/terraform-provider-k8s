@@ -15,6 +15,7 @@ PriorityClass defines mapping from a priority class name to the priority integer
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -30,7 +31,7 @@ resource "k8s_scheduling_k8s_io_v1_priority_class" "this" {
 
   description = "TypeString"
 
-  global_default = "TypeBool"
+  global_default = "TypeString"
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -55,7 +56,7 @@ resource "k8s_scheduling_k8s_io_v1_priority_class" "this" {
 description is an arbitrary string that usually provides guidelines on when this priority class should be used.
 #### global_default
 
-######  TypeBool
+######  TypeString
 
 globalDefault specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class. Only one PriorityClass can be marked as `globalDefault`. However, if more than one PriorityClasses exists with their `globalDefault` field set to true, the smallest value of such global default PriorityClasses will be used as the default priority.
 ## metadata
@@ -104,6 +105,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString

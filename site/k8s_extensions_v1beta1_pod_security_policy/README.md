@@ -15,6 +15,7 @@ PodSecurityPolicy governs the ability to make requests that affect the Security 
 - [labels](#labels)
 - [name](#name)
 - [namespace](#namespace)
+- [resource_version](#resource_version)
 - [self_link](#self_link)
 - [uid](#uid)
 
@@ -193,7 +194,7 @@ resource "k8s_extensions_v1beta1_pod_security_policy" "this" {
   }
 
   spec {
-    allow_privilege_escalation = "TypeBool"
+    allow_privilege_escalation = "TypeString"
     allowed_capabilities       = ["TypeString"]
 
     allowed_csi_drivers {
@@ -206,12 +207,12 @@ resource "k8s_extensions_v1beta1_pod_security_policy" "this" {
 
     allowed_host_paths {
       path_prefix = "TypeString"
-      read_only   = "TypeBool"
+      read_only   = "TypeString"
     }
     allowed_proc_mount_types           = ["TypeString"]
     allowed_unsafe_sysctls             = ["TypeString"]
     default_add_capabilities           = ["TypeString"]
-    default_allow_privilege_escalation = "TypeBool"
+    default_allow_privilege_escalation = "TypeString"
     forbidden_sysctls                  = ["TypeString"]
 
     fsgroup {
@@ -222,16 +223,16 @@ resource "k8s_extensions_v1beta1_pod_security_policy" "this" {
       }
       rule = "TypeString"
     }
-    host_ipc     = "TypeBool"
-    host_network = "TypeBool"
-    host_pid     = "TypeBool"
+    host_ipc     = "TypeString"
+    host_network = "TypeString"
+    host_pid     = "TypeString"
 
     host_ports {
       max = "TypeInt*"
       min = "TypeInt*"
     }
-    privileged                 = "TypeBool"
-    read_only_root_filesystem  = "TypeBool"
+    privileged                 = "TypeString"
+    read_only_root_filesystem  = "TypeString"
     required_drop_capabilities = ["TypeString"]
 
     run_asgroup {
@@ -327,6 +328,13 @@ Name must be unique within a namespace. Is required when creating resources, alt
 Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
@@ -346,7 +354,7 @@ spec defines the policy enforced.
     
 #### allow_privilege_escalation
 
-######  TypeBool
+######  TypeString
 
 allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true.
 #### allowed_capabilities
@@ -388,7 +396,7 @@ pathPrefix is the path prefix that the host volume must match. It does not suppo
 Examples: `/foo` would allow `/foo`, `/foo/` and `/foo/bar` `/foo` would not allow `/food` or `/etc/foo`
 #### read_only
 
-######  TypeBool
+######  TypeString
 
 when set to true, will allow host volumes matching the pathPrefix only if all volume mounts are readOnly.
 #### allowed_proc_mount_types
@@ -410,7 +418,7 @@ Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "fo
 defaultAddCapabilities is the default set of capabilities that will be added to the container unless the pod spec specifically drops the capability.  You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list.
 #### default_allow_privilege_escalation
 
-######  TypeBool
+######  TypeString
 
 defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process.
 #### forbidden_sysctls
@@ -447,17 +455,17 @@ min is the start of the range, inclusive.
 rule is the strategy that will dictate what FSGroup is used in the SecurityContext.
 #### host_ipc
 
-######  TypeBool
+######  TypeString
 
 hostIPC determines if the policy allows the use of HostIPC in the pod spec.
 #### host_network
 
-######  TypeBool
+######  TypeString
 
 hostNetwork determines if the policy allows the use of HostNetwork in the pod spec.
 #### host_pid
 
-######  TypeBool
+######  TypeString
 
 hostPID determines if the policy allows the use of HostPID in the pod spec.
 ## host_ports
@@ -477,12 +485,12 @@ max is the end of the range, inclusive.
 min is the start of the range, inclusive.
 #### privileged
 
-######  TypeBool
+######  TypeString
 
 privileged determines if a pod can request to be run as privileged.
 #### read_only_root_filesystem
 
-######  TypeBool
+######  TypeString
 
 readOnlyRootFilesystem when set to true will force containers to run with a read only root file system.  If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to.
 #### required_drop_capabilities
