@@ -57,6 +57,7 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
         }
         containers {
           args = [
+            "--v=5",
             "--nodeid=$(NODE_ID)",
             "--endpoint=$(CSI_ENDPOINT)",
           ]
