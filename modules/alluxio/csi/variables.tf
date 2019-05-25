@@ -1,6 +1,5 @@
-variable "name" {
-  default = "alluxio"
-}
+variable "name" {}
+
 variable "namespace" {
   default = null
 }
@@ -14,6 +13,7 @@ variable "command" {
 
 variable "args" {
   default = [
+    "--v=5",
     "--nodeid=$(NODE_ID)",
     "--endpoint=$(CSI_ENDPOINT)",
   ]
