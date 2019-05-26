@@ -20,6 +20,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec`),
 	regexp.MustCompile(`k8s_\w+_\w+_role_binding\.role_ref`),
 	regexp.MustCompile(`k8s_.*\.spec.access_modes`),
+	regexp.MustCompile(`k8s_.*\.parameters`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
