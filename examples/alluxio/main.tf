@@ -111,23 +111,19 @@ module "fuse" {
 
 module "csi" {
   source    = "../../modules/alluxio/csi"
-  name = var.name
+  name      = var.name
   namespace = k8s_core_v1_namespace.this.metadata.0.name
 }
 
-resource "k8s_storage_k8s_io_v1_storage_class" "this" {
-  metadata {
-    name      = var.name
-  }
-
-  _provisioner = "alluxio"
-  parameters = {
-    "alluxio.master.hostname" = "${module.master.service.metadata.0.name}.${module.master.service.metadata.0.namespace}",
-    "alluxio.master.port"     = module.master.service.spec.0.ports.0.port
-  }
+module "storage-class" {
+  source                  = "../../modules/alluxio/csi/storage-class"
+  name                    = var.name
+  _provisioner            = module.csi._provisioner
+  alluxio_master_hostname = "${module.master.service.metadata.0.name}.${module.master.service.metadata.0.namespace}"
+  alluxio_master_port     = module.master.service.spec.0.ports.0.port
+  java_options            = "-Xms64M"
+  mount_options           = ["allow_other"]
 }
-
-
 
 module "ingress-rules" {
   source        = "git::https://github.com/mingfang/terraform-provider-k8s.git//modules/kubernetes/ingress-rules"
