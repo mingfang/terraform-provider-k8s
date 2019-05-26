@@ -99,7 +99,8 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
             name              = "pods-mount-dir"
           }
         }
-        
+
+        enable_service_links = false
         service_account = var.name
 
         volumes {
