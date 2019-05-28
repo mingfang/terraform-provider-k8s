@@ -27,10 +27,11 @@ locals {
     ]
     containers = [
       {
+        args = [
+          "start-fg",
+        ]
         command = [
-          "/bin/bash",
-          "-c",
-          "/opt/dremio/bin/dremio-admin upgrade && /opt/dremio/bin/dremio start-fg",
+          "/opt/dremio/bin/dremio",
         ]
         env = concat([
           {
