@@ -19,12 +19,16 @@ locals {
     ]
     containers = [
       {
+        name  = "dremio"
+        image = var.image
+
         args = [
           "start-fg",
         ]
         command = [
           "/opt/dremio/bin/dremio",
         ]
+
         env = concat([
           {
             name = "POD_NAME"
@@ -48,9 +52,6 @@ locals {
             value = "-Dzookeeper=${var.zookeeper} -Dservices.coordinator.enabled=false"
           },
         ], var.env)
-
-        image = var.image
-        name  = "dremio"
 
         resources = {
           requests = {
