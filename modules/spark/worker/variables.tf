@@ -8,10 +8,6 @@ variable "env" {
   default = []
 }
 
-variable "replicas" {
-  default = 1
-}
-
 variable "image" {
   default = "registry.rebelsoft.com/spark"
 }

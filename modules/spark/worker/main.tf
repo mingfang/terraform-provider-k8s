@@ -9,13 +9,6 @@ locals {
   parameters = {
     name      = var.name
     namespace = var.namespace
-    replicas  = var.replicas
-    ports = [
-      {
-        name = "http-webui"
-        port = var.spark_worker_webui_port
-      },
-    ]
     enable_service_links = false
     containers = [
       {
