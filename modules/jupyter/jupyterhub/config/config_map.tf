@@ -3,7 +3,7 @@ resource "k8s_core_v1_config_map" "this" {
     "values.yaml" = <<-EOF
       Chart:
         Name: jupyterhub
-        Version: 0.9-b51ffeb
+        Version: 0.9-36ff743
       Release:
         Name: release-name
         Namespace: ${var.namespace}
@@ -64,7 +64,7 @@ resource "k8s_core_v1_config_map" "this" {
         fsGid: 1000
         image:
           name: jupyterhub/k8s-hub
-          tag: 0.9-b51ffeb
+          tag: 0.9-36ff743
         imagePullPolicy: IfNotPresent
         imagePullSecret:
           email: null

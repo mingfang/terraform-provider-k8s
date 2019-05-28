@@ -17,7 +17,7 @@ variable "port" {
 }
 
 variable "image" {
-  default = "jupyterhub/k8s-hub:0.9-b51ffeb"
+  default = "jupyterhub/k8s-hub:0.9-36ff743"
 }
 
 variable "overrides" {
