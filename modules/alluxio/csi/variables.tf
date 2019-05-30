@@ -19,3 +19,7 @@ variable "args" {
   ]
 }
 
+variable "domain_socket_path" {
+  default = null
+}
+
