@@ -5,15 +5,15 @@ variable "namespace" {
 }
 
 variable "image" {
-  default = "alluxio/alluxio:2.0.0-SNAPSHOT"
+  default = "alluxio/alluxio:2.0.0-RC1"
 }
 
 variable "overrides" {
   default = {}
 }
 
-variable "env" {
-  default = []
+variable "extra_alluxio_java_opts" {
+  default = ""
 }
 
 variable "alluxio_master_hostname" {}

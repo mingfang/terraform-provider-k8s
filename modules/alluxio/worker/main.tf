@@ -6,6 +6,17 @@
  */
 
 locals {
+  domain_socket_path = "/tmp/${var.name}.sock"
+  alluxio_java_opts = join(" ", [
+    "-Dalluxio.master.hostname=${var.alluxio_master_hostname}",
+    "-Dalluxio.master.port=${var.alluxio_master_port}",
+    "-Dalluxio.worker.hostname=$${ALLUXIO_WORKER_HOSTNAME}",
+    "-Dalluxio.locality.node=$${ALLUXIO_LOCALITY_NODE}",
+    "-Dalluxio.worker.data.server.domain.socket.address=/opt/domain",
+    "-Dalluxio.worker.data.server.domain.socket.as.uuid=true",
+    var.extra_alluxio_java_opts
+  ])
+
   parameters = {
     name                 = var.name
     namespace            = var.namespace
@@ -19,7 +30,7 @@ locals {
           "worker"
         ]
 
-        env = concat([
+        env = [
           {
             name = "ALLUXIO_WORKER_HOSTNAME"
             value_from = {
@@ -29,22 +40,6 @@ locals {
             }
           },
           {
-            name  = "ALLUXIO_MASTER_HOSTNAME"
-            value = var.alluxio_master_hostname
-          },
-          {
-            name  = "ALLUXIO_MASTER_PORT"
-            value = var.alluxio_master_port
-          },
-          {
-            name  = "ALLUXIO_WORKER_DATA_SERVER_DOMAIN_SOCKET_ADDRESS"
-            value = "/opt/domain"
-          },
-          {
-            name  = "ALLUXIO_WORKER_DATA_SERVER_DOMAIN_SOCKET_AS_UUID"
-            value = "true"
-          },
-          {
             name  = "ALLUXIO_LOCALITY_NODE"
             value_from = {
               field_ref = {
@@ -52,7 +47,11 @@ locals {
               }
             }
           },
-        ], var.env)
+          {
+            name  = "ALLUXIO_JAVA_OPTS"
+            value = local.alluxio_java_opts
+          },
+        ]
 
         volume_mounts = [
           {
@@ -77,7 +76,7 @@ locals {
       {
         name = "alluxio-domain"
         host_path = {
-          path    = "/tmp/domain"
+          path = local.domain_socket_path
           type = "DirectoryOrCreate"
         }
       },

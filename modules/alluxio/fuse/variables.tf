@@ -5,7 +5,7 @@ variable "namespace" {
 }
 
 variable "image" {
-  default = "alluxio/alluxio-fuse:2.0.0-SNAPSHOT"
+  default = "alluxio/alluxio-fuse:2.0.0-RC1"
 }
 
 variable "overrides" {

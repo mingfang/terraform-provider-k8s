@@ -31,36 +31,16 @@ module "master" {
   overrides = {
     image_pull_policy = "Always"
   }
-  env = [
-    {
-      name  = "ALLUXIO_MASTER_MOUNT_TABLE_ROOT_UFS"
-      value = "s3a://alluxio"
-    },
-    {
-      name  = "ALLUXIO_UNDERFS_S3_ENDPOINT"
-      value = "http://minio.minio.svc.cluster.local:9000"
-    },
-    {
-      name  = "ALLUXIO_UNDERFS_S3_DISABLE_DNS_BUCKETS"
-      value = "true"
-    },
-    {
-      name  = "ALLUXIO_UNDERFS_S3A_INHERIT_ACL"
-      value = "false"
-    },
-    {
-      name  = "AWS_ACCESSKEYID"
-      value = "IUWU60H2527LP7DOYJVP"
-    },
-    {
-      name  = "AWS_SECRETKEY"
-      value = "bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm"
-    },
-    {
-      name  = "ALLUXIO_JAVA_OPTS"
-      value = "-Dalluxio.master.audit.logging.enabled=true"
-    },
-  ]
+  extra_alluxio_java_opts = join(" ", [
+    "-Dalluxio.master.mount.table.root.ufs=s3a://alluxio",
+    "-Dalluxio.master.mount.table.root.readonly=true",
+    "-Dalluxio.master.audit.logging.enabled=true",
+    "-Dalluxio.underfs.s3.endpoint=http://minio.minio.svc.cluster.local:9000",
+    "-Dalluxio.underfs.s3.disable.dns.buckets=true",
+    "-Dalluxio.underfs.s3a.inherit_acl=false",
+    "-Daws.accessKeyId=IUWU60H2527LP7DOYJVP",
+    "-Daws.secretKey=bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm",
+  ])
 }
 
 module "worker" {
@@ -69,31 +49,22 @@ module "worker" {
   namespace = k8s_core_v1_namespace.this.metadata.0.name
   overrides = {
     image_pull_policy = "Always"
+    update_strategy = {
+      rolling_update = {
+        max_unavailable = "100%"
+      }
+      type = "RollingUpdate"
+    }
   }
-  env = [
-    {
-      name  = "ALLUXIO_UNDERFS_S3_ENDPOINT"
-      value = "http://minio.minio.svc.cluster.local:9000"
-    },
-    {
-      name  = "ALLUXIO_UNDERFS_S3_DISABLE_DNS_BUCKETS"
-      value = "true"
-    },
-    {
-      name  = "ALLUXIO_UNDERFS_S3A_INHERIT_ACL"
-      value = "false"
-    },
-    {
-      name  = "AWS_ACCESSKEYID"
-      value = "IUWU60H2527LP7DOYJVP"
-    },
-    {
-      name  = "AWS_SECRETKEY"
-      value = "bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm"
-    },
-  ]
   alluxio_master_hostname = module.master.service.metadata.0.name
   alluxio_master_port     = module.master.service.spec.0.ports.0.port
+  extra_alluxio_java_opts = join(" ", [
+    "-Dalluxio.underfs.s3.endpoint=http://minio.minio.svc.cluster.local:9000",
+    "-Dalluxio.underfs.s3.disable.dns.buckets=true",
+    "-Dalluxio.underfs.s3a.inherit_acl=false",
+    "-Daws.accessKeyId=IUWU60H2527LP7DOYJVP",
+    "-Daws.secretKey=bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm",
+  ])
 }
 
 /*
@@ -116,13 +87,14 @@ module "csi" {
 }
 
 module "storage-class" {
-  source                  = "../../modules/alluxio/csi/storage-class"
-  name                    = var.name
-  _provisioner            = module.csi._provisioner
-  alluxio_master_hostname = "${module.master.service.metadata.0.name}.${module.master.service.metadata.0.namespace}"
-  alluxio_master_port     = module.master.service.spec.0.ports.0.port
-  java_options            = "-Xms64M"
-  mount_options           = ["allow_other"]
+  source          = "../../modules/alluxio/csi/storage-class"
+  name            = var.name
+  _provisioner    = module.csi._provisioner
+  master_hostname = "${module.master.service.metadata.0.name}.${module.master.service.metadata.0.namespace}"
+  master_port     = module.master.service.spec.0.ports.0.port
+  domain_socket   = "/opt/domain"
+  java_options    = "-Xms64M -Dalluxio.security.stale.channel.purge.interval=365d"
+  mount_options   = ["allow_other"]
 }
 
 module "ingress-rules" {

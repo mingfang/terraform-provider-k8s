@@ -6,6 +6,11 @@
  */
 
 locals {
+  alluxio_java_opts = join(" ", [
+    "-Dalluxio.master.port=${var.ports.0.port}",
+    var.extra_alluxio_java_opts
+  ])
+
   parameters = {
     name      = var.name
     namespace = var.namespace
@@ -16,20 +21,21 @@ locals {
       {
         name  = "alluxio"
         image = var.image
+
         args = [
           "master"
         ]
-        env = concat([
+
+        env = [
           {
-            name = "ALLUXIO_MASTER_PORT"
-            value = var.ports.0.port
+            name = "ALLUXIO_JAVA_OPTS"
+            value = local.alluxio_java_opts
           },
-        ], var.env)
+        ]
       }
     ]
   }
 }
-
 
 module "deployment-service" {
   source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/deployment-service"
