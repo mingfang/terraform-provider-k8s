@@ -163,6 +163,23 @@ locals {
   )
 }
 
+resource "k8s_core_v1_persistent_volume_claim" "this" {
+  metadata {
+    name      = var.name
+    namespace = var.namespace
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+
+    resources {
+      requests = { "storage" = "1Gi" }
+    }
+
+    storage_class_name = "alluxio"
+  }
+}
+
 module "config" {
   source    = "../../modules/jupyter/jupyterhub/config"
   name      = var.name
@@ -185,15 +202,14 @@ module "config" {
   singleuser_storage_extra_volume_mounts = [
     {
       name       = "alluxio-fuse-mount"
-      mount_path = "/alluxio"
+      mountPath = "/alluxio"
     }
   ]
   singleuser_storage_extra_volumes = [
     {
       name = "alluxio-fuse-mount"
-      host_path = {
-        path = "/alluxio-fuse"
-        type = "Directory"
+      persistentVolumeClaim = {
+        claimName = k8s_core_v1_persistent_volume_claim.this.metadata.0.name
       }
     }
   ]
@@ -226,8 +242,8 @@ module "hub" {
   secret_name               = module.config.secret.metadata.0.name
   proxy_api_service_host    = "${var.name}-proxy"
   proxy_api_service_port    = 8001
-  proxy_public_service_host = "${var.name}.${var.ingress_ip}.nip.io"
-  proxy_public_service_port = var.ingress_node_port
+  proxy_public_service_host = module.ingress-rules.rules.0.host
+  proxy_public_service_port = 80
 }
 
 module "ingress-rules" {
@@ -237,7 +253,7 @@ module "ingress-rules" {
   ingress_class = "nginx"
   rules = [
     {
-      host = "${var.name}.${var.ingress_ip}.nip.io"
+      host = "${var.name}.rebelsoft.com"
 
       http = {
         paths = [
