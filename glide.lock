@@ -1,5 +1,5 @@
 hash: cc7e5a38b5a714d21aa4780da60f13f58bc54f06708cd03f309a416acca12f9b
-updated: 2019-05-23T02:49:14.046041134Z
+updated: 2019-06-12T21:09:30.213607877Z
 imports:
 - name: github.com/agext/levenshtein
   version: 0ded9c86537917af2ff89bc9c78de6bd58477894
@@ -44,15 +44,15 @@ imports:
 - name: github.com/fatih/color
   version: 3f9d52f7176a6927daacff70a3e8d1dc2025c53e
 - name: github.com/ghodss/yaml
-  version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
+  version: c7ce16629ff4cd059ed96ed06419dd3856fd3577
 - name: github.com/go-openapi/jsonpointer
-  version: 46af16f9f7b149af66e5d1bd010e3574dc06de98
+  version: ef5f0afec364d3b9396b7b77b43dbe26bf1f8004
 - name: github.com/go-openapi/jsonreference
-  version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
+  version: 8483a886a90412cd6858df4ea3483dce9c8e35a3
 - name: github.com/go-openapi/spec
-  version: 6aced65f8501fe1217321abf0749d354824ba2ff
+  version: 5bae59e25b21498baea7f9d46e9c147ec106a42e
 - name: github.com/go-openapi/swag
-  version: 1d0bd113de87027671077d3c71eb3ac5d7dbba72
+  version: 5899d5c5e619fda5fa86e14795a835f473ca284c
 - name: github.com/gogo/protobuf
   version: 342cbe0a04158f6dcb03ca0079991a51a4248c02
   subpackages:
@@ -70,7 +70,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 6f77996f0c42f7b84e5a2b252227263f93432e9b
+  version: 1b316004397f1f336546ca058ddb5b95c41a8772
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -104,7 +104,7 @@ imports:
 - name: github.com/hashicorp/go-multierror
   version: 886a7fbe3eb1c874d46f623bfa70af45f425b3d1
 - name: github.com/hashicorp/go-plugin
-  version: a1756f37cec6471f10accdf15a5e5961317bea0d
+  version: a1bc61569a26c0f65865932c0d55743b0567c494
   subpackages:
   - internal/plugin
 - name: github.com/hashicorp/go-safetemp
@@ -114,7 +114,7 @@ imports:
 - name: github.com/hashicorp/go-version
   version: 192140e6f3e645d971b134d4e35b5191adb9dfd3
 - name: github.com/hashicorp/hcl
-  version: 99e2f22d1c94b272184d97dd9d252866409100ab
+  version: cf7d376da96d9cecec7c7483cec2735efe54a410
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -125,7 +125,7 @@ imports:
   - json/scanner
   - json/token
 - name: github.com/hashicorp/hcl2
-  version: 4b22149b7cef7272799ac85dca150e553d667971
+  version: 318e80eefe28c3aa01b434c61bcf4c83a0cc6b25
   subpackages:
   - ext/dynblock
   - ext/typeexpr
@@ -146,7 +146,7 @@ imports:
 - name: github.com/hashicorp/logutils
   version: a335183dfd075f638afcc820c90591ca3c97eba6
 - name: github.com/hashicorp/terraform
-  version: 31323bd1332fe52cbc86abe8802155e44c63de90
+  version: aee25aaea6294a0d59401282f20ba2161b83e525
   repo: https://github.com/mingfang/terraform
   subpackages:
   - addrs
@@ -196,7 +196,7 @@ imports:
   - tfdiags
   - version
 - name: github.com/hashicorp/terraform-config-inspect
-  version: 8022a2663a706bf2f36bfaf7968a9234f9e5a571
+  version: e2ee25ba1e5e57c8d6481aa83e1ca7ebd3bf3742
   subpackages:
   - tfconfig
 - name: github.com/hashicorp/yamux
@@ -212,13 +212,13 @@ imports:
 - name: github.com/kr/pty
   version: b6e1bdd4a4f88614e0c6e5e8089c7abed98aae17
 - name: github.com/mailru/easyjson
-  version: d5b7844b561a7bc640052f1b935f7b800330d7e0
+  version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
   - buffer
   - jlexer
   - jwriter
 - name: github.com/mattn/go-colorable
-  version: 3a70a971f94a22f2fa562ffcc7a0eb45f5daf045
+  version: 8029fb3788e5a4a9c00e415f586a6d033f5d38b3
 - name: github.com/mattn/go-isatty
   version: 1311e847b0cb909da63b5fecfb5370aa66236465
 - name: github.com/mitchellh/cli
@@ -250,7 +250,7 @@ imports:
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/posener/complete
-  version: af07aa5181b38e3fa57d053328e44aaa27da5999
+  version: 60e9d0a237999e714fb4d04727fe7ffa1b377c6e
   subpackages:
   - cmd
   - cmd/install
@@ -259,6 +259,8 @@ imports:
   version: 8a290539e2e8629dbc4e6bad948158f790ec31f4
 - name: github.com/PuerkitoBio/urlesc
   version: 5bd2802263f21d8788851d5305584c82a5c75d7e
+- name: github.com/satori/go.uuid
+  version: b2ce2384e17bbe0c6d34077efa39dbab3e09123b
 - name: github.com/spf13/afero
   version: 588a75ec4f32903aa5e39a2619ba6a4631e28424
   subpackages:
@@ -274,11 +276,11 @@ imports:
   - internal/xlog
   - lzma
 - name: github.com/vmihailenco/msgpack
-  version: 5467b4fb032b68b160f4acce954153280cf5e05b
+  version: 28f5bd403628d3e7d2c10865549fa70e17345be6
   subpackages:
   - codes
 - name: github.com/zclconf/go-cty
-  version: 4fecf87372ec204b46eb9e8ff264cdc3cafdccfe
+  version: 6fd39ad70c3a6bbdb1b4e47444e4cce72f901200
   subpackages:
   - cty
   - cty/convert
@@ -288,6 +290,8 @@ imports:
   - cty/json
   - cty/msgpack
   - cty/set
+- name: github.com/zclconf/go-cty-yaml
+  version: e82830b0868d20488fcdc580da2f1e8e36d43efa
 - name: golang.org/x/crypto
   version: de0752318171da717af4ce24d0a2e8626afaeb11
   subpackages:
@@ -358,18 +362,20 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/genproto
-  version: c2c4e71fbf6989c3e46a18d65cb88c288f8a3a55
+  version: a7e196e89fd3a3c4d103ca540bd5dac3a736e375
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
-  version: 168a6198bcb0ef175f7dacec0b8691fc141dc9b8
+  version: cd89eaf40e4cd50ea058ccd4f2f08d5e9ce03316
   subpackages:
   - balancer
   - balancer/base
   - balancer/roundrobin
+  - binarylog/grpc_binarylog_v1
   - codes
   - connectivity
   - credentials
+  - credentials/internal
   - encoding
   - encoding/proto
   - grpclog
@@ -377,8 +383,14 @@ imports:
   - health/grpc_health_v1
   - internal
   - internal/backoff
+  - internal/balancerload
+  - internal/binarylog
   - internal/channelz
+  - internal/envconfig
   - internal/grpcrand
+  - internal/grpcsync
+  - internal/syscall
+  - internal/transport
   - keepalive
   - metadata
   - naming
@@ -386,11 +398,11 @@ imports:
   - resolver
   - resolver/dns
   - resolver/passthrough
+  - serviceconfig
   - stats
   - status
   - tap
   - test/bufconn
-  - transport
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
