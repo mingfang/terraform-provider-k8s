@@ -30,14 +30,7 @@ func K8SConfig_Singleton() *K8SConfig {
 }
 
 func newK8SConfig() *K8SConfig {
-	//todo: where is kubeconfig
-	kubeconfig := "/kubeconfig"
-	cacheDir := "/dev/shm/kube/http-cache"
-
-	RESTClientGetter := &genericclioptions.ConfigFlags{
-		KubeConfig: &kubeconfig,
-		CacheDir:   &cacheDir,
-	}
+	RESTClientGetter := genericclioptions.NewConfigFlags(true)
 	RESTMapper, err := RESTClientGetter.ToRESTMapper()
 	if err != nil {
 		log.Fatal(err)
