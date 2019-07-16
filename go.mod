@@ -12,14 +12,14 @@ replace k8s.io/cli-runtime => k8s.io/cli-runtime v0.0.0-20190409023024-d644b00f3
 
 // Forked for critical feature https://github.com/mingfang/terraform/commit/c81184ae9eb1d557596b5a3fa9db8cff2149db9c
 
-replace github.com/hashicorp/terraform => github.com/mingfang/terraform v0.12.0-alpha4.0.20190612210514-aee25aaea629
+replace github.com/hashicorp/terraform => github.com/mingfang/terraform v0.12.0-alpha4.0.20190716124805-56125c18ce4c
 
 require (
 	github.com/awalterschulze/gographviz v0.0.0-20190522210029-fa59802746ab
 	github.com/davecgh/go-spew v1.1.1
 	github.com/evanphx/json-patch v4.5.0+incompatible // indirect
 	github.com/gruntwork-io/terratest v0.17.0
-	github.com/hashicorp/terraform v0.12.2
+	github.com/hashicorp/terraform v0.12.4
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/spf13/cobra v0.0.5 // indirect

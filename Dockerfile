@@ -19,11 +19,20 @@ RUN wget -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform
 # Glide
 RUN curl https://glide.sh/get | sh
 
+#Docker client only
+RUN wget -O - https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar zx -C /usr/local/bin --strip-components=1 docker/docker
+
+#Helm
+RUN wget -O - https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
+
 FROM base as dev
+ENV GO111MODULE=on
 
 #Terraform master branch
-RUN git clone --depth=1 https://github.com/hashicorp/terraform.git $GOPATH/src/github.com/hashicorp/terraform
+ENV COMMIT v0.12.4
+RUN git clone https://github.com/hashicorp/terraform.git $GOPATH/src/github.com/hashicorp/terraform
 RUN cd "$GOPATH/src/github.com/hashicorp/terraform" && \
+    git checkout $COMMIT && \
     make tools && \
     XC_OS=linux XC_ARCH=amd64 make bin
 RUN mv /go/bin/terraform /usr/local/bin/terraform
@@ -45,8 +54,6 @@ RUN cd $GOPATH/src/github.com/mingfang/terraform-provider-k8s/cmd/extractor && \
 # generator
 RUN cd $GOPATH/src/github.com/mingfang/terraform-provider-k8s/cmd/generator && \
     CGO_ENABLED=0 go build -o /usr/local/bin/generator
-
-ENV TF_LOG=DEBUG
 
 FROM alpine as final
 RUN apk add --no-cache ca-certificates
