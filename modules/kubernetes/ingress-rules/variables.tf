@@ -5,7 +5,7 @@ variable "namespace" {
 }
 
 variable "annotations" {
-  type = map
+  type    = map
   default = {}
 }
 
@@ -14,6 +14,7 @@ variable "ingress_class" {
 }
 
 variable "rules" {}
+variable "tls" {}
 
 variable "overrides" {
   default = {}
