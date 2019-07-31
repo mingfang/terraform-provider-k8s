@@ -20,15 +20,4 @@ resource "k8s_rbac_authorization_k8s_io_v1_role" "config-watcher" {
       "watch",
     ]
   }
-  rules {
-    api_groups = [
-      "",
-    ]
-    resources = [
-      "events",
-    ]
-    verbs = [
-      "create",
-    ]
-  }
 }

@@ -32,7 +32,7 @@ resource "k8s_apps_v1_deployment" "controller" {
             "--port=7472",
             "--config=config",
           ]
-          image             = "metallb/controller:v0.7.3"
+          image             = "metallb/controller:v0.8.1"
           image_pull_policy = "IfNotPresent"
           name              = "controller"
 
@@ -55,6 +55,9 @@ resource "k8s_apps_v1_deployment" "controller" {
             }
             read_only_root_filesystem = true
           }
+        }
+        node_selector = {
+          "beta.kubernetes.io/os" = "linux"
         }
         security_context {
           run_asnon_root = true

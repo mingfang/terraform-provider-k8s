@@ -41,7 +41,15 @@ resource "k8s_apps_v1_daemon_set" "speaker" {
               }
             }
           }
-          image             = "metallb/speaker:v0.7.3"
+          env {
+            name = "METALLB_HOST"
+            value_from {
+              field_ref {
+                field_path = "status.hostIP"
+              }
+            }
+          }
+          image             = "metallb/speaker:v0.8.1"
           image_pull_policy = "IfNotPresent"
           name              = "speaker"
 
@@ -59,18 +67,28 @@ resource "k8s_apps_v1_daemon_set" "speaker" {
             allow_privilege_escalation = false
             capabilities {
               add = [
-                "net_raw",
+                "NET_ADMIN",
+                "NET_RAW",
+                "SYS_ADMIN",
               ]
               drop = [
-                "all",
+                "ALL",
               ]
             }
             read_only_root_filesystem = true
           }
         }
-        host_network                     = true
+        host_network = true
+        node_selector = {
+          "beta.kubernetes.io/os" = "linux"
+        }
         service_account_name             = "speaker"
         termination_grace_period_seconds = 0
+
+        tolerations {
+          effect = "NoSchedule"
+          key    = "node-role.kubernetes.io/master"
+        }
       }
     }
   }
