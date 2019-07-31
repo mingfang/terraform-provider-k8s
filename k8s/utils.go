@@ -77,7 +77,6 @@ func IsKeyword(path string) bool {
 }
 
 var skipKinds = map[string]struct{}{
-	"APIService":                {},
 	"CertificateSigningRequest": {},
 	"ControllerRevision":        {},
 	"Event":                     {},
