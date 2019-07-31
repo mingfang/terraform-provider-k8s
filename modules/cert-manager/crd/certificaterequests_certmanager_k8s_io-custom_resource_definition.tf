@@ -1,8 +1,5 @@
 resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificaterequests_certmanager_k8s_io" {
   metadata {
-    labels = {
-      "controller-tools.k8s.io" = "1.0"
-    }
     name = "certificaterequests.certmanager.k8s.io"
   }
   spec {
@@ -44,10 +41,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
       ]
     }
     scope = "Namespaced"
+    subresources {
+    }
     validation {
       open_apiv3_schema = <<-JSON
         {
-          "type": "object",
+          "description": "CertificateRequest is a type to represent a Certificate Signing Request",
           "properties": {
             "apiVersion": {
               "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -61,6 +60,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
               "type": "object"
             },
             "spec": {
+              "description": "CertificateRequestSpec defines the desired state of CertificateRequest",
               "properties": {
                 "csr": {
                   "description": "Byte slice containing the PEM encoded CertificateSigningRequest",
@@ -100,6 +100,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
               "type": "object"
             },
             "status": {
+              "description": "CertificateStatus defines the observed state of CertificateRequest and resulting signed certificate.",
               "properties": {
                 "ca": {
                   "description": "Byte slice containing the PEM encoded certificate authority of the signed certificate.",
@@ -113,6 +114,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                 },
                 "conditions": {
                   "items": {
+                    "description": "CertificateRequestCondition contains condition information for a CertificateRequest.",
                     "properties": {
                       "lastTransitionTime": {
                         "description": "LastTransitionTime is the timestamp corresponding to the last status change of this condition.",
@@ -129,11 +131,6 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                       },
                       "status": {
                         "description": "Status of the condition, one of ('True', 'False', 'Unknown').",
-                        "enum": [
-                          "True",
-                          "False",
-                          "Unknown"
-                        ],
                         "type": "string"
                       },
                       "type": {
@@ -142,8 +139,8 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                       }
                     },
                     "required": [
-                      "type",
-                      "status"
+                      "status",
+                      "type"
                     ],
                     "type": "object"
                   },
@@ -152,10 +149,16 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
               },
               "type": "object"
             }
-          }
+          },
+          "type": "object"
         }
         JSON
     }
-    version = "v1alpha1"
+
+    versions {
+      name = "v1alpha1"
+      served = true
+      storage = true
+    }
   }
 }

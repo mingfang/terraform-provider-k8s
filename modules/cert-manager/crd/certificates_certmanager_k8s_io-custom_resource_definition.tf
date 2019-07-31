@@ -1,8 +1,5 @@
 resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificates_certmanager_k8s_io" {
   metadata {
-    labels = {
-      "controller-tools.k8s.io" = "1.0"
-    }
     name = "certificates.certmanager.k8s.io"
   }
   spec {
@@ -49,10 +46,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
       ]
     }
     scope = "Namespaced"
+    subresources {
+    }
     validation {
       open_apiv3_schema = <<-JSON
         {
-          "type": "object",
+          "description": "Certificate is a type to represent a Certificate from ACME",
           "properties": {
             "apiVersion": {
               "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -66,19 +65,48 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
               "type": "object"
             },
             "spec": {
+              "description": "CertificateSpec defines the desired state of Certificate",
               "properties": {
                 "acme": {
                   "description": "ACME contains configuration specific to ACME Certificates. Notably, this contains details on how the domain names listed on this Certificate resource should be 'solved', i.e. mapping HTTP01 and DNS01 providers to DNS names.",
                   "properties": {
                     "config": {
                       "items": {
+                        "description": "DomainSolverConfig contains solver configuration for a set of domains.",
                         "properties": {
+                          "dns01": {
+                            "description": "DNS01 contains DNS01 challenge solving configuration",
+                            "properties": {
+                              "provider": {
+                                "description": "Provider is the name of the DNS01 challenge provider to use, as configure on the referenced Issuer or ClusterIssuer resource.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "provider"
+                            ],
+                            "type": "object"
+                          },
                           "domains": {
                             "description": "Domains is the list of domains that this SolverConfig applies to.",
                             "items": {
                               "type": "string"
                             },
                             "type": "array"
+                          },
+                          "http01": {
+                            "description": "HTTP01 contains HTTP01 challenge solving configuration",
+                            "properties": {
+                              "ingress": {
+                                "description": "Ingress is the name of an Ingress resource that will be edited to include the ACME HTTP01 'well-known' challenge path in order to solve HTTP01 challenges. If this field is specified, 'ingressClass' **must not** be specified.",
+                                "type": "string"
+                              },
+                              "ingressClass": {
+                                "description": "IngressClass is the ingress class that should be set on new ingress resources that are created in order to solve HTTP01 challenges. This field should be used when using an ingress controller such as nginx, which 'flattens' ingress configuration instead of maintaining a 1:1 mapping between loadbalancer IP:ingress resources. If this field is not set, and 'ingress' is not set, then ingresses without an ingress class set will be created to solve HTTP01 challenges. If this field is specified, 'ingress' **must not** be specified.",
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
                           }
                         },
                         "required": [
@@ -140,10 +168,6 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                 },
                 "keyAlgorithm": {
                   "description": "KeyAlgorithm is the private key algorithm of the corresponding private key for this certificate. If provided, allowed values are either \"rsa\" or \"ecdsa\" If KeyAlgorithm is specified and KeySize is not provided, key size of 256 will be used for \"ecdsa\" key algorithm and key size of 2048 will be used for \"rsa\" key algorithm.",
-                  "enum": [
-                    "rsa",
-                    "ecdsa"
-                  ],
                   "type": "string"
                 },
                 "keyEncoding": {
@@ -152,7 +176,6 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                 },
                 "keySize": {
                   "description": "KeySize is the key bit size of the corresponding private key for this certificate. If provided, value must be between 2048 and 8192 inclusive when KeyAlgorithm is empty or is set to \"rsa\", and value must be one of (256, 384, 521) when KeyAlgorithm is set to \"ecdsa\".",
-                  "format": "int64",
                   "type": "integer"
                 },
                 "organization": {
@@ -172,15 +195,17 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                 }
               },
               "required": [
-                "secretName",
-                "issuerRef"
+                "issuerRef",
+                "secretName"
               ],
               "type": "object"
             },
             "status": {
+              "description": "CertificateStatus defines the observed state of Certificate",
               "properties": {
                 "conditions": {
                   "items": {
+                    "description": "CertificateCondition contains condition information for an Certificate.",
                     "properties": {
                       "lastTransitionTime": {
                         "description": "LastTransitionTime is the timestamp corresponding to the last status change of this condition.",
@@ -197,11 +222,6 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                       },
                       "status": {
                         "description": "Status of the condition, one of ('True', 'False', 'Unknown').",
-                        "enum": [
-                          "True",
-                          "False",
-                          "Unknown"
-                        ],
                         "type": "string"
                       },
                       "type": {
@@ -210,8 +230,8 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                       }
                     },
                     "required": [
-                      "type",
-                      "status"
+                      "status",
+                      "type"
                     ],
                     "type": "object"
                   },
@@ -229,10 +249,16 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
               },
               "type": "object"
             }
-          }
+          },
+          "type": "object"
         }
         JSON
     }
-    version = "v1alpha1"
+
+    versions {
+      name = "v1alpha1"
+      served = true
+      storage = true
+    }
   }
 }
