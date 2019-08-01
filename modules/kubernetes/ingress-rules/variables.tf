@@ -14,7 +14,10 @@ variable "ingress_class" {
 }
 
 variable "rules" {}
-variable "tls" {}
+
+variable "tls" {
+  default = null
+}
 
 variable "overrides" {
   default = {}
