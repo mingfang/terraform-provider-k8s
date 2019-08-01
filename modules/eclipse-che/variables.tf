@@ -1,0 +1,1 @@
+variable "che_host" {}

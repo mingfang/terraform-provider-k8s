@@ -12,7 +12,7 @@ replace k8s.io/cli-runtime => k8s.io/cli-runtime v0.0.0-20190409023024-d644b00f3
 
 // Forked for critical feature https://github.com/mingfang/terraform/commit/c81184ae9eb1d557596b5a3fa9db8cff2149db9c
 
-replace github.com/hashicorp/terraform => github.com/mingfang/terraform v0.12.0-alpha4.0.20190716124805-56125c18ce4c
+replace github.com/hashicorp/terraform => github.com/mingfang/terraform v0.12.0-alpha4.0.20190801154513-a451ae6ab501
 
 require (
 	github.com/awalterschulze/gographviz v0.0.0-20190522210029-fa59802746ab
