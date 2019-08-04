@@ -4,10 +4,6 @@ variable "namespace" {
   default = null
 }
 
-variable "replicas" {
-  default = 3
-}
-
 variable ports {
   default = [
     {

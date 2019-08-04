@@ -10,7 +10,7 @@ locals {
     name                 = var.name
     namespace            = var.namespace
     annotations          = var.annotations
-    replicas             = var.replicas
+    replicas             = 1
     ports                = var.ports
     enable_service_links = false
 
