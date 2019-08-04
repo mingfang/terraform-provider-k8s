@@ -30,7 +30,7 @@ resource "k8s_core_v1_service" "ingress-nginx" {
         name        = "tcp-${ports.key}"
         port        = ports.key
         protocol    = "TCP"
-        target_port = ports.key
+        target_port = split(":", ports.value)[1]
       }
     }
 
