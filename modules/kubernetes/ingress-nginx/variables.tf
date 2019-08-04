@@ -28,3 +28,7 @@ variable "extra_args" {
   type    = list
   default = []
 }
+
+variable "tcp_services_data" {
+  default = {}
+}

@@ -7,4 +7,6 @@ resource "k8s_core_v1_config_map" "tcp-services" {
     name      = "${var.name}-tcp-services"
     namespace = var.namespace
   }
+
+  data = var.tcp_services_data
 }
