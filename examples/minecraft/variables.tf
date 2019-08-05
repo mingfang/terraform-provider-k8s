@@ -1,11 +1,7 @@
 variable "name" {
-  default = "minecraft"
+  default = "minecraft-example"
 }
 
 variable "namespace" {
-  default = "minecraft"
-}
-
-variable "replicas" {
-  default = 1
+  default = "minecraft-example"
 }
