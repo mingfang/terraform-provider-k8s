@@ -63,8 +63,8 @@ module "bungeecord" {
   priorities = ["minecraft"]
   servers = {
     minecraft = {
-      motd = "Just another BungeeCord - Forced Host"
-      address = "minecraft:25565"
+      motd       = "Just another BungeeCord - Forced Host"
+      address    = "minecraft:25565"
       restricted = false
     }
   }
