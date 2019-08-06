@@ -36,6 +36,8 @@ module "minecraft" {
 
   storage            = module.minecraft-storage.storage
   storage_class_name = module.minecraft-storage.storage_class_name
+
+  bungeecord = true
 }
 
 module "bungeecord-storage" {

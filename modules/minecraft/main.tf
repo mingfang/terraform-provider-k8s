@@ -24,7 +24,22 @@ locals {
             name       = var.volume_claim_template_name
             mount_path = "/data"
             sub_path   = var.name
-          }
+          },
+          {
+            mount_path = "/data/bukkit.yml"
+            name       = "config"
+            sub_path   = "bukkit.yml"
+          },
+          {
+            mount_path = "/data/server.properties"
+            name       = "config"
+            sub_path   = "server.properties"
+          },
+          {
+            mount_path = "/data/spigot.yml"
+            name       = "config"
+            sub_path   = "spigot.yml"
+          },
         ]
       },
     ]
@@ -42,6 +57,16 @@ locals {
         }
       }
     ]
+
+    volumes = [
+      {
+        config_map = {
+          name = var.name
+        }
+        name = "config"
+      },
+    ]
+
   }
 }
 

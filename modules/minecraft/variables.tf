@@ -47,3 +47,7 @@ variable "volume_claim_template_name" {
 variable "overrides" {
   default = {}
 }
+
+variable "bungeecord" {
+  default = false
+}
