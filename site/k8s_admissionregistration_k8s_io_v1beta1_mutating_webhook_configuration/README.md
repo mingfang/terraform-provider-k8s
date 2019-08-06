@@ -28,7 +28,9 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
     
 - [admission_review_versions](#admission_review_versions)
 - [failure_policy](#failure_policy)
+- [match_policy](#match_policy)
 - [name](#name)*
+- [reinvocation_policy](#reinvocation_policy)
 - [side_effects](#side_effects)
 - [timeout_seconds](#timeout_seconds)
 
@@ -48,6 +50,7 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 - [name](#name)*
 - [namespace](#namespace)*
 - [path](#path)
+- [port](#port)
 
     
 </details>
@@ -56,6 +59,26 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 
 <details>
 <summary>namespace_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>object_selector</summary><blockquote>
 
     
 - [match_labels](#match_labels)
@@ -113,10 +136,12 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
         name      = "TypeString*"
         namespace = "TypeString*"
         path      = "TypeString"
+        port      = "TypeInt"
       }
       url = "TypeString"
     }
     failure_policy = "TypeString"
+    match_policy   = "TypeString"
     name           = "TypeString*"
 
     namespace_selector {
@@ -128,6 +153,17 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
       }
       match_labels = { "key" = "TypeString" }
     }
+
+    object_selector {
+
+      match_expressions {
+        key      = "TypeString*"
+        operator = "TypeString*"
+        values   = ["TypeString"]
+      }
+      match_labels = { "key" = "TypeString" }
+    }
+    reinvocation_policy = "TypeString"
 
     rules {
       api_groups   = ["TypeString"]
@@ -238,8 +274,6 @@ ClientConfig defines how to communicate with the hook. Required
 
 If the webhook is running within the cluster, then you should use `service`.
 
-Port 443 will be used if it is open, otherwise it is an error.
-
     
 #### name
 
@@ -256,6 +290,11 @@ Port 443 will be used if it is open, otherwise it is an error.
 ######  TypeString
 
 `path` is an optional URL path which will be sent in any request to this service.
+#### port
+
+######  TypeInt
+
+If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
 #### url
 
 ######  TypeString
@@ -276,6 +315,17 @@ Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fra
 ######  TypeString
 
 FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Ignore.
+#### match_policy
+
+######  TypeString
+
+matchPolicy defines how the "rules" list is used to match incoming requests. Allowed values are "Exact" or "Equivalent".
+
+- Exact: match a request only if it exactly matches a specified rule. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, but "rules" only included `apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]`, a request to apps/v1beta1 or extensions/v1beta1 would not be sent to the webhook.
+
+- Equivalent: match a request if modifies a resource listed in rules, even via another API group or version. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, and "rules" only included `apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]`, a request to apps/v1beta1 or extensions/v1beta1 would be converted to apps/v1 and sent to the webhook.
+
+Defaults to "Exact"
 #### name
 
 ###### Required •  TypeString
@@ -341,6 +391,47 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+## object_selector
+
+ObjectSelector decides whether to run the webhook based on if the object has matching labels. objectSelector is evaluated against both the oldObject and newObject that would be sent to the webhook, and is considered to match if either object matches the selector. A null object (oldObject in the case of create, or newObject in the case of delete) or an object that cannot have labels (like a DeploymentRollback or a PodProxyOptions object) is not considered to match. Use the object selector only if the webhook is opt-in, because end users may skip the admission webhook by setting the labels. Default to the empty LabelSelector, which matches everything.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+#### reinvocation_policy
+
+######  TypeString
+
+reinvocationPolicy indicates whether this webhook should be called multiple times as part of a single admission evaluation. Allowed values are "Never" and "IfNeeded".
+
+Never: the webhook will not be called more than once in a single admission evaluation.
+
+IfNeeded: the webhook will be called at least one additional time as part of the admission evaluation if the object being admitted is modified by other admission plugins after the initial webhook call. Webhooks that specify this option *must* be idempotent, able to process objects they previously admitted. Note: * the number of additional invocations is not guaranteed to be exactly one. * if additional invocations result in further modifications to the object, webhooks are not guaranteed to be invoked again. * webhooks that use this option may be reordered to minimize the number of additional invocations. * to validate an object after all mutations are guaranteed complete, use a validating admission webhook instead.
+
+Defaults to "Never".
 ## rules
 
 Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule. However, in order to prevent ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks from putting the cluster in a state which cannot be recovered from without completely disabling the plugin, ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks are never called on admission requests for ValidatingWebhookConfiguration and MutatingWebhookConfiguration objects.

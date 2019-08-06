@@ -1223,7 +1223,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's key must be defined
+Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
 Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
@@ -1278,7 +1278,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the Secret or it's key must be defined
+Specify whether the Secret or its key must be defined
 ## env_from
 
 EnvFrom defines the collection of EnvFromSource to inject into containers.
@@ -1383,7 +1383,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is alpha in 1.14.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
 ## volumes
 
 Volumes defines the collection of Volume to inject into the pod.
@@ -1578,7 +1578,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's keys must be defined
+Specify whether the ConfigMap or its keys must be defined
 ## csi
 
 CSI (Container Storage Interface) represents storage that is handled by an external CSI driver (Alpha feature).
@@ -2038,7 +2038,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's keys must be defined
+Specify whether the ConfigMap or its keys must be defined
 ## downward_api
 
 information about the downwardAPI data to project
@@ -2328,7 +2328,7 @@ The relative path of the file to map the key to. May not be an absolute path. Ma
 
 ######  TypeString
 
-Specify whether the Secret or it's keys must be defined
+Specify whether the Secret or its keys must be defined
 #### secret_name
 
 ######  TypeString

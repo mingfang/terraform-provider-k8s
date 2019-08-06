@@ -27,6 +27,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 
     
 - [group](#group)*
+- [preserve_unknown_fields](#preserve_unknown_fields)
 - [scope](#scope)*
 - [version](#version)
 
@@ -68,6 +69,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 - [name](#name)*
 - [namespace](#namespace)*
 - [path](#path)
+- [port](#port)
 
     
 </details>
@@ -209,6 +211,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
           name      = "TypeString*"
           namespace = "TypeString*"
           path      = "TypeString"
+          port      = "TypeInt"
         }
         url = "TypeString"
       }
@@ -223,7 +226,8 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
       short_names = ["TypeString"]
       singular    = "TypeString"
     }
-    scope = "TypeString*"
+    preserve_unknown_fields = "TypeString"
+    scope                   = "TypeString*"
 
     subresources {
 
@@ -394,7 +398,8 @@ ConversionReviewVersions is an ordered list of preferred `ConversionReview` vers
 
 ###### Required •  TypeString
 
-`strategy` specifies the conversion strategy. Allowed values are: - `None`: The converter only change the apiVersion and would not touch any other field in the CR. - `Webhook`: API Server will call to an external webhook to do the conversion. Additional information is needed for this option.
+`strategy` specifies the conversion strategy. Allowed values are: - `None`: The converter only change the apiVersion and would not touch any other field in the CR. - `Webhook`: API Server will call to an external webhook to do the conversion. Additional information
+  is needed for this option. This requires spec.preserveUnknownFields to be false.
 ## webhook_client_config
 
 `webhookClientConfig` is the instructions for how to call the webhook if strategy is `Webhook`. This field is alpha-level and is only honored by servers that enable the CustomResourceWebhookConversion feature.
@@ -410,8 +415,6 @@ ConversionReviewVersions is an ordered list of preferred `ConversionReview` vers
 `service` is a reference to the service for this webhook. Either `service` or `url` must be specified.
 
 If the webhook is running within the cluster, then you should use `service`.
-
-Port 443 will be used if it is open, otherwise it is an error.
 
     
 #### name
@@ -429,6 +432,11 @@ Port 443 will be used if it is open, otherwise it is an error.
 ######  TypeString
 
 `path` is an optional URL path which will be sent in any request to this service.
+#### port
+
+######  TypeInt
+
+If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
 #### url
 
 ######  TypeString
@@ -484,6 +492,11 @@ ShortNames are short names for the resource.  It must be all lowercase.
 ######  TypeString
 
 Singular is the singular name of the resource.  It must be all lowercase  Defaults to lowercased <kind>
+#### preserve_unknown_fields
+
+######  TypeString
+
+preserveUnknownFields disables pruning of object fields which are not specified in the OpenAPI schema. apiVersion, kind, metadata and known fields inside metadata are always preserved. Defaults to true in v1beta and will default to false in v1.
 #### scope
 
 ###### Required •  TypeString
@@ -503,7 +516,7 @@ Scale denotes the scale subresource for CustomResources
 
 ######  TypeString
 
-LabelSelectorPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Selector. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status. Must be set to work with HPA. If there is no value under the given path in the CustomResource, the status label selector value in the /scale subresource will default to the empty string.
+LabelSelectorPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Selector. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status or .spec. Must be set to work with HPA. The field pointed by this JSON path must be a string field (not a complex selector struct) which contains a serialized label selector in string form. More info: https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions#scale-subresource If there is no value under the given path in the CustomResource, the status label selector value in the /scale subresource will default to the empty string.
 #### spec_replicas_path
 
 ###### Required •  TypeString
@@ -608,7 +621,7 @@ Scale denotes the scale subresource for CustomResources
 
 ######  TypeString
 
-LabelSelectorPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Selector. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status. Must be set to work with HPA. If there is no value under the given path in the CustomResource, the status label selector value in the /scale subresource will default to the empty string.
+LabelSelectorPath defines the JSON path inside of a CustomResource that corresponds to Scale.Status.Selector. Only JSON paths without the array notation are allowed. Must be a JSON Path under .status or .spec. Must be set to work with HPA. The field pointed by this JSON path must be a string field (not a complex selector struct) which contains a serialized label selector in string form. More info: https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions#scale-subresource If there is no value under the given path in the CustomResource, the status label selector value in the /scale subresource will default to the empty string.
 #### spec_replicas_path
 
 ###### Required •  TypeString

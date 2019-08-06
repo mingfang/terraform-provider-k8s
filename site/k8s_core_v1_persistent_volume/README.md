@@ -143,6 +143,16 @@ PersistentVolume (PV) is a storage resource provisioned by an administrator. It 
 
     
 <details>
+<summary>controller_expand_secret_ref</summary><blockquote>
+
+    
+- [name](#name)
+- [namespace](#namespace)
+
+    
+</details>
+
+<details>
 <summary>controller_publish_secret_ref</summary><blockquote>
 
     
@@ -552,6 +562,11 @@ resource "k8s_core_v1_persistent_volume" "this" {
     }
 
     csi {
+
+      controller_expand_secret_ref {
+        name      = "TypeString"
+        namespace = "TypeString"
+      }
 
       controller_publish_secret_ref {
         name      = "TypeString"
@@ -1046,6 +1061,21 @@ UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/wor
 CSI represents storage that is handled by an external CSI driver (Beta feature).
 
     
+## controller_expand_secret_ref
+
+ControllerExpandSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI ControllerExpandVolume call. This is an alpha field and requires enabling ExpandCSIVolumes feature gate. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed.
+
+    
+#### name
+
+######  TypeString
+
+Name is unique within a namespace to reference a secret resource.
+#### namespace
+
+######  TypeString
+
+Namespace defines the space within which the secret name must be unique.
 ## controller_publish_secret_ref
 
 ControllerPublishSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI ControllerPublishVolume and ControllerUnpublishVolume calls. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed.

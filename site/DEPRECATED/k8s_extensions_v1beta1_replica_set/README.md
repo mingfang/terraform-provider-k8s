@@ -88,6 +88,7 @@ DEPRECATED - This group version of ReplicaSet is deprecated by apps/v1beta2/Repl
 - [hostname](#hostname)
 - [node_name](#node_name)
 - [node_selector](#node_selector)
+- [preemption_policy](#preemption_policy)
 - [priority](#priority)
 - [priority_class_name](#priority_class_name)
 - [restart_policy](#restart_policy)
@@ -726,6 +727,16 @@ DEPRECATED - This group version of ReplicaSet is deprecated by apps/v1beta2/Repl
     
 </details>
 
+<details>
+<summary>windows_options</summary><blockquote>
+
+    
+- [gmsa_credential_spec](#gmsa_credential_spec)
+- [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+
+    
+</details>
+
 </details>
 
 <details>
@@ -1172,6 +1183,16 @@ DEPRECATED - This group version of ReplicaSet is deprecated by apps/v1beta2/Repl
     
 </details>
 
+<details>
+<summary>windows_options</summary><blockquote>
+
+    
+- [gmsa_credential_spec](#gmsa_credential_spec)
+- [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+
+    
+</details>
+
 </details>
 
 <details>
@@ -1238,6 +1259,16 @@ DEPRECATED - This group version of ReplicaSet is deprecated by apps/v1beta2/Repl
     
 - [name](#name)*
 - [value](#value)*
+
+    
+</details>
+
+<details>
+<summary>windows_options</summary><blockquote>
+
+    
+- [gmsa_credential_spec](#gmsa_credential_spec)
+- [gmsa_credential_spec_name](#gmsa_credential_spec_name)
 
     
 </details>
@@ -2181,6 +2212,11 @@ resource "k8s_extensions_v1beta1_replica_set" "this" {
               type  = "TypeString"
               user  = "TypeString"
             }
+
+            windows_options {
+              gmsa_credential_spec      = "TypeString"
+              gmsa_credential_spec_name = "TypeString"
+            }
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -2423,6 +2459,11 @@ resource "k8s_extensions_v1beta1_replica_set" "this" {
               type  = "TypeString"
               user  = "TypeString"
             }
+
+            windows_options {
+              gmsa_credential_spec      = "TypeString"
+              gmsa_credential_spec_name = "TypeString"
+            }
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -2447,6 +2488,7 @@ resource "k8s_extensions_v1beta1_replica_set" "this" {
         }
         node_name           = "TypeString"
         node_selector       = { "key" = "TypeString" }
+        preemption_policy   = "TypeString"
         priority            = "TypeInt"
         priority_class_name = "TypeString"
 
@@ -2474,6 +2516,11 @@ resource "k8s_extensions_v1beta1_replica_set" "this" {
           sysctls {
             name  = "TypeString*"
             value = "TypeString*"
+          }
+
+          windows_options {
+            gmsa_credential_spec      = "TypeString"
+            gmsa_credential_spec_name = "TypeString"
           }
         }
         service_account                  = "TypeString"
@@ -3380,7 +3427,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's key must be defined
+Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
 Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
@@ -3435,7 +3482,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the Secret or it's key must be defined
+Specify whether the Secret or its key must be defined
 ## env_from
 
 List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.
@@ -3951,6 +3998,21 @@ Type is a SELinux type label that applies to the container.
 ######  TypeString
 
 User is a SELinux user label that applies to the container.
+## windows_options
+
+Windows security options.
+
+    
+#### gmsa_credential_spec
+
+######  TypeString
+
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### gmsa_credential_spec_name
+
+######  TypeString
+
+GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
 #### stdin
 
 ######  TypeString
@@ -4025,7 +4087,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is alpha in 1.14.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
 #### working_dir
 
 ######  TypeString
@@ -4170,7 +4232,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's key must be defined
+Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
 Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
@@ -4225,7 +4287,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the Secret or it's key must be defined
+Specify whether the Secret or its key must be defined
 ## env_from
 
 List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.
@@ -4741,6 +4803,21 @@ Type is a SELinux type label that applies to the container.
 ######  TypeString
 
 User is a SELinux user label that applies to the container.
+## windows_options
+
+Windows security options.
+
+    
+#### gmsa_credential_spec
+
+######  TypeString
+
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### gmsa_credential_spec_name
+
+######  TypeString
+
+GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
 #### stdin
 
 ######  TypeString
@@ -4815,7 +4892,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is alpha in 1.14.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
 #### working_dir
 
 ######  TypeString
@@ -4831,6 +4908,11 @@ NodeName is a request to schedule this pod onto a specific node. If it is non-em
 ######  TypeMap
 
 NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node. More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+#### preemption_policy
+
+######  TypeString
+
+PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is alpha-level and is only honored by servers that enable the NonPreemptingPriority feature.
 #### priority
 
 ######  TypeInt
@@ -4860,7 +4942,7 @@ Restart policy for all containers within the pod. One of Always, OnFailure, Neve
 
 ######  TypeString
 
-RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run. If unset or empty, the "legacy" RuntimeClass will be used, which is an implicit class with an empty definition that uses the default runtime handler. More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md This is an alpha feature and may change in the future.
+RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run. If unset or empty, the "legacy" RuntimeClass will be used, which is an implicit class with an empty definition that uses the default runtime handler. More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md This is a beta feature as of Kubernetes v1.14.
 #### scheduler_name
 
 ######  TypeString
@@ -4940,6 +5022,21 @@ Name of a property to set
 ###### Required •  TypeString
 
 Value of a property to set
+## windows_options
+
+Windows security options.
+
+    
+#### gmsa_credential_spec
+
+######  TypeString
+
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### gmsa_credential_spec_name
+
+######  TypeString
+
+GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
 #### service_account
 
 ######  TypeString
@@ -5189,7 +5286,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's keys must be defined
+Specify whether the ConfigMap or its keys must be defined
 ## csi
 
 CSI (Container Storage Interface) represents storage that is handled by an external CSI driver (Alpha feature).
@@ -5649,7 +5746,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Specify whether the ConfigMap or it's keys must be defined
+Specify whether the ConfigMap or its keys must be defined
 ## downward_api
 
 information about the downwardAPI data to project
@@ -5939,7 +6036,7 @@ The relative path of the file to map the key to. May not be an absolute path. Ma
 
 ######  TypeString
 
-Specify whether the Secret or it's keys must be defined
+Specify whether the Secret or its keys must be defined
 #### secret_name
 
 ######  TypeString

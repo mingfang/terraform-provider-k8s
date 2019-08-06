@@ -138,6 +138,16 @@ PodSecurityPolicy governs the ability to make requests that affect the Security 
 </details>
 
 <details>
+<summary>runtime_class</summary><blockquote>
+
+    
+- [allowed_runtime_class_names](#allowed_runtime_class_names)*
+- [default_runtime_class_name](#default_runtime_class_name)
+
+    
+</details>
+
+<details>
 <summary>selinux</summary><blockquote>
 
     
@@ -253,6 +263,11 @@ resource "k8s_extensions_v1beta1_pod_security_policy" "this" {
       rule = "TypeString*"
     }
 
+    runtime_class {
+      allowed_runtime_class_names = ["TypeString*"]
+      default_runtime_class_name  = "TypeString"
+    }
+
     selinux {
       rule = "TypeString*"
 
@@ -364,7 +379,7 @@ allowPrivilegeEscalation determines if a pod can request to allow privilege esca
 allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities.
 ## allowed_csi_drivers
 
-AllowedCSIDrivers is a whitelist of inline CSI drivers that must be explicitly set to be embedded within a pod spec. An empty value means no CSI drivers can run inline within a pod spec.
+AllowedCSIDrivers is a whitelist of inline CSI drivers that must be explicitly set to be embedded within a pod spec. An empty value indicates that any CSI driver can be used for inline ephemeral volumes. This is an alpha field, and is only honored if the API server enables the CSIInlineVolume feature gate.
 
     
 #### name
@@ -548,6 +563,21 @@ min is the start of the range, inclusive.
 ###### Required •  TypeString
 
 rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+## runtime_class
+
+runtimeClass is the strategy that will dictate the allowable RuntimeClasses for a pod. If this field is omitted, the pod's runtimeClassName field is unrestricted. Enforcement of this field depends on the RuntimeClass feature gate being enabled.
+
+    
+#### allowed_runtime_class_names
+
+###### Required •  TypeList
+
+allowedRuntimeClassNames is a whitelist of RuntimeClass names that may be specified on a pod. A value of "*" means that any RuntimeClass name is allowed, and must be the only item in the list. An empty list requires the RuntimeClassName field to be unset.
+#### default_runtime_class_name
+
+######  TypeString
+
+defaultRuntimeClassName is the default RuntimeClassName to set on the pod. The default MUST be allowed by the allowedRuntimeClassNames list. A value of nil does not mutate the Pod.
 ## selinux
 
 seLinux is the strategy that will dictate the allowable labels that may be set.

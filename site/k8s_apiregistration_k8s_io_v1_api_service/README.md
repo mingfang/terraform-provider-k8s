@@ -1,7 +1,7 @@
 
-# resource "k8s_certmanager_k8s_io_v1alpha1_challenge"
+# resource "k8s_apiregistration_k8s_io_v1_api_service"
 
-
+APIService represents a server for a particular GroupVersion. Name must be "version.group".
 
   
 <details>
@@ -26,42 +26,23 @@
 <summary>spec</summary><blockquote>
 
     
-- [authz_url](#authz_url)*
-- [config](#config)
-- [dns_name](#dns_name)*
-- [key](#key)*
-- [token](#token)*
-- [type](#type)*
-- [url](#url)*
-- [wildcard](#wildcard)*
+- [cabundle](#cabundle)
+- [group](#group)
+- [group_priority_minimum](#group_priority_minimum)*
+- [insecure_skip_tls_verify](#insecure_skip_tls_verify)
+- [version](#version)
+- [version_priority](#version_priority)*
 
     
 <details>
-<summary>issuer_ref</summary><blockquote>
+<summary>service</summary><blockquote>
 
     
-- [kind](#kind)
-- [name](#name)*
+- [name](#name)
+- [namespace](#namespace)
+- [port](#port)
 
     
-</details>
-
-<details>
-<summary>solver</summary><blockquote>
-
-    
-
-    
-<details>
-<summary>selector</summary><blockquote>
-
-    
-- [dns_names](#dns_names)
-- [match_labels](#match_labels)
-
-    
-</details>
-
 </details>
 
 </details>
@@ -71,7 +52,7 @@
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_certmanager_k8s_io_v1alpha1_challenge" "this" {
+resource "k8s_apiregistration_k8s_io_v1_api_service" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -81,27 +62,18 @@ resource "k8s_certmanager_k8s_io_v1alpha1_challenge" "this" {
   }
 
   spec {
-    authz_url = "TypeString*"
-    config    = { "key" = "TypeString" }
-    dns_name  = "TypeString*"
+    cabundle                 = "TypeString"
+    group                    = "TypeString"
+    group_priority_minimum   = "TypeInt*"
+    insecure_skip_tls_verify = "TypeString"
 
-    issuer_ref {
-      kind = "TypeString"
-      name = "TypeString*"
+    service {
+      name      = "TypeString"
+      namespace = "TypeString"
+      port      = "TypeInt"
     }
-    key = "TypeString*"
-
-    solver {
-
-      selector {
-        dns_names    = ["TypeString"]
-        match_labels = { "key" = "TypeString" }
-      }
-    }
-    token    = "TypeString*"
-    type     = "TypeString*"
-    url      = "TypeString*"
-    wildcard = "TypeString*"
+    version          = "TypeString"
+    version_priority = "TypeInt*"
   }
 }
 
@@ -113,7 +85,7 @@ resource "k8s_certmanager_k8s_io_v1alpha1_challenge" "this" {
   
 ## metadata
 
-Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+
 
     
 #### annotations
@@ -178,81 +150,56 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-
-
-    
-#### authz_url
-
-###### Required •  TypeString
-
-AuthzURL is the URL to the ACME Authorization resource that this challenge is a part of.
-#### config
-
-######  TypeMap
-
-Config specifies the solver configuration for this challenge. Only **one** of 'config' or 'solver' may be specified, and if both are specified then no action will be performed on the Challenge resource. DEPRECATED: the 'solver' field should be specified instead
-#### dns_name
-
-###### Required •  TypeString
-
-DNSName is the identifier that this challenge is for, e.g. example.com.
-## issuer_ref
-
-IssuerRef references a properly configured ACME-type Issuer which should be used to create this Challenge. If the Issuer does not exist, processing will be retried. If the Issuer is not an 'ACME' Issuer, an error will be returned and the Challenge will be marked as failed.
+Spec contains information for locating and communicating with a server
 
     
-#### kind
+#### cabundle
 
 ######  TypeString
 
+CABundle is a PEM encoded CA bundle which will be used to validate an API server's serving certificate. If unspecified, system trust roots on the apiserver are used.
+#### group
 
+######  TypeString
+
+Group is the API group name this server hosts
+#### group_priority_minimum
+
+###### Required •  TypeInt
+
+GroupPriorityMininum is the priority this group should have at least. Higher priority means that the group is preferred by clients over lower priority ones. Note that other versions of this group might specify even higher GroupPriorityMininum values such that the whole group gets a higher priority. The primary sort is based on GroupPriorityMinimum, ordered highest number to lowest (20 before 10). The secondary sort is based on the alphabetical comparison of the name of the object.  (v1.bar before v1.foo) We'd recommend something like: *.k8s.io (except extensions) at 18000 and PaaSes (OpenShift, Deis) are recommended to be in the 2000s
+#### insecure_skip_tls_verify
+
+######  TypeString
+
+InsecureSkipTLSVerify disables TLS certificate verification when communicating with this server. This is strongly discouraged.  You should use the CABundle instead.
+## service
+
+Service is a reference to the service for this API server.  It must communicate on port 443 If the Service is nil, that means the handling for the API groupversion is handled locally on this server. The call will simply delegate to the normal handler chain to be fulfilled.
+
+    
 #### name
 
-###### Required •  TypeString
+######  TypeString
 
+Name is the name of the service
+#### namespace
 
-#### key
+######  TypeString
 
-###### Required •  TypeString
+Namespace is the namespace of the service
+#### port
 
-Key is the ACME challenge key for this challenge
-## solver
+######  TypeInt
 
-Solver contains the domain solving configuration that should be used to solve this challenge resource. Only **one** of 'config' or 'solver' may be specified, and if both are specified then no action will be performed on the Challenge resource.
+If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
+#### version
 
-    
-## selector
+######  TypeString
 
-Selector selects a set of DNSNames on the Certificate resource that should be solved using this challenge solver.
+Version is the API version this server hosts.  For example, "v1"
+#### version_priority
 
-    
-#### dns_names
+###### Required •  TypeInt
 
-######  TypeList
-
-List of DNSNames that can be used to further refine the domains that this solver applies to.
-#### match_labels
-
-######  TypeMap
-
-A label selector that is used to refine the set of certificate's that this challenge solver will apply to. TODO: use kubernetes standard types for matchLabels
-#### token
-
-###### Required •  TypeString
-
-Token is the ACME challenge token for this challenge.
-#### type
-
-###### Required •  TypeString
-
-Type is the type of ACME challenge this resource represents, e.g. "dns01" or "http01"
-#### url
-
-###### Required •  TypeString
-
-URL is the URL of the ACME Challenge resource for this challenge. This can be used to lookup details about the status of this challenge.
-#### wildcard
-
-###### Required •  TypeString
-
-Wildcard will be true if this challenge is for a wildcard identifier, for example '*.example.com'
+VersionPriority controls the ordering of this API version inside of its group.  Must be greater than zero. The primary sort is based on VersionPriority, ordered highest to lowest (20 before 10). Since it's inside of a group, the number can be small, probably in the 10s. In case of equal version priorities, the version string will be used to compute the order inside a group. If the version string is "kube-like", it will sort above non "kube-like" version strings, which are ordered lexicographically. "Kube-like" versions start with a "v", then are followed by a number (the major version), then optionally the string "alpha" or "beta" and another number (the minor version). These are sorted first by GA > beta > alpha (where GA is a version with no suffix such as beta or alpha), and then by comparing major version, then minor version. An example sorted list of versions: v10, v2, v1, v11beta2, v10beta3, v3beta1, v12alpha1, v11alpha2, foo1, foo10.
