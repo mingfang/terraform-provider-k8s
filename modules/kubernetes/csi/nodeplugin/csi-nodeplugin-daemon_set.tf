@@ -98,6 +98,10 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
             mount_propagation = "Bidirectional"
             name              = "pods-mount-dir"
           }
+          volume_mounts {
+            name       = "alluxio-domain"
+            mount_path = "/opt/domain"
+          }
         }
 
         enable_service_links = false
@@ -123,6 +127,13 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
             type = "Directory"
           }
           name = "registration-dir"
+        }
+        volumes {
+          name = "alluxio-domain"
+          host_path {
+            path    = "/tmp/alluxio-worker.sock"
+            type = "DirectoryOrCreate"
+          }
         }
       }
     }

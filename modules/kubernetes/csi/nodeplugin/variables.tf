@@ -13,3 +13,7 @@ variable "command" {
 variable "args" {
   default = []
 }
+
+variable "overrides" {
+  default = {}
+}

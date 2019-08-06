@@ -7,9 +7,10 @@ resource "k8s_storage_k8s_io_v1_storage_class" "this" {
 
   mount_options = var.mount_options
   parameters = {
-    "alluxio.master.hostname" = var.alluxio_master_hostname
-    "alluxio.master.port"     = var.alluxio_master_port
-    "alluxio_path"            = var.alluxio_path
-    "java_options"            = var.java_options
+    "alluxio.master.hostname"                          = var.master_hostname
+    "alluxio.master.port"                              = var.master_port
+    "alluxio.worker.data.server.domain.socket.address" = var.domain_socket
+    "alluxio_path"                                     = var.alluxio_path
+    "java_options"                                     = var.java_options
   }
 }
