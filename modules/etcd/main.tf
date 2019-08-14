@@ -175,7 +175,7 @@ locals {
     volume_claim_templates = [
       {
         name               = var.volume_claim_template_name
-        storage_class_name = var.storage_class_name
+        storage_class_name = var.storage_class
         access_modes       = ["ReadWriteOnce"]
 
         resources = {

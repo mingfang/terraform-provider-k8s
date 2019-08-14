@@ -26,23 +26,16 @@ variable "image" {
 }
 
 variable "env" {
-  type    = list
   default = []
 }
 
 variable "annotations" {
-  type    = map
-  default = null
-}
-
-variable "node_selector" {
-  type    = map
   default = null
 }
 
 variable "storage" {}
 
-variable "storage_class_name" {}
+variable "storage_class" {}
 
 variable "volume_claim_template_name" {
   default = "pvc"
