@@ -3,4 +3,4 @@ source helper
 
 docker build --pull --target dev --tag "${IMAGE}:dev" $@ .
 
-docker run --rm -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/ceph/docker-kubernetes-master/vault-data/cluster-admin-kubeconfig.yml:/kubeconfig -v `pwd`:/go/src/github.com/mingfang/terraform-provider-k8s -w /go/src/github.com/mingfang/terraform-provider-k8s -it "${IMAGE}:dev" bash
+docker run --rm -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/ceph/docker-kubernetes-master/vault-data/cluster-admin-kubeconfig.yml:/kubeconfig -e KUBECONFIG=/kubeconfig -v `pwd`:/go/src/github.com/mingfang/terraform-provider-k8s -w /go/src/github.com/mingfang/terraform-provider-k8s -it "${IMAGE}:dev" bash
