@@ -10,7 +10,7 @@ locals {
   parameters = {
     name      = var.name
     namespace = var.namespace
-    replicas  = var.replicas
+    replicas  = 1
     ports = [
       {
         name = "tcp"
