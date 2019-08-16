@@ -6,10 +6,16 @@
  */
 
 locals {
+  labels = {
+    app     = var.name
+    name    = var.name
+    service = var.name
+  }
+
   parameters = {
     name                 = var.name
     namespace            = var.namespace
-    annotations          = var.annotations
+    labels               = local.labels
     replicas             = var.replicas
     ports                = var.ports
     enable_service_links = false
@@ -18,7 +24,7 @@ locals {
       {
         name  = "etcd"
         image = var.image
-        env = concat([
+        env = [
           {
             name = "CLUSTER_NAMESPACE"
 
@@ -36,7 +42,7 @@ locals {
             name  = "SET_NAME"
             value = var.name
           },
-        ], var.env)
+        ]
 
         command = [
           "/bin/sh",
@@ -152,6 +158,18 @@ locals {
                 EOF
               ]
             }
+          }
+        }
+
+        liveness_probe = {
+          initial_delay_seconds = 60
+
+          exec = {
+            command = [
+              "sh",
+              "-cx",
+              "ETCDCTL_API=3 /usr/local/bin/etcdctl endpoint health",
+            ]
           }
         }
 

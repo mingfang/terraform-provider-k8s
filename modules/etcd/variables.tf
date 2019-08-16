@@ -8,7 +8,7 @@ variable "replicas" {
   default = 3
 }
 
-variable ports {
+variable "ports" {
   default = [
     {
       name = "peer"
@@ -22,15 +22,11 @@ variable ports {
 }
 
 variable "image" {
-  default = "gcr.io/etcd-development/etcd:v3.3.12"
+  default = "gcr.io/etcd-development/etcd:v3.3.13"
 }
 
-variable "env" {
-  default = []
-}
-
-variable "annotations" {
-  default = null
+variable "overrides" {
+  default = {}
 }
 
 variable "storage" {}
@@ -41,6 +37,3 @@ variable "volume_claim_template_name" {
   default = "pvc"
 }
 
-variable "overrides" {
-  default = {}
-}
