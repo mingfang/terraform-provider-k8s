@@ -33,11 +33,11 @@ locals {
         image = var.image
         command = [
           "sh",
-          "-cex",
+          "-cx",
           <<-EOF
-          bin/apply-config-from-env.py conf/broker.conf &&
-          bin/apply-config-from-env.py conf/pulsar_env.sh &&
-          bin/gen-yml-from-env.py conf/functions_worker.yml &&
+          bin/apply-config-from-env.py conf/broker.conf
+          bin/apply-config-from-env.py conf/pulsar_env.sh
+          bin/gen-yml-from-env.py conf/functions_worker.yml
           bin/pulsar broker
           EOF
         ]
@@ -105,6 +105,30 @@ locals {
             value = var.EXTRA_OPTS
           },
         ]
+
+        liveness_probe = {
+          initial_delay_seconds = 60
+
+          exec = {
+            command = [
+              "sh",
+              "-cx",
+              "bin/pulsar-admin brokers healthcheck",
+            ]
+          }
+        }
+
+        readiness_probe = {
+          initial_delay_seconds = 10
+
+          exec = {
+            command = [
+              "sh",
+              "-cx",
+              "bin/pulsar-admin brokers healthcheck",
+            ]
+          }
+        }
       },
     ]
   }

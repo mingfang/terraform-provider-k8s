@@ -11,12 +11,12 @@ variable "replicas" {
 variable "ports" {
   default = [
     {
-      name : "http"
-      port : 8080
+      name = "http"
+      port = 8080
     },
     {
-      name : "pulsar"
-      port : 6650
+      name = "pulsar"
+      port = 6650
     },
   ]
 }
@@ -29,15 +29,16 @@ variable "overrides" {
   default = {}
 }
 
+variable "storage" {}
+
 variable "storage_class" {}
 
-variable storage {}
 
-variable "zookeeper" {}
-
-variable memory {
+variable "memory" {
   default = "-Xms64m -Xmx128m -XX:MaxDirectMemorySize=128m"
 }
+
+variable "zookeeper" {}
 
 variable "configurationStoreServers" {}
 

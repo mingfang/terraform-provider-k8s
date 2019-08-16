@@ -33,10 +33,11 @@ locals {
         image = var.image
         command = [
           "sh",
-          "-cex",
+          "-cx",
           <<-EOF
-          bin/apply-config-from-env.py conf/bookkeeper.conf &&
-          bin/apply-config-from-env.py conf/pulsar_env.sh &&
+          bin/apply-config-from-env.py conf/bookkeeper.conf
+          bin/apply-config-from-env.py conf/pulsar_env.sh
+          bin/bookkeeper shell metaformat --nonInteractive || true
           bin/pulsar bookie
           EOF
         ]
@@ -92,26 +93,30 @@ locals {
             value = var.EXTRA_OPTS
           },
         ]
-      },
-    ]
-    init_containers = [
-      {
-        name  = "init"
-        image = var.image
-        command = [
-          "sh",
-          "-cex",
-          <<-EOF
-          bin/apply-config-from-env.py conf/bookkeeper.conf &&
-          bin/bookkeeper shell metaformat --nonInteractive || true;
-          EOF
-        ]
-        env = [
-          {
-            name  = "zkServers"
-            value = var.zookeeper
-          },
-        ]
+
+        liveness_probe = {
+          initial_delay_seconds = 60
+
+          exec = {
+            command = [
+              "sh",
+              "-cx",
+              "bin/bookkeeper shell bookiesanity",
+            ]
+          }
+        }
+
+        readiness_probe = {
+          initial_delay_seconds = 10
+
+          exec = {
+            command = [
+              "sh",
+              "-cx",
+              "bin/bookkeeper shell bookiesanity",
+            ]
+          }
+        }
       },
     ]
   }
