@@ -9,7 +9,7 @@ First replicas will be coordinator only.
 The other replicas will be workers.
 */
 variable "replicas" {
-  default = 2
+  default = 1
 }
 
 variable "ports" {
@@ -29,13 +29,21 @@ variable "overrides" {
   default = {}
 }
 
-variable memory {
-  default = "-Xms64m -Xmx128m -XX:MaxDirectMemorySize=128m"
+/*
+If discovery_uri is empty then start as Presto coordinator,
+else start as Presto worker.
+*/
+variable "discovery_uri" {
+  default = ""
 }
 
 variable "pulsar" {}
 
 variable "zookeeper" {}
+
+variable PULSAR_MEM {
+  default = "-Xms64m -Xmx128m -XX:MaxDirectMemorySize=128m"
+}
 
 variable "EXTRA_OPTS" {
   default = ""
