@@ -25,15 +25,11 @@ variable "overrides" {
   default = {}
 }
 
-variable "storage_class" {}
-
 variable storage {}
 
-variable "zookeeper" {}
+variable "storage_class" {}
 
-variable memory {
-  default = "-Xms64m -Xmx256m -XX:MaxDirectMemorySize=256m"
-}
+variable "zookeeper" {}
 
 variable "clusterName" {
   default = "local"
@@ -45,6 +41,10 @@ variable "dbStorage_writeCacheMaxSizeMb" {
 
 variable "dbStorage_readAheadCacheMaxSizeMb" {
   default = 32
+}
+
+variable PULSAR_MEM {
+  default = "-Xms64m -Xmx256m -XX:MaxDirectMemorySize=256m"
 }
 
 variable "EXTRA_OPTS" {

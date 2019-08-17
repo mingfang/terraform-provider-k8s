@@ -37,15 +37,11 @@ locals {
           <<-EOF
           bin/apply-config-from-env.py conf/bookkeeper.conf
           bin/apply-config-from-env.py conf/pulsar_env.sh
-          bin/bookkeeper shell metaformat --nonInteractive || true
+          bin/bookkeeper shell metaformat --nonInteractive --force || true
           bin/pulsar bookie
           EOF
         ]
         env = [
-          {
-            name  = "PULSAR_MEM"
-            value = "\" ${var.memory}\""
-          },
           {
             name  = "zkServers"
             value = var.zookeeper
@@ -87,6 +83,10 @@ locals {
           {
             name  = "advertisedAddress"
             value = "$(POD_NAME).${var.name}.$(POD_NAMESPACE)"
+          },
+          {
+            name  = "PULSAR_MEM"
+            value = "\" ${var.PULSAR_MEM}\""
           },
           {
             name  = "BOOKIE_EXTRA_OPTS"
