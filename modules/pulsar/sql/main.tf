@@ -27,7 +27,7 @@ locals {
         image = var.image
         command = [
           "sh",
-          "-cex",
+          "-cx",
           <<-EOF
           if [ "$discovery_uri" ]; then
             # Worker

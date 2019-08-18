@@ -6,21 +6,17 @@
  */
 
 locals {
-  labels = {
-    app     = var.name
-    name    = var.name
-    service = var.name
-  }
-
   parameters = {
     name      = var.name
     namespace = var.namespace
-    labels    = local.labels
     replicas  = var.replicas
-    ports     = var.ports
-
-    enable_service_links = false
-
+    ports = [
+      {
+        name = "http"
+        port = var.port
+      }
+    ]
+    enable_service_links        = false
     containers = [
       {
         name  = "dashboard"
@@ -37,8 +33,8 @@ locals {
             }
           },
           {
-            name = "SERVICE_URL"
-            value = var.SERVICE_URL
+            name = "PE_CONNECTION_URL"
+            value = var.PE_CONNECTION_URL
           }
         ]
       }

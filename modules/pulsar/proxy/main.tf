@@ -32,18 +32,14 @@ locals {
         image = var.image
         command = [
           "sh",
-          "-cex",
+          "-cx",
           <<-EOF
-          bin/apply-config-from-env.py conf/proxy.conf &&
-          bin/apply-config-from-env.py conf/pulsar_env.sh &&
+          bin/apply-config-from-env.py conf/proxy.conf
+          bin/apply-config-from-env.py conf/pulsar_env.sh
           bin/pulsar proxy
           EOF
         ]
         env = [
-          {
-            name  = "PULSAR_MEM"
-            value = "\" ${var.memory}\""
-          },
           {
             name  = "zookeeperServers"
             value = var.zookeeper
@@ -55,6 +51,10 @@ locals {
           {
             name  = "clusterName"
             value = var.clusterName
+          },
+          {
+            name  = "PULSAR_MEM"
+            value = "\" ${var.PULSAR_MEM}\""
           },
           {
             name  = "PULSAR_EXTRA_OPTS"

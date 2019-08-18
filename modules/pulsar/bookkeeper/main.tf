@@ -95,7 +95,8 @@ locals {
         ]
 
         liveness_probe = {
-          initial_delay_seconds = 60
+          initial_delay_seconds = 120
+          period_seconds        = 60
 
           exec = {
             command = [

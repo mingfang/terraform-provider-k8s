@@ -33,11 +33,6 @@ variable "storage" {}
 
 variable "storage_class" {}
 
-
-variable "memory" {
-  default = "-Xms64m -Xmx128m -XX:MaxDirectMemorySize=128m"
-}
-
 variable "zookeeper" {}
 
 variable "configurationStoreServers" {}
@@ -64,6 +59,10 @@ variable "functionsWorkerEnabled" {
 
 variable "PF_pulsarFunctionsCluster" {
   default = "local"
+}
+
+variable "PULSAR_MEM" {
+  default = "-Xms64m -Xmx128m -XX:MaxDirectMemorySize=128m"
 }
 
 variable "EXTRA_OPTS" {

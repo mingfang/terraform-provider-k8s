@@ -8,21 +8,16 @@ variable "replicas" {
   default = 1
 }
 
-variable "ports" {
-  default = [
-    {
-      name = "http"
-      port = 80
-    }
-  ]
+variable "port" {
+  default = 3000
 }
 
 variable "image" {
-  default = "apachepulsar/pulsar-dashboard"
+  default = "registry.rebelsoft.com/pulsar-express"
 }
 
 variable "overrides" {
   default = {}
 }
 
-variable "SERVICE_URL" {}
+variable "PE_CONNECTION_URL" {}

@@ -43,10 +43,6 @@ locals {
         ]
         env = [
           {
-            name  = "PULSAR_MEM"
-            value = "\" ${var.memory}\""
-          },
-          {
             name  = "zookeeperServers"
             value = var.zookeeper
           },
@@ -101,13 +97,18 @@ locals {
             value = "$(POD_NAME).${var.name}.$(POD_NAMESPACE)"
           },
           {
+            name  = "PULSAR_MEM"
+            value = "\" ${var.PULSAR_MEM}\""
+          },
+          {
             name  = "PULSAR_EXTRA_OPTS"
             value = var.EXTRA_OPTS
           },
         ]
 
         liveness_probe = {
-          initial_delay_seconds = 60
+          initial_delay_seconds = 120
+          period_seconds        = 60
 
           exec = {
             command = [

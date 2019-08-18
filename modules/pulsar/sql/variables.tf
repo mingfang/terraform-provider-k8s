@@ -15,8 +15,8 @@ variable "replicas" {
 variable "ports" {
   default = [
     {
-      name : "http"
-      port : 8081
+      name = "http"
+      port = 8081
     },
   ]
 }

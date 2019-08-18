@@ -11,8 +11,12 @@ variable "replicas" {
 variable "ports" {
   default = [
     {
-      name : "pulsar"
-      port : 6650
+      name = "http"
+      port = 8080
+    },
+    {
+      name = "pulsar"
+      port = 6650
     },
   ]
 }
@@ -25,16 +29,16 @@ variable "overrides" {
   default = {}
 }
 
-variable memory {
-  default = "-Xms16m -Xmx64m -XX:MaxDirectMemorySize=128m"
-}
-
 variable "zookeeper" {}
 
 variable "configurationStoreServers" {}
 
 variable "clusterName" {
   default = "local"
+}
+
+variable PULSAR_MEM {
+  default = "-Xms16m -Xmx64m -XX:MaxDirectMemorySize=128m"
 }
 
 variable "EXTRA_OPTS" {

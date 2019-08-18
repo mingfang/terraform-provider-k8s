@@ -32,18 +32,14 @@ locals {
         image = var.image
         command = [
           "sh",
-          "-cex",
+          "-cx",
           <<-EOF
-          bin/apply-config-from-env.py conf/websocket.conf &&
-          bin/apply-config-from-env.py conf/pulsar_env.sh &&
+          bin/apply-config-from-env.py conf/websocket.conf
+          bin/apply-config-from-env.py conf/pulsar_env.sh
           bin/pulsar websocket
           EOF
         ]
         env = [
-          {
-            name  = "PULSAR_MEM"
-            value = "\" ${var.memory}\""
-          },
           {
             name  = "configurationStoreServers"
             value = var.configurationStoreServers
@@ -51,6 +47,10 @@ locals {
           {
             name  = "clusterName"
             value = var.clusterName
+          },
+          {
+            name  = "PULSAR_MEM"
+            value = "\" ${var.PULSAR_MEM}\""
           },
           {
             name  = "PULSAR_EXTRA_OPTS"
