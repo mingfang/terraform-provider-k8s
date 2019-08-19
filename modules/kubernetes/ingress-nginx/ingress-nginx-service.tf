@@ -33,6 +33,15 @@ resource "k8s_core_v1_service" "ingress-nginx" {
         target_port = split(":", ports.value)[1]
       }
     }
+    dynamic "ports" {
+      for_each = var.udp_services_data
+      content {
+        name        = "udp-${ports.key}"
+        port        = ports.key
+        protocol    = "UDP"
+        target_port = split(":", ports.value)[1]
+      }
+    }
 
     selector = {
       "app.kubernetes.io/name"    = var.name

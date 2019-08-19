@@ -32,3 +32,7 @@ variable "extra_args" {
 variable "tcp_services_data" {
   default = {}
 }
+
+variable "udp_services_data" {
+  default = {}
+}
