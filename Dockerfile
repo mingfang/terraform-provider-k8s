@@ -2,22 +2,13 @@ FROM golang as base
 RUN apt-get update
 RUN apt-get install -y vim unzip zip
 
-#RUN wget https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && \
-#RUN wget https://releases.hashicorp.com/terraform/0.12.0-alpha4/terraform_0.12.0-alpha4_terraform_0.12.0-alpha4_linux_amd64.zip && \
-#    unzip terraform*.zip && \
-#    rm terraform*.zip && \
-#    mv terraform /usr/local/bin
-
-RUN wget https://releases.hashicorp.com/packer/1.3.5/packer_1.3.5_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_linux_amd64.zip && \
     unzip packer*.zip && \
     rm packer*.zip && \
     mv packer /usr/local/bin
 
 RUN wget -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/v0.6.0/terraform-docs-v0.6.0-linux-amd64 && \
     chmod +x /usr/local/bin/terraform-docs
-
-# Glide
-RUN curl https://glide.sh/get | sh
 
 #Docker client only
 RUN wget -O - https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar zx -C /usr/local/bin --strip-components=1 docker/docker
@@ -29,7 +20,7 @@ FROM base as dev
 ENV GO111MODULE=on
 
 #Terraform master branch
-ENV COMMIT v0.12.6
+ENV COMMIT v0.12.7
 RUN git clone https://github.com/hashicorp/terraform.git $GOPATH/src/github.com/hashicorp/terraform
 RUN cd "$GOPATH/src/github.com/hashicorp/terraform" && \
     git checkout $COMMIT && \
