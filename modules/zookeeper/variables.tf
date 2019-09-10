@@ -8,7 +8,7 @@ variable "replicas" {
   default = 3
 }
 
-variable ports {
+variable "ports" {
   default = [
     {
       name = "client"
@@ -30,28 +30,17 @@ variable "image" {
 }
 
 variable "env" {
-  type    = list
   default = []
-}
-
-variable "annotations" {
-  type    = map
-  default = null
-}
-
-variable "node_selector" {
-  type    = map
-  default = null
-}
-
-variable "storage" {}
-
-variable "storage_class_name" {}
-
-variable "volume_claim_template_name" {
-  default = "pvc"
 }
 
 variable "overrides" {
   default = {}
+}
+
+variable "storage_class" {}
+
+variable "storage" {}
+
+variable "volume_claim_template_name" {
+  default = "pvc"
 }

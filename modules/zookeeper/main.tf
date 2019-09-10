@@ -6,12 +6,20 @@
  */
 
 locals {
+  labels = {
+    app     = var.name
+    name    = var.name
+    service = var.name
+  }
+
   parameters = {
-    name        = var.name
-    namespace   = var.namespace
-    annotations = var.annotations
-    replicas    = var.replicas
-    ports       = var.ports
+    name                 = var.name
+    namespace            = var.namespace
+    labels               = local.labels
+    replicas             = var.replicas
+    ports                = var.ports
+    enable_service_links = false
+
     containers = [
       {
         name  = "zookeeper"
@@ -36,7 +44,7 @@ locals {
           },
           {
             name  = "ZOO_STANDALONE_ENABLED"
-            value = "false"
+            value = var.replicas == 1 ? "true" : "false"
           },
           {
             name  = "ZOO_AUTOPURGE_PURGEINTERVAL"
@@ -46,7 +54,7 @@ locals {
 
         command = [
           "bash",
-          "-cx",
+          "-cex",
           <<-EOF
           export ZOO_SERVERS=$(echo $ZOO_SERVERS|sed "s|$POD_NAME.${var.name}.${var.namespace}|0.0.0.0|")
           /docker-entrypoint.sh zkServer.sh start-foreground
@@ -55,7 +63,6 @@ locals {
 
         liveness_probe = {
           initial_delay_seconds = 10
-          timeout_seconds       = 1
 
           exec = {
             command = [
@@ -106,7 +113,7 @@ locals {
 
         command = [
           "bash",
-          "-cx",
+          "-cex",
           "mkdir -p $ZOO_DATA_DIR; echo \"$(expr $${HOSTNAME//[^0-9]/} + 1)\" > $ZOO_DATA_DIR/myid",
         ]
 
@@ -128,7 +135,7 @@ locals {
     volume_claim_templates = [
       {
         name               = var.volume_claim_template_name
-        storage_class_name = var.storage_class_name
+        storage_class_name = var.storage_class
         access_modes       = ["ReadWriteOnce"]
 
         resources = {
@@ -140,7 +147,6 @@ locals {
     ]
   }
 }
-
 
 module "statefulset-service" {
   source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"
