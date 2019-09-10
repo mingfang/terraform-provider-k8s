@@ -6,11 +6,20 @@
  */
 
 locals {
+  labels = {
+    app     = var.name
+    name    = var.name
+    service = var.name
+  }
+
   parameters = {
-    name      = var.name
-    namespace = var.namespace
-    replicas  = var.replicas
-    ports     = var.ports
+    name                 = var.name
+    namespace            = var.namespace
+    labels               = local.labels
+    replicas             = var.replicas
+    ports                = var.ports
+    enable_service_links = false
+
     containers = [
       {
         name  = "nifi"
@@ -41,19 +50,17 @@ locals {
             }
           },
           {
-            name = "NIFI_REMOTE_INPUT_HOST"
-            value_from = {
-              field_ref = {
-                field_path = "status.podIP"
-              }
-            }
+            name  = "NIFI_WEB_HTTP_PORT"
+            value = var.ports.0.port
           },
         ], var.env)
+        security_context = {
+          run_asuser = "0"
+        }
       },
     ]
   }
 }
-
 
 module "statefulset-service" {
   source     = "git::https://github.com/mingfang/terraform-provider-k8s.git//archetypes/statefulset-service"

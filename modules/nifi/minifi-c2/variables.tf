@@ -8,23 +8,21 @@ variable "env" {
   default = []
 }
 
-variable "replicas" {
-  default = 1
-}
-
 variable ports {
   default = [
     {
       name = "http"
-      port = 8080
+      port = 10080
     },
   ]
 }
 
 variable "image" {
-  default = "apache/nifi:latest"
+  default = "apache/nifi-minifi-c2:0.5.0"
 }
 
 variable "overrides" {
   default = {}
 }
+
+variable "NIFI_REST_API_URL" {}
