@@ -5,7 +5,9 @@ function tfextract() {
 }
 
 export DIR=modules/kubernetes/ingress-nginx
-tfextract -dir ${DIR} -url https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+mkdir -p ${DIR}
+
+tfextract -dir ${DIR} -url https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 tfextract -dir ${DIR} -url https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml
 
 #namespace
@@ -29,7 +31,7 @@ sed -i -e 's|name *= "udp-services|name = "${var.name}-udp-services|g' ${DIR}/*c
 sed -i -e 's|/udp-services"|/${var.name}-udp-services"|g' ${DIR}/*deployment.tf
 
 #add ingress class and extra args
-sed -i -e 's|"/nginx-ingress-controller",$|"/nginx-ingress-controller","--election-id=${var.name}","--ingress-class=${var.ingress_class}",join(",", var.extra_args),|' ${DIR}/*deployment.tf
+sed -i -e 's|"/nginx-ingress-controller",$|"/nginx-ingress-controller",\n"--election-id=${var.name}",\n"--ingress-class=${var.ingress_class}",\njoin(",", var.extra_args),|' ${DIR}/*deployment.tf
 
 #role
 sed -i -e 's|"ingress-controller-leader-nginx"|"${var.name}-${var.ingress_class}"|g' ${DIR}/*role.tf

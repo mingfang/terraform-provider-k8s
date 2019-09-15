@@ -49,19 +49,6 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "nginx-ingress-clu
   }
   rules {
     api_groups = [
-      "extensions",
-    ]
-    resources = [
-      "ingresses",
-    ]
-    verbs = [
-      "get",
-      "list",
-      "watch",
-    ]
-  }
-  rules {
-    api_groups = [
       "",
     ]
     resources = [
@@ -75,6 +62,21 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "nginx-ingress-clu
   rules {
     api_groups = [
       "extensions",
+      "networking.k8s.io",
+    ]
+    resources = [
+      "ingresses",
+    ]
+    verbs = [
+      "get",
+      "list",
+      "watch",
+    ]
+  }
+  rules {
+    api_groups = [
+      "extensions",
+      "networking.k8s.io",
     ]
     resources = [
       "ingresses/status",

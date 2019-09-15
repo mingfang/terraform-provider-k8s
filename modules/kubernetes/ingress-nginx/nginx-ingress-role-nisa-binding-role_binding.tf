@@ -15,7 +15,7 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_role_binding" "nginx-ingress-rol
 
   subjects {
     kind      = "ServiceAccount"
-    name      = k8s_core_v1_service_account.nginx-ingress-serviceaccount.metadata.0.name
-    namespace = k8s_core_v1_service_account.nginx-ingress-serviceaccount.metadata.0.namespace
+    name      = var.name
+    namespace = var.namespace
   }
 }

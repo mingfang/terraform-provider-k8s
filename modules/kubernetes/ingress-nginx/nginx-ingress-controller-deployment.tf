@@ -61,7 +61,7 @@ resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
               }
             }
           }
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1"
           liveness_probe {
             failure_threshold = 3
             http_get {
