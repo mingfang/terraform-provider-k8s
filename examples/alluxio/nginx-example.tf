@@ -45,7 +45,7 @@ locals {
       {
         name = "alluxio"
         persistent_volume_claim = {
-          claim_name = k8s_core_v1_persistent_volume_claim.this.metadata.0.name
+          claim_name = k8s_core_v1_persistent_volume_claim.this.metadata[0].name
         }
       }
     ]

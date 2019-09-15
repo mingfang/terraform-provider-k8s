@@ -30,7 +30,7 @@ variable "ports" {
 }
 
 variable "image" {
-  default = "alluxio/alluxio:2.0.0"
+  default = "alluxio/alluxio:2.0.1"
 }
 
 variable "overrides" {
