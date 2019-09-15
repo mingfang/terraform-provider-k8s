@@ -14,7 +14,7 @@ RUN wget -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform
 RUN wget -O - https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar zx -C /usr/local/bin --strip-components=1 docker/docker
 
 #Helm
-RUN wget -O - https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
+RUN wget -O - https://get.helm.sh/helm-v3.0.0-beta.3-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
 
 FROM base as dev
 ENV GO111MODULE=on
