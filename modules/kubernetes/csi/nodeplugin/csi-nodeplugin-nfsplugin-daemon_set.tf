@@ -105,7 +105,7 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
         }
 
         enable_service_links = false
-        service_account = var.name
+        service_account      = var.name
 
         volumes {
           host_path {
@@ -131,7 +131,7 @@ resource "k8s_apps_v1beta2_daemon_set" "csi-nodeplugin" {
         volumes {
           name = "alluxio-domain"
           host_path {
-            path    = "/tmp/alluxio-worker.sock"
+            path = "/tmp/alluxio-worker.sock"
             type = "DirectoryOrCreate"
           }
         }

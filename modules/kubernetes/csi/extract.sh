@@ -9,9 +9,11 @@ export DIR=modules/kubernetes/csi
 # nodeplugin
 
 mkdir -p ${DIR}/nodeplugin
+
 tfextract -dir ${DIR}/nodeplugin -url https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/kubernetes/csi-nodeplugin-nfsplugin.yaml
 tfextract -dir ${DIR}/nodeplugin -url https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/kubernetes/csi-nodeplugin-rbac.yaml
-sed -i -e '3 a namespace = var.namespace' ${DIR}/nodeplugin/*{service_account,daemon_set}.tf
+
+#sed -i -e '3 a namespace = var.namespace' ${DIR}/nodeplugin/*{service_account,daemon_set}.tf
 sed -i -e 's|namespace *=.*|namespace = var.namespace|g' ${DIR}/nodeplugin/*.tf
 sed -i -e 's|= "csi-nodeplugin.*"|= var.name|g' ${DIR}/nodeplugin/*.tf
 sed -i -e 's|/csi-nfsplugin|/${var.name}|g' ${DIR}/nodeplugin/*.tf
@@ -40,7 +42,7 @@ sed -i -e "s|= \"csi-${module}-|= \"\${var.name}-|g" ${DIR}/${module}/*.tf
 sed -i -e "s|= \"external-${module}|= \"\${var.name}|g" ${DIR}/${module}/*.tf
 sed -i -e 's|"mock-driver"|"${var.name}-driver"|g' ${DIR}/${module}/*.tf
 sed -i -e 's|/var/lib/csi/sockets/pluginproxy/mock.socket|unix://var/lib/csi/sockets/pluginproxy/${var.name}|g' ${DIR}/${module}/*.tf
-sed -i -e 's|"--enable-leader-election",|"--enable-leader-election",\n "--leader-election-type=leases",|g' ${DIR}/${module}/*.tf
+#sed -i -e 's|"--enable-leader-election",|"--enable-leader-election",\n "--leader-election-type=leases",|g' ${DIR}/${module}/*.tf
 sed -i -e '3 a namespace = var.namespace' ${DIR}/${module}/*deployment.tf
 sed -i -e '6 a namespace = var.namespace' ${DIR}/${module}/*service.tf
 

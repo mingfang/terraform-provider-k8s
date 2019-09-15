@@ -4,7 +4,7 @@ resource "k8s_apps_v1_deployment" "csi-attacher" {
     namespace = var.namespace
   }
   spec {
-    replicas = 1
+    replicas = 3
     selector {
       match_labels = {
         "app" = var.name
@@ -23,7 +23,6 @@ resource "k8s_apps_v1_deployment" "csi-attacher" {
             "--v=5",
             "--csi-address=$(ADDRESS)",
             "--leader-election",
-            "--leader-election-type=leases",
           ]
 
           env {

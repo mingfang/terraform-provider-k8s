@@ -4,7 +4,7 @@ resource "k8s_apps_v1_deployment" "csi-provisioner" {
     namespace = var.namespace
   }
   spec {
-    replicas = 1
+    replicas = 3
     selector {
       match_labels = {
         "app" = var.name
@@ -22,7 +22,6 @@ resource "k8s_apps_v1_deployment" "csi-provisioner" {
           args = [
             "--csi-address=$(ADDRESS)",
             "--enable-leader-election",
-            "--leader-election-type=leases",
           ]
 
           env {
