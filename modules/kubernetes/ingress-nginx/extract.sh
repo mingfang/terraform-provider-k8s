@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-alias tfextract='go run cmd/extractor/*go'
+function tfextract() {
+    go run cmd/extractor/*go $@
+}
 
 export DIR=modules/kubernetes/ingress-nginx
 tfextract -dir ${DIR} -url https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml

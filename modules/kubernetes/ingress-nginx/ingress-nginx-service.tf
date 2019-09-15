@@ -10,19 +10,15 @@ resource "k8s_core_v1_service" "ingress-nginx" {
   spec {
     load_balancer_ip = var.load_balancer_ip
 
-    ports {
-      name        = "http"
-      port        = 80
-      protocol    = "TCP"
-      target_port = "80"
-      node_port   = var.service_type == "NodePort" ? var.node_port_http : null
-    }
-    ports {
-      name        = "https"
-      port        = 443
-      protocol    = "TCP"
-      target_port = "443"
-      node_port   = var.service_type == "NodePort" ? var.node_port_https : null
+    dynamic "ports" {
+      for_each = var.ports == null ? [] : var.ports
+      content {
+        name        = lookup(ports.value, "name", null)
+        node_port   = lookup(ports.value, "node_port", null)
+        port        = ports.value.port
+        protocol    = lookup(ports.value, "protocol", null)
+        target_port = lookup(ports.value, "target_port", null)
+      }
     }
     dynamic "ports" {
       for_each = var.tcp_services_data

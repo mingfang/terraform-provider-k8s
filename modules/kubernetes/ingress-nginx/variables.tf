@@ -5,7 +5,7 @@ variable "namespace" {
 }
 
 variable "service_type" {
-  default = "NodePort"
+  default = "ClusterIP"
 }
 
 variable "ingress_class" {
@@ -16,16 +16,24 @@ variable "load_balancer_ip" {
   default = null
 }
 
-variable "node_port_http" {
-  default = 30000
-}
-
-variable "node_port_https" {
-  default = 30443
+variable "ports" {
+  default = [
+    {
+      name        = "http"
+      port        = 80
+      protocol    = "TCP"
+      target_port = "80"
+    },
+    {
+      name        = "https"
+      port        = 443
+      protocol    = "TCP"
+      target_port = "443"
+    }
+  ]
 }
 
 variable "extra_args" {
-  type    = list
   default = []
 }
 

@@ -38,8 +38,8 @@ resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
             "--udp-services-configmap=$(POD_NAMESPACE)/${var.name}-udp-services",
             "--annotations-prefix=nginx.ingress.kubernetes.io",
             var.service_type == "NodePort" ?
-              "--report-node-internal-ip-address" :
-              "--publish-service=$(POD_NAMESPACE)/${var.name}",
+            "--report-node-internal-ip-address" :
+            "--publish-service=$(POD_NAMESPACE)/${var.name}",
             "--update-status=true",
             "--update-status-on-shutdown",
             join(",", var.extra_args),
@@ -76,14 +76,6 @@ resource "k8s_apps_v1_deployment" "nginx-ingress-controller" {
           }
           name = var.name
 
-          ports {
-            container_port = 80
-            name           = "http"
-          }
-          ports {
-            container_port = 443
-            name           = "https"
-          }
           readiness_probe {
             failure_threshold = 3
             http_get {
