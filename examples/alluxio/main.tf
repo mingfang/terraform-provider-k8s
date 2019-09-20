@@ -15,11 +15,12 @@ module "master" {
   extra_alluxio_java_opts = join(" ", [
     "-Dalluxio.master.mount.table.root.ufs=s3a://alluxio",
     "-Dalluxio.master.audit.logging.enabled=true",
-    "-Dalluxio.underfs.s3.endpoint=http://minio.minio-example.svc.cluster.local:9000",
-    "-Dalluxio.underfs.s3.disable.dns.buckets=true",
-    "-Dalluxio.underfs.s3a.inherit_acl=false",
-    "-Daws.accessKeyId=IUWU60H2527LP7DOYJVP",
-    "-Daws.secretKey=bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm",
+    "-Dalluxio.master.mount.table.root.option.alluxio.underfs.s3.endpoint=http://minio.minio-example.svc.cluster.local:9000",
+    "-Dalluxio.master.mount.table.root.option.alluxio.underfs.s3.disable.dns.buckets=true",
+    "-Dalluxio.master.mount.table.root.option.alluxio.underfs.s3a.inherit_acl=false",
+    "-Dalluxio.master.mount.table.root.option.aws.accessKeyId=IUWU60H2527LP7DOYJVP",
+    "-Dalluxio.master.mount.table.root.option.aws.secretKey=bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm",
+    "-Dalluxio.user.file.metadata.sync.interval=30s",
   ])
 }
 
@@ -38,13 +39,6 @@ module "worker" {
 
   alluxio_master_hostname = module.master.service.metadata[0].name
   alluxio_master_port     = module.master.service.spec[0].ports[0].port
-  extra_alluxio_java_opts = join(" ", [
-    "-Dalluxio.underfs.s3.endpoint=http://minio.minio-example.svc.cluster.local:9000",
-    "-Dalluxio.underfs.s3.disable.dns.buckets=true",
-    "-Dalluxio.underfs.s3a.inherit_acl=false",
-    "-Daws.accessKeyId=IUWU60H2527LP7DOYJVP",
-    "-Daws.secretKey=bbdGponYV5p9P99EsasLSu4K3SjYBEcBLtyz7wbm",
-  ])
 }
 
 /*
@@ -89,8 +83,8 @@ module "ingress" {
 resource "k8s_extensions_v1beta1_ingress" "master" {
   metadata {
     annotations = {
-      "kubernetes.io/ingress.class"                 = module.ingress.ingress_class
-      "nginx.ingress.kubernetes.io/server-alias"    = "${var.name}.*",
+      "kubernetes.io/ingress.class"              = module.ingress.ingress_class
+      "nginx.ingress.kubernetes.io/server-alias" = "${var.name}.*",
     }
     name      = var.name
     namespace = k8s_core_v1_namespace.this.metadata[0].name
