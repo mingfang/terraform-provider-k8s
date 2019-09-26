@@ -3,8 +3,8 @@ package k8s
 import (
 	"log"
 
-	tfSchema "github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/helper/structure"
+	tfSchema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -118,6 +118,9 @@ var visitedReferences = map[string]struct{}{}
 func (this *K8S2TFSchemaVisitor) VisitReference(r proto.Reference) {
 	//log.Println("VisitReference path:", this.path)
 	if _, ok := visitedReferences[r.Reference()]; ok {
+		//if loop then treat it as json
+		this.handleJSON()
+		this.Schema.Description = r.GetDescription()
 		return
 	}
 

@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-	tfSchema "github.com/hashicorp/terraform/helper/schema"
+	tfSchema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 var forceNewPattern = []*regexp.Regexp{
@@ -138,7 +138,7 @@ func ToSnake(s string) string {
 				n += string(v) + string(del)
 			}
 			runLen = 0
-		} else if v == ' ' || v == '_' || v == '.' || v == ':' {
+		} else if v == ' ' || v == '_' || v == '.' || v == ':' || v == '-' || v == '$' {
 			// replace spaces/underscores with delimiters
 			n += string(del)
 			runLen = 0

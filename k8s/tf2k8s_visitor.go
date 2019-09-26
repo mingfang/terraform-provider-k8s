@@ -5,9 +5,9 @@ import (
 	"log"
 	"strconv"
 
-	tfSchema "github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/helper/structure"
-	"github.com/hashicorp/terraform/terraform"
+	tfSchema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
