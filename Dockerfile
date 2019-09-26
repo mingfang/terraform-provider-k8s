@@ -20,7 +20,7 @@ FROM base as dev
 ENV GO111MODULE=on
 
 #Terraform master branch
-ENV COMMIT v0.12.7
+ENV COMMIT v0.12.9
 RUN git clone https://github.com/hashicorp/terraform.git $GOPATH/src/github.com/hashicorp/terraform
 RUN cd "$GOPATH/src/github.com/hashicorp/terraform" && \
     git checkout $COMMIT && \
