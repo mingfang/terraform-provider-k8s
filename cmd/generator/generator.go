@@ -13,7 +13,7 @@ import (
 	"strings"
 	"text/template"
 
-	tfSchema "github.com/hashicorp/terraform/helper/schema"
+	tfSchema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/mingfang/terraform-provider-k8s/k8s"
 )
 
