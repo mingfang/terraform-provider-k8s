@@ -1,13 +1,13 @@
-resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-controller-challenges" {
+resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert_manager_cainjector" {
   metadata {
     labels = {
-      "app"                          = "cert-manager"
+      "app"                          = "cainjector"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
-      "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.9.0"
+      "app.kubernetes.io/name"       = "cainjector"
+      "helm.sh/chart"                = "cainjector-v0.10.0"
     }
-    name = "cert-manager-controller-challenges"
+    name = "cert-manager-cainjector"
   }
 
   rules {
@@ -15,21 +15,7 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
       "certmanager.k8s.io",
     ]
     resources = [
-      "challenges",
-      "challenges/status",
-    ]
-    verbs = [
-      "update",
-    ]
-  }
-  rules {
-    api_groups = [
-      "certmanager.k8s.io",
-    ]
-    resources = [
-      "challenges",
-      "issuers",
-      "clusterissuers",
+      "certificates",
     ]
     verbs = [
       "get",
@@ -55,67 +41,57 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
       "",
     ]
     resources = [
+      "configmaps",
       "events",
     ]
     verbs = [
+      "get",
       "create",
+      "update",
       "patch",
     ]
   }
   rules {
     api_groups = [
-      "",
+      "admissionregistration.k8s.io",
     ]
     resources = [
-      "pods",
-      "services",
+      "validatingwebhookconfigurations",
+      "mutatingwebhookconfigurations",
     ]
     verbs = [
       "get",
       "list",
       "watch",
-      "create",
-      "delete",
-    ]
-  }
-  rules {
-    api_groups = [
-      "extensions",
-    ]
-    resources = [
-      "ingresses",
-    ]
-    verbs = [
-      "get",
-      "list",
-      "watch",
-      "create",
-      "delete",
       "update",
     ]
   }
   rules {
     api_groups = [
-      "certmanager.k8s.io",
+      "apiregistration.k8s.io",
     ]
     resources = [
-      "challenges/finalizers",
-    ]
-    verbs = [
-      "update",
-    ]
-  }
-  rules {
-    api_groups = [
-      "",
-    ]
-    resources = [
-      "secrets",
+      "apiservices",
     ]
     verbs = [
       "get",
       "list",
       "watch",
+      "update",
+    ]
+  }
+  rules {
+    api_groups = [
+      "apiextensions.k8s.io",
+    ]
+    resources = [
+      "customresourcedefinitions",
+    ]
+    verbs = [
+      "get",
+      "list",
+      "watch",
+      "update",
     ]
   }
 }

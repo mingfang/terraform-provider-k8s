@@ -1,13 +1,13 @@
-resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-controller-ingress-shim" {
+resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert_manager_controller_certificates" {
   metadata {
     labels = {
       "app"                          = "cert-manager"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.9.0"
+      "helm.sh/chart"                = "cert-manager-v0.10.0"
     }
-    name = "cert-manager-controller-ingress-shim"
+    name = "cert-manager-controller-certificates"
   }
 
   rules {
@@ -16,12 +16,12 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
     ]
     resources = [
       "certificates",
+      "certificates/status",
       "certificaterequests",
+      "certificaterequests/status",
     ]
     verbs = [
-      "create",
       "update",
-      "delete",
     ]
   }
   rules {
@@ -31,8 +31,9 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
     resources = [
       "certificates",
       "certificaterequests",
-      "issuers",
       "clusterissuers",
+      "issuers",
+      "orders",
     ]
     verbs = [
       "get",
@@ -42,26 +43,41 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
   }
   rules {
     api_groups = [
-      "extensions",
+      "certmanager.k8s.io",
     ]
     resources = [
-      "ingresses",
-    ]
-    verbs = [
-      "get",
-      "list",
-      "watch",
-    ]
-  }
-  rules {
-    api_groups = [
-      "extensions",
-    ]
-    resources = [
-      "ingresses/finalizers",
+      "certificates/finalizers",
     ]
     verbs = [
       "update",
+    ]
+  }
+  rules {
+    api_groups = [
+      "certmanager.k8s.io",
+    ]
+    resources = [
+      "orders",
+    ]
+    verbs = [
+      "create",
+      "delete",
+    ]
+  }
+  rules {
+    api_groups = [
+      "",
+    ]
+    resources = [
+      "secrets",
+    ]
+    verbs = [
+      "get",
+      "list",
+      "watch",
+      "create",
+      "update",
+      "delete",
     ]
   }
   rules {

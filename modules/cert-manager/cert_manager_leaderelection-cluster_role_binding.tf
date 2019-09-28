@@ -1,18 +1,18 @@
-resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role_binding" "cert-manager-controller-ingress-shim" {
+resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role_binding" "cert_manager_leaderelection" {
   metadata {
     labels = {
       "app"                          = "cert-manager"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.9.0"
+      "helm.sh/chart"                = "cert-manager-v0.10.0"
     }
-    name = "cert-manager-controller-ingress-shim"
+    name = "cert-manager-leaderelection"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "cert-manager-controller-ingress-shim"
+    name      = "cert-manager-leaderelection"
   }
 
   subjects {

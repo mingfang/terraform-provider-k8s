@@ -1,13 +1,13 @@
-resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-controller-certificates" {
+resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert_manager_controller_ingress_shim" {
   metadata {
     labels = {
       "app"                          = "cert-manager"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.9.0"
+      "helm.sh/chart"                = "cert-manager-v0.10.0"
     }
-    name = "cert-manager-controller-certificates"
+    name = "cert-manager-controller-ingress-shim"
   }
 
   rules {
@@ -16,12 +16,12 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
     ]
     resources = [
       "certificates",
-      "certificates/status",
       "certificaterequests",
-      "certificaterequests/status",
     ]
     verbs = [
+      "create",
       "update",
+      "delete",
     ]
   }
   rules {
@@ -31,9 +31,8 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
     resources = [
       "certificates",
       "certificaterequests",
-      "clusterissuers",
       "issuers",
-      "orders",
+      "clusterissuers",
     ]
     verbs = [
       "get",
@@ -43,41 +42,26 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert-manager-cont
   }
   rules {
     api_groups = [
-      "certmanager.k8s.io",
+      "extensions",
     ]
     resources = [
-      "certificates/finalizers",
-    ]
-    verbs = [
-      "update",
-    ]
-  }
-  rules {
-    api_groups = [
-      "certmanager.k8s.io",
-    ]
-    resources = [
-      "orders",
-    ]
-    verbs = [
-      "create",
-      "delete",
-    ]
-  }
-  rules {
-    api_groups = [
-      "",
-    ]
-    resources = [
-      "secrets",
+      "ingresses",
     ]
     verbs = [
       "get",
       "list",
       "watch",
-      "create",
+    ]
+  }
+  rules {
+    api_groups = [
+      "extensions",
+    ]
+    resources = [
+      "ingresses/finalizers",
+    ]
+    verbs = [
       "update",
-      "delete",
     ]
   }
   rules {

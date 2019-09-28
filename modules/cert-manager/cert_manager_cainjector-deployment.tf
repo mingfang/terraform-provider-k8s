@@ -1,11 +1,11 @@
-resource "k8s_apps_v1_deployment" "cert-manager-cainjector" {
+resource "k8s_apps_v1_deployment" "cert_manager_cainjector" {
   metadata {
     labels = {
       "app"                          = "cainjector"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cainjector"
-      "helm.sh/chart"                = "cainjector-v0.9.0"
+      "helm.sh/chart"                = "cainjector-v0.10.0"
     }
     name      = "cert-manager-cainjector"
     namespace = var.namespace
@@ -27,7 +27,7 @@ resource "k8s_apps_v1_deployment" "cert-manager-cainjector" {
           "app.kubernetes.io/instance"   = "cert-manager"
           "app.kubernetes.io/managed-by" = "Tiller"
           "app.kubernetes.io/name"       = "cainjector"
-          "helm.sh/chart"                = "cainjector-v0.9.0"
+          "helm.sh/chart"                = "cainjector-v0.10.0"
         }
       }
       spec {
@@ -46,7 +46,7 @@ resource "k8s_apps_v1_deployment" "cert-manager-cainjector" {
               }
             }
           }
-          image             = "quay.io/jetstack/cert-manager-cainjector:v0.9.0"
+          image             = "quay.io/jetstack/cert-manager-cainjector:v0.10.0"
           image_pull_policy = "IfNotPresent"
           name              = "cainjector"
           resources {

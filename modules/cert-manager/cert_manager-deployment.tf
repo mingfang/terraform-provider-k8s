@@ -1,11 +1,11 @@
-resource "k8s_apps_v1_deployment" "cert-manager" {
+resource "k8s_apps_v1_deployment" "cert_manager" {
   metadata {
     labels = {
       "app"                          = "cert-manager"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.9.0"
+      "helm.sh/chart"                = "cert-manager-v0.10.0"
     }
     name      = "cert-manager"
     namespace = var.namespace
@@ -32,7 +32,7 @@ resource "k8s_apps_v1_deployment" "cert-manager" {
           "app.kubernetes.io/instance"   = "cert-manager"
           "app.kubernetes.io/managed-by" = "Tiller"
           "app.kubernetes.io/name"       = "cert-manager"
-          "helm.sh/chart"                = "cert-manager-v0.9.0"
+          "helm.sh/chart"                = "cert-manager-v0.10.0"
         }
       }
       spec {
@@ -42,6 +42,10 @@ resource "k8s_apps_v1_deployment" "cert-manager" {
             "--v=2",
             "--cluster-resource-namespace=$(POD_NAMESPACE)",
             "--leader-election-namespace=$(POD_NAMESPACE)",
+            "--webhook-namespace=$(POD_NAMESPACE)",
+            "--webhook-ca-secret=cert-manager-webhook-ca",
+            "--webhook-serving-secret=cert-manager-webhook-tls",
+            "--webhook-dns-names=cert-manager-webhook,cert-manager-webhook.cert-manager,cert-manager-webhook.cert-manager.svc",
           ]
 
           env {
@@ -52,7 +56,7 @@ resource "k8s_apps_v1_deployment" "cert-manager" {
               }
             }
           }
-          image             = "quay.io/jetstack/cert-manager-controller:v0.9.0"
+          image             = "quay.io/jetstack/cert-manager-controller:v0.10.0"
           image_pull_policy = "IfNotPresent"
           name              = "cert-manager"
 

@@ -1,11 +1,11 @@
-resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role_binding" "cert-manager-cainjector" {
+resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role_binding" "cert_manager_cainjector" {
   metadata {
     labels = {
       "app"                          = "cainjector"
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cainjector"
-      "helm.sh/chart"                = "cainjector-v0.9.0"
+      "helm.sh/chart"                = "cainjector-v0.10.0"
     }
     name = "cert-manager-cainjector"
   }

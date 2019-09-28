@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-alias tfextract='go run cmd/extractor/*go'
+function tfextract() {
+    go run cmd/extractor/*go $@
+}
 
 export DIR=modules/cert-manager
 mkdir -p ${DIR}/tmp
@@ -9,7 +11,7 @@ mkdir -p ${DIR}/crd
 # Must apply the CRDs before extraction
 
 rm ${DIR}/tmp/*
-tfextract -dir ${DIR}/tmp -url https://github.com/jetstack/cert-manager/releases/download/v0.9.0/cert-manager-no-webhook.yaml
+tfextract -dir ${DIR}/tmp -url https://github.com/jetstack/cert-manager/releases/download/v0.10.0/cert-manager-no-webhook.yaml
 rm ${DIR}/tmp/*-custom_resource_definition.tf
 rm ${DIR}/tmp/*namespace.tf
 mv ${DIR}/tmp/* ${DIR}

@@ -1,222 +1,68 @@
-resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_certmanager_k8s_io" {
+resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "issuers_cert_manager_io" {
   metadata {
-    name = "orders.certmanager.k8s.io"
+    name = "issuers.cert-manager.io"
   }
   spec {
-
-    additional_printer_columns {
-      json_path = ".status.state"
-      name      = "State"
-      type      = "string"
-    }
-    additional_printer_columns {
-      json_path = ".spec.issuerRef.name"
-      name      = "Issuer"
-      priority  = 1
-      type      = "string"
-    }
-    additional_printer_columns {
-      json_path = ".status.reason"
-      name      = "Reason"
-      priority  = 1
-      type      = "string"
-    }
-    additional_printer_columns {
-      json_path   = ".metadata.creationTimestamp"
-      description = "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC."
-      name        = "Age"
-      type        = "date"
-    }
-    group = "certmanager.k8s.io"
+    group = "cert-manager.io"
     names {
-      kind   = "Order"
-      plural = "orders"
+      kind   = "Issuer"
+      plural = "issuers"
     }
+    preserve_unknown_fields = false
     scope = "Namespaced"
-    subresources {
-    }
     validation {
       open_apiv3_schema = <<-JSON
         {
-          "description": "Order is a type to represent an Order with an ACME server",
           "properties": {
             "apiVersion": {
-              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
               "type": "string"
             },
             "kind": {
-              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
               "type": "string"
             },
             "metadata": {
               "type": "object"
             },
             "spec": {
+              "description": "IssuerSpec is the specification of an Issuer. This includes any configuration required for the issuer.",
               "properties": {
-                "commonName": {
-                  "description": "CommonName is the common name as specified on the DER encoded CSR. If CommonName is not specified, the first DNSName specified will be used as the CommonName. At least one of CommonName or a DNSNames must be set. This field must match the corresponding field on the DER encoded CSR.",
-                  "type": "string"
-                },
-                "config": {
-                  "description": "Config specifies a mapping from DNS identifiers to how those identifiers should be solved when performing ACME challenges. A config entry must exist for each domain listed in DNSNames and CommonName. Only **one** of 'config' or 'solvers' may be specified, and if both are specified then no action will be performed on the Order resource. \n This field will be removed when support for solver config specified on the Certificate under certificate.spec.acme has been removed. DEPRECATED: this field will be removed in future. Solver configuration must instead be provided on ACME Issuer resources.",
-                  "items": {
-                    "description": "DomainSolverConfig contains solver configuration for a set of domains.",
-                    "properties": {
-                      "dns01": {
-                        "description": "DNS01 contains DNS01 challenge solving configuration",
-                        "properties": {
-                          "provider": {
-                            "description": "Provider is the name of the DNS01 challenge provider to use, as configure on the referenced Issuer or ClusterIssuer resource.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "provider"
-                        ],
-                        "type": "object"
-                      },
-                      "domains": {
-                        "description": "Domains is the list of domains that this SolverConfig applies to.",
-                        "items": {
+                "acme": {
+                  "description": "ACMEIssuer contains the specification for an ACME issuer",
+                  "properties": {
+                    "email": {
+                      "description": "Email is the email for this account",
+                      "type": "string"
+                    },
+                    "privateKeySecretRef": {
+                      "description": "PrivateKey is the name of a secret containing the private key for this user account.",
+                      "properties": {
+                        "key": {
+                          "description": "The key of the secret to select from. Must be a valid secret key.",
                           "type": "string"
                         },
-                        "type": "array"
+                        "name": {
+                          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                          "type": "string"
+                        }
                       },
-                      "http01": {
-                        "description": "HTTP01 contains HTTP01 challenge solving configuration",
-                        "properties": {
-                          "ingress": {
-                            "description": "Ingress is the name of an Ingress resource that will be edited to include the ACME HTTP01 'well-known' challenge path in order to solve HTTP01 challenges. If this field is specified, 'ingressClass' **must not** be specified.",
-                            "type": "string"
-                          },
-                          "ingressClass": {
-                            "description": "IngressClass is the ingress class that should be set on new ingress resources that are created in order to solve HTTP01 challenges. This field should be used when using an ingress controller such as nginx, which 'flattens' ingress configuration instead of maintaining a 1:1 mapping between loadbalancer IP:ingress resources. If this field is not set, and 'ingress' is not set, then ingresses without an ingress class set will be created to solve HTTP01 challenges. If this field is specified, 'ingress' **must not** be specified.",
-                            "type": "string"
-                          }
-                        },
-                        "type": "object"
-                      }
+                      "required": [
+                        "name"
+                      ],
+                      "type": "object"
                     },
-                    "required": [
-                      "domains"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
-                },
-                "csr": {
-                  "description": "Certificate signing request bytes in DER encoding. This will be used when finalizing the order. This field must be set on the order.",
-                  "format": "byte",
-                  "type": "string"
-                },
-                "dnsNames": {
-                  "description": "DNSNames is a list of DNS names that should be included as part of the Order validation process. If CommonName is not specified, the first DNSName specified will be used as the CommonName. At least one of CommonName or a DNSNames must be set. This field must match the corresponding field on the DER encoded CSR.",
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "issuerRef": {
-                  "description": "IssuerRef references a properly configured ACME-type Issuer which should be used to create this Order. If the Issuer does not exist, processing will be retried. If the Issuer is not an 'ACME' Issuer, an error will be returned and the Order will be marked as failed.",
-                  "properties": {
-                    "group": {
+                    "server": {
+                      "description": "Server is the ACME server URL",
                       "type": "string"
                     },
-                    "kind": {
-                      "type": "string"
+                    "skipTLSVerify": {
+                      "description": "If true, skip verifying the ACME server TLS certificate",
+                      "type": "boolean"
                     },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ],
-                  "type": "object"
-                }
-              },
-              "required": [
-                "csr",
-                "issuerRef"
-              ],
-              "type": "object"
-            },
-            "status": {
-              "properties": {
-                "certificate": {
-                  "description": "Certificate is a copy of the PEM encoded certificate for this Order. This field will be populated after the order has been successfully finalized with the ACME server, and the order has transitioned to the 'valid' state.",
-                  "format": "byte",
-                  "type": "string"
-                },
-                "challenges": {
-                  "description": "Challenges is a list of ChallengeSpecs for Challenges that must be created in order to complete this Order.",
-                  "items": {
-                    "properties": {
-                      "authzURL": {
-                        "description": "AuthzURL is the URL to the ACME Authorization resource that this challenge is a part of.",
-                        "type": "string"
-                      },
-                      "config": {
-                        "description": "Config specifies the solver configuration for this challenge. Only **one** of 'config' or 'solver' may be specified, and if both are specified then no action will be performed on the Challenge resource. DEPRECATED: the 'solver' field should be specified instead",
-                        "properties": {
-                          "dns01": {
-                            "description": "DNS01 contains DNS01 challenge solving configuration",
-                            "properties": {
-                              "provider": {
-                                "description": "Provider is the name of the DNS01 challenge provider to use, as configure on the referenced Issuer or ClusterIssuer resource.",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "provider"
-                            ],
-                            "type": "object"
-                          },
-                          "http01": {
-                            "description": "HTTP01 contains HTTP01 challenge solving configuration",
-                            "properties": {
-                              "ingress": {
-                                "description": "Ingress is the name of an Ingress resource that will be edited to include the ACME HTTP01 'well-known' challenge path in order to solve HTTP01 challenges. If this field is specified, 'ingressClass' **must not** be specified.",
-                                "type": "string"
-                              },
-                              "ingressClass": {
-                                "description": "IngressClass is the ingress class that should be set on new ingress resources that are created in order to solve HTTP01 challenges. This field should be used when using an ingress controller such as nginx, which 'flattens' ingress configuration instead of maintaining a 1:1 mapping between loadbalancer IP:ingress resources. If this field is not set, and 'ingress' is not set, then ingresses without an ingress class set will be created to solve HTTP01 challenges. If this field is specified, 'ingress' **must not** be specified.",
-                                "type": "string"
-                              }
-                            },
-                            "type": "object"
-                          }
-                        },
-                        "type": "object"
-                      },
-                      "dnsName": {
-                        "description": "DNSName is the identifier that this challenge is for, e.g. example.com.",
-                        "type": "string"
-                      },
-                      "issuerRef": {
-                        "description": "IssuerRef references a properly configured ACME-type Issuer which should be used to create this Challenge. If the Issuer does not exist, processing will be retried. If the Issuer is not an 'ACME' Issuer, an error will be returned and the Challenge will be marked as failed.",
-                        "properties": {
-                          "group": {
-                            "type": "string"
-                          },
-                          "kind": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "name"
-                        ],
-                        "type": "object"
-                      },
-                      "key": {
-                        "description": "Key is the ACME challenge key for this challenge",
-                        "type": "string"
-                      },
-                      "solver": {
-                        "description": "Solver contains the domain solving configuration that should be used to solve this challenge resource. Only **one** of 'config' or 'solver' may be specified, and if both are specified then no action will be performed on the Challenge resource.",
+                    "solvers": {
+                      "description": "Solvers is a list of challenge solvers that will be used to solve ACME challenges for the matching domains.",
+                      "items": {
                         "properties": {
                           "dns01": {
                             "properties": {
@@ -335,6 +181,12 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
                                     "type": "object"
                                   },
                                   "environment": {
+                                    "enum": [
+                                      "AzurePublicCloud",
+                                      "AzureChinaCloud",
+                                      "AzureGermanCloud",
+                                      "AzureUSGovernmentCloud"
+                                    ],
                                     "type": "string"
                                   },
                                   "hostedZoneName": {
@@ -419,6 +271,10 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
                               },
                               "cnameStrategy": {
                                 "description": "CNAMEStrategy configures how the DNS01 provider should handle CNAME records when found in DNS zones.",
+                                "enum": [
+                                  "None",
+                                  "Follow"
+                                ],
                                 "type": "string"
                               },
                               "digitalocean": {
@@ -488,15 +344,23 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
                                 "description": "ACMEIssuerDNS01ProviderRoute53 is a structure containing the Route 53 configuration for AWS",
                                 "properties": {
                                   "accessKeyID": {
+                                    "description": "The AccessKeyID is used for authentication. If not set we fall-back to using env vars, shared credentials file or AWS Instance metadata see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     "type": "string"
                                   },
                                   "hostedZoneID": {
+                                    "description": "If set, the provider will manage only this zone in Route53 and will not do an lookup using the route53:ListHostedZonesByName api call.",
                                     "type": "string"
                                   },
                                   "region": {
+                                    "description": "Always set the region when using AccessKeyID and SecretAccessKey",
+                                    "type": "string"
+                                  },
+                                  "role": {
+                                    "description": "Role is a Role ARN which the Route53 provider will assume using either the explicit credentials AccessKeyID/SecretAccessKey or the inferred credentials from environment variables, shared credentials file or AWS Instance metadata",
                                     "type": "string"
                                   },
                                   "secretAccessKeySecretRef": {
+                                    "description": "The SecretAccessKey is used for authentication. If not set we fall-back to using env vars, shared credentials file or AWS Instance metadata https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     "properties": {
                                       "key": {
                                         "description": "The key of the secret to select from. Must be a valid secret key.",
@@ -514,9 +378,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
                                   }
                                 },
                                 "required": [
-                                  "accessKeyID",
-                                  "region",
-                                  "secretAccessKeySecretRef"
+                                  "region"
                                 ],
                                 "type": "object"
                               },
@@ -1131,74 +993,292 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "orders_c
                         },
                         "type": "object"
                       },
-                      "token": {
-                        "description": "Token is the ACME challenge token for this challenge.",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "privateKeySecretRef",
+                    "server"
+                  ],
+                  "type": "object"
+                },
+                "ca": {
+                  "properties": {
+                    "secretName": {
+                      "description": "SecretName is the name of the secret used to sign Certificates issued by this Issuer.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "secretName"
+                  ],
+                  "type": "object"
+                },
+                "selfSigned": {
+                  "type": "object"
+                },
+                "vault": {
+                  "properties": {
+                    "auth": {
+                      "description": "Vault authentication",
+                      "properties": {
+                        "appRole": {
+                          "description": "This Secret contains a AppRole and Secret",
+                          "properties": {
+                            "path": {
+                              "description": "Where the authentication path is mounted in Vault.",
+                              "type": "string"
+                            },
+                            "roleId": {
+                              "type": "string"
+                            },
+                            "secretRef": {
+                              "properties": {
+                                "key": {
+                                  "description": "The key of the secret to select from. Must be a valid secret key.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "roleId",
+                            "secretRef"
+                          ],
+                          "type": "object"
+                        },
+                        "kubernetes": {
+                          "description": "This contains a Role and Secret with a ServiceAccount token to authenticate with vault.",
+                          "properties": {
+                            "mountPath": {
+                              "description": "The value here will be used as part of the path used when authenticating with vault, for example if you set a value of \"foo\", the path used will be `/v1/auth/foo/login`. If unspecified, the default value \"kubernetes\" will be used.",
+                              "type": "string"
+                            },
+                            "role": {
+                              "description": "A required field containing the Vault Role to assume. A Role binds a Kubernetes ServiceAccount with a set of Vault policies.",
+                              "type": "string"
+                            },
+                            "secretRef": {
+                              "description": "The required Secret field containing a Kubernetes ServiceAccount JWT used for authenticating with Vault. Use of 'ambient credentials' is not supported.",
+                              "properties": {
+                                "key": {
+                                  "description": "The key of the secret to select from. Must be a valid secret key.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "role",
+                            "secretRef"
+                          ],
+                          "type": "object"
+                        },
+                        "tokenSecretRef": {
+                          "description": "This Secret contains the Vault token key",
+                          "properties": {
+                            "key": {
+                              "description": "The key of the secret to select from. Must be a valid secret key.",
+                              "type": "string"
+                            },
+                            "name": {
+                              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "caBundle": {
+                      "description": "Base64 encoded CA bundle to validate Vault server certificate. Only used if the Server URL is using HTTPS protocol. This parameter is ignored for plain HTTP protocol connection. If not set the system root certificates are used to validate the TLS connection.",
+                      "format": "byte",
+                      "type": "string"
+                    },
+                    "path": {
+                      "description": "Vault URL path to the certificate role",
+                      "type": "string"
+                    },
+                    "server": {
+                      "description": "Server is the vault connection address",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "auth",
+                    "path",
+                    "server"
+                  ],
+                  "type": "object"
+                },
+                "venafi": {
+                  "description": "VenafiIssuer describes issuer configuration details for Venafi Cloud.",
+                  "properties": {
+                    "cloud": {
+                      "description": "Cloud specifies the Venafi cloud configuration settings. Only one of TPP or Cloud may be specified.",
+                      "properties": {
+                        "apiTokenSecretRef": {
+                          "description": "APITokenSecretRef is a secret key selector for the Venafi Cloud API token.",
+                          "properties": {
+                            "key": {
+                              "description": "The key of the secret to select from. Must be a valid secret key.",
+                              "type": "string"
+                            },
+                            "name": {
+                              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ],
+                          "type": "object"
+                        },
+                        "url": {
+                          "description": "URL is the base URL for Venafi Cloud",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "apiTokenSecretRef",
+                        "url"
+                      ],
+                      "type": "object"
+                    },
+                    "tpp": {
+                      "description": "TPP specifies Trust Protection Platform configuration settings. Only one of TPP or Cloud may be specified.",
+                      "properties": {
+                        "caBundle": {
+                          "description": "CABundle is a PEM encoded TLS certifiate to use to verify connections to the TPP instance. If specified, system roots will not be used and the issuing CA for the TPP instance must be verifiable using the provided root. If not specified, the connection will be verified using the cert-manager system root certificates.",
+                          "format": "byte",
+                          "type": "string"
+                        },
+                        "credentialsRef": {
+                          "description": "CredentialsRef is a reference to a Secret containing the username and password for the TPP server. The secret must contain two keys, 'username' and 'password'.",
+                          "properties": {
+                            "name": {
+                              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ],
+                          "type": "object"
+                        },
+                        "url": {
+                          "description": "URL is the base URL for the Venafi TPP instance",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "credentialsRef",
+                        "url"
+                      ],
+                      "type": "object"
+                    },
+                    "zone": {
+                      "description": "Zone is the Venafi Policy Zone to use for this issuer. All requests made to the Venafi platform will be restricted by the named zone policy. This field is required.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "zone"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "status": {
+              "description": "IssuerStatus contains status information about an Issuer",
+              "properties": {
+                "acme": {
+                  "properties": {
+                    "lastRegisteredEmail": {
+                      "description": "LastRegisteredEmail is the email associated with the latest registered ACME account, in order to track changes made to registered account associated with the  Issuer",
+                      "type": "string"
+                    },
+                    "uri": {
+                      "description": "URI is the unique account identifier, which can also be used to retrieve account details from the CA",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "conditions": {
+                  "items": {
+                    "description": "IssuerCondition contains condition information for an Issuer.",
+                    "properties": {
+                      "lastTransitionTime": {
+                        "description": "LastTransitionTime is the timestamp corresponding to the last status change of this condition.",
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "message": {
+                        "description": "Message is a human readable description of the details of the last transition, complementing reason.",
+                        "type": "string"
+                      },
+                      "reason": {
+                        "description": "Reason is a brief machine readable explanation for the condition's last transition.",
+                        "type": "string"
+                      },
+                      "status": {
+                        "description": "Status of the condition, one of ('True', 'False', 'Unknown').",
+                        "enum": [
+                          "True",
+                          "False",
+                          "Unknown"
+                        ],
                         "type": "string"
                       },
                       "type": {
-                        "description": "Type is the type of ACME challenge this resource represents, e.g. \"dns01\" or \"http01\"",
+                        "description": "Type of the condition, currently ('Ready').",
                         "type": "string"
-                      },
-                      "url": {
-                        "description": "URL is the URL of the ACME Challenge resource for this challenge. This can be used to lookup details about the status of this challenge.",
-                        "type": "string"
-                      },
-                      "wildcard": {
-                        "description": "Wildcard will be true if this challenge is for a wildcard identifier, for example '*.example.com'",
-                        "type": "boolean"
                       }
                     },
                     "required": [
-                      "authzURL",
-                      "dnsName",
-                      "issuerRef",
-                      "key",
-                      "token",
-                      "type",
-                      "url"
+                      "status",
+                      "type"
                     ],
                     "type": "object"
                   },
                   "type": "array"
-                },
-                "failureTime": {
-                  "description": "FailureTime stores the time that this order failed. This is used to influence garbage collection and back-off.",
-                  "format": "date-time",
-                  "type": "string"
-                },
-                "finalizeURL": {
-                  "description": "FinalizeURL of the Order. This is used to obtain certificates for this order once it has been completed.",
-                  "type": "string"
-                },
-                "reason": {
-                  "description": "Reason optionally provides more information about a why the order is in the current state.",
-                  "type": "string"
-                },
-                "state": {
-                  "description": "State contains the current state of this Order resource. States 'success' and 'expired' are 'final'",
-                  "type": "string"
-                },
-                "url": {
-                  "description": "URL of the Order. This will initially be empty when the resource is first created. The Order controller will populate this field when the Order is first processed. This field will be immutable after it is initially set.",
-                  "type": "string"
                 }
               },
               "type": "object"
             }
           },
-          "required": [
-            "metadata",
-            "spec",
-            "status"
-          ],
           "type": "object"
         }
         JSON
     }
+    version = "v1alpha2"
 
     versions {
-      name = "v1alpha1"
-      served = true
+      name    = "v1alpha2"
+      served  = true
       storage = true
     }
   }
