@@ -1,6 +1,6 @@
-resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificaterequests_cert_manager_io" {
+resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificaterequests_certmanager_k8s_io" {
   metadata {
-    name = "certificaterequests.cert-manager.io"
+    name = "certificaterequests.certmanager.k8s.io"
   }
   spec {
 
@@ -31,7 +31,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
       name        = "Age"
       type        = "date"
     }
-    group = "cert-manager.io"
+    group = "certmanager.k8s.io"
     names {
       kind   = "CertificateRequest"
       plural = "certificaterequests"
@@ -50,11 +50,11 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
           "description": "CertificateRequest is a type to represent a Certificate Signing Request",
           "properties": {
             "apiVersion": {
-              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
               "type": "string"
             },
             "kind": {
-              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
               "type": "string"
             },
             "metadata": {
@@ -77,7 +77,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
                   "type": "boolean"
                 },
                 "issuerRef": {
-                  "description": "IssuerRef is a reference to the issuer for this CertificateRequest.  If the 'kind' field is not set, or set to 'Issuer', an Issuer resource with the given name in the same namespace as the CertificateRequest will be used.  If the 'kind' field is set to 'ClusterIssuer', a ClusterIssuer with the provided name will be used. The 'name' field in this stanza is required at all times. The group field refers to the API group of the issuer which defaults to 'cert-manager.io' if empty.",
+                  "description": "IssuerRef is a reference to the issuer for this CertificateRequest.  If the 'kind' field is not set, or set to 'Issuer', an Issuer resource with the given name in the same namespace as the CertificateRequest will be used.  If the 'kind' field is set to 'ClusterIssuer', a ClusterIssuer with the provided name will be used. The 'name' field in this stanza is required at all times. The group field refers to the API group of the issuer which defaults to 'certmanager.k8s.io' if empty.",
                   "properties": {
                     "group": {
                       "type": "string"
@@ -200,7 +200,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
     }
 
     versions {
-      name    = "v1alpha2"
+      name    = "v1alpha1"
       served  = true
       storage = true
     }

@@ -5,7 +5,7 @@ resource "k8s_rbac_authorization_k8s_io_v1beta1_cluster_role" "cert_manager_lead
       "app.kubernetes.io/instance"   = "cert-manager"
       "app.kubernetes.io/managed-by" = "Tiller"
       "app.kubernetes.io/name"       = "cert-manager"
-      "helm.sh/chart"                = "cert-manager-v0.10.0"
+      "helm.sh/chart"                = "cert-manager-v0.10.1"
     }
     name = "cert-manager-leaderelection"
   }

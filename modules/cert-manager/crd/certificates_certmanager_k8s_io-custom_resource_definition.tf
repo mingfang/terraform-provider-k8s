@@ -1,6 +1,6 @@
-resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificates_cert_manager_io" {
+resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certificates_certmanager_k8s_io" {
   metadata {
-    name = "certificates.cert-manager.io"
+    name = "certificates.certmanager.k8s.io"
   }
   spec {
 
@@ -36,7 +36,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
       name        = "Age"
       type        = "date"
     }
-    group = "cert-manager.io"
+    group = "certmanager.k8s.io"
     names {
       kind   = "Certificate"
       plural = "certificates"
@@ -55,11 +55,11 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
           "description": "Certificate is a type to represent a Certificate from ACME",
           "properties": {
             "apiVersion": {
-              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
               "type": "string"
             },
             "kind": {
-              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
               "type": "string"
             },
             "metadata": {
@@ -68,6 +68,61 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
             "spec": {
               "description": "CertificateSpec defines the desired state of Certificate",
               "properties": {
+                "acme": {
+                  "description": "ACME contains configuration specific to ACME Certificates. Notably, this contains details on how the domain names listed on this Certificate resource should be 'solved', i.e. mapping HTTP01 and DNS01 providers to DNS names.",
+                  "properties": {
+                    "config": {
+                      "items": {
+                        "description": "DomainSolverConfig contains solver configuration for a set of domains.",
+                        "properties": {
+                          "dns01": {
+                            "description": "DNS01 contains DNS01 challenge solving configuration",
+                            "properties": {
+                              "provider": {
+                                "description": "Provider is the name of the DNS01 challenge provider to use, as configure on the referenced Issuer or ClusterIssuer resource.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "provider"
+                            ],
+                            "type": "object"
+                          },
+                          "domains": {
+                            "description": "Domains is the list of domains that this SolverConfig applies to.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "http01": {
+                            "description": "HTTP01 contains HTTP01 challenge solving configuration",
+                            "properties": {
+                              "ingress": {
+                                "description": "Ingress is the name of an Ingress resource that will be edited to include the ACME HTTP01 'well-known' challenge path in order to solve HTTP01 challenges. If this field is specified, 'ingressClass' **must not** be specified.",
+                                "type": "string"
+                              },
+                              "ingressClass": {
+                                "description": "IngressClass is the ingress class that should be set on new ingress resources that are created in order to solve HTTP01 challenges. This field should be used when using an ingress controller such as nginx, which 'flattens' ingress configuration instead of maintaining a 1:1 mapping between loadbalancer IP:ingress resources. If this field is not set, and 'ingress' is not set, then ingresses without an ingress class set will be created to solve HTTP01 challenges. If this field is specified, 'ingress' **must not** be specified.",
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "required": [
+                          "domains"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "config"
+                  ],
+                  "type": "object"
+                },
                 "commonName": {
                   "description": "CommonName is a common name to be used on the Certificate. If no CommonName is given, then the first entry in DNSNames is used as the CommonName. The CommonName should have a length of 64 characters or fewer to avoid generating invalid CSRs; in order to have longer domain names, set the CommonName (or first DNSNames entry) to have 64 characters or fewer, and then add the longer domain name to DNSNames.",
                   "type": "string"
@@ -248,7 +303,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "certific
     }
 
     versions {
-      name    = "v1alpha2"
+      name    = "v1alpha1"
       served  = true
       storage = true
     }

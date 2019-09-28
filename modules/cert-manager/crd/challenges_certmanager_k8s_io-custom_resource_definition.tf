@@ -1,6 +1,6 @@
-resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challenges_acme_cert_manager_io" {
+resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challenges_certmanager_k8s_io" {
   metadata {
-    name = "challenges.acme.cert-manager.io"
+    name = "challenges.certmanager.k8s.io"
   }
   spec {
 
@@ -26,7 +26,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challeng
       name        = "Age"
       type        = "date"
     }
-    group = "acme.cert-manager.io"
+    group = "certmanager.k8s.io"
     names {
       kind   = "Challenge"
       plural = "challenges"
@@ -41,11 +41,11 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challeng
           "description": "Challenge is a type to represent a Challenge request with an ACME server",
           "properties": {
             "apiVersion": {
-              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
               "type": "string"
             },
             "kind": {
-              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
               "type": "string"
             },
             "metadata": {
@@ -56,6 +56,39 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challeng
                 "authzURL": {
                   "description": "AuthzURL is the URL to the ACME Authorization resource that this challenge is a part of.",
                   "type": "string"
+                },
+                "config": {
+                  "description": "Config specifies the solver configuration for this challenge. Only **one** of 'config' or 'solver' may be specified, and if both are specified then no action will be performed on the Challenge resource. DEPRECATED: the 'solver' field should be specified instead",
+                  "properties": {
+                    "dns01": {
+                      "description": "DNS01 contains DNS01 challenge solving configuration",
+                      "properties": {
+                        "provider": {
+                          "description": "Provider is the name of the DNS01 challenge provider to use, as configure on the referenced Issuer or ClusterIssuer resource.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "provider"
+                      ],
+                      "type": "object"
+                    },
+                    "http01": {
+                      "description": "HTTP01 contains HTTP01 challenge solving configuration",
+                      "properties": {
+                        "ingress": {
+                          "description": "Ingress is the name of an Ingress resource that will be edited to include the ACME HTTP01 'well-known' challenge path in order to solve HTTP01 challenges. If this field is specified, 'ingressClass' **must not** be specified.",
+                          "type": "string"
+                        },
+                        "ingressClass": {
+                          "description": "IngressClass is the ingress class that should be set on new ingress resources that are created in order to solve HTTP01 challenges. This field should be used when using an ingress controller such as nginx, which 'flattens' ingress configuration instead of maintaining a 1:1 mapping between loadbalancer IP:ingress resources. If this field is not set, and 'ingress' is not set, then ingresses without an ingress class set will be created to solve HTTP01 challenges. If this field is specified, 'ingress' **must not** be specified.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
                 },
                 "dnsName": {
                   "description": "DNSName is the identifier that this challenge is for, e.g. example.com.",
@@ -1083,7 +1116,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "challeng
     }
 
     versions {
-      name    = "v1alpha2"
+      name    = "v1alpha1"
       served  = true
       storage = true
     }
