@@ -1,0 +1,15 @@
+#!/bin/bash
+source helper
+
+if [ $REGISTRY ]; then
+    sha=`git rev-parse HEAD||true`
+    if [ $sha ]; then
+      docker tag ${IMAGE} "$REGISTRY/${IMAGE}:$sha"
+      docker push "$REGISTRY/${IMAGE}:$sha" 
+      docker tag ${IMAGE} "$REGISTRY/${IMAGE}:latest"
+      docker push "$REGISTRY/${IMAGE}:latest" 
+    else
+      docker tag ${IMAGE} "$REGISTRY/${IMAGE}:latest"
+      docker push "$REGISTRY/${IMAGE}:latest" 
+    fi
+fi

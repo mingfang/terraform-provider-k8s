@@ -1,0 +1,1 @@
+find -type d -path '*/\.terraform' | xargs -n 1 -I{} rm -rf {}

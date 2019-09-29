@@ -1,0 +1,7 @@
+docker pull registry.rebelsoft.com/elkjs
+
+for dir in ${1:-archetypes modules solutions examples test}; do
+  terraform fmt $dir
+  find $dir -name main.tf | grep -v .terraform | xargs -I{} dirname {} | xargs -I{} sh -cx 'echo "[View Full Size](https://raw.githubusercontent.com/mingfang/terraform-provider-k8s/master/$1/diagram.svg?sanitize=true)<img src=\"diagram.svg\"/>" > $1/README.md;terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md $1 >> $1/README.md;  git add $1/README.md' -- {}
+  find $dir -name main.tf | grep -v .terraform | xargs -I{} dirname {} | xargs -I{} sh -cx 'terraform init $1; terraform graph $1 | go run /go/src/github.com/mingfang/terraform-provider-k8s/cmd/graph/*go $1 | docker run --rm -i -w /elkgraph-web/client registry.rebelsoft.com/elkjs node lib/server/server.js > $1/diagram.svg; git add $1/diagram.svg' -- {}
+done
