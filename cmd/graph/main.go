@@ -20,7 +20,7 @@ func main() {
 		title = os.Args[1]
 	}
 	mainDot(title)
-	//log.Println(findModule("[root] module.test.k8s_apps_v1_deployment.this"))
+	//log.Println(getModule("[root] module.test.k8s_apps_v1_deployment.this"))
 }
 
 func mainTestGraph() {
@@ -145,7 +145,7 @@ func (this *graphVisitor) Visit(e ast.Elem) ast.Visitor {
 	if key == "" {
 		key = "graph"
 	}
-	//log.Println("Graph ID:", key)
+	log.Println("Graph ID:", key)
 	this.elkGraph, _ = makeElkNode(key, "", true)
 	return &stmtVisitor{
 		title:    this.title,
@@ -248,17 +248,22 @@ func makeElkPort(key string, label string, side string) (*ElkPort, bool) {
 	return &elkPort, true
 }
 
-var skipNodes = map[string]struct{}{
-	"[root] provider.k8s":                               struct{}{},
-	"[root] provider.k8s (close)":                       struct{}{},
-	"[root] provider.template":                          struct{}{},
-	"[root] provider.template (close)":                  struct{}{},
-	"[root] meta.count-boundary (count boundary fixup)": struct{}{},
+var skipPaths = []*regexp.Regexp{
+	regexp.MustCompile(`^\[root] root.*`),
+	regexp.MustCompile(`^\[root] provider.*`),
+	regexp.MustCompile(`^\[root] meta.*`),
 }
 
-func IsSkipNode(id string) bool {
-	_, found := skipNodes[id]
-	return found
+//[root] module.deployment-service.k8s_apps_v1_deployment.this
+func IsSkipNode(path string) bool {
+	for _, pattern := range skipPaths {
+		//log.Println("isSkipPath:", path)
+		if pattern.MatchString(path) {
+			//log.Println("SkipPath:", path)
+			return true
+		}
+	}
+	return false
 }
 
 type stmtVisitor struct {
@@ -270,7 +275,8 @@ func (this *stmtVisitor) Visit(e ast.Elem) ast.Visitor {
 	switch astType := e.(type) {
 	case ast.NodeStmt:
 		//log.Println("NodeStmt:", this.elkGraph.ID)
-		return this.visitNodeStmt(astType)
+		//return this.visitNodeStmt(astType)
+		return &nilVisitor{}
 	case ast.EdgeStmt:
 		//log.Println("EdgeStmt:", this.elkGraph.ID)
 		return this.visitEdgeStmt(astType)
@@ -422,7 +428,7 @@ func side(portType string) string {
 }
 
 func makeAllModuleNodes(parent *ElkNode, str string) (*ElkNode, string) {
-	sourceModule, sourceRest := findModule(str)
+	sourceModule, sourceRest := getModule(str)
 	if sourceModule != "" {
 		node, isNew := makeElkNode(parent.ID+sourceModule, sourceModule, true)
 		if isNew {
@@ -434,20 +440,22 @@ func makeAllModuleNodes(parent *ElkNode, str string) (*ElkNode, string) {
 	}
 }
 
-func findModule(str string) (string, string) {
-	var re = regexp.MustCompile(`(?Um).*module\.([^.]+)\.(.*)$`)
-	parts := re.FindStringSubmatch(str)
+var modulePattern = regexp.MustCompile(`(?Um).*module\.([^.]+)\.(.*)$`)
+
+func getModule(str string) (string, string) {
+	parts := modulePattern.FindStringSubmatch(str)
 	if len(parts) != 3 {
 		return "", ""
 	} else {
-		//log.Println("findModule for", str, "module:", parts[1], "rest:", parts[2])
+		//log.Println("getModule for", str, "module:", parts[1], "rest:", parts[2])
 		return parts[1], parts[2]
 	}
 }
 
+var varOrOutPattern = regexp.MustCompile(`(?m)(var|output)\.(\w+)`)
+
 func getVarOrOut(str string) (string, string) {
-	var re = regexp.MustCompile(`(?m)(var|output)\.(\w+)`)
-	parts := re.FindStringSubmatch(str)
+	parts := varOrOutPattern.FindStringSubmatch(str)
 	if len(parts) != 3 {
 		return "", ""
 	} else {
