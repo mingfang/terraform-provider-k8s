@@ -110,6 +110,7 @@ Deployment enables declarative updates for Pods and ReplicaSets.
 - [hostname](#hostname)
 - [node_name](#node_name)
 - [node_selector](#node_selector)
+- [overhead](#overhead)
 - [preemption_policy](#preemption_policy)
 - [priority](#priority)
 - [priority_class_name](#priority_class_name)
@@ -755,6 +756,61 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     
 - [gmsa_credential_spec](#gmsa_credential_spec)
 - [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+- [run_asuser_name](#run_asuser_name)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>startup_probe</summary><blockquote>
+
+    
+- [failure_threshold](#failure_threshold)
+- [initial_delay_seconds](#initial_delay_seconds)
+- [period_seconds](#period_seconds)
+- [success_threshold](#success_threshold)
+- [timeout_seconds](#timeout_seconds)
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
 
     
 </details>
@@ -801,6 +857,479 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     
 - [name](#name)
 - [value](#value)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>ephemeral_containers</summary><blockquote>
+
+    
+- [args](#args)
+- [command](#command)
+- [image](#image)
+- [image_pull_policy](#image_pull_policy)
+- [name](#name)*
+- [stdin](#stdin)
+- [stdin_once](#stdin_once)
+- [target_container_name](#target_container_name)
+- [termination_message_path](#termination_message_path)
+- [termination_message_policy](#termination_message_policy)
+- [tty](#tty)
+- [working_dir](#working_dir)
+
+    
+<details>
+<summary>env</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)
+
+    
+<details>
+<summary>value_from</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>config_map_keyref</summary><blockquote>
+
+    
+- [key](#key)*
+- [name](#name)
+- [optional](#optional)
+
+    
+</details>
+
+<details>
+<summary>field_ref</summary><blockquote>
+
+    
+- [api_version](#api_version)
+- [field_path](#field_path)*
+
+    
+</details>
+
+<details>
+<summary>resource_field_ref</summary><blockquote>
+
+    
+- [container_name](#container_name)
+- [divisor](#divisor)
+- [resource](#resource)*
+
+    
+</details>
+
+<details>
+<summary>secret_key_ref</summary><blockquote>
+
+    
+- [key](#key)*
+- [name](#name)
+- [optional](#optional)
+
+    
+</details>
+
+</details>
+
+</details>
+
+<details>
+<summary>env_from</summary><blockquote>
+
+    
+- [prefix](#prefix)
+
+    
+<details>
+<summary>config_map_ref</summary><blockquote>
+
+    
+- [name](#name)
+- [optional](#optional)
+
+    
+</details>
+
+<details>
+<summary>secret_ref</summary><blockquote>
+
+    
+- [name](#name)
+- [optional](#optional)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>lifecycle</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>post_start</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>pre_stop</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
+
+    
+</details>
+
+</details>
+
+</details>
+
+<details>
+<summary>liveness_probe</summary><blockquote>
+
+    
+- [failure_threshold](#failure_threshold)
+- [initial_delay_seconds](#initial_delay_seconds)
+- [period_seconds](#period_seconds)
+- [success_threshold](#success_threshold)
+- [timeout_seconds](#timeout_seconds)
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>ports</summary><blockquote>
+
+    
+- [container_port](#container_port)*
+- [host_ip](#host_ip)
+- [host_port](#host_port)
+- [name](#name)
+- [protocol](#protocol)
+
+    
+</details>
+
+<details>
+<summary>readiness_probe</summary><blockquote>
+
+    
+- [failure_threshold](#failure_threshold)
+- [initial_delay_seconds](#initial_delay_seconds)
+- [period_seconds](#period_seconds)
+- [success_threshold](#success_threshold)
+- [timeout_seconds](#timeout_seconds)
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>resources</summary><blockquote>
+
+    
+- [limits](#limits)
+- [requests](#requests)
+
+    
+</details>
+
+<details>
+<summary>security_context</summary><blockquote>
+
+    
+- [allow_privilege_escalation](#allow_privilege_escalation)
+- [privileged](#privileged)
+- [proc_mount](#proc_mount)
+- [read_only_root_filesystem](#read_only_root_filesystem)
+- [run_asgroup](#run_asgroup)
+- [run_asnon_root](#run_asnon_root)
+- [run_asuser](#run_asuser)
+
+    
+<details>
+<summary>capabilities</summary><blockquote>
+
+    
+- [add](#add)
+- [drop](#drop)
+
+    
+</details>
+
+<details>
+<summary>selinux_options</summary><blockquote>
+
+    
+- [level](#level)
+- [role](#role)
+- [type](#type)
+- [user](#user)
+
+    
+</details>
+
+<details>
+<summary>windows_options</summary><blockquote>
+
+    
+- [gmsa_credential_spec](#gmsa_credential_spec)
+- [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+- [run_asuser_name](#run_asuser_name)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>startup_probe</summary><blockquote>
+
+    
+- [failure_threshold](#failure_threshold)
+- [initial_delay_seconds](#initial_delay_seconds)
+- [period_seconds](#period_seconds)
+- [success_threshold](#success_threshold)
+- [timeout_seconds](#timeout_seconds)
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>volume_devices</summary><blockquote>
+
+    
+- [device_path](#device_path)*
+- [name](#name)*
+
+    
+</details>
+
+<details>
+<summary>volume_mounts</summary><blockquote>
+
+    
+- [mount_path](#mount_path)*
+- [mount_propagation](#mount_propagation)
+- [name](#name)*
+- [read_only](#read_only)
+- [sub_path](#sub_path)
+- [sub_path_expr](#sub_path_expr)
 
     
 </details>
@@ -1211,6 +1740,61 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     
 - [gmsa_credential_spec](#gmsa_credential_spec)
 - [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+- [run_asuser_name](#run_asuser_name)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>startup_probe</summary><blockquote>
+
+    
+- [failure_threshold](#failure_threshold)
+- [initial_delay_seconds](#initial_delay_seconds)
+- [period_seconds](#period_seconds)
+- [success_threshold](#success_threshold)
+- [timeout_seconds](#timeout_seconds)
+
+    
+<details>
+<summary>exec</summary><blockquote>
+
+    
+- [command](#command)
+
+    
+</details>
+
+<details>
+<summary>http_get</summary><blockquote>
+
+    
+- [host](#host)
+- [path](#path)
+- [port](#port)*
+- [scheme](#scheme)
+
+    
+<details>
+<summary>http_headers</summary><blockquote>
+
+    
+- [name](#name)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>tcp_socket</summary><blockquote>
+
+    
+- [host](#host)
+- [port](#port)*
 
     
 </details>
@@ -1291,6 +1875,7 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     
 - [gmsa_credential_spec](#gmsa_credential_spec)
 - [gmsa_credential_spec_name](#gmsa_credential_spec_name)
+- [run_asuser_name](#run_asuser_name)
 
     
 </details>
@@ -1308,6 +1893,37 @@ Deployment enables declarative updates for Pods and ReplicaSets.
 - [value](#value)
 
     
+</details>
+
+<details>
+<summary>topology_spread_constraints</summary><blockquote>
+
+    
+- [max_skew](#max_skew)*
+- [topology_key](#topology_key)*
+- [when_unsatisfiable](#when_unsatisfiable)*
+
+    
+<details>
+<summary>label_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
 </details>
 
 <details>
@@ -2250,7 +2866,37 @@ resource "k8s_apps_v1_deployment" "this" {
             windows_options {
               gmsa_credential_spec      = "TypeString"
               gmsa_credential_spec_name = "TypeString"
+              run_asuser_name           = "TypeString"
             }
+          }
+
+          startup_probe {
+
+            exec {
+              command = ["TypeString"]
+            }
+            failure_threshold = "TypeInt"
+
+            http_get {
+              host = "TypeString"
+
+              http_headers {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+              path   = "TypeString"
+              port   = "TypeString*"
+              scheme = "TypeString"
+            }
+            initial_delay_seconds = "TypeInt"
+            period_seconds        = "TypeInt"
+            success_threshold     = "TypeInt"
+
+            tcp_socket {
+              host = "TypeString"
+              port = "TypeString*"
+            }
+            timeout_seconds = "TypeInt"
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -2285,6 +2931,259 @@ resource "k8s_apps_v1_deployment" "this" {
         }
         dns_policy           = "TypeString"
         enable_service_links = "TypeString"
+
+        ephemeral_containers {
+          args    = ["TypeString"]
+          command = ["TypeString"]
+
+          env {
+            name  = "TypeString*"
+            value = "TypeString"
+
+            value_from {
+
+              config_map_keyref {
+                key      = "TypeString*"
+                name     = "TypeString"
+                optional = "TypeString"
+              }
+
+              field_ref {
+                api_version = "TypeString"
+                field_path  = "TypeString*"
+              }
+
+              resource_field_ref {
+                container_name = "TypeString"
+                divisor        = "TypeString"
+                resource       = "TypeString*"
+              }
+
+              secret_key_ref {
+                key      = "TypeString*"
+                name     = "TypeString"
+                optional = "TypeString"
+              }
+            }
+          }
+
+          env_from {
+
+            config_map_ref {
+              name     = "TypeString"
+              optional = "TypeString"
+            }
+            prefix = "TypeString"
+
+            secret_ref {
+              name     = "TypeString"
+              optional = "TypeString"
+            }
+          }
+          image             = "TypeString"
+          image_pull_policy = "TypeString"
+
+          lifecycle {
+
+            post_start {
+
+              exec {
+                command = ["TypeString"]
+              }
+
+              http_get {
+                host = "TypeString"
+
+                http_headers {
+                  name  = "TypeString*"
+                  value = "TypeString*"
+                }
+                path   = "TypeString"
+                port   = "TypeString*"
+                scheme = "TypeString"
+              }
+
+              tcp_socket {
+                host = "TypeString"
+                port = "TypeString*"
+              }
+            }
+
+            pre_stop {
+
+              exec {
+                command = ["TypeString"]
+              }
+
+              http_get {
+                host = "TypeString"
+
+                http_headers {
+                  name  = "TypeString*"
+                  value = "TypeString*"
+                }
+                path   = "TypeString"
+                port   = "TypeString*"
+                scheme = "TypeString"
+              }
+
+              tcp_socket {
+                host = "TypeString"
+                port = "TypeString*"
+              }
+            }
+          }
+
+          liveness_probe {
+
+            exec {
+              command = ["TypeString"]
+            }
+            failure_threshold = "TypeInt"
+
+            http_get {
+              host = "TypeString"
+
+              http_headers {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+              path   = "TypeString"
+              port   = "TypeString*"
+              scheme = "TypeString"
+            }
+            initial_delay_seconds = "TypeInt"
+            period_seconds        = "TypeInt"
+            success_threshold     = "TypeInt"
+
+            tcp_socket {
+              host = "TypeString"
+              port = "TypeString*"
+            }
+            timeout_seconds = "TypeInt"
+          }
+          name = "TypeString*"
+
+          ports {
+            container_port = "TypeInt*"
+            host_ip        = "TypeString"
+            host_port      = "TypeInt"
+            name           = "TypeString"
+            protocol       = "TypeString"
+          }
+
+          readiness_probe {
+
+            exec {
+              command = ["TypeString"]
+            }
+            failure_threshold = "TypeInt"
+
+            http_get {
+              host = "TypeString"
+
+              http_headers {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+              path   = "TypeString"
+              port   = "TypeString*"
+              scheme = "TypeString"
+            }
+            initial_delay_seconds = "TypeInt"
+            period_seconds        = "TypeInt"
+            success_threshold     = "TypeInt"
+
+            tcp_socket {
+              host = "TypeString"
+              port = "TypeString*"
+            }
+            timeout_seconds = "TypeInt"
+          }
+
+          resources {
+            limits   = { "key" = "TypeString" }
+            requests = { "key" = "TypeString" }
+          }
+
+          security_context {
+            allow_privilege_escalation = "TypeString"
+
+            capabilities {
+              add  = ["TypeString"]
+              drop = ["TypeString"]
+            }
+            privileged                = "TypeString"
+            proc_mount                = "TypeString"
+            read_only_root_filesystem = "TypeString"
+            run_asgroup               = "TypeInt"
+            run_asnon_root            = "TypeString"
+            run_asuser                = "TypeInt"
+
+            selinux_options {
+              level = "TypeString"
+              role  = "TypeString"
+              type  = "TypeString"
+              user  = "TypeString"
+            }
+
+            windows_options {
+              gmsa_credential_spec      = "TypeString"
+              gmsa_credential_spec_name = "TypeString"
+              run_asuser_name           = "TypeString"
+            }
+          }
+
+          startup_probe {
+
+            exec {
+              command = ["TypeString"]
+            }
+            failure_threshold = "TypeInt"
+
+            http_get {
+              host = "TypeString"
+
+              http_headers {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+              path   = "TypeString"
+              port   = "TypeString*"
+              scheme = "TypeString"
+            }
+            initial_delay_seconds = "TypeInt"
+            period_seconds        = "TypeInt"
+            success_threshold     = "TypeInt"
+
+            tcp_socket {
+              host = "TypeString"
+              port = "TypeString*"
+            }
+            timeout_seconds = "TypeInt"
+          }
+          stdin                      = "TypeString"
+          stdin_once                 = "TypeString"
+          target_container_name      = "TypeString"
+          termination_message_path   = "TypeString"
+          termination_message_policy = "TypeString"
+          tty                        = "TypeString"
+
+          volume_devices {
+            device_path = "TypeString*"
+            name        = "TypeString*"
+          }
+
+          volume_mounts {
+            mount_path        = "TypeString*"
+            mount_propagation = "TypeString"
+            name              = "TypeString*"
+            read_only         = "TypeString"
+            sub_path          = "TypeString"
+            sub_path_expr     = "TypeString"
+          }
+          working_dir = "TypeString"
+        }
 
         host_aliases {
           hostnames = ["TypeString"]
@@ -2497,7 +3396,37 @@ resource "k8s_apps_v1_deployment" "this" {
             windows_options {
               gmsa_credential_spec      = "TypeString"
               gmsa_credential_spec_name = "TypeString"
+              run_asuser_name           = "TypeString"
             }
+          }
+
+          startup_probe {
+
+            exec {
+              command = ["TypeString"]
+            }
+            failure_threshold = "TypeInt"
+
+            http_get {
+              host = "TypeString"
+
+              http_headers {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+              path   = "TypeString"
+              port   = "TypeString*"
+              scheme = "TypeString"
+            }
+            initial_delay_seconds = "TypeInt"
+            period_seconds        = "TypeInt"
+            success_threshold     = "TypeInt"
+
+            tcp_socket {
+              host = "TypeString"
+              port = "TypeString*"
+            }
+            timeout_seconds = "TypeInt"
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -2522,6 +3451,7 @@ resource "k8s_apps_v1_deployment" "this" {
         }
         node_name           = "TypeString"
         node_selector       = { "key" = "TypeString" }
+        overhead            = { "key" = "TypeString" }
         preemption_policy   = "TypeString"
         priority            = "TypeInt"
         priority_class_name = "TypeString"
@@ -2555,6 +3485,7 @@ resource "k8s_apps_v1_deployment" "this" {
           windows_options {
             gmsa_credential_spec      = "TypeString"
             gmsa_credential_spec_name = "TypeString"
+            run_asuser_name           = "TypeString"
           }
         }
         service_account                  = "TypeString"
@@ -2569,6 +3500,22 @@ resource "k8s_apps_v1_deployment" "this" {
           operator           = "TypeString"
           toleration_seconds = "TypeInt"
           value              = "TypeString"
+        }
+
+        topology_spread_constraints {
+
+          label_selector {
+
+            match_expressions {
+              key      = "TypeString*"
+              operator = "TypeString*"
+              values   = ["TypeString"]
+            }
+            match_labels = { "key" = "TypeString" }
+          }
+          max_skew           = "TypeInt*"
+          topology_key       = "TypeString*"
+          when_unsatisfiable = "TypeString*"
         }
 
         volumes {
@@ -2903,7 +3850,7 @@ Annotations is an unstructured key value map stored with a resource that may be 
 
 CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 
-Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 #### deletion_grace_period_seconds
 
 ######  ReadOnly • TypeInt
@@ -2915,7 +3862,7 @@ Number of seconds allowed for this object to gracefully terminate before it will
 
 DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.
 
-Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 #### labels
 
 ######  TypeMap
@@ -2939,12 +3886,14 @@ Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/use
 
 An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
 
-Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
 
 SelfLink is a URL representing this object. Populated by the system. Read-only.
+
+DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the field is planned to be removed in 1.21 release.
 #### uid
 
 ######  ReadOnly • TypeString
@@ -3044,7 +3993,7 @@ Template describes the pods that will be created.
     
 ## metadata
 
-Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 
     
 #### annotations
@@ -3058,7 +4007,7 @@ Annotations is an unstructured key value map stored with a resource that may be 
 
 CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 
-Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 #### deletion_grace_period_seconds
 
 ######  ReadOnly • TypeInt
@@ -3070,7 +4019,7 @@ Number of seconds allowed for this object to gracefully terminate before it will
 
 DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.
 
-Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 #### labels
 
 ######  TypeMap
@@ -3094,12 +4043,14 @@ Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/use
 
 An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
 
-Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
 #### self_link
 
 ######  ReadOnly • TypeString
 
 SelfLink is a URL representing this object. Populated by the system. Read-only.
+
+DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the field is planned to be removed in 1.21 release.
 #### uid
 
 ######  ReadOnly • TypeString
@@ -3109,7 +4060,7 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-Specification of the desired behavior of the pod. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+Specification of the desired behavior of the pod. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 
     
 #### active_deadline_seconds
@@ -3684,7 +4635,7 @@ Optional: Host name to connect to, defaults to the pod IP.
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
 ## pre_stop
 
-PreStop is called immediately before a container is terminated due to an API request or management event such as liveness probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
 
     
 ## exec
@@ -3826,7 +4777,7 @@ How often (in seconds) to perform the probe. Default to 10 seconds. Minimum valu
 
 ######  TypeInt
 
-Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness. Minimum value is 1.
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
 ## tcp_socket
 
 TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
@@ -3956,7 +4907,7 @@ How often (in seconds) to perform the probe. Default to 10 seconds. Minimum valu
 
 ######  TypeInt
 
-Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness. Minimum value is 1.
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
 ## tcp_socket
 
 TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
@@ -4074,7 +5025,7 @@ Type is a SELinux type label that applies to the container.
 User is a SELinux user label that applies to the container.
 ## windows_options
 
-Windows security options.
+The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 
     
 #### gmsa_credential_spec
@@ -4087,6 +5038,106 @@ GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kuber
 ######  TypeString
 
 GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### run_asuser_name
+
+######  TypeString
+
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+## startup_probe
+
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is an alpha feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+#### failure_threshold
+
+######  TypeInt
+
+Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+#### initial_delay_seconds
+
+######  TypeInt
+
+Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### period_seconds
+
+######  TypeInt
+
+How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.
+#### success_threshold
+
+######  TypeInt
+
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### timeout_seconds
+
+######  TypeInt
+
+Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 #### stdin
 
 ######  TypeString
@@ -4207,6 +5258,831 @@ Set DNS policy for the pod. Defaults to "ClusterFirst". Valid values are 'Cluste
 ######  TypeString
 
 EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Defaults to true.
+## ephemeral_containers
+
+List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing pod to perform user-initiated actions such as debugging. This list cannot be specified when creating a pod, and it cannot be modified by updating the pod spec. In order to add an ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource. This field is alpha-level and is only honored by servers that enable the EphemeralContainers feature.
+
+    
+#### args
+
+######  TypeList
+
+Arguments to the entrypoint. The docker image's CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
+#### command
+
+######  TypeList
+
+Entrypoint array. Not executed within a shell. The docker image's ENTRYPOINT is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
+## env
+
+List of environment variables to set in the container. Cannot be updated.
+
+    
+#### name
+
+###### Required •  TypeString
+
+Name of the environment variable. Must be a C_IDENTIFIER.
+#### value
+
+######  TypeString
+
+Variable references $(VAR_NAME) are expanded using the previous defined environment variables in the container and any service environment variables. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to "".
+## value_from
+
+Source for the environment variable's value. Cannot be used if value is not empty.
+
+    
+## config_map_keyref
+
+Selects a key of a ConfigMap.
+
+    
+#### key
+
+###### Required •  TypeString
+
+The key to select.
+#### name
+
+######  TypeString
+
+Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+#### optional
+
+######  TypeString
+
+Specify whether the ConfigMap or its key must be defined
+## field_ref
+
+Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+
+    
+#### api_version
+
+######  TypeString
+
+Version of the schema the FieldPath is written in terms of, defaults to "v1".
+#### field_path
+
+###### Required •  TypeString
+
+Path of the field to select in the specified API version.
+## resource_field_ref
+
+Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.
+
+    
+#### container_name
+
+######  TypeString
+
+Container name: required for volumes, optional for env vars
+#### divisor
+
+######  TypeString
+
+Specifies the output format of the exposed resources, defaults to "1"
+#### resource
+
+###### Required •  TypeString
+
+Required: resource to select
+## secret_key_ref
+
+Selects a key of a secret in the pod's namespace
+
+    
+#### key
+
+###### Required •  TypeString
+
+The key of the secret to select from.  Must be a valid secret key.
+#### name
+
+######  TypeString
+
+Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+#### optional
+
+######  TypeString
+
+Specify whether the Secret or its key must be defined
+## env_from
+
+List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.
+
+    
+## config_map_ref
+
+The ConfigMap to select from
+
+    
+#### name
+
+######  TypeString
+
+Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+#### optional
+
+######  TypeString
+
+Specify whether the ConfigMap must be defined
+#### prefix
+
+######  TypeString
+
+An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
+## secret_ref
+
+The Secret to select from
+
+    
+#### name
+
+######  TypeString
+
+Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+#### optional
+
+######  TypeString
+
+Specify whether the Secret must be defined
+#### image
+
+######  TypeString
+
+Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images
+#### image_pull_policy
+
+######  TypeString
+
+Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images
+## lifecycle
+
+Lifecycle is not allowed for ephemeral containers.
+
+    
+## post_start
+
+PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+## pre_stop
+
+PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+## liveness_probe
+
+Probes are not allowed for ephemeral containers.
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+#### failure_threshold
+
+######  TypeInt
+
+Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+#### initial_delay_seconds
+
+######  TypeInt
+
+Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### period_seconds
+
+######  TypeInt
+
+How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.
+#### success_threshold
+
+######  TypeInt
+
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### timeout_seconds
+
+######  TypeInt
+
+Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### name
+
+###### Required •  TypeString
+
+Name of the ephemeral container specified as a DNS_LABEL. This name must be unique among all containers, init containers and ephemeral containers.
+## ports
+
+Ports are not allowed for ephemeral containers.
+
+    
+#### container_port
+
+###### Required •  TypeInt
+
+Number of port to expose on the pod's IP address. This must be a valid port number, 0 < x < 65536.
+#### host_ip
+
+######  TypeString
+
+What host IP to bind the external port to.
+#### host_port
+
+######  TypeInt
+
+Number of port to expose on the host. If specified, this must be a valid port number, 0 < x < 65536. If HostNetwork is specified, this must match ContainerPort. Most containers do not need this.
+#### name
+
+######  TypeString
+
+If specified, this must be an IANA_SVC_NAME and unique within the pod. Each named port in a pod must have a unique name. Name for the port that can be referred to by services.
+#### protocol
+
+######  TypeString
+
+Protocol for port. Must be UDP, TCP, or SCTP. Defaults to "TCP".
+## readiness_probe
+
+Probes are not allowed for ephemeral containers.
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+#### failure_threshold
+
+######  TypeInt
+
+Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+#### initial_delay_seconds
+
+######  TypeInt
+
+Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### period_seconds
+
+######  TypeInt
+
+How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.
+#### success_threshold
+
+######  TypeInt
+
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### timeout_seconds
+
+######  TypeInt
+
+Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+## resources
+
+Resources are not allowed for ephemeral containers. Ephemeral containers use spare resources already allocated to the pod.
+
+    
+#### limits
+
+######  TypeMap
+
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+#### requests
+
+######  TypeMap
+
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## security_context
+
+SecurityContext is not allowed for ephemeral containers.
+
+    
+#### allow_privilege_escalation
+
+######  TypeString
+
+AllowPrivilegeEscalation controls whether a process can gain more privileges than its parent process. This bool directly controls if the no_new_privs flag will be set on the container process. AllowPrivilegeEscalation is true always when the container is: 1) run as Privileged 2) has CAP_SYS_ADMIN
+## capabilities
+
+The capabilities to add/drop when running containers. Defaults to the default set of capabilities granted by the container runtime.
+
+    
+#### add
+
+######  TypeList
+
+Added capabilities
+#### drop
+
+######  TypeList
+
+Removed capabilities
+#### privileged
+
+######  TypeString
+
+Run container in privileged mode. Processes in privileged containers are essentially equivalent to root on the host. Defaults to false.
+#### proc_mount
+
+######  TypeString
+
+procMount denotes the type of proc mount to use for the containers. The default is DefaultProcMount which uses the container runtime defaults for readonly paths and masked paths. This requires the ProcMountType feature flag to be enabled.
+#### read_only_root_filesystem
+
+######  TypeString
+
+Whether this container has a read-only root filesystem. Default is false.
+#### run_asgroup
+
+######  TypeInt
+
+The GID to run the entrypoint of the container process. Uses runtime default if unset. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+#### run_asnon_root
+
+######  TypeString
+
+Indicates that the container must run as a non-root user. If true, the Kubelet will validate the image at runtime to ensure that it does not run as UID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+#### run_asuser
+
+######  TypeInt
+
+The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+## selinux_options
+
+The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+
+    
+#### level
+
+######  TypeString
+
+Level is SELinux level label that applies to the container.
+#### role
+
+######  TypeString
+
+Role is a SELinux role label that applies to the container.
+#### type
+
+######  TypeString
+
+Type is a SELinux type label that applies to the container.
+#### user
+
+######  TypeString
+
+User is a SELinux user label that applies to the container.
+## windows_options
+
+The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+
+    
+#### gmsa_credential_spec
+
+######  TypeString
+
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### gmsa_credential_spec_name
+
+######  TypeString
+
+GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### run_asuser_name
+
+######  TypeString
+
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+## startup_probe
+
+Probes are not allowed for ephemeral containers.
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+#### failure_threshold
+
+######  TypeInt
+
+Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+#### initial_delay_seconds
+
+######  TypeInt
+
+Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### period_seconds
+
+######  TypeInt
+
+How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.
+#### success_threshold
+
+######  TypeInt
+
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### timeout_seconds
+
+######  TypeInt
+
+Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### stdin
+
+######  TypeString
+
+Whether this container should allocate a buffer for stdin in the container runtime. If this is not set, reads from stdin in the container will always result in EOF. Default is false.
+#### stdin_once
+
+######  TypeString
+
+Whether the container runtime should close the stdin channel after it has been opened by a single attach. When stdin is true the stdin stream will remain open across multiple attach sessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the first client attaches to stdin, and then remains open and accepts data until the client disconnects, at which time stdin is closed and remains closed until the container is restarted. If this flag is false, a container processes that reads from stdin will never receive an EOF. Default is false
+#### target_container_name
+
+######  TypeString
+
+If set, the name of the container from PodSpec that this ephemeral container targets. The ephemeral container will be run in the namespaces (IPC, PID, etc) of this container. If not set then the ephemeral container is run in whatever namespaces are shared for the pod. Note that the container runtime must support this feature.
+#### termination_message_path
+
+######  TypeString
+
+Optional: Path at which the file to which the container's termination message will be written is mounted into the container's filesystem. Message written is intended to be brief final status, such as an assertion failure message. Will be truncated by the node if greater than 4096 bytes. The total message length across all containers will be limited to 12kb. Defaults to /dev/termination-log. Cannot be updated.
+#### termination_message_policy
+
+######  TypeString
+
+Indicate how the termination message should be populated. File will use the contents of terminationMessagePath to populate the container status message on both success and failure. FallbackToLogsOnError will use the last chunk of container log output if the termination message file is empty and the container exited with an error. The log output is limited to 2048 bytes or 80 lines, whichever is smaller. Defaults to File. Cannot be updated.
+#### tty
+
+######  TypeString
+
+Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false.
+## volume_devices
+
+volumeDevices is the list of block devices to be used by the container. This is a beta feature.
+
+    
+#### device_path
+
+###### Required •  TypeString
+
+devicePath is the path inside of the container that the device will be mapped to.
+#### name
+
+###### Required •  TypeString
+
+name must match the name of a persistentVolumeClaim in the pod
+## volume_mounts
+
+Pod volumes to mount into the container's filesystem. Cannot be updated.
+
+    
+#### mount_path
+
+###### Required •  TypeString
+
+Path within the container at which the volume should be mounted.  Must not contain ':'.
+#### mount_propagation
+
+######  TypeString
+
+mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10.
+#### name
+
+###### Required •  TypeString
+
+This must match the Name of a Volume.
+#### read_only
+
+######  TypeString
+
+Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false.
+#### sub_path
+
+######  TypeString
+
+Path within the volume from which the container's volume should be mounted. Defaults to "" (volume's root).
+#### sub_path_expr
+
+######  TypeString
+
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
+#### working_dir
+
+######  TypeString
+
+Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated.
 ## host_aliases
 
 HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts file if specified. This is only valid for non-hostNetwork pods.
@@ -4254,7 +6130,7 @@ ImagePullSecrets is an optional list of references to secrets in the same namesp
 Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 ## init_containers
 
-List of initialization containers belonging to the pod. Init containers are executed in order prior to containers being started. If any init container fails, the pod is considered to have failed and is handled according to its restartPolicy. The name for an init container or normal container must be unique among all containers. Init containers may not have Lifecycle actions, Readiness probes, or Liveness probes. The resourceRequirements of an init container are taken into account during scheduling by finding the highest request/limit for each resource type, and then using the max of of that value or the sum of the normal containers. Limits are applied to init containers in a similar fashion. Init containers cannot currently be added or removed. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+List of initialization containers belonging to the pod. Init containers are executed in order prior to containers being started. If any init container fails, the pod is considered to have failed and is handled according to its restartPolicy. The name for an init container or normal container must be unique among all containers. Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes. The resourceRequirements of an init container are taken into account during scheduling by finding the highest request/limit for each resource type, and then using the max of of that value or the sum of the normal containers. Limits are applied to init containers in a similar fashion. Init containers cannot currently be added or removed. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
     
 #### args
@@ -4489,7 +6365,7 @@ Optional: Host name to connect to, defaults to the pod IP.
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
 ## pre_stop
 
-PreStop is called immediately before a container is terminated due to an API request or management event such as liveness probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
 
     
 ## exec
@@ -4631,7 +6507,7 @@ How often (in seconds) to perform the probe. Default to 10 seconds. Minimum valu
 
 ######  TypeInt
 
-Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness. Minimum value is 1.
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
 ## tcp_socket
 
 TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
@@ -4761,7 +6637,7 @@ How often (in seconds) to perform the probe. Default to 10 seconds. Minimum valu
 
 ######  TypeInt
 
-Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness. Minimum value is 1.
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
 ## tcp_socket
 
 TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
@@ -4879,7 +6755,7 @@ Type is a SELinux type label that applies to the container.
 User is a SELinux user label that applies to the container.
 ## windows_options
 
-Windows security options.
+The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 
     
 #### gmsa_credential_spec
@@ -4892,6 +6768,106 @@ GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kuber
 ######  TypeString
 
 GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### run_asuser_name
+
+######  TypeString
+
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+## startup_probe
+
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is an alpha feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+
+    
+## exec
+
+One and only one of the following should be specified. Exec specifies the action to take.
+
+    
+#### command
+
+######  TypeList
+
+Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+#### failure_threshold
+
+######  TypeInt
+
+Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1.
+## http_get
+
+HTTPGet specifies the http request to perform.
+
+    
+#### host
+
+######  TypeString
+
+Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
+## http_headers
+
+Custom headers to set in the request. HTTP allows repeated headers.
+
+    
+#### name
+
+###### Required •  TypeString
+
+The header field name
+#### value
+
+###### Required •  TypeString
+
+The header field value
+#### path
+
+######  TypeString
+
+Path to access on the HTTP server.
+#### port
+
+###### Required •  TypeString
+
+Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### scheme
+
+######  TypeString
+
+Scheme to use for connecting to the host. Defaults to HTTP.
+#### initial_delay_seconds
+
+######  TypeInt
+
+Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+#### period_seconds
+
+######  TypeInt
+
+How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.
+#### success_threshold
+
+######  TypeInt
+
+Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1.
+## tcp_socket
+
+TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported
+
+    
+#### host
+
+######  TypeString
+
+Optional: Host name to connect to, defaults to the pod IP.
+#### port
+
+###### Required •  TypeString
+
+Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### timeout_seconds
+
+######  TypeInt
+
+Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 #### stdin
 
 ######  TypeString
@@ -4982,6 +6958,11 @@ NodeName is a request to schedule this pod onto a specific node. If it is non-em
 ######  TypeMap
 
 NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node. More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+#### overhead
+
+######  TypeMap
+
+Overhead represents the resource overhead associated with running a pod for a given RuntimeClass. This field will be autopopulated at admission time by the RuntimeClass admission controller. If the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests. The RuntimeClass admission controller will reject Pod create requests which have the overhead already set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero. More info: https://git.k8s.io/enhancements/keps/sig-node/20190226-pod-overhead.md This field is alpha-level as of Kubernetes v1.16, and is only honored by servers that enable the PodOverhead feature.
 #### preemption_policy
 
 ######  TypeString
@@ -5098,7 +7079,7 @@ Name of a property to set
 Value of a property to set
 ## windows_options
 
-Windows security options.
+The Windows specific settings applied to all containers. If unspecified, the options within a container's SecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 
     
 #### gmsa_credential_spec
@@ -5111,6 +7092,11 @@ GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kuber
 ######  TypeString
 
 GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+#### run_asuser_name
+
+######  TypeString
+
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
 #### service_account
 
 ######  TypeString
@@ -5166,6 +7152,56 @@ TolerationSeconds represents the period of time the toleration (which must be of
 ######  TypeString
 
 Value is the taint value the toleration matches to. If the operator is Exists, the value should be empty, otherwise just a regular string.
+## topology_spread_constraints
+
+TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. This field is alpha-level and is only honored by clusters that enables the EvenPodsSpread feature. All topologySpreadConstraints are ANDed.
+
+    
+## label_selector
+
+LabelSelector is used to find matching pods. Pods that match this label selector are counted to determine the number of pods in their corresponding topology domain.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+#### max_skew
+
+###### Required •  TypeInt
+
+MaxSkew describes the degree to which pods may be unevenly distributed. It's the maximum permitted difference between the number of matching pods in any two topology domains of a given topology type. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       | - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1; scheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2) violate MaxSkew(1). - if MaxSkew is 2, incoming pod can be scheduled onto any zone. It's a required field. Default value is 1 and 0 is not allowed.
+#### topology_key
+
+###### Required •  TypeString
+
+TopologyKey is the key of node labels. Nodes that have a label with this key and identical values are considered to be in the same topology. We consider each <key, value> as a "bucket", and try to put balanced number of pods into each bucket. It's a required field.
+#### when_unsatisfiable
+
+###### Required •  TypeString
+
+WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy the spread constraint. - DoNotSchedule (default) tells the scheduler not to schedule it - ScheduleAnyway tells the scheduler to still schedule it It's considered as "Unsatisfiable" if and only if placing incoming pod on any topology violates "MaxSkew". For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   | If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler won't make it *more* imbalanced. It's a required field.
 ## volumes
 
 List of volumes that can be mounted by containers belonging to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes
@@ -5260,7 +7296,7 @@ CephFS represents a Ceph FS mount on the host that shares a pod's lifetime
 
 ###### Required •  TypeList
 
-Required: Monitors is a collection of Ceph monitors More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
+Required: Monitors is a collection of Ceph monitors More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it
 #### path
 
 ######  TypeString
@@ -5270,15 +7306,15 @@ Optional: Used as the mounted root, rather than the full Ceph tree, default is /
 
 ######  TypeString
 
-Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
+Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it
 #### secret_file
 
 ######  TypeString
 
-Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
+Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it
 ## secret_ref
 
-Optional: SecretRef is reference to the authentication secret for User, default is empty. More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
+Optional: SecretRef is reference to the authentication secret for User, default is empty. More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it
 
     
 #### name
@@ -5290,22 +7326,22 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-Optional: User is the rados user name, default is admin More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
+Optional: User is the rados user name, default is admin More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it
 ## cinder
 
-Cinder represents a cinder volume attached and mounted on kubelets host machine More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
+Cinder represents a cinder volume attached and mounted on kubelets host machine. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
 
     
 #### fstype
 
 ######  TypeString
 
-Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
+Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
 #### read_only
 
 ######  TypeString
 
-Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
+Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
 ## secret_ref
 
 Optional: points to a secret object containing parameters used to connect to OpenStack.
@@ -5320,7 +7356,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ###### Required •  TypeString
 
-volume id used to identify the volume in cinder More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
+volume id used to identify the volume in cinder. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
 ## config_map
 
 ConfigMap represents a configMap that should populate this volume
@@ -5598,24 +7634,24 @@ Repository URL
 Commit hash for the specified revision.
 ## glusterfs
 
-Glusterfs represents a Glusterfs mount on the host that shares a pod's lifetime. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md
+Glusterfs represents a Glusterfs mount on the host that shares a pod's lifetime. More info: https://examples.k8s.io/volumes/glusterfs/README.md
 
     
 #### endpoints
 
 ###### Required •  TypeString
 
-EndpointsName is the endpoint name that details Glusterfs topology. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
+EndpointsName is the endpoint name that details Glusterfs topology. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
 #### path
 
 ###### Required •  TypeString
 
-Path is the Glusterfs volume path. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
+Path is the Glusterfs volume path. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
 #### read_only
 
 ######  TypeString
 
-ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
+ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
 ## host_path
 
 HostPath represents a pre-existing file or directory on the host machine that is directly exposed to the container. This is generally used for system agents or other privileged things that are allowed to see the host machine. Most containers will NOT need this. More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath
@@ -5633,7 +7669,7 @@ Path of the directory on the host. If the path is a symlink, it will follow the 
 Type for HostPath Volume Defaults to "" More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath
 ## iscsi
 
-ISCSI represents an ISCSI Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://releases.k8s.io/HEAD/examples/volumes/iscsi/README.md
+ISCSI represents an ISCSI Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://examples.k8s.io/volumes/iscsi/README.md
 
     
 #### chap_auth_discovery
@@ -5968,7 +8004,7 @@ User to map volume access to Defaults to serivceaccount user
 Volume is a string that references an already created Quobyte volume by name.
 ## rbd
 
-RBD represents a Rados Block Device mount on the host that shares a pod's lifetime. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md
+RBD represents a Rados Block Device mount on the host that shares a pod's lifetime. More info: https://examples.k8s.io/volumes/rbd/README.md
 
     
 #### fstype
@@ -5980,30 +8016,30 @@ Filesystem type of the volume that you want to mount. Tip: Ensure that the files
 
 ###### Required •  TypeString
 
-The rados image name. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+The rados image name. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 #### keyring
 
 ######  TypeString
 
-Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 #### monitors
 
 ###### Required •  TypeList
 
-A collection of Ceph monitors. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+A collection of Ceph monitors. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 #### pool
 
 ######  TypeString
 
-The rados pool name. Default is rbd. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+The rados pool name. Default is rbd. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 #### read_only
 
 ######  TypeString
 
-ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 ## secret_ref
 
-SecretRef is name of the authentication secret for RBDUser. If provided overrides keyring. Default is nil. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+SecretRef is name of the authentication secret for RBDUser. If provided overrides keyring. Default is nil. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 
     
 #### name
@@ -6015,7 +8051,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 
 ######  TypeString
 
-The rados user name. Default is admin. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it
+The rados user name. Default is admin. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
 ## scale_io
 
 ScaleIO represents a ScaleIO persistent volume attached and mounted on Kubernetes nodes.

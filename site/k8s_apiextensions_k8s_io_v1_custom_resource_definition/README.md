@@ -1,7 +1,7 @@
 
-# resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition"
+# resource "k8s_apiextensions_k8s_io_v1_custom_resource_definition"
 
-CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format <.spec.name>.<.spec.group>. Deprecated in v1.16, planned for removal in v1.19. Use apiextensions.k8s.io/v1 CustomResourceDefinition instead.
+CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format <.spec.name>.<.spec.group>.
 
   
 <details>
@@ -29,33 +29,24 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 - [group](#group)*
 - [preserve_unknown_fields](#preserve_unknown_fields)
 - [scope](#scope)*
-- [version](#version)
 
     
-<details>
-<summary>additional_printer_columns</summary><blockquote>
-
-    
-- [description](#description)
-- [format](#format)
-- [json_path](#json_path)*
-- [name](#name)*
-- [priority](#priority)
-- [type](#type)*
-
-    
-</details>
-
 <details>
 <summary>conversion</summary><blockquote>
 
     
-- [conversion_review_versions](#conversion_review_versions)
 - [strategy](#strategy)*
 
     
 <details>
-<summary>webhook_client_config</summary><blockquote>
+<summary>webhook</summary><blockquote>
+
+    
+- [conversion_review_versions](#conversion_review_versions)*
+
+    
+<details>
+<summary>client_config</summary><blockquote>
 
     
 - [cabundle](#cabundle)
@@ -78,6 +69,8 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 
 </details>
 
+</details>
+
 <details>
 <summary>names</summary><blockquote>
 
@@ -88,34 +81,6 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 - [plural](#plural)*
 - [short_names](#short_names)
 - [singular](#singular)
-
-    
-</details>
-
-<details>
-<summary>subresources</summary><blockquote>
-
-    
-
-    
-<details>
-<summary>scale</summary><blockquote>
-
-    
-- [label_selector_path](#label_selector_path)
-- [spec_replicas_path](#spec_replicas_path)*
-- [status_replicas_path](#status_replicas_path)*
-
-    
-</details>
-
-</details>
-
-<details>
-<summary>validation</summary><blockquote>
-
-    
-- [open_apiv3_schema](#open_apiv3_schema)
 
     
 </details>
@@ -147,9 +112,67 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>schema</summary><blockquote>
 
     
-- [open_apiv3_schema](#open_apiv3_schema)
 
     
+<details>
+<summary>open_apiv3_schema</summary><blockquote>
+
+    
+- [_ref](#_ref)
+- [_schema](#_schema)
+- [additional_items](#additional_items)
+- [additional_properties](#additional_properties)
+- [all_of](#all_of)
+- [any_of](#any_of)
+- [default](#default)
+- [definitions](#definitions)
+- [dependencies](#dependencies)
+- [description](#description)
+- [enum](#enum)
+- [example](#example)
+- [exclusive_maximum](#exclusive_maximum)
+- [exclusive_minimum](#exclusive_minimum)
+- [format](#format)
+- [id](#id)
+- [items](#items)
+- [max_items](#max_items)
+- [max_length](#max_length)
+- [max_properties](#max_properties)
+- [maximum](#maximum)
+- [min_items](#min_items)
+- [min_length](#min_length)
+- [min_properties](#min_properties)
+- [minimum](#minimum)
+- [multiple_of](#multiple_of)
+- [not](#not)
+- [nullable](#nullable)
+- [one_of](#one_of)
+- [pattern](#pattern)
+- [pattern_properties](#pattern_properties)
+- [properties](#properties)
+- [required](#required)
+- [title](#title)
+- [type](#type)
+- [unique_items](#unique_items)
+- [x_kubernetes_embedded_resource](#x_kubernetes_embedded_resource)
+- [x_kubernetes_int_or_string](#x_kubernetes_int_or_string)
+- [x_kubernetes_list_map_keys](#x_kubernetes_list_map_keys)
+- [x_kubernetes_list_type](#x_kubernetes_list_type)
+- [x_kubernetes_preserve_unknown_fields](#x_kubernetes_preserve_unknown_fields)
+
+    
+<details>
+<summary>external_docs</summary><blockquote>
+
+    
+- [description](#description)
+- [url](#url)
+
+    
+</details>
+
+</details>
+
 </details>
 
 <details>
@@ -180,7 +203,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
+resource "k8s_apiextensions_k8s_io_v1_custom_resource_definition" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -191,29 +214,23 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
 
   spec {
 
-    additional_printer_columns {
-      description = "TypeString"
-      format      = "TypeString"
-      json_path   = "TypeString*"
-      name        = "TypeString*"
-      priority    = "TypeInt"
-      type        = "TypeString*"
-    }
-
     conversion {
-      conversion_review_versions = ["TypeString"]
-      strategy                   = "TypeString*"
+      strategy = "TypeString*"
 
-      webhook_client_config {
-        cabundle = "TypeString"
+      webhook {
 
-        service {
-          name      = "TypeString*"
-          namespace = "TypeString*"
-          path      = "TypeString"
-          port      = "TypeInt"
+        client_config {
+          cabundle = "TypeString"
+
+          service {
+            name      = "TypeString*"
+            namespace = "TypeString*"
+            path      = "TypeString"
+            port      = "TypeInt"
+          }
+          url = "TypeString"
         }
-        url = "TypeString"
+        conversion_review_versions = ["TypeString*"]
       }
     }
     group = "TypeString*"
@@ -229,20 +246,6 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
     preserve_unknown_fields = "TypeString"
     scope                   = "TypeString*"
 
-    subresources {
-
-      scale {
-        label_selector_path  = "TypeString"
-        spec_replicas_path   = "TypeString*"
-        status_replicas_path = "TypeString*"
-      }
-    }
-
-    validation {
-      open_apiv3_schema = "TypeString"
-    }
-    version = "TypeString"
-
     versions {
 
       additional_printer_columns {
@@ -256,7 +259,55 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
       name = "TypeString*"
 
       schema {
-        open_apiv3_schema = "TypeString"
+
+        open_apiv3_schema {
+          _ref                  = "TypeString"
+          _schema               = "TypeString"
+          additional_items      = "TypeString"
+          additional_properties = "TypeString"
+          all_of                = ["TypeString"]
+          any_of                = ["TypeString"]
+          default               = "TypeString"
+          definitions           = { "key" = "TypeString" }
+          dependencies          = { "key" = "TypeString" }
+          description           = "TypeString"
+          enum                  = ["TypeString"]
+          example               = "TypeString"
+          exclusive_maximum     = "TypeString"
+          exclusive_minimum     = "TypeString"
+
+          external_docs {
+            description = "TypeString"
+            url         = "TypeString"
+          }
+          format                               = "TypeString"
+          id                                   = "TypeString"
+          items                                = "TypeString"
+          max_items                            = "TypeInt"
+          max_length                           = "TypeInt"
+          max_properties                       = "TypeInt"
+          maximum                              = "TypeFloat"
+          min_items                            = "TypeInt"
+          min_length                           = "TypeInt"
+          min_properties                       = "TypeInt"
+          minimum                              = "TypeFloat"
+          multiple_of                          = "TypeFloat"
+          not                                  = "TypeString"
+          nullable                             = "TypeString"
+          one_of                               = ["TypeString"]
+          pattern                              = "TypeString"
+          pattern_properties                   = { "key" = "TypeString" }
+          properties                           = { "key" = "TypeString" }
+          required                             = ["TypeString"]
+          title                                = "TypeString"
+          type                                 = "TypeString"
+          unique_items                         = "TypeString"
+          x_kubernetes_embedded_resource       = "TypeString"
+          x_kubernetes_int_or_string           = "TypeString"
+          x_kubernetes_list_map_keys           = ["TypeString"]
+          x_kubernetes_list_type               = "TypeString"
+          x_kubernetes_preserve_unknown_fields = "TypeString"
+        }
       }
       served  = "TypeString*"
       storage = "TypeString*"
@@ -351,60 +402,25 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 spec describes how the user wants the resources to appear
 
     
-## additional_printer_columns
-
-additionalPrinterColumns specifies additional columns returned in Table output. See https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables for details. If present, this field configures columns for all versions. Top-level and per-version columns are mutually exclusive. If no top-level or per-version columns are specified, a single column displaying the age of the custom resource is used.
-
-    
-#### description
-
-######  TypeString
-
-description is a human readable description of this column.
-#### format
-
-######  TypeString
-
-format is an optional OpenAPI type definition for this column. The 'name' format is applied to the primary identifier column to assist in clients identifying column is the resource name. See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#data-types for details.
-#### json_path
-
-###### Required •  TypeString
-
-JSONPath is a simple JSON path (i.e. with array notation) which is evaluated against each custom resource to produce the value for this column.
-#### name
-
-###### Required •  TypeString
-
-name is a human readable name for the column.
-#### priority
-
-######  TypeInt
-
-priority is an integer defining the relative importance of this column compared to others. Lower numbers are considered higher priority. Columns that may be omitted in limited space scenarios should be given a priority greater than 0.
-#### type
-
-###### Required •  TypeString
-
-type is an OpenAPI type definition for this column. See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#data-types for details.
 ## conversion
 
 conversion defines conversion settings for the CRD.
 
     
-#### conversion_review_versions
-
-######  TypeList
-
-conversionReviewVersions is an ordered list of preferred `ConversionReview` versions the Webhook expects. The API server will use the first version in the list which it supports. If none of the versions specified in this list are supported by API server, conversion will fail for the custom resource. If a persisted Webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail. Defaults to `["v1beta1"]`.
 #### strategy
 
 ###### Required •  TypeString
 
 strategy specifies how custom resources are converted between versions. Allowed values are: - `None`: The converter only change the apiVersion and would not touch any other field in the custom resource. - `Webhook`: API Server will call to an external webhook to do the conversion. Additional information
-  is needed for this option. This requires spec.preserveUnknownFields to be false, and spec.conversion.webhookClientConfig to be set.
-## webhook_client_config
+  is needed for this option. This requires spec.preserveUnknownFields to be false, and spec.conversion.webhook to be set.
+## webhook
 
-webhookClientConfig is the instructions for how to call the webhook if strategy is `Webhook`. Required when `strategy` is set to `Webhook`.
+webhook describes how to call the conversion webhook. Required when `strategy` is set to `Webhook`.
+
+    
+## client_config
+
+clientConfig is the instructions for how to call the webhook if strategy is `Webhook`.
 
     
 #### cabundle
@@ -454,6 +470,11 @@ The scheme must be "https"; the URL must begin with "https://".
 A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier.
 
 Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either.
+#### conversion_review_versions
+
+###### Required •  TypeList
+
+conversionReviewVersions is an ordered list of preferred `ConversionReview` versions the Webhook expects. The API server will use the first version in the list which it supports. If none of the versions specified in this list are supported by API server, conversion will fail for the custom resource. If a persisted Webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail.
 #### group
 
 ###### Required •  TypeString
@@ -498,60 +519,20 @@ singular is the singular name of the resource. It must be all lowercase. Default
 
 ######  TypeString
 
-preserveUnknownFields indicates that object fields which are not specified in the OpenAPI schema should be preserved when persisting to storage. apiVersion, kind, metadata and known fields inside metadata are always preserved. If false, schemas must be defined for all versions. Defaults to true in v1beta for backwards compatibility. Deprecated: will be required to be false in v1. Preservation of unknown fields can be specified in the validation schema using the `x-kubernetes-preserve-unknown-fields: true` extension. See https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#pruning-versus-preserving-unknown-fields for details.
+preserveUnknownFields indicates that object fields which are not specified in the OpenAPI schema should be preserved when persisting to storage. apiVersion, kind, metadata and known fields inside metadata are always preserved. This field is deprecated in favor of setting `x-preserve-unknown-fields` to true in `spec.versions[*].schema.openAPIV3Schema`. See https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#pruning-versus-preserving-unknown-fields for details.
 #### scope
 
 ###### Required •  TypeString
 
 scope indicates whether the defined custom resource is cluster- or namespace-scoped. Allowed values are `Cluster` and `Namespaced`. Default is `Namespaced`.
-## subresources
-
-subresources specify what subresources the defined custom resource has. If present, this field configures subresources for all versions. Top-level and per-version subresources are mutually exclusive.
-
-    
-## scale
-
-scale indicates the custom resource should serve a `/scale` subresource that returns an `autoscaling/v1` Scale object.
-
-    
-#### label_selector_path
-
-######  TypeString
-
-labelSelectorPath defines the JSON path inside of a custom resource that corresponds to Scale `status.selector`. Only JSON paths without the array notation are allowed. Must be a JSON Path under `.status` or `.spec`. Must be set to work with HorizontalPodAutoscaler. The field pointed by this JSON path must be a string field (not a complex selector struct) which contains a serialized label selector in string form. More info: https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions#scale-subresource If there is no value under the given path in the custom resource, the `status.selector` value in the `/scale` subresource will default to the empty string.
-#### spec_replicas_path
-
-###### Required •  TypeString
-
-specReplicasPath defines the JSON path inside of a custom resource that corresponds to Scale `spec.replicas`. Only JSON paths without the array notation are allowed. Must be a JSON Path under `.spec`. If there is no value under the given path in the custom resource, the `/scale` subresource will return an error on GET.
-#### status_replicas_path
-
-###### Required •  TypeString
-
-statusReplicasPath defines the JSON path inside of a custom resource that corresponds to Scale `status.replicas`. Only JSON paths without the array notation are allowed. Must be a JSON Path under `.status`. If there is no value under the given path in the custom resource, the `status.replicas` value in the `/scale` subresource will default to 0.
-## validation
-
-validation describes the schema used for validation and pruning of the custom resource. If present, this validation schema is used to validate all versions. Top-level and per-version schemas are mutually exclusive.
-
-    
-#### open_apiv3_schema
-
-######  TypeString
-
-openAPIV3Schema is the OpenAPI v3 schema to use for validation and pruning.
-#### version
-
-######  TypeString
-
-version is the API version of the defined custom resource. The custom resources are served under `/apis/<group>/<version>/...`. Must match the name of the first item in the `versions` list if `version` and `versions` are both specified. Optional if `versions` is specified. Deprecated: use `versions` instead.
 ## versions
 
-versions is the list of all API versions of the defined custom resource. Optional if `version` is specified. The name of the first item in the `versions` list must match the `version` field if `version` and `versions` are both specified. Version names are used to compute the order in which served versions are listed in API discovery. If the version string is "kube-like", it will sort above non "kube-like" version strings, which are ordered lexicographically. "Kube-like" versions start with a "v", then are followed by a number (the major version), then optionally the string "alpha" or "beta" and another number (the minor version). These are sorted first by GA > beta > alpha (where GA is a version with no suffix such as beta or alpha), and then by comparing major version, then minor version. An example sorted list of versions: v10, v2, v1, v11beta2, v10beta3, v3beta1, v12alpha1, v11alpha2, foo1, foo10.
+versions is the list of all API versions of the defined custom resource. Version names are used to compute the order in which served versions are listed in API discovery. If the version string is "kube-like", it will sort above non "kube-like" version strings, which are ordered lexicographically. "Kube-like" versions start with a "v", then are followed by a number (the major version), then optionally the string "alpha" or "beta" and another number (the minor version). These are sorted first by GA > beta > alpha (where GA is a version with no suffix such as beta or alpha), and then by comparing major version, then minor version. An example sorted list of versions: v10, v2, v1, v11beta2, v10beta3, v3beta1, v12alpha1, v11alpha2, foo1, foo10.
 
     
 ## additional_printer_columns
 
-additionalPrinterColumns specifies additional columns returned in Table output. See https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables for details. Top-level and per-version columns are mutually exclusive. Per-version columns must not all be set to identical values (top-level columns should be used instead). If no top-level or per-version columns are specified, a single column displaying the age of the custom resource is used.
+additionalPrinterColumns specifies additional columns returned in Table output. See https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables for details. If no columns are specified, a single column displaying the age of the custom resource is used.
 
     
 #### description
@@ -568,7 +549,7 @@ format is an optional OpenAPI type definition for this column. The 'name' format
 
 ###### Required •  TypeString
 
-JSONPath is a simple JSON path (i.e. with array notation) which is evaluated against each custom resource to produce the value for this column.
+jsonPath is a simple JSON path (i.e. with array notation) which is evaluated against each custom resource to produce the value for this column.
 #### name
 
 ###### Required •  TypeString
@@ -591,14 +572,257 @@ type is an OpenAPI type definition for this column. See https://github.com/OAI/O
 name is the version name, e.g. “v1”, “v2beta1”, etc. The custom resources are served under this version at `/apis/<group>/<version>/...` if `served` is true.
 ## schema
 
-schema describes the schema used for validation and pruning of this version of the custom resource. Top-level and per-version schemas are mutually exclusive. Per-version schemas must not all be set to identical values (top-level validation schema should be used instead).
+schema describes the schema used for validation, pruning, and defaulting of this version of the custom resource.
 
     
-#### open_apiv3_schema
+## open_apiv3_schema
+
+openAPIV3Schema is the OpenAPI v3 schema to use for validation and pruning.
+
+    
+#### _ref
 
 ######  TypeString
 
-openAPIV3Schema is the OpenAPI v3 schema to use for validation and pruning.
+
+#### _schema
+
+######  TypeString
+
+
+#### additional_items
+
+######  TypeString
+
+
+#### additional_properties
+
+######  TypeString
+
+
+#### all_of
+
+######  TypeList
+
+
+#### any_of
+
+######  TypeList
+
+
+#### default
+
+######  TypeString
+
+default is a default value for undefined object fields. Defaulting is a beta feature under the CustomResourceDefaulting feature gate. Defaulting requires spec.preserveUnknownFields to be false.
+#### definitions
+
+######  TypeMap
+
+
+#### dependencies
+
+######  TypeMap
+
+
+#### description
+
+######  TypeString
+
+
+#### enum
+
+######  TypeList
+
+
+#### example
+
+######  TypeString
+
+
+#### exclusive_maximum
+
+######  TypeString
+
+
+#### exclusive_minimum
+
+######  TypeString
+
+
+## external_docs
+
+
+
+    
+#### description
+
+######  TypeString
+
+
+#### url
+
+######  TypeString
+
+
+#### format
+
+######  TypeString
+
+
+#### id
+
+######  TypeString
+
+
+#### items
+
+######  TypeString
+
+
+#### max_items
+
+######  TypeInt
+
+
+#### max_length
+
+######  TypeInt
+
+
+#### max_properties
+
+######  TypeInt
+
+
+#### maximum
+
+######  TypeFloat
+
+
+#### min_items
+
+######  TypeInt
+
+
+#### min_length
+
+######  TypeInt
+
+
+#### min_properties
+
+######  TypeInt
+
+
+#### minimum
+
+######  TypeFloat
+
+
+#### multiple_of
+
+######  TypeFloat
+
+
+#### not
+
+######  TypeString
+
+
+#### nullable
+
+######  TypeString
+
+
+#### one_of
+
+######  TypeList
+
+
+#### pattern
+
+######  TypeString
+
+
+#### pattern_properties
+
+######  TypeMap
+
+
+#### properties
+
+######  TypeMap
+
+
+#### required
+
+######  TypeList
+
+
+#### title
+
+######  TypeString
+
+
+#### type
+
+######  TypeString
+
+
+#### unique_items
+
+######  TypeString
+
+
+#### x_kubernetes_embedded_resource
+
+######  TypeString
+
+x-kubernetes-embedded-resource defines that the value is an embedded Kubernetes runtime.Object, with TypeMeta and ObjectMeta. The type must be object. It is allowed to further restrict the embedded object. kind, apiVersion and metadata are validated automatically. x-kubernetes-preserve-unknown-fields is allowed to be true, but does not have to be if the object is fully specified (up to kind, apiVersion, metadata).
+#### x_kubernetes_int_or_string
+
+######  TypeString
+
+x-kubernetes-int-or-string specifies that this value is either an integer or a string. If this is true, an empty type is allowed and type as child of anyOf is permitted if following one of the following patterns:
+
+1) anyOf:
+   - type: integer
+   - type: string
+2) allOf:
+   - anyOf:
+     - type: integer
+     - type: string
+   - ... zero or more
+#### x_kubernetes_list_map_keys
+
+######  TypeList
+
+x-kubernetes-list-map-keys annotates an array with the x-kubernetes-list-type `map` by specifying the keys used as the index of the map.
+
+This tag MUST only be used on lists that have the "x-kubernetes-list-type" extension set to "map". Also, the values specified for this attribute must be a scalar typed field of the child structure (no nesting is supported).
+#### x_kubernetes_list_type
+
+######  TypeString
+
+x-kubernetes-list-type annotates an array to further describe its topology. This extension must only be used on lists and may have 3 possible values:
+
+1) `atomic`: the list is treated as a single entity, like a scalar.
+     Atomic lists will be entirely replaced when updated. This extension
+     may be used on any type of list (struct, scalar, ...).
+2) `set`:
+     Sets are lists that must not have multiple items with the same value. Each
+     value must be a scalar (or another atomic type).
+3) `map`:
+     These lists are like maps in that their elements have a non-index key
+     used to identify them. Order is preserved upon merge. The map tag
+     must only be used on a list with elements of type object.
+Defaults to atomic for arrays.
+#### x_kubernetes_preserve_unknown_fields
+
+######  TypeString
+
+x-kubernetes-preserve-unknown-fields stops the API server decoding step from pruning fields which are not specified in the validation schema. This affects fields recursively, but switches back to normal pruning behaviour if nested properties or additionalProperties are specified in the schema. This can either be true or undefined. False is forbidden.
 #### served
 
 ###### Required •  TypeString
@@ -611,7 +835,7 @@ served is a flag enabling/disabling this version from being served via REST APIs
 storage indicates this version should be used when persisting custom resources to storage. There must be exactly one version with storage=true.
 ## subresources
 
-subresources specify what subresources this version of the defined custom resource have. Top-level and per-version subresources are mutually exclusive. Per-version subresources must not all be set to identical values (top-level subresources should be used instead).
+subresources specify what subresources this version of the defined custom resource have.
 
     
 ## scale

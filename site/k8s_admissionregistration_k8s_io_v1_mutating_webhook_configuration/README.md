@@ -1,7 +1,7 @@
 
-# resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration"
+# resource "k8s_admissionregistration_k8s_io_v1_mutating_webhook_configuration"
 
-MutatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and may change the object. Deprecated in v1.16, planned for removal in v1.19. Use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration instead.
+MutatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and may change the object.
 
   
 <details>
@@ -26,12 +26,12 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 <summary>webhooks</summary><blockquote>
 
     
-- [admission_review_versions](#admission_review_versions)
+- [admission_review_versions](#admission_review_versions)*
 - [failure_policy](#failure_policy)
 - [match_policy](#match_policy)
 - [name](#name)*
 - [reinvocation_policy](#reinvocation_policy)
-- [side_effects](#side_effects)
+- [side_effects](#side_effects)*
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -117,7 +117,7 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration" "this" {
+resource "k8s_admissionregistration_k8s_io_v1_mutating_webhook_configuration" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -127,7 +127,7 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
   }
 
   webhooks {
-    admission_review_versions = ["TypeString"]
+    admission_review_versions = ["TypeString*"]
 
     client_config {
       cabundle = "TypeString"
@@ -172,7 +172,7 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
       resources    = ["TypeString"]
       scope        = "TypeString"
     }
-    side_effects    = "TypeString"
+    side_effects    = "TypeString*"
     timeout_seconds = "TypeInt"
   }
 }
@@ -257,9 +257,9 @@ Webhooks is a list of webhooks and the affected resources and operations.
     
 #### admission_review_versions
 
-######  TypeList
+###### Required •  TypeList
 
-AdmissionReviewVersions is an ordered list of preferred `AdmissionReview` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy. Default to `['v1beta1']`.
+AdmissionReviewVersions is an ordered list of preferred `AdmissionReview` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy.
 ## client_config
 
 ClientConfig defines how to communicate with the hook. Required
@@ -316,7 +316,7 @@ Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fra
 
 ######  TypeString
 
-FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Ignore.
+FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Fail.
 #### match_policy
 
 ######  TypeString
@@ -327,7 +327,7 @@ matchPolicy defines how the "rules" list is used to match incoming requests. All
 
 - Equivalent: match a request if modifies a resource listed in rules, even via another API group or version. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, and "rules" only included `apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]`, a request to apps/v1beta1 or extensions/v1beta1 would be converted to apps/v1 and sent to the webhook.
 
-Defaults to "Exact"
+Defaults to "Equivalent"
 #### name
 
 ###### Required •  TypeString
@@ -472,11 +472,11 @@ Depending on the enclosing object, subresources might not be allowed. Required.
 scope specifies the scope of this rule. Valid values are "Cluster", "Namespaced", and "*" "Cluster" means that only cluster-scoped resources will match this rule. Namespace API objects are cluster-scoped. "Namespaced" means that only namespaced resources will match this rule. "*" means that there are no scope restrictions. Subresources match the scope of their parent resource. Default is "*".
 #### side_effects
 
-######  TypeString
+###### Required •  TypeString
 
-SideEffects states whether this webhookk has side effects. Acceptable values are: Unknown, None, Some, NoneOnDryRun Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission change and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some. Defaults to Unknown.
+SideEffects states whether this webhook has side effects. Acceptable values are: None, NoneOnDryRun (webhooks created via v1beta1 may also specify Some or Unknown). Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission change and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some.
 #### timeout_seconds
 
 ######  TypeInt
 
-TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds.
+TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 10 seconds.

@@ -1,7 +1,7 @@
 
-# resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration"
+# resource "k8s_admissionregistration_k8s_io_v1_validating_webhook_configuration"
 
-MutatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and may change the object. Deprecated in v1.16, planned for removal in v1.19. Use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration instead.
+ValidatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and object without changing it.
 
   
 <details>
@@ -26,12 +26,11 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 <summary>webhooks</summary><blockquote>
 
     
-- [admission_review_versions](#admission_review_versions)
+- [admission_review_versions](#admission_review_versions)*
 - [failure_policy](#failure_policy)
 - [match_policy](#match_policy)
 - [name](#name)*
-- [reinvocation_policy](#reinvocation_policy)
-- [side_effects](#side_effects)
+- [side_effects](#side_effects)*
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -117,7 +116,7 @@ MutatingWebhookConfiguration describes the configuration of and admission webhoo
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuration" "this" {
+resource "k8s_admissionregistration_k8s_io_v1_validating_webhook_configuration" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -127,7 +126,7 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
   }
 
   webhooks {
-    admission_review_versions = ["TypeString"]
+    admission_review_versions = ["TypeString*"]
 
     client_config {
       cabundle = "TypeString"
@@ -163,7 +162,6 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
       }
       match_labels = { "key" = "TypeString" }
     }
-    reinvocation_policy = "TypeString"
 
     rules {
       api_groups   = ["TypeString"]
@@ -172,7 +170,7 @@ resource "k8s_admissionregistration_k8s_io_v1beta1_mutating_webhook_configuratio
       resources    = ["TypeString"]
       scope        = "TypeString"
     }
-    side_effects    = "TypeString"
+    side_effects    = "TypeString*"
     timeout_seconds = "TypeInt"
   }
 }
@@ -257,9 +255,9 @@ Webhooks is a list of webhooks and the affected resources and operations.
     
 #### admission_review_versions
 
-######  TypeList
+###### Required •  TypeList
 
-AdmissionReviewVersions is an ordered list of preferred `AdmissionReview` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy. Default to `['v1beta1']`.
+AdmissionReviewVersions is an ordered list of preferred `AdmissionReview` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy.
 ## client_config
 
 ClientConfig defines how to communicate with the hook. Required
@@ -316,7 +314,7 @@ Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fra
 
 ######  TypeString
 
-FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Ignore.
+FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Fail.
 #### match_policy
 
 ######  TypeString
@@ -327,7 +325,7 @@ matchPolicy defines how the "rules" list is used to match incoming requests. All
 
 - Equivalent: match a request if modifies a resource listed in rules, even via another API group or version. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, and "rules" only included `apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]`, a request to apps/v1beta1 or extensions/v1beta1 would be converted to apps/v1 and sent to the webhook.
 
-Defaults to "Exact"
+Defaults to "Equivalent"
 #### name
 
 ###### Required •  TypeString
@@ -363,7 +361,7 @@ If instead you want to only run the webhook on any objects whose namespace is as
   ]
 }
 
-See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ for more examples of label selectors.
+See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels for more examples of label selectors.
 
 Default to the empty LabelSelector, which matches everything.
 
@@ -423,17 +421,6 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
-#### reinvocation_policy
-
-######  TypeString
-
-reinvocationPolicy indicates whether this webhook should be called multiple times as part of a single admission evaluation. Allowed values are "Never" and "IfNeeded".
-
-Never: the webhook will not be called more than once in a single admission evaluation.
-
-IfNeeded: the webhook will be called at least one additional time as part of the admission evaluation if the object being admitted is modified by other admission plugins after the initial webhook call. Webhooks that specify this option *must* be idempotent, able to process objects they previously admitted. Note: * the number of additional invocations is not guaranteed to be exactly one. * if additional invocations result in further modifications to the object, webhooks are not guaranteed to be invoked again. * webhooks that use this option may be reordered to minimize the number of additional invocations. * to validate an object after all mutations are guaranteed complete, use a validating admission webhook instead.
-
-Defaults to "Never".
 ## rules
 
 Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule. However, in order to prevent ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks from putting the cluster in a state which cannot be recovered from without completely disabling the plugin, ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks are never called on admission requests for ValidatingWebhookConfiguration and MutatingWebhookConfiguration objects.
@@ -472,11 +459,11 @@ Depending on the enclosing object, subresources might not be allowed. Required.
 scope specifies the scope of this rule. Valid values are "Cluster", "Namespaced", and "*" "Cluster" means that only cluster-scoped resources will match this rule. Namespace API objects are cluster-scoped. "Namespaced" means that only namespaced resources will match this rule. "*" means that there are no scope restrictions. Subresources match the scope of their parent resource. Default is "*".
 #### side_effects
 
-######  TypeString
+###### Required •  TypeString
 
-SideEffects states whether this webhookk has side effects. Acceptable values are: Unknown, None, Some, NoneOnDryRun Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission change and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some. Defaults to Unknown.
+SideEffects states whether this webhook has side effects. Acceptable values are: None, NoneOnDryRun (webhooks created via v1beta1 may also specify Some or Unknown). Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission change and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some.
 #### timeout_seconds
 
 ######  TypeInt
 
-TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 30 seconds.
+TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 10 seconds.
