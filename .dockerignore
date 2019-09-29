@@ -1,5 +1,6 @@
 .idea
-.terraform
+**/.terraform
 terraform.tfstate
 terraform.tfstate.backup
 crash.log
+dist
