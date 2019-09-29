@@ -12,26 +12,29 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 - Supports resources based on Custom Resource Definition(CRD).
 
 ## Requirements
-- Docker 
-- kubeconfig file in the current directory
 - Terraform 0.12+
 - Kubernetes v1.14+ (Recommended for best CRD support)
+
+## Installation
+Download the binary from the [releases](https://github.com/mingfang/terraform-provider-k8s/releases).
+
+Follow official plugin installations instructions here https://www.terraform.io/docs/plugins/basics.html#installing-plugins.
  
-## Install
+## Run Using Docker (optional)
 ```sh
 docker pull registry.rebelsoft.com/terraform-provider-k8s
-alias tf='docker run -v `pwd`/kubeconfig:/kubeconfig -e KUBECONFIG=/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s terraform'
+alias terraform='docker run -v `pwd`/kubeconfig:/kubeconfig -e KUBECONFIG=/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s terraform'
 alias tfextract='docker run -v `pwd`/kubeconfig:/kubeconfig -e KUBECONFIG=/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s extractor'
 alias tfgenerate='docker run -v `pwd`/kubeconfig:/kubeconfig -e KUBECONFIG=/kubeconfig -v `pwd`:/docker -w /docker --rm -it registry.rebelsoft.com/terraform-provider-k8s generator'
 ```
 
 ## Init
-For new projects or after install/upgrade, run ```tf init```
+For new projects or after install/upgrade, run ```terraform init```
 
 ## Import
-After extracting existing resources to tf files, you can import the state for them.
+After extracting existing resources to terraform files, you can import the state for them.
 
-Run ```tf import k8s_core_v1_service.nginx default.service.nginx``` to import, in this case a nginx service.
+Run ```terraform import k8s_core_v1_service.nginx default.service.nginx``` to import, in this case a nginx service.
 
 ## Resource Format
 The resource format is ```resource "k8s_<group>_<version>_<kind>" "<name>"```.
@@ -78,7 +81,7 @@ Ids are used internally by Terraform to uniquely identify resource state.  The u
 Run ```tfgenerate``` to list all available resource and data source types
 
 ## Generate
-Run ```tfgenerate <resource>``` to generate a skeleton tf file for the resource. For example,
+Run ```tfgenerate <resource>``` to generate a skeleton terraform file for the resource. For example,
 
 - ```tfgenerate k8s_core_v1_service``` to generate a Kubernetes Service
 - ```tfgenerate k8s_apps_v1_deployment``` to generate a Kubernetes Deployment
