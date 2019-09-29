@@ -4,6 +4,9 @@
 # goreleaser --snapshot --rm-dist
 
 # Release
+# git tag -a v0.1.0 -m "First release"
+# git push origin v0.1.0
+# goreleaser release
 
 # Make sure to check the documentation at http://goreleaser.com
 
