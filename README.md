@@ -7,15 +7,15 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 - Supports the latest version of Kubernetes
 - Auto extract from live Kubernetes cluster and import as Terraform state
 - Convert Kubernetes manifests to Terraform files
-- A catalog of reusable [modules](https://github.com/mingfang/terraform-provider-k8s/tree/master/modules)
-- A catalog of complete [solutions](https://github.com/mingfang/terraform-provider-k8s/tree/master/solutions) using the modules
+- A catalog of reusable modules [terraform-k8s-modules/modules](https://github.com/mingfang/terraform-k8s-modules/modules)
+- A catalog of complete solutions [terraform-k8s-modules/solutions](https://github.com/mingfang/terraform-k8s-modules/solutions) using the modules
 - Supports resources based on Custom Resource Definition(CRD).
 
 ## Requirements
 - Docker 
 - kubeconfig file in the current directory
-- Terraform 0.12
-- Kubernetes v1.14 (Recommended for best CRD support)
+- Terraform 0.12+
+- Kubernetes v1.14+ (Recommended for best CRD support)
  
 ## Install
 ```sh

@@ -1,3 +1,0 @@
-variable "parameters" {
-  default = null
-}

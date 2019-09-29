@@ -1,1 +1,0 @@
-storm.zookeeper.servers: [${storm_zookeeper_servers}]
