@@ -17,10 +17,19 @@ before:
     # you may remove this if you don't need go generate
     #- go generate ./...
 builds:
-- env:
+- binary: "terraform-provider-k8s_v{{ .Version }}"
+  env:
   - CGO_ENABLED=0
+  goos:
+  - darwin
+  - linux
+  - windows
+  goarch:
+  - amd64
 archives:
-- replacements:
+- files:
+  - none*
+  replacements:
     darwin: Darwin
     linux: Linux
     windows: Windows
@@ -29,7 +38,7 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-SNAPSHOT"
+  name_template: "{{ .Version }}"
 changelog:
   skip: false
   sort: asc
