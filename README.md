@@ -2,13 +2,14 @@
 terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 
 ## Features
-- Uses the Kubernetes [client-go](https://github.com/kubernetes/client-go) library to dynamically discover available resources
 - Supports all Kubernetes [resources](./site), including alpha and beta versions
+- Supports resources based on Custom Resource Definition(CRD).
 - Supports the latest version of Kubernetes
 - Auto extract from live Kubernetes cluster and import as Terraform state
 - Convert Kubernetes manifests to Terraform files
-- A catalog of reusable modules [terraform-k8s-modules](https://github.com/mingfang/terraform-k8s-modules)
-- Supports resources based on Custom Resource Definition(CRD).
+
+## Modules Catalog
+A catalog of reusable modules is at [terraform-k8s-modules](https://github.com/mingfang/terraform-k8s-modules)
 
 ## Requirements
 - Terraform 0.12+
@@ -17,7 +18,7 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 ## Installation
 Download the binary from the [releases](https://github.com/mingfang/terraform-provider-k8s/releases).
 
-Follow official plugin installations instructions here https://www.terraform.io/docs/plugins/basics.html#installing-plugins.
+Follow official plugin installations instructions here https://www.terraform.io/docs/configuration/providers.html#third-party-plugins.
  
 ## Run Using Docker (optional)
 ```sh
