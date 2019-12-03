@@ -29,7 +29,7 @@ ENV GO111MODULE=on
 #    XC_OS=linux XC_ARCH=amd64 make bin
 #RUN mv /go/bin/terraform /usr/local/bin/terraform
 
-RUN wget https://releases.hashicorp.com/terraform/0.12.15/terraform_0.12.15_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip && \
     unzip *.zip && \
     mv terraform /usr/local/bin && \
     rm *.zip
@@ -52,9 +52,9 @@ RUN cd $GOPATH/src/github.com/mingfang/terraform-provider-k8s/cmd/extractor && \
 RUN cd $GOPATH/src/github.com/mingfang/terraform-provider-k8s/cmd/generator && \
     CGO_ENABLED=0 go build -o /usr/local/bin/generator
 
-FROM alpine as final
-RUN apk add --no-cache ca-certificates
-RUN apk add --no-cache git
+FROM ubuntu as final
+RUN apt-get update
+RUN apt-get install -y ca-certificates
 
 COPY --from=build /usr/local/bin/terraform /usr/local/bin/
 COPY --from=build /usr/local/bin/terraform-provider-k8s /usr/local/bin/
