@@ -21,6 +21,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
 	regexp.MustCompile(`k8s_\w+_\w+_persistent_volume\.spec`),
 	regexp.MustCompile(`k8s_\w+_\w+_role_binding\.role_ref`),
+	regexp.MustCompile(`k8s_\w+_\w+_ingress\.spec\.tls`),
 	regexp.MustCompile(`k8s_.*\.spec.access_modes`),
 	regexp.MustCompile(`k8s_.*\.parameters`),
 }
