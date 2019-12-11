@@ -1,0 +1,96 @@
+metadata:
+  name: terraform-provider-k8s
+projects:
+  - name: terraform-provider-k8s
+    source:
+      location: 'https://github.com/mingfang/terraform-provider-k8s.git'
+      type: git
+    clonePath: src/github.com/mingfang/terraform-provider-k8s/
+  - name: terraform-k8s-modules
+    source:
+      location: 'https://github.com/mingfang/terraform-k8s-modules.git'
+      type: git
+components:
+  - id: ms-vscode/go/latest
+    memoryLimit: 512Mi
+    type: chePlugin
+    alias: go-plugin
+  - mountSources: true
+    memoryLimit: 1024Mi
+    type: dockerimage
+    alias: go-cli
+    image: 'quay.io/eclipse/che-golang-1.12:7.5.1'
+    env:
+      - value: '/go:$(CHE_PROJECTS_ROOT)'
+        name: GOPATH
+      - value: /tmp/.cache
+        name: GOCACHE
+      - value: 'on'
+        name: GO111MODULE
+  - referenceContent: |
+      apiVersion: v1
+      kind: List
+      items:
+      - apiVersion: v1
+        kind: Pod
+        metadata:
+          name: terraform
+        spec:
+          containers:
+          - name: terraform
+            image: registry.rebelsoft.com/terraform-provider-k8s
+            command: [sleep, infinity]
+            env:
+            - name: APPDATA
+              value: /projects
+            resources:
+              limits:
+                memory: 2048Mi
+            volumeMounts:
+            - mountPath: /projects
+              name: projects
+          volumes:
+          - name: projects
+            persistentVolumeClaim:
+              claimName: projects
+      - apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: projects
+        spec:
+          accessModes:
+           - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi  
+    type: kubernetes
+    reference: terraform.yaml
+    alias: terraform
+apiVersion: 1.0.0
+commands:
+  - name: build
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/src/github.com/mingfang/terraform-provider-k8s/'
+        type: exec
+        command: >-
+          go build -o
+          ${CHE_PROJECTS_ROOT}/terraform.d/plugins/terraform-provider-k8s_v1.0.0
+        component: go-cli
+  - name: terraform init
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: pwd; terraform init
+        component: terraform
+  - name: terraform plan
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: pwd; terraform plan
+        component: terraform
+  - name: terraform apply -auto-approve
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: pwd; terraform apply -auto-approve
+        component: terraform
