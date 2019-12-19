@@ -64,7 +64,6 @@ components:
             requests:
               storage: 2Gi  
     type: kubernetes
-    reference: terraform.yaml
     alias: terraform
 apiVersion: 1.0.0
 commands:
