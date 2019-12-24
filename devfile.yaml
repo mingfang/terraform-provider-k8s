@@ -28,7 +28,7 @@ components:
             image: registry.rebelsoft.com/terraform-provider-k8s
             command: [sleep, infinity]
             env:
-            - name: APPDATA
+            - name: HOME
               value: /projects
             - name: TF_VAR_namespace
               value: ""
@@ -67,13 +67,12 @@ components:
       - value: 'on'
         name: GO111MODULE
     mountSources: true
-    memoryLimit: 1024Mi
+    memoryLimit: 2048Mi
   - id: redhat/vscode-yaml/latest
     type: chePlugin
   - id: ms-vscode/go/latest
     alias: go-plugin
     type: chePlugin
-    memoryLimit: 512Mi
 commands:
   - name: build
     actions:
@@ -81,7 +80,7 @@ commands:
         type: exec
         command: >-
           go build -o
-          ${CHE_PROJECTS_ROOT}/terraform.d/plugins/terraform-provider-k8s_v1.0.0
+          ${CHE_PROJECTS_ROOT}/.terraform.d/plugins/terraform-provider-k8s_v1.0.0
         component: go-cli
   - name: terraform fmt
     actions:
