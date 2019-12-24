@@ -30,6 +30,12 @@ components:
             env:
             - name: APPDATA
               value: /projects
+            - name: TF_VAR_namespace
+              value: ""
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
             resources:
               limits:
                 memory: 2048Mi
@@ -100,4 +106,10 @@ commands:
       - workdir: '${fileDirname}'
         type: exec
         command: pwd; terraform apply -auto-approve
+        component: terraform
+  - name: terraform destroy -auto-approve
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: pwd; terraform destroy -auto-approve
         component: terraform
