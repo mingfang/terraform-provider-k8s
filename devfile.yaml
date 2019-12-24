@@ -1,3 +1,4 @@
+apiVersion: 1.0.0
 metadata:
   name: terraform-provider-k8s
 projects:
@@ -11,23 +12,9 @@ projects:
       location: 'https://github.com/mingfang/terraform-k8s-modules.git'
       type: git
 components:
-  - id: ms-vscode/go/latest
-    memoryLimit: 512Mi
-    type: chePlugin
-    alias: go-plugin
-  - mountSources: true
-    memoryLimit: 1024Mi
-    type: dockerimage
-    alias: go-cli
-    image: 'quay.io/eclipse/che-golang-1.12:7.6.0'
-    env:
-      - value: '/go:$(CHE_PROJECTS_ROOT)'
-        name: GOPATH
-      - value: /tmp/.cache
-        name: GOCACHE
-      - value: 'on'
-        name: GO111MODULE
-  - referenceContent: |
+  - alias: terraform
+    type: kubernetes
+    referenceContent: |
       apiVersion: v1
       kind: List
       items:
@@ -63,9 +50,24 @@ components:
           resources:
             requests:
               storage: 2Gi  
-    type: kubernetes
-    alias: terraform
-apiVersion: 1.0.0
+  - alias: go-cli
+    type: dockerimage
+    image: 'quay.io/eclipse/che-golang-1.12:7.6.0'
+    env:
+      - value: '/go:$(CHE_PROJECTS_ROOT)'
+        name: GOPATH
+      - value: /tmp/.cache
+        name: GOCACHE
+      - value: 'on'
+        name: GO111MODULE
+    mountSources: true
+    memoryLimit: 1024Mi
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: ms-vscode/go/latest
+    alias: go-plugin
+    type: chePlugin
+    memoryLimit: 512Mi
 commands:
   - name: build
     actions:
@@ -75,6 +77,12 @@ commands:
           go build -o
           ${CHE_PROJECTS_ROOT}/terraform.d/plugins/terraform-provider-k8s_v1.0.0
         component: go-cli
+  - name: terraform fmt
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: pwd; terraform fmt
+        component: terraform
   - name: terraform init
     actions:
       - workdir: '${fileDirname}'
