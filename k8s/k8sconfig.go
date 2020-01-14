@@ -15,6 +15,9 @@ import (
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/kube-openapi/pkg/util/proto"
+
+	//https://github.com/kubernetes/client-go/issues/242
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 var (
