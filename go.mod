@@ -4,7 +4,7 @@ go 1.12
 
 // Forked for critical feature https://github.com/mingfang/terraform/commit/c81184ae9eb1d557596b5a3fa9db8cff2149db9c
 
-replace github.com/hashicorp/terraform-plugin-sdk => github.com/mingfang/terraform-plugin-sdk v1.0.1-0.20191109223005-48c5d8417d1c
+replace github.com/hashicorp/terraform-plugin-sdk => github.com/mingfang/terraform-plugin-sdk v1.0.1-0.20200115023446-4002fbe119e8
 
 require (
 	github.com/awalterschulze/gographviz v0.0.0-20190522210029-fa59802746ab
@@ -15,7 +15,7 @@ require (
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/gruntwork-io/terratest v0.18.5
-	github.com/hashicorp/terraform-plugin-sdk v1.3.0
+	github.com/hashicorp/terraform-plugin-sdk v1.4.1
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/mattn/go-isatty v0.0.10 // indirect
