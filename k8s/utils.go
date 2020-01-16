@@ -41,7 +41,7 @@ func IsForceNewField(path string) bool {
 var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`^[\w]+\.api_version$`), //redundant; already in resourceKey
 	regexp.MustCompile(`^[\w]+\.kind$`),        //redundant; already in resourceKey
-	regexp.MustCompile(`.*\.status$`),          //this is actually not part of schema
+	regexp.MustCompile(`^[\w]+\.status`),       //this is dynamic
 	regexp.MustCompile(`.*\.metadata\.cluster_name$`),
 	regexp.MustCompile(`.*\.metadata\.finalizers$`),
 	regexp.MustCompile(`.*\.spec\.finalizers$`),
