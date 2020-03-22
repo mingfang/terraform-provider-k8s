@@ -168,11 +168,11 @@ func (this *K8SConfig) ForEachAPIResource(callback func(metav1.APIResource, sche
 		}
 		gv, _ := schema.ParseGroupVersion(list.GroupVersion)
 		for _, apiResource := range list.APIResources {
-			gvk, _ := this.RESTMapper.KindFor(schema.GroupVersionResource{
+			gvk := schema.GroupVersionKind{
 				Group:    gv.Group,
 				Version:  gv.Version,
-				Resource: apiResource.Kind,
-			})
+				Kind: apiResource.Kind,
+			}
 			callback(apiResource, gvk)
 		}
 	}
