@@ -1,4 +1,4 @@
-FROM golang as base
+FROM golang:1.12 as base
 RUN apt-get update
 RUN apt-get install -y vim unzip zip
 
