@@ -105,3 +105,5 @@ For this example, if ```-kind service``` was left blank then all resources named
 
 The ```-import``` flag will automatically import the extracted resources as Terraform state.
 
+## Open In LegionX
+https://legionx.com/https://github.com/mingfang/terraform-provider-k8s
