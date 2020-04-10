@@ -69,6 +69,20 @@ func IsSkipPath(path string) bool {
 	return false
 }
 
+var sensitivePaths = []*regexp.Regexp{
+	regexp.MustCompile(`k8s_core_.*_secret\.data`),
+}
+
+func IsSensitive(path string) bool {
+	for _, pattern := range sensitivePaths {
+		if pattern.MatchString(path) {
+			return true
+		}
+	}
+	return false
+}
+
+
 var keywords = []*regexp.Regexp{
 	regexp.MustCompile(`^provisioner`),
 }

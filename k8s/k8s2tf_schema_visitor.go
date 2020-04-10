@@ -96,11 +96,13 @@ func (this *K8S2TFSchemaVisitor) VisitKind(proto *proto.Kind) {
 			schemaVisitor.Schema.Computed = false
 			schemaVisitor.Schema.Optional = false
 			schemaVisitor.Schema.ForceNew = IsForceNewField(path)
+			schemaVisitor.Schema.Sensitive = IsSensitive(path)
 		} else {
 			schemaVisitor.Schema.Required = false
 			schemaVisitor.Schema.Computed = true
 			schemaVisitor.Schema.Optional = true
 			schemaVisitor.Schema.ForceNew = IsForceNewField(path)
+			schemaVisitor.Schema.Sensitive = IsSensitive(path)
 		}
 
 		elements[ToSnake(key)] = &schemaVisitor.Schema
