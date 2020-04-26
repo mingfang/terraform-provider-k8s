@@ -55,6 +55,8 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`.*\.metadata\.annotations\.pv_kubernetes_io/`),
 	regexp.MustCompile(`.*\.metadata\.annotations\.volume\.beta\.kubernetes.io/`),
 	regexp.MustCompile(`.*\.metadata\.annotations\..*_template_generation`),
+	regexp.MustCompile(`^k8s_batch_[\w]+_job\..*\.labels\.controller_uid`),
+	regexp.MustCompile(`^k8s_batch_[\w]+_job\..*\.labels\.job_name`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
