@@ -1,7 +1,7 @@
 
-# resource "k8s_apps_v1_daemon_set"
+# resource "k8s_batch_v2alpha1_cron_job"
 
-DaemonSet represents the configuration of a daemon set.
+CronJob represents the configuration of a single cron job.
 
   
 <details>
@@ -26,8 +26,48 @@ DaemonSet represents the configuration of a daemon set.
 <summary>spec</summary><blockquote>
 
     
-- [min_ready_seconds](#min_ready_seconds)
-- [revision_history_limit](#revision_history_limit)
+- [concurrency_policy](#concurrency_policy)
+- [failed_jobs_history_limit](#failed_jobs_history_limit)
+- [schedule](#schedule)*
+- [starting_deadline_seconds](#starting_deadline_seconds)
+- [successful_jobs_history_limit](#successful_jobs_history_limit)
+- [suspend](#suspend)
+
+    
+<details>
+<summary>job_template</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>metadata</summary><blockquote>
+
+    
+- [annotations](#annotations)
+- [creation_timestamp](#creation_timestamp)
+- [deletion_grace_period_seconds](#deletion_grace_period_seconds)
+- [deletion_timestamp](#deletion_timestamp)
+- [labels](#labels)
+- [name](#name)
+- [namespace](#namespace)
+- [resource_version](#resource_version)
+- [self_link](#self_link)
+- [uid](#uid)
+
+    
+</details>
+
+<details>
+<summary>spec</summary><blockquote>
+
+    
+- [active_deadline_seconds](#active_deadline_seconds)
+- [backoff_limit](#backoff_limit)
+- [completions](#completions)
+- [manual_selector](#manual_selector)
+- [parallelism](#parallelism)
+- [ttl_seconds_after_finished](#ttl_seconds_after_finished)
 
     
 <details>
@@ -2475,20 +2515,6 @@ DaemonSet represents the configuration of a daemon set.
 
 </details>
 
-<details>
-<summary>update_strategy</summary><blockquote>
-
-    
-- [type](#type)
-
-    
-<details>
-<summary>rolling_update</summary><blockquote>
-
-    
-- [max_unavailable](#max_unavailable)
-
-    
 </details>
 
 </details>
@@ -2500,7 +2526,7 @@ DaemonSet represents the configuration of a daemon set.
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_apps_v1_daemon_set" "this" {
+resource "k8s_batch_v2alpha1_cron_job" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -2510,20 +2536,10 @@ resource "k8s_apps_v1_daemon_set" "this" {
   }
 
   spec {
-    min_ready_seconds      = "TypeInt"
-    revision_history_limit = "TypeInt"
+    concurrency_policy        = "TypeString"
+    failed_jobs_history_limit = "TypeInt"
 
-    selector {
-
-      match_expressions {
-        key      = "TypeString*"
-        operator = "TypeString*"
-        values   = ["TypeString"]
-      }
-      match_labels = { "key" = "TypeString" }
-    }
-
-    template {
+    job_template {
 
       metadata {
         annotations = { "key" = "TypeString" }
@@ -2534,71 +2550,987 @@ resource "k8s_apps_v1_daemon_set" "this" {
 
       spec {
         active_deadline_seconds = "TypeInt"
+        backoff_limit           = "TypeInt"
+        completions             = "TypeInt"
+        manual_selector         = "TypeString"
+        parallelism             = "TypeInt"
 
-        affinity {
+        selector {
 
-          node_affinity {
+          match_expressions {
+            key      = "TypeString*"
+            operator = "TypeString*"
+            values   = ["TypeString"]
+          }
+          match_labels = { "key" = "TypeString" }
+        }
 
-            preferred_during_scheduling_ignored_during_execution {
+        template {
 
-              preference {
-
-                match_expressions {
-                  key      = "TypeString*"
-                  operator = "TypeString*"
-                  values   = ["TypeString"]
-                }
-
-                match_fields {
-                  key      = "TypeString*"
-                  operator = "TypeString*"
-                  values   = ["TypeString"]
-                }
-              }
-              weight = "TypeInt*"
-            }
-
-            required_during_scheduling_ignored_during_execution {
-
-              node_selector_terms {
-
-                match_expressions {
-                  key      = "TypeString*"
-                  operator = "TypeString*"
-                  values   = ["TypeString"]
-                }
-
-                match_fields {
-                  key      = "TypeString*"
-                  operator = "TypeString*"
-                  values   = ["TypeString"]
-                }
-              }
-            }
+          metadata {
+            annotations = { "key" = "TypeString" }
+            labels      = { "key" = "TypeString" }
+            name        = "TypeString"
+            namespace   = "TypeString"
           }
 
-          pod_affinity {
+          spec {
+            active_deadline_seconds = "TypeInt"
 
-            preferred_during_scheduling_ignored_during_execution {
+            affinity {
 
-              pod_affinity_term {
+              node_affinity {
 
-                label_selector {
+                preferred_during_scheduling_ignored_during_execution {
 
-                  match_expressions {
-                    key      = "TypeString*"
-                    operator = "TypeString*"
-                    values   = ["TypeString"]
+                  preference {
+
+                    match_expressions {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
+
+                    match_fields {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
                   }
-                  match_labels = { "key" = "TypeString" }
+                  weight = "TypeInt*"
                 }
-                namespaces   = ["TypeString"]
-                topology_key = "TypeString*"
+
+                required_during_scheduling_ignored_during_execution {
+
+                  node_selector_terms {
+
+                    match_expressions {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
+
+                    match_fields {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
+                  }
+                }
               }
-              weight = "TypeInt*"
+
+              pod_affinity {
+
+                preferred_during_scheduling_ignored_during_execution {
+
+                  pod_affinity_term {
+
+                    label_selector {
+
+                      match_expressions {
+                        key      = "TypeString*"
+                        operator = "TypeString*"
+                        values   = ["TypeString"]
+                      }
+                      match_labels = { "key" = "TypeString" }
+                    }
+                    namespaces   = ["TypeString"]
+                    topology_key = "TypeString*"
+                  }
+                  weight = "TypeInt*"
+                }
+
+                required_during_scheduling_ignored_during_execution {
+
+                  label_selector {
+
+                    match_expressions {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
+                    match_labels = { "key" = "TypeString" }
+                  }
+                  namespaces   = ["TypeString"]
+                  topology_key = "TypeString*"
+                }
+              }
+
+              pod_anti_affinity {
+
+                preferred_during_scheduling_ignored_during_execution {
+
+                  pod_affinity_term {
+
+                    label_selector {
+
+                      match_expressions {
+                        key      = "TypeString*"
+                        operator = "TypeString*"
+                        values   = ["TypeString"]
+                      }
+                      match_labels = { "key" = "TypeString" }
+                    }
+                    namespaces   = ["TypeString"]
+                    topology_key = "TypeString*"
+                  }
+                  weight = "TypeInt*"
+                }
+
+                required_during_scheduling_ignored_during_execution {
+
+                  label_selector {
+
+                    match_expressions {
+                      key      = "TypeString*"
+                      operator = "TypeString*"
+                      values   = ["TypeString"]
+                    }
+                    match_labels = { "key" = "TypeString" }
+                  }
+                  namespaces   = ["TypeString"]
+                  topology_key = "TypeString*"
+                }
+              }
+            }
+            automount_service_account_token = "TypeString"
+
+            containers {
+              args    = ["TypeString"]
+              command = ["TypeString"]
+
+              env {
+                name  = "TypeString*"
+                value = "TypeString"
+
+                value_from {
+
+                  config_map_keyref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+
+                  field_ref {
+                    api_version = "TypeString"
+                    field_path  = "TypeString*"
+                  }
+
+                  resource_field_ref {
+                    container_name = "TypeString"
+                    divisor        = "TypeString"
+                    resource       = "TypeString*"
+                  }
+
+                  secret_key_ref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+                }
+              }
+
+              env_from {
+
+                config_map_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+                prefix = "TypeString"
+
+                secret_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+              }
+              image             = "TypeString"
+              image_pull_policy = "TypeString"
+
+              lifecycle {
+
+                post_start {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+
+                pre_stop {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+              }
+
+              liveness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              name = "TypeString*"
+
+              ports {
+                container_port = "TypeInt*"
+                host_ip        = "TypeString"
+                host_port      = "TypeInt"
+                name           = "TypeString"
+                protocol       = "TypeString"
+              }
+
+              readiness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+
+              resources {
+                limits   = { "key" = "TypeString" }
+                requests = { "key" = "TypeString" }
+              }
+
+              security_context {
+                allow_privilege_escalation = "TypeString"
+
+                capabilities {
+                  add  = ["TypeString"]
+                  drop = ["TypeString"]
+                }
+                privileged                = "TypeString"
+                proc_mount                = "TypeString"
+                read_only_root_filesystem = "TypeString"
+                run_asgroup               = "TypeInt"
+                run_asnon_root            = "TypeString"
+                run_asuser                = "TypeInt"
+
+                selinux_options {
+                  level = "TypeString"
+                  role  = "TypeString"
+                  type  = "TypeString"
+                  user  = "TypeString"
+                }
+
+                windows_options {
+                  gmsa_credential_spec      = "TypeString"
+                  gmsa_credential_spec_name = "TypeString"
+                  run_asuser_name           = "TypeString"
+                }
+              }
+
+              startup_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              stdin                      = "TypeString"
+              stdin_once                 = "TypeString"
+              termination_message_path   = "TypeString"
+              termination_message_policy = "TypeString"
+              tty                        = "TypeString"
+
+              volume_devices {
+                device_path = "TypeString*"
+                name        = "TypeString*"
+              }
+
+              volume_mounts {
+                mount_path        = "TypeString*"
+                mount_propagation = "TypeString"
+                name              = "TypeString*"
+                read_only         = "TypeString"
+                sub_path          = "TypeString"
+                sub_path_expr     = "TypeString"
+              }
+              working_dir = "TypeString"
             }
 
-            required_during_scheduling_ignored_during_execution {
+            dns_config {
+              nameservers = ["TypeString"]
+
+              options {
+                name  = "TypeString"
+                value = "TypeString"
+              }
+              searches = ["TypeString"]
+            }
+            dns_policy           = "TypeString"
+            enable_service_links = "TypeString"
+
+            ephemeral_containers {
+              args    = ["TypeString"]
+              command = ["TypeString"]
+
+              env {
+                name  = "TypeString*"
+                value = "TypeString"
+
+                value_from {
+
+                  config_map_keyref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+
+                  field_ref {
+                    api_version = "TypeString"
+                    field_path  = "TypeString*"
+                  }
+
+                  resource_field_ref {
+                    container_name = "TypeString"
+                    divisor        = "TypeString"
+                    resource       = "TypeString*"
+                  }
+
+                  secret_key_ref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+                }
+              }
+
+              env_from {
+
+                config_map_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+                prefix = "TypeString"
+
+                secret_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+              }
+              image             = "TypeString"
+              image_pull_policy = "TypeString"
+
+              lifecycle {
+
+                post_start {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+
+                pre_stop {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+              }
+
+              liveness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              name = "TypeString*"
+
+              ports {
+                container_port = "TypeInt*"
+                host_ip        = "TypeString"
+                host_port      = "TypeInt"
+                name           = "TypeString"
+                protocol       = "TypeString"
+              }
+
+              readiness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+
+              resources {
+                limits   = { "key" = "TypeString" }
+                requests = { "key" = "TypeString" }
+              }
+
+              security_context {
+                allow_privilege_escalation = "TypeString"
+
+                capabilities {
+                  add  = ["TypeString"]
+                  drop = ["TypeString"]
+                }
+                privileged                = "TypeString"
+                proc_mount                = "TypeString"
+                read_only_root_filesystem = "TypeString"
+                run_asgroup               = "TypeInt"
+                run_asnon_root            = "TypeString"
+                run_asuser                = "TypeInt"
+
+                selinux_options {
+                  level = "TypeString"
+                  role  = "TypeString"
+                  type  = "TypeString"
+                  user  = "TypeString"
+                }
+
+                windows_options {
+                  gmsa_credential_spec      = "TypeString"
+                  gmsa_credential_spec_name = "TypeString"
+                  run_asuser_name           = "TypeString"
+                }
+              }
+
+              startup_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              stdin                      = "TypeString"
+              stdin_once                 = "TypeString"
+              target_container_name      = "TypeString"
+              termination_message_path   = "TypeString"
+              termination_message_policy = "TypeString"
+              tty                        = "TypeString"
+
+              volume_devices {
+                device_path = "TypeString*"
+                name        = "TypeString*"
+              }
+
+              volume_mounts {
+                mount_path        = "TypeString*"
+                mount_propagation = "TypeString"
+                name              = "TypeString*"
+                read_only         = "TypeString"
+                sub_path          = "TypeString"
+                sub_path_expr     = "TypeString"
+              }
+              working_dir = "TypeString"
+            }
+
+            host_aliases {
+              hostnames = ["TypeString"]
+              ip        = "TypeString"
+            }
+            host_ipc     = "TypeString"
+            host_network = "TypeString"
+            host_pid     = "TypeString"
+            hostname     = "TypeString"
+
+            image_pull_secrets {
+              name = "TypeString"
+            }
+
+            init_containers {
+              args    = ["TypeString"]
+              command = ["TypeString"]
+
+              env {
+                name  = "TypeString*"
+                value = "TypeString"
+
+                value_from {
+
+                  config_map_keyref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+
+                  field_ref {
+                    api_version = "TypeString"
+                    field_path  = "TypeString*"
+                  }
+
+                  resource_field_ref {
+                    container_name = "TypeString"
+                    divisor        = "TypeString"
+                    resource       = "TypeString*"
+                  }
+
+                  secret_key_ref {
+                    key      = "TypeString*"
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+                }
+              }
+
+              env_from {
+
+                config_map_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+                prefix = "TypeString"
+
+                secret_ref {
+                  name     = "TypeString"
+                  optional = "TypeString"
+                }
+              }
+              image             = "TypeString"
+              image_pull_policy = "TypeString"
+
+              lifecycle {
+
+                post_start {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+
+                pre_stop {
+
+                  exec {
+                    command = ["TypeString"]
+                  }
+
+                  http_get {
+                    host = "TypeString"
+
+                    http_headers {
+                      name  = "TypeString*"
+                      value = "TypeString*"
+                    }
+                    path   = "TypeString"
+                    port   = "TypeString*"
+                    scheme = "TypeString"
+                  }
+
+                  tcp_socket {
+                    host = "TypeString"
+                    port = "TypeString*"
+                  }
+                }
+              }
+
+              liveness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              name = "TypeString*"
+
+              ports {
+                container_port = "TypeInt*"
+                host_ip        = "TypeString"
+                host_port      = "TypeInt"
+                name           = "TypeString"
+                protocol       = "TypeString"
+              }
+
+              readiness_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+
+              resources {
+                limits   = { "key" = "TypeString" }
+                requests = { "key" = "TypeString" }
+              }
+
+              security_context {
+                allow_privilege_escalation = "TypeString"
+
+                capabilities {
+                  add  = ["TypeString"]
+                  drop = ["TypeString"]
+                }
+                privileged                = "TypeString"
+                proc_mount                = "TypeString"
+                read_only_root_filesystem = "TypeString"
+                run_asgroup               = "TypeInt"
+                run_asnon_root            = "TypeString"
+                run_asuser                = "TypeInt"
+
+                selinux_options {
+                  level = "TypeString"
+                  role  = "TypeString"
+                  type  = "TypeString"
+                  user  = "TypeString"
+                }
+
+                windows_options {
+                  gmsa_credential_spec      = "TypeString"
+                  gmsa_credential_spec_name = "TypeString"
+                  run_asuser_name           = "TypeString"
+                }
+              }
+
+              startup_probe {
+
+                exec {
+                  command = ["TypeString"]
+                }
+                failure_threshold = "TypeInt"
+
+                http_get {
+                  host = "TypeString"
+
+                  http_headers {
+                    name  = "TypeString*"
+                    value = "TypeString*"
+                  }
+                  path   = "TypeString"
+                  port   = "TypeString*"
+                  scheme = "TypeString"
+                }
+                initial_delay_seconds = "TypeInt"
+                period_seconds        = "TypeInt"
+                success_threshold     = "TypeInt"
+
+                tcp_socket {
+                  host = "TypeString"
+                  port = "TypeString*"
+                }
+                timeout_seconds = "TypeInt"
+              }
+              stdin                      = "TypeString"
+              stdin_once                 = "TypeString"
+              termination_message_path   = "TypeString"
+              termination_message_policy = "TypeString"
+              tty                        = "TypeString"
+
+              volume_devices {
+                device_path = "TypeString*"
+                name        = "TypeString*"
+              }
+
+              volume_mounts {
+                mount_path        = "TypeString*"
+                mount_propagation = "TypeString"
+                name              = "TypeString*"
+                read_only         = "TypeString"
+                sub_path          = "TypeString"
+                sub_path_expr     = "TypeString"
+              }
+              working_dir = "TypeString"
+            }
+            node_name           = "TypeString"
+            node_selector       = { "key" = "TypeString" }
+            overhead            = { "key" = "TypeString" }
+            preemption_policy   = "TypeString"
+            priority            = "TypeInt"
+            priority_class_name = "TypeString"
+
+            readiness_gates {
+              condition_type = "TypeString*"
+            }
+            restart_policy     = "TypeString"
+            runtime_class_name = "TypeString"
+            scheduler_name     = "TypeString"
+
+            security_context {
+              fsgroup               = "TypeInt"
+              fsgroup_change_policy = "TypeString"
+              run_asgroup           = "TypeInt"
+              run_asnon_root        = "TypeString"
+              run_asuser            = "TypeInt"
+
+              selinux_options {
+                level = "TypeString"
+                role  = "TypeString"
+                type  = "TypeString"
+                user  = "TypeString"
+              }
+              supplemental_groups = ["TypeInt"]
+
+              sysctls {
+                name  = "TypeString*"
+                value = "TypeString*"
+              }
+
+              windows_options {
+                gmsa_credential_spec      = "TypeString"
+                gmsa_credential_spec_name = "TypeString"
+                run_asuser_name           = "TypeString"
+              }
+            }
+            service_account                  = "TypeString"
+            service_account_name             = "TypeString"
+            share_process_namespace          = "TypeString"
+            subdomain                        = "TypeString"
+            termination_grace_period_seconds = "TypeInt"
+
+            tolerations {
+              effect             = "TypeString"
+              key                = "TypeString"
+              operator           = "TypeString"
+              toleration_seconds = "TypeInt"
+              value              = "TypeString"
+            }
+
+            topology_spread_constraints {
 
               label_selector {
 
@@ -2609,1089 +3541,59 @@ resource "k8s_apps_v1_daemon_set" "this" {
                 }
                 match_labels = { "key" = "TypeString" }
               }
-              namespaces   = ["TypeString"]
-              topology_key = "TypeString*"
+              max_skew           = "TypeInt*"
+              topology_key       = "TypeString*"
+              when_unsatisfiable = "TypeString*"
             }
-          }
 
-          pod_anti_affinity {
+            volumes {
 
-            preferred_during_scheduling_ignored_during_execution {
+              aws_elastic_block_store {
+                fstype    = "TypeString"
+                partition = "TypeInt"
+                read_only = "TypeString"
+                volume_id = "TypeString*"
+              }
 
-              pod_affinity_term {
+              azure_disk {
+                caching_mode = "TypeString"
+                disk_name    = "TypeString*"
+                disk_uri     = "TypeString*"
+                fstype       = "TypeString"
+                kind         = "TypeString"
+                read_only    = "TypeString"
+              }
 
-                label_selector {
+              azure_file {
+                read_only   = "TypeString"
+                secret_name = "TypeString*"
+                share_name  = "TypeString*"
+              }
 
-                  match_expressions {
-                    key      = "TypeString*"
-                    operator = "TypeString*"
-                    values   = ["TypeString"]
-                  }
-                  match_labels = { "key" = "TypeString" }
+              cephfs {
+                monitors    = ["TypeString*"]
+                path        = "TypeString"
+                read_only   = "TypeString"
+                secret_file = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
                 }
-                namespaces   = ["TypeString"]
-                topology_key = "TypeString*"
+                user = "TypeString"
               }
-              weight = "TypeInt*"
-            }
 
-            required_during_scheduling_ignored_during_execution {
+              cinder {
+                fstype    = "TypeString"
+                read_only = "TypeString"
 
-              label_selector {
-
-                match_expressions {
-                  key      = "TypeString*"
-                  operator = "TypeString*"
-                  values   = ["TypeString"]
+                secret_ref {
+                  name = "TypeString"
                 }
-                match_labels = { "key" = "TypeString" }
+                volume_id = "TypeString*"
               }
-              namespaces   = ["TypeString"]
-              topology_key = "TypeString*"
-            }
-          }
-        }
-        automount_service_account_token = "TypeString"
-
-        containers {
-          args    = ["TypeString"]
-          command = ["TypeString"]
-
-          env {
-            name  = "TypeString*"
-            value = "TypeString"
-
-            value_from {
-
-              config_map_keyref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-
-              field_ref {
-                api_version = "TypeString"
-                field_path  = "TypeString*"
-              }
-
-              resource_field_ref {
-                container_name = "TypeString"
-                divisor        = "TypeString"
-                resource       = "TypeString*"
-              }
-
-              secret_key_ref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-            }
-          }
-
-          env_from {
-
-            config_map_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-            prefix = "TypeString"
-
-            secret_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-          }
-          image             = "TypeString"
-          image_pull_policy = "TypeString"
-
-          lifecycle {
-
-            post_start {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-
-            pre_stop {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-          }
-
-          liveness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          name = "TypeString*"
-
-          ports {
-            container_port = "TypeInt*"
-            host_ip        = "TypeString"
-            host_port      = "TypeInt"
-            name           = "TypeString"
-            protocol       = "TypeString"
-          }
-
-          readiness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-
-          resources {
-            limits   = { "key" = "TypeString" }
-            requests = { "key" = "TypeString" }
-          }
-
-          security_context {
-            allow_privilege_escalation = "TypeString"
-
-            capabilities {
-              add  = ["TypeString"]
-              drop = ["TypeString"]
-            }
-            privileged                = "TypeString"
-            proc_mount                = "TypeString"
-            read_only_root_filesystem = "TypeString"
-            run_asgroup               = "TypeInt"
-            run_asnon_root            = "TypeString"
-            run_asuser                = "TypeInt"
-
-            selinux_options {
-              level = "TypeString"
-              role  = "TypeString"
-              type  = "TypeString"
-              user  = "TypeString"
-            }
-
-            windows_options {
-              gmsa_credential_spec      = "TypeString"
-              gmsa_credential_spec_name = "TypeString"
-              run_asuser_name           = "TypeString"
-            }
-          }
-
-          startup_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          stdin                      = "TypeString"
-          stdin_once                 = "TypeString"
-          termination_message_path   = "TypeString"
-          termination_message_policy = "TypeString"
-          tty                        = "TypeString"
-
-          volume_devices {
-            device_path = "TypeString*"
-            name        = "TypeString*"
-          }
-
-          volume_mounts {
-            mount_path        = "TypeString*"
-            mount_propagation = "TypeString"
-            name              = "TypeString*"
-            read_only         = "TypeString"
-            sub_path          = "TypeString"
-            sub_path_expr     = "TypeString"
-          }
-          working_dir = "TypeString"
-        }
-
-        dns_config {
-          nameservers = ["TypeString"]
-
-          options {
-            name  = "TypeString"
-            value = "TypeString"
-          }
-          searches = ["TypeString"]
-        }
-        dns_policy           = "TypeString"
-        enable_service_links = "TypeString"
-
-        ephemeral_containers {
-          args    = ["TypeString"]
-          command = ["TypeString"]
-
-          env {
-            name  = "TypeString*"
-            value = "TypeString"
-
-            value_from {
-
-              config_map_keyref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-
-              field_ref {
-                api_version = "TypeString"
-                field_path  = "TypeString*"
-              }
-
-              resource_field_ref {
-                container_name = "TypeString"
-                divisor        = "TypeString"
-                resource       = "TypeString*"
-              }
-
-              secret_key_ref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-            }
-          }
-
-          env_from {
-
-            config_map_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-            prefix = "TypeString"
-
-            secret_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-          }
-          image             = "TypeString"
-          image_pull_policy = "TypeString"
-
-          lifecycle {
-
-            post_start {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-
-            pre_stop {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-          }
-
-          liveness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          name = "TypeString*"
-
-          ports {
-            container_port = "TypeInt*"
-            host_ip        = "TypeString"
-            host_port      = "TypeInt"
-            name           = "TypeString"
-            protocol       = "TypeString"
-          }
-
-          readiness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-
-          resources {
-            limits   = { "key" = "TypeString" }
-            requests = { "key" = "TypeString" }
-          }
-
-          security_context {
-            allow_privilege_escalation = "TypeString"
-
-            capabilities {
-              add  = ["TypeString"]
-              drop = ["TypeString"]
-            }
-            privileged                = "TypeString"
-            proc_mount                = "TypeString"
-            read_only_root_filesystem = "TypeString"
-            run_asgroup               = "TypeInt"
-            run_asnon_root            = "TypeString"
-            run_asuser                = "TypeInt"
-
-            selinux_options {
-              level = "TypeString"
-              role  = "TypeString"
-              type  = "TypeString"
-              user  = "TypeString"
-            }
-
-            windows_options {
-              gmsa_credential_spec      = "TypeString"
-              gmsa_credential_spec_name = "TypeString"
-              run_asuser_name           = "TypeString"
-            }
-          }
-
-          startup_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          stdin                      = "TypeString"
-          stdin_once                 = "TypeString"
-          target_container_name      = "TypeString"
-          termination_message_path   = "TypeString"
-          termination_message_policy = "TypeString"
-          tty                        = "TypeString"
-
-          volume_devices {
-            device_path = "TypeString*"
-            name        = "TypeString*"
-          }
-
-          volume_mounts {
-            mount_path        = "TypeString*"
-            mount_propagation = "TypeString"
-            name              = "TypeString*"
-            read_only         = "TypeString"
-            sub_path          = "TypeString"
-            sub_path_expr     = "TypeString"
-          }
-          working_dir = "TypeString"
-        }
-
-        host_aliases {
-          hostnames = ["TypeString"]
-          ip        = "TypeString"
-        }
-        host_ipc     = "TypeString"
-        host_network = "TypeString"
-        host_pid     = "TypeString"
-        hostname     = "TypeString"
-
-        image_pull_secrets {
-          name = "TypeString"
-        }
-
-        init_containers {
-          args    = ["TypeString"]
-          command = ["TypeString"]
-
-          env {
-            name  = "TypeString*"
-            value = "TypeString"
-
-            value_from {
-
-              config_map_keyref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-
-              field_ref {
-                api_version = "TypeString"
-                field_path  = "TypeString*"
-              }
-
-              resource_field_ref {
-                container_name = "TypeString"
-                divisor        = "TypeString"
-                resource       = "TypeString*"
-              }
-
-              secret_key_ref {
-                key      = "TypeString*"
-                name     = "TypeString"
-                optional = "TypeString"
-              }
-            }
-          }
-
-          env_from {
-
-            config_map_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-            prefix = "TypeString"
-
-            secret_ref {
-              name     = "TypeString"
-              optional = "TypeString"
-            }
-          }
-          image             = "TypeString"
-          image_pull_policy = "TypeString"
-
-          lifecycle {
-
-            post_start {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-
-            pre_stop {
-
-              exec {
-                command = ["TypeString"]
-              }
-
-              http_get {
-                host = "TypeString"
-
-                http_headers {
-                  name  = "TypeString*"
-                  value = "TypeString*"
-                }
-                path   = "TypeString"
-                port   = "TypeString*"
-                scheme = "TypeString"
-              }
-
-              tcp_socket {
-                host = "TypeString"
-                port = "TypeString*"
-              }
-            }
-          }
-
-          liveness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          name = "TypeString*"
-
-          ports {
-            container_port = "TypeInt*"
-            host_ip        = "TypeString"
-            host_port      = "TypeInt"
-            name           = "TypeString"
-            protocol       = "TypeString"
-          }
-
-          readiness_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-
-          resources {
-            limits   = { "key" = "TypeString" }
-            requests = { "key" = "TypeString" }
-          }
-
-          security_context {
-            allow_privilege_escalation = "TypeString"
-
-            capabilities {
-              add  = ["TypeString"]
-              drop = ["TypeString"]
-            }
-            privileged                = "TypeString"
-            proc_mount                = "TypeString"
-            read_only_root_filesystem = "TypeString"
-            run_asgroup               = "TypeInt"
-            run_asnon_root            = "TypeString"
-            run_asuser                = "TypeInt"
-
-            selinux_options {
-              level = "TypeString"
-              role  = "TypeString"
-              type  = "TypeString"
-              user  = "TypeString"
-            }
-
-            windows_options {
-              gmsa_credential_spec      = "TypeString"
-              gmsa_credential_spec_name = "TypeString"
-              run_asuser_name           = "TypeString"
-            }
-          }
-
-          startup_probe {
-
-            exec {
-              command = ["TypeString"]
-            }
-            failure_threshold = "TypeInt"
-
-            http_get {
-              host = "TypeString"
-
-              http_headers {
-                name  = "TypeString*"
-                value = "TypeString*"
-              }
-              path   = "TypeString"
-              port   = "TypeString*"
-              scheme = "TypeString"
-            }
-            initial_delay_seconds = "TypeInt"
-            period_seconds        = "TypeInt"
-            success_threshold     = "TypeInt"
-
-            tcp_socket {
-              host = "TypeString"
-              port = "TypeString*"
-            }
-            timeout_seconds = "TypeInt"
-          }
-          stdin                      = "TypeString"
-          stdin_once                 = "TypeString"
-          termination_message_path   = "TypeString"
-          termination_message_policy = "TypeString"
-          tty                        = "TypeString"
-
-          volume_devices {
-            device_path = "TypeString*"
-            name        = "TypeString*"
-          }
-
-          volume_mounts {
-            mount_path        = "TypeString*"
-            mount_propagation = "TypeString"
-            name              = "TypeString*"
-            read_only         = "TypeString"
-            sub_path          = "TypeString"
-            sub_path_expr     = "TypeString"
-          }
-          working_dir = "TypeString"
-        }
-        node_name           = "TypeString"
-        node_selector       = { "key" = "TypeString" }
-        overhead            = { "key" = "TypeString" }
-        preemption_policy   = "TypeString"
-        priority            = "TypeInt"
-        priority_class_name = "TypeString"
-
-        readiness_gates {
-          condition_type = "TypeString*"
-        }
-        restart_policy     = "TypeString"
-        runtime_class_name = "TypeString"
-        scheduler_name     = "TypeString"
-
-        security_context {
-          fsgroup               = "TypeInt"
-          fsgroup_change_policy = "TypeString"
-          run_asgroup           = "TypeInt"
-          run_asnon_root        = "TypeString"
-          run_asuser            = "TypeInt"
-
-          selinux_options {
-            level = "TypeString"
-            role  = "TypeString"
-            type  = "TypeString"
-            user  = "TypeString"
-          }
-          supplemental_groups = ["TypeInt"]
-
-          sysctls {
-            name  = "TypeString*"
-            value = "TypeString*"
-          }
-
-          windows_options {
-            gmsa_credential_spec      = "TypeString"
-            gmsa_credential_spec_name = "TypeString"
-            run_asuser_name           = "TypeString"
-          }
-        }
-        service_account                  = "TypeString"
-        service_account_name             = "TypeString"
-        share_process_namespace          = "TypeString"
-        subdomain                        = "TypeString"
-        termination_grace_period_seconds = "TypeInt"
-
-        tolerations {
-          effect             = "TypeString"
-          key                = "TypeString"
-          operator           = "TypeString"
-          toleration_seconds = "TypeInt"
-          value              = "TypeString"
-        }
-
-        topology_spread_constraints {
-
-          label_selector {
-
-            match_expressions {
-              key      = "TypeString*"
-              operator = "TypeString*"
-              values   = ["TypeString"]
-            }
-            match_labels = { "key" = "TypeString" }
-          }
-          max_skew           = "TypeInt*"
-          topology_key       = "TypeString*"
-          when_unsatisfiable = "TypeString*"
-        }
-
-        volumes {
-
-          aws_elastic_block_store {
-            fstype    = "TypeString"
-            partition = "TypeInt"
-            read_only = "TypeString"
-            volume_id = "TypeString*"
-          }
-
-          azure_disk {
-            caching_mode = "TypeString"
-            disk_name    = "TypeString*"
-            disk_uri     = "TypeString*"
-            fstype       = "TypeString"
-            kind         = "TypeString"
-            read_only    = "TypeString"
-          }
-
-          azure_file {
-            read_only   = "TypeString"
-            secret_name = "TypeString*"
-            share_name  = "TypeString*"
-          }
-
-          cephfs {
-            monitors    = ["TypeString*"]
-            path        = "TypeString"
-            read_only   = "TypeString"
-            secret_file = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            user = "TypeString"
-          }
-
-          cinder {
-            fstype    = "TypeString"
-            read_only = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            volume_id = "TypeString*"
-          }
-
-          config_map {
-            default_mode = "TypeInt"
-
-            items {
-              key  = "TypeString*"
-              mode = "TypeInt"
-              path = "TypeString*"
-            }
-            name     = "TypeString"
-            optional = "TypeString"
-          }
-
-          csi {
-            driver = "TypeString*"
-            fstype = "TypeString"
-
-            node_publish_secret_ref {
-              name = "TypeString"
-            }
-            read_only         = "TypeString"
-            volume_attributes = { "key" = "TypeString" }
-          }
-
-          downward_api {
-            default_mode = "TypeInt"
-
-            items {
-
-              field_ref {
-                api_version = "TypeString"
-                field_path  = "TypeString*"
-              }
-              mode = "TypeInt"
-              path = "TypeString*"
-
-              resource_field_ref {
-                container_name = "TypeString"
-                divisor        = "TypeString"
-                resource       = "TypeString*"
-              }
-            }
-          }
-
-          empty_dir {
-            medium     = "TypeString"
-            size_limit = "TypeString"
-          }
-
-          fc {
-            fstype      = "TypeString"
-            lun         = "TypeInt"
-            read_only   = "TypeString"
-            target_wwns = ["TypeString"]
-            wwids       = ["TypeString"]
-          }
-
-          flex_volume {
-            driver    = "TypeString*"
-            fstype    = "TypeString"
-            options   = { "key" = "TypeString" }
-            read_only = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-          }
-
-          flocker {
-            dataset_name = "TypeString"
-            dataset_uuid = "TypeString"
-          }
-
-          gce_persistent_disk {
-            fstype    = "TypeString"
-            partition = "TypeInt"
-            pdname    = "TypeString*"
-            read_only = "TypeString"
-          }
-
-          git_repo {
-            directory  = "TypeString"
-            repository = "TypeString*"
-            revision   = "TypeString"
-          }
-
-          glusterfs {
-            endpoints = "TypeString*"
-            path      = "TypeString*"
-            read_only = "TypeString"
-          }
-
-          host_path {
-            path = "TypeString*"
-            type = "TypeString"
-          }
-
-          iscsi {
-            chap_auth_discovery = "TypeString"
-            chap_auth_session   = "TypeString"
-            fstype              = "TypeString"
-            initiator_name      = "TypeString"
-            iqn                 = "TypeString*"
-            iscsi_interface     = "TypeString"
-            lun                 = "TypeInt*"
-            portals             = ["TypeString"]
-            read_only           = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            target_portal = "TypeString*"
-          }
-          name = "TypeString*"
-
-          nfs {
-            path      = "TypeString*"
-            read_only = "TypeString"
-            server    = "TypeString*"
-          }
-
-          persistent_volume_claim {
-            claim_name = "TypeString*"
-            read_only  = "TypeString"
-          }
-
-          photon_persistent_disk {
-            fstype = "TypeString"
-            pdid   = "TypeString*"
-          }
-
-          portworx_volume {
-            fstype    = "TypeString"
-            read_only = "TypeString"
-            volume_id = "TypeString*"
-          }
-
-          projected {
-            default_mode = "TypeInt"
-
-            sources {
 
               config_map {
+                default_mode = "TypeInt"
 
                 items {
                   key  = "TypeString*"
@@ -3702,7 +3604,19 @@ resource "k8s_apps_v1_daemon_set" "this" {
                 optional = "TypeString"
               }
 
+              csi {
+                driver = "TypeString*"
+                fstype = "TypeString"
+
+                node_publish_secret_ref {
+                  name = "TypeString"
+                }
+                read_only         = "TypeString"
+                volume_attributes = { "key" = "TypeString" }
+              }
+
               downward_api {
+                default_mode = "TypeInt"
 
                 items {
 
@@ -3721,104 +3635,231 @@ resource "k8s_apps_v1_daemon_set" "this" {
                 }
               }
 
+              empty_dir {
+                medium     = "TypeString"
+                size_limit = "TypeString"
+              }
+
+              fc {
+                fstype      = "TypeString"
+                lun         = "TypeInt"
+                read_only   = "TypeString"
+                target_wwns = ["TypeString"]
+                wwids       = ["TypeString"]
+              }
+
+              flex_volume {
+                driver    = "TypeString*"
+                fstype    = "TypeString"
+                options   = { "key" = "TypeString" }
+                read_only = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
+                }
+              }
+
+              flocker {
+                dataset_name = "TypeString"
+                dataset_uuid = "TypeString"
+              }
+
+              gce_persistent_disk {
+                fstype    = "TypeString"
+                partition = "TypeInt"
+                pdname    = "TypeString*"
+                read_only = "TypeString"
+              }
+
+              git_repo {
+                directory  = "TypeString"
+                repository = "TypeString*"
+                revision   = "TypeString"
+              }
+
+              glusterfs {
+                endpoints = "TypeString*"
+                path      = "TypeString*"
+                read_only = "TypeString"
+              }
+
+              host_path {
+                path = "TypeString*"
+                type = "TypeString"
+              }
+
+              iscsi {
+                chap_auth_discovery = "TypeString"
+                chap_auth_session   = "TypeString"
+                fstype              = "TypeString"
+                initiator_name      = "TypeString"
+                iqn                 = "TypeString*"
+                iscsi_interface     = "TypeString"
+                lun                 = "TypeInt*"
+                portals             = ["TypeString"]
+                read_only           = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
+                }
+                target_portal = "TypeString*"
+              }
+              name = "TypeString*"
+
+              nfs {
+                path      = "TypeString*"
+                read_only = "TypeString"
+                server    = "TypeString*"
+              }
+
+              persistent_volume_claim {
+                claim_name = "TypeString*"
+                read_only  = "TypeString"
+              }
+
+              photon_persistent_disk {
+                fstype = "TypeString"
+                pdid   = "TypeString*"
+              }
+
+              portworx_volume {
+                fstype    = "TypeString"
+                read_only = "TypeString"
+                volume_id = "TypeString*"
+              }
+
+              projected {
+                default_mode = "TypeInt"
+
+                sources {
+
+                  config_map {
+
+                    items {
+                      key  = "TypeString*"
+                      mode = "TypeInt"
+                      path = "TypeString*"
+                    }
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+
+                  downward_api {
+
+                    items {
+
+                      field_ref {
+                        api_version = "TypeString"
+                        field_path  = "TypeString*"
+                      }
+                      mode = "TypeInt"
+                      path = "TypeString*"
+
+                      resource_field_ref {
+                        container_name = "TypeString"
+                        divisor        = "TypeString"
+                        resource       = "TypeString*"
+                      }
+                    }
+                  }
+
+                  secret {
+
+                    items {
+                      key  = "TypeString*"
+                      mode = "TypeInt"
+                      path = "TypeString*"
+                    }
+                    name     = "TypeString"
+                    optional = "TypeString"
+                  }
+
+                  service_account_token {
+                    audience           = "TypeString"
+                    expiration_seconds = "TypeInt"
+                    path               = "TypeString*"
+                  }
+                }
+              }
+
+              quobyte {
+                group     = "TypeString"
+                read_only = "TypeString"
+                registry  = "TypeString*"
+                tenant    = "TypeString"
+                user      = "TypeString"
+                volume    = "TypeString*"
+              }
+
+              rbd {
+                fstype    = "TypeString"
+                image     = "TypeString*"
+                keyring   = "TypeString"
+                monitors  = ["TypeString*"]
+                pool      = "TypeString"
+                read_only = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
+                }
+                user = "TypeString"
+              }
+
+              scale_io {
+                fstype            = "TypeString"
+                gateway           = "TypeString*"
+                protection_domain = "TypeString"
+                read_only         = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
+                }
+                ssl_enabled  = "TypeString"
+                storage_mode = "TypeString"
+                storage_pool = "TypeString"
+                system       = "TypeString*"
+                volume_name  = "TypeString"
+              }
+
               secret {
+                default_mode = "TypeInt"
 
                 items {
                   key  = "TypeString*"
                   mode = "TypeInt"
                   path = "TypeString*"
                 }
-                name     = "TypeString"
-                optional = "TypeString"
+                optional    = "TypeString"
+                secret_name = "TypeString"
               }
 
-              service_account_token {
-                audience           = "TypeString"
-                expiration_seconds = "TypeInt"
-                path               = "TypeString*"
+              storageos {
+                fstype    = "TypeString"
+                read_only = "TypeString"
+
+                secret_ref {
+                  name = "TypeString"
+                }
+                volume_name      = "TypeString"
+                volume_namespace = "TypeString"
+              }
+
+              vsphere_volume {
+                fstype              = "TypeString"
+                storage_policy_id   = "TypeString"
+                storage_policy_name = "TypeString"
+                volume_path         = "TypeString*"
               }
             }
-          }
-
-          quobyte {
-            group     = "TypeString"
-            read_only = "TypeString"
-            registry  = "TypeString*"
-            tenant    = "TypeString"
-            user      = "TypeString"
-            volume    = "TypeString*"
-          }
-
-          rbd {
-            fstype    = "TypeString"
-            image     = "TypeString*"
-            keyring   = "TypeString"
-            monitors  = ["TypeString*"]
-            pool      = "TypeString"
-            read_only = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            user = "TypeString"
-          }
-
-          scale_io {
-            fstype            = "TypeString"
-            gateway           = "TypeString*"
-            protection_domain = "TypeString"
-            read_only         = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            ssl_enabled  = "TypeString"
-            storage_mode = "TypeString"
-            storage_pool = "TypeString"
-            system       = "TypeString*"
-            volume_name  = "TypeString"
-          }
-
-          secret {
-            default_mode = "TypeInt"
-
-            items {
-              key  = "TypeString*"
-              mode = "TypeInt"
-              path = "TypeString*"
-            }
-            optional    = "TypeString"
-            secret_name = "TypeString"
-          }
-
-          storageos {
-            fstype    = "TypeString"
-            read_only = "TypeString"
-
-            secret_ref {
-              name = "TypeString"
-            }
-            volume_name      = "TypeString"
-            volume_namespace = "TypeString"
-          }
-
-          vsphere_volume {
-            fstype              = "TypeString"
-            storage_policy_id   = "TypeString"
-            storage_policy_name = "TypeString"
-            volume_path         = "TypeString*"
           }
         }
+        ttl_seconds_after_finished = "TypeInt"
       }
     }
-
-    update_strategy {
-
-      rolling_update {
-        max_unavailable = "TypeString"
-      }
-      type = "TypeString"
-    }
+    schedule                      = "TypeString*"
+    starting_deadline_seconds     = "TypeInt"
+    successful_jobs_history_limit = "TypeInt"
+    suspend                       = "TypeString"
   }
 }
 
@@ -3897,22 +3938,124 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-The desired behavior of this daemon set. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+Specification of the desired behavior of a cron job, including the schedule. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 
     
-#### min_ready_seconds
+#### concurrency_policy
+
+######  TypeString
+
+Specifies how to treat concurrent executions of a Job. Valid values are: - "Allow" (default): allows CronJobs to run concurrently; - "Forbid": forbids concurrent runs, skipping next run if previous run hasn't finished yet; - "Replace": cancels currently running job and replaces it with a new one
+#### failed_jobs_history_limit
 
 ######  TypeInt
 
-The minimum number of seconds for which a newly created DaemonSet pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready).
-#### revision_history_limit
+The number of failed finished jobs to retain. This is a pointer to distinguish between explicit zero and not specified.
+## job_template
+
+Specifies the job that will be created when executing a CronJob.
+
+    
+## metadata
+
+Standard object's metadata of the jobs created from this template. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+    
+#### annotations
+
+######  TypeMap
+
+Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations
+#### creation_timestamp
+
+######  ReadOnly • TypeString
+
+CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+
+Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+#### deletion_grace_period_seconds
+
+######  ReadOnly • TypeInt
+
+Number of seconds allowed for this object to gracefully terminate before it will be removed from the system. Only set when deletionTimestamp is also set. May only be shortened. Read-only.
+#### deletion_timestamp
+
+######  ReadOnly • TypeString
+
+DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.
+
+Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+#### labels
+
+######  TypeMap
+
+Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
+#### name
+
+######  TypeString
+
+Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names
+#### namespace
+
+######  TypeString
+
+Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+
+Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+#### self_link
+
+######  ReadOnly • TypeString
+
+SelfLink is a URL representing this object. Populated by the system. Read-only.
+
+DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the field is planned to be removed in 1.21 release.
+#### uid
+
+######  ReadOnly • TypeString
+
+UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
+
+Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+## spec
+
+Specification of the desired behavior of the job. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+
+    
+#### active_deadline_seconds
 
 ######  TypeInt
 
-The number of old history to retain to allow rollback. This is a pointer to distinguish between explicit zero and not specified. Defaults to 10.
+Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
+#### backoff_limit
+
+######  TypeInt
+
+Specifies the number of retries before marking this job failed. Defaults to 6
+#### completions
+
+######  TypeInt
+
+Specifies the desired number of successfully finished pods the job should be run with.  Setting to nil means that the success of any pod signals the success of all pods, and allows parallelism to have any positive value.  Setting to 1 means that parallelism is limited to 1 and the success of that pod signals the success of the job. More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
+#### manual_selector
+
+######  TypeString
+
+manualSelector controls generation of pod labels and pod selectors. Leave `manualSelector` unset unless you are certain what you are doing. When false or unset, the system pick labels unique to this job and appends those labels to the pod template.  When true, the user is responsible for picking unique labels and specifying the selector.  Failure to pick a unique label may cause this and other jobs to not function correctly.  However, You may see `manualSelector=true` in jobs that were created with the old `extensions/v1beta1` API. More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#specifying-your-own-pod-selector
+#### parallelism
+
+######  TypeInt
+
+Specifies the maximum desired number of pods the job should run at any given time. The actual number of pods running in steady state will be less than this number when ((.spec.completions - .status.successful) < .spec.parallelism), i.e. when the work left to do is less than max parallelism. More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
 ## selector
 
-A label query over pods that are managed by the daemon set. Must match in order to be controlled. It must match the pod template's labels. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors
+A label query over pods that should match the pod count. Normally, the system sets this field for you. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors
 
     
 ## match_expressions
@@ -3942,7 +4085,7 @@ values is an array of string values. If the operator is In or NotIn, the values 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 ## template
 
-An object that describes the pod that will be created. The DaemonSet will create exactly one copy of this pod on every node that matches the template's node selector (or on every node if no node selector is specified). More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template
+Describes the pod that will be created when executing a job. More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
 
     
 ## metadata
@@ -8171,23 +8314,28 @@ Storage Policy Based Management (SPBM) profile name.
 ###### Required •  TypeString
 
 Path that identifies vSphere volume vmdk
-## update_strategy
+#### ttl_seconds_after_finished
 
-An update strategy to replace existing DaemonSet pods with new pods.
+######  TypeInt
 
-    
-## rolling_update
+ttlSecondsAfterFinished limits the lifetime of a Job that has finished execution (either Complete or Failed). If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. When the Job is being deleted, its lifecycle guarantees (e.g. finalizers) will be honored. If this field is unset, the Job won't be automatically deleted. If this field is set to zero, the Job becomes eligible to be deleted immediately after it finishes. This field is alpha-level and is only honored by servers that enable the TTLAfterFinished feature.
+#### schedule
 
-Rolling update config params. Present only if type = "RollingUpdate".
+###### Required •  TypeString
 
-    
-#### max_unavailable
+The schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
+#### starting_deadline_seconds
+
+######  TypeInt
+
+Optional deadline in seconds for starting the job if it misses scheduled time for any reason.  Missed jobs executions will be counted as failed ones.
+#### successful_jobs_history_limit
+
+######  TypeInt
+
+The number of successful finished jobs to retain. This is a pointer to distinguish between explicit zero and not specified.
+#### suspend
 
 ######  TypeString
 
-The maximum number of DaemonSet pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of total number of DaemonSet pods at the start of the update (ex: 10%). Absolute number is calculated from percentage by rounding up. This cannot be 0. Default value is 1. Example: when this is set to 30%, at most 30% of the total number of nodes that should be running the daemon pod (i.e. status.desiredNumberScheduled) can have their pods stopped for an update at any given time. The update starts by stopping at most 30% of those DaemonSet pods and then brings up new DaemonSet pods in their place. Once the new pods are available, it then proceeds onto other DaemonSet pods, thus ensuring that at least 70% of original number of DaemonSet pods are available at all times during the update.
-#### type
-
-######  TypeString
-
-Type of daemon set update. Can be "RollingUpdate" or "OnDelete". Default is RollingUpdate.
+This flag tells the controller to suspend subsequent executions, it does not apply to already started executions.  Defaults to false.

@@ -1,9 +1,37 @@
 
-# resource "k8s_core_v1_config_map"
+# resource "k8s_rbac_authorization_k8s_io_v1alpha1_cluster_role"
 
-ConfigMap holds configuration data for pods to consume.
+ClusterRole is a cluster level, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding or ClusterRoleBinding. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 ClusterRole, and will no longer be served in v1.20.
 
   
+<details>
+<summary>aggregation_rule</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>cluster_role_selectors</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
+</details>
+
 <details>
 <summary>metadata</summary><blockquote>
 
@@ -22,24 +50,52 @@ ConfigMap holds configuration data for pods to consume.
     
 </details>
 
+<details>
+<summary>rules</summary><blockquote>
+
+    
+- [api_groups](#api_groups)
+- [non_resource_urls](#non_resource_urls)
+- [resource_names](#resource_names)
+- [resources](#resources)
+- [verbs](#verbs)*
+
+    
+</details>
+
 
 <details>
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_core_v1_config_map" "this" {
+resource "k8s_rbac_authorization_k8s_io_v1alpha1_cluster_role" "this" {
 
-  binary_data = { "key" = "TypeString" }
+  aggregation_rule {
 
-  data = { "key" = "TypeString" }
+    cluster_role_selectors {
 
-  immutable = "TypeString"
+      match_expressions {
+        key      = "TypeString*"
+        operator = "TypeString*"
+        values   = ["TypeString"]
+      }
+      match_labels = { "key" = "TypeString" }
+    }
+  }
 
   metadata {
     annotations = { "key" = "TypeString" }
     labels      = { "key" = "TypeString" }
     name        = "TypeString"
     namespace   = "TypeString"
+  }
+
+  rules {
+    api_groups        = ["TypeString"]
+    non_resource_urls = ["TypeString"]
+    resource_names    = ["TypeString"]
+    resources         = ["TypeString"]
+    verbs             = ["TypeString*"]
   }
 }
 
@@ -49,24 +105,44 @@ resource "k8s_core_v1_config_map" "this" {
 </details>
 
   
-#### binary_data
+## aggregation_rule
+
+AggregationRule is an optional field that describes how to build the Rules for this ClusterRole. If AggregationRule is set, then the Rules are controller managed and direct changes to Rules will be stomped by the controller.
+
+    
+## cluster_role_selectors
+
+ClusterRoleSelectors holds a list of selectors which will be used to find ClusterRoles and create the rules. If any of the selectors match, then the ClusterRole's permissions will be added
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
 
 ######  TypeMap
 
-BinaryData contains the binary data. Each key must consist of alphanumeric characters, '-', '_' or '.'. BinaryData can contain byte sequences that are not in the UTF-8 range. The keys stored in BinaryData must not overlap with the ones in the Data field, this is enforced during validation process. Using this field will require 1.10+ apiserver and kubelet.
-#### data
-
-######  TypeMap
-
-Data contains the configuration data. Each key must consist of alphanumeric characters, '-', '_' or '.'. Values with non-UTF-8 byte sequences must use the BinaryData field. The keys stored in Data must not overlap with the keys in the BinaryData field, this is enforced during validation process.
-#### immutable
-
-######  TypeString
-
-Immutable, if set to true, ensures that data stored in the ConfigMap cannot be updated (only object metadata can be modified). If not set to true, the field can be modified at any time. Defaulted to nil. This is an alpha field enabled by ImmutableEphemeralVolumes feature gate.
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 ## metadata
 
-Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+Standard object's metadata.
 
     
 #### annotations
@@ -131,3 +207,33 @@ DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the f
 UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
 
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+## rules
+
+Rules holds all the PolicyRules for this ClusterRole
+
+    
+#### api_groups
+
+######  TypeList
+
+APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.
+#### non_resource_urls
+
+######  TypeList
+
+NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as "pods" or "secrets") or non-resource URL paths (such as "/api"),  but not both.
+#### resource_names
+
+######  TypeList
+
+ResourceNames is an optional white list of names that the rule applies to.  An empty set means that everything is allowed.
+#### resources
+
+######  TypeList
+
+Resources is a list of resources this rule applies to.  ResourceAll represents all resources.
+#### verbs
+
+###### Required •  TypeList
+
+Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.

@@ -1,5 +1,5 @@
 
-# resource "k8s_storage_k8s_io_v1_volume_attachment"
+# resource "k8s_storage_k8s_io_v1alpha1_volume_attachment"
 
 VolumeAttachment captures the intent to attach or detach the specified volume to/from the specified node.
 
@@ -512,7 +512,7 @@ VolumeAttachment objects are non-namespaced.
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_storage_k8s_io_v1_volume_attachment" "this" {
+resource "k8s_storage_k8s_io_v1alpha1_volume_attachment" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }

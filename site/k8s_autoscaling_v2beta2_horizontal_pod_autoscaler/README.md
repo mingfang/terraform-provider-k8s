@@ -31,6 +31,56 @@ HorizontalPodAutoscaler is the configuration for a horizontal pod autoscaler, wh
 
     
 <details>
+<summary>behavior</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>scale_down</summary><blockquote>
+
+    
+- [select_policy](#select_policy)
+- [stabilization_window_seconds](#stabilization_window_seconds)
+
+    
+<details>
+<summary>policies</summary><blockquote>
+
+    
+- [period_seconds](#period_seconds)*
+- [type](#type)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>scale_up</summary><blockquote>
+
+    
+- [select_policy](#select_policy)
+- [stabilization_window_seconds](#stabilization_window_seconds)
+
+    
+<details>
+<summary>policies</summary><blockquote>
+
+    
+- [period_seconds](#period_seconds)*
+- [type](#type)*
+- [value](#value)*
+
+    
+</details>
+
+</details>
+
+</details>
+
+<details>
 <summary>metrics</summary><blockquote>
 
     
@@ -246,6 +296,31 @@ resource "k8s_autoscaling_v2beta2_horizontal_pod_autoscaler" "this" {
   }
 
   spec {
+
+    behavior {
+
+      scale_down {
+
+        policies {
+          period_seconds = "TypeInt*"
+          type           = "TypeString*"
+          value          = "TypeInt*"
+        }
+        select_policy                = "TypeString"
+        stabilization_window_seconds = "TypeInt"
+      }
+
+      scale_up {
+
+        policies {
+          period_seconds = "TypeInt*"
+          type           = "TypeString*"
+          value          = "TypeInt*"
+        }
+        select_policy                = "TypeString"
+        stabilization_window_seconds = "TypeInt"
+      }
+    }
     max_replicas = "TypeInt*"
 
     metrics {
@@ -428,6 +503,84 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 spec is the specification for the behaviour of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status.
 
     
+## behavior
+
+behavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively). If not set, the default HPAScalingRules for scale up and scale down are used.
+
+    
+## scale_down
+
+scaleDown is scaling policy for scaling Down. If not set, the default value is to allow to scale down to minReplicas pods, with a 300 second stabilization window (i.e., the highest recommendation for the last 300sec is used).
+
+    
+## policies
+
+policies is a list of potential scaling polices which can be used during scaling. At least one policy must be specified, otherwise the HPAScalingRules will be discarded as invalid
+
+    
+#### period_seconds
+
+###### Required •  TypeInt
+
+PeriodSeconds specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
+#### type
+
+###### Required •  TypeString
+
+Type is used to specify the scaling policy.
+#### value
+
+###### Required •  TypeInt
+
+Value contains the amount of change which is permitted by the policy. It must be greater than zero
+#### select_policy
+
+######  TypeString
+
+selectPolicy is used to specify which policy should be used. If not set, the default value MaxPolicySelect is used.
+#### stabilization_window_seconds
+
+######  TypeInt
+
+StabilizationWindowSeconds is the number of seconds for which past recommendations should be considered while scaling up or scaling down. StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
+## scale_up
+
+scaleUp is scaling policy for scaling Up. If not set, the default value is the higher of:
+  * increase no more than 4 pods per 60 seconds
+  * double the number of pods per 60 seconds
+No stabilization is used.
+
+    
+## policies
+
+policies is a list of potential scaling polices which can be used during scaling. At least one policy must be specified, otherwise the HPAScalingRules will be discarded as invalid
+
+    
+#### period_seconds
+
+###### Required •  TypeInt
+
+PeriodSeconds specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
+#### type
+
+###### Required •  TypeString
+
+Type is used to specify the scaling policy.
+#### value
+
+###### Required •  TypeInt
+
+Value contains the amount of change which is permitted by the policy. It must be greater than zero
+#### select_policy
+
+######  TypeString
+
+selectPolicy is used to specify which policy should be used. If not set, the default value MaxPolicySelect is used.
+#### stabilization_window_seconds
+
+######  TypeInt
+
+StabilizationWindowSeconds is the number of seconds for which past recommendations should be considered while scaling up or scaling down. StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
 #### max_replicas
 
 ###### Required •  TypeInt

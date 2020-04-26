@@ -416,12 +416,12 @@ IPBlock defines policy on a particular IPBlock. If this field is set then neithe
 
 ###### Required •  TypeString
 
-CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24"
+CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64"
 #### except
 
 ######  TypeList
 
-Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" Except values will be rejected if they are outside the CIDR range
+Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range
 ## namespace_selector
 
 Selects Namespaces using cluster-scoped labels. This field follows standard label selector semantics; if present but empty, it selects all namespaces.
@@ -505,12 +505,12 @@ IPBlock defines policy on a particular IPBlock. If this field is set then neithe
 
 ###### Required •  TypeString
 
-CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24"
+CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64"
 #### except
 
 ######  TypeList
 
-Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" Except values will be rejected if they are outside the CIDR range
+Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range
 ## namespace_selector
 
 Selects Namespaces using cluster-scoped labels. This field follows standard label selector semantics; if present but empty, it selects all namespaces.

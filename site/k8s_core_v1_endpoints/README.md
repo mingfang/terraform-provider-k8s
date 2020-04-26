@@ -95,6 +95,7 @@ Endpoints is a collection of endpoints that implement the actual service. Exampl
 <summary>ports</summary><blockquote>
 
     
+- [app_protocol](#app_protocol)
 - [name](#name)
 - [port](#port)*
 - [protocol](#protocol)
@@ -153,9 +154,10 @@ resource "k8s_core_v1_endpoints" "this" {
     }
 
     ports {
-      name     = "TypeString"
-      port     = "TypeInt*"
-      protocol = "TypeString"
+      app_protocol = "TypeString"
+      name         = "TypeString"
+      port         = "TypeInt*"
+      protocol     = "TypeString"
     }
   }
 }
@@ -363,6 +365,11 @@ UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/wor
 Port numbers available on the related IP addresses.
 
     
+#### app_protocol
+
+######  TypeString
+
+The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol. Field can be enabled with ServiceAppProtocol feature gate.
 #### name
 
 ######  TypeString

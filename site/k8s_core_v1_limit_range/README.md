@@ -37,7 +37,7 @@ LimitRange sets resource usage limits for each kind of resource in a Namespace.
 - [max](#max)
 - [max_limit_request_ratio](#max_limit_request_ratio)
 - [min](#min)
-- [type](#type)
+- [type](#type)*
 
     
 </details>
@@ -66,7 +66,7 @@ resource "k8s_core_v1_limit_range" "this" {
       max                     = { "key" = "TypeString" }
       max_limit_request_ratio = { "key" = "TypeString" }
       min                     = { "key" = "TypeString" }
-      type                    = "TypeString"
+      type                    = "TypeString*"
     }
   }
 }
@@ -181,6 +181,6 @@ MaxLimitRequestRatio if specified, the named resource must have a request and li
 Min usage constraints on this kind by resource name.
 #### type
 
-######  TypeString
+###### Required •  TypeString
 
 Type of resource that this limit applies to.

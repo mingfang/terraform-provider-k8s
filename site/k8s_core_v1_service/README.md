@@ -37,6 +37,7 @@ Service is a named abstraction of software service (for example, mysql) consisti
 - [publish_not_ready_addresses](#publish_not_ready_addresses)
 - [selector](#selector)
 - [session_affinity](#session_affinity)
+- [topology_keys](#topology_keys)
 - [type](#type)
 
     
@@ -44,6 +45,7 @@ Service is a named abstraction of software service (for example, mysql) consisti
 <summary>ports</summary><blockquote>
 
     
+- [app_protocol](#app_protocol)
 - [name](#name)
 - [node_port](#node_port)
 - [port](#port)*
@@ -97,11 +99,12 @@ resource "k8s_core_v1_service" "this" {
     load_balancer_source_ranges = ["TypeString"]
 
     ports {
-      name        = "TypeString"
-      node_port   = "TypeInt"
-      port        = "TypeInt*"
-      protocol    = "TypeString"
-      target_port = "TypeString"
+      app_protocol = "TypeString"
+      name         = "TypeString"
+      node_port    = "TypeInt"
+      port         = "TypeInt*"
+      protocol     = "TypeString"
+      target_port  = "TypeString"
     }
     publish_not_ready_addresses = "TypeString"
     selector                    = { "key" = "TypeString" }
@@ -113,7 +116,8 @@ resource "k8s_core_v1_service" "this" {
         timeout_seconds = "TypeInt"
       }
     }
-    type = "TypeString"
+    topology_keys = ["TypeString"]
+    type          = "TypeString"
   }
 }
 
@@ -240,6 +244,11 @@ If specified and supported by the platform, this will restrict traffic through t
 The list of ports that are exposed by this service. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
 
     
+#### app_protocol
+
+######  TypeString
+
+The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol. Field can be enabled with ServiceAppProtocol feature gate.
 #### name
 
 ######  TypeString
@@ -295,6 +304,11 @@ clientIP contains the configurations of Client IP based session affinity.
 ######  TypeInt
 
 timeoutSeconds specifies the seconds of ClientIP type session sticky time. The value must be >0 && <=86400(for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800(for 3 hours).
+#### topology_keys
+
+######  TypeList
+
+topologyKeys is a preference-order list of topology keys which implementations of services should use to preferentially sort endpoints when accessing this Service, it can not be used at the same time as externalTrafficPolicy=Local. Topology keys must be valid label keys and at most 16 keys may be specified. Endpoints are chosen based on the first topology key with available backends. If this field is specified and all entries have no backends that match the topology of the client, the service has no backends for that client and connections should fail. The special value "*" may be used to mean "any topology". This catch-all value, if used, only makes sense as the last value in the list. If this is not specified or empty, no topology constraints will be applied.
 #### type
 
 ######  TypeString

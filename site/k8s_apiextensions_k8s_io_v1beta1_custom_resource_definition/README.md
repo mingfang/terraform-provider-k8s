@@ -96,6 +96,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>subresources</summary><blockquote>
 
     
+- [status](#status)
 
     
 <details>
@@ -156,6 +157,7 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>subresources</summary><blockquote>
 
     
+- [status](#status)
 
     
 <details>
@@ -236,6 +238,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
         spec_replicas_path   = "TypeString*"
         status_replicas_path = "TypeString*"
       }
+      status = { "key" = "TypeString" }
     }
 
     validation {
@@ -268,6 +271,7 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
           spec_replicas_path   = "TypeString*"
           status_replicas_path = "TypeString*"
         }
+        status = { "key" = "TypeString" }
       }
     }
   }
@@ -529,6 +533,11 @@ specReplicasPath defines the JSON path inside of a custom resource that correspo
 ###### Required •  TypeString
 
 statusReplicasPath defines the JSON path inside of a custom resource that corresponds to Scale `status.replicas`. Only JSON paths without the array notation are allowed. Must be a JSON Path under `.status`. If there is no value under the given path in the custom resource, the `status.replicas` value in the `/scale` subresource will default to 0.
+#### status
+
+######  TypeMap
+
+status indicates the custom resource should serve a `/status` subresource. When enabled: 1. requests to the custom resource primary endpoint ignore changes to the `status` stanza of the object. 2. requests to the custom resource `/status` subresource ignore changes to anything other than the `status` stanza of the object.
 ## validation
 
 validation describes the schema used for validation and pruning of the custom resource. If present, this validation schema is used to validate all versions. Top-level and per-version schemas are mutually exclusive.
@@ -634,3 +643,8 @@ specReplicasPath defines the JSON path inside of a custom resource that correspo
 ###### Required •  TypeString
 
 statusReplicasPath defines the JSON path inside of a custom resource that corresponds to Scale `status.replicas`. Only JSON paths without the array notation are allowed. Must be a JSON Path under `.status`. If there is no value under the given path in the custom resource, the `status.replicas` value in the `/scale` subresource will default to 0.
+#### status
+
+######  TypeMap
+
+status indicates the custom resource should serve a `/status` subresource. When enabled: 1. requests to the custom resource primary endpoint ignore changes to the `status` stanza of the object. 2. requests to the custom resource `/status` subresource ignore changes to anything other than the `status` stanza of the object.

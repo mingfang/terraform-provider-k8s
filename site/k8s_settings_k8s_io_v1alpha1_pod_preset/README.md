@@ -1228,7 +1228,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -1385,7 +1385,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive.
 ## volumes
 
 Volumes defines the collection of Volume to inject into the pod.

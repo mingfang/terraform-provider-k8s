@@ -1,7 +1,7 @@
 
-# resource "k8s_storage_k8s_io_v1beta1_csi_node"
+# resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration"
 
-CSINode holds information about all CSI drivers installed on a node. CSI drivers do not need to create the CSINode object directly. As long as they use the node-driver-registrar sidecar container, the kubelet will automatically populate the CSINode object for the CSI driver as part of kubelet plugin registration. CSINode has the same name as a node. If the object is missing, it means either there are no CSI Drivers available on the node, or the Kubelet version is low enough that it doesn't create this object. CSINode has an OwnerReference that points to the corresponding node object.
+PriorityLevelConfiguration represents the configuration of a priority level.
 
   
 <details>
@@ -26,24 +26,34 @@ CSINode holds information about all CSI drivers installed on a node. CSI drivers
 <summary>spec</summary><blockquote>
 
     
+- [type](#type)*
 
     
 <details>
-<summary>drivers</summary><blockquote>
+<summary>limited</summary><blockquote>
 
     
-- [name](#name)*
-- [node_id](#node_id)*
-- [topology_keys](#topology_keys)
+- [assured_concurrency_shares](#assured_concurrency_shares)
 
     
 <details>
-<summary>allocatable</summary><blockquote>
+<summary>limit_response</summary><blockquote>
 
     
-- [count](#count)
+- [type](#type)*
 
     
+<details>
+<summary>queuing</summary><blockquote>
+
+    
+- [hand_size](#hand_size)
+- [queue_length_limit](#queue_length_limit)
+- [queues](#queues)
+
+    
+</details>
+
 </details>
 
 </details>
@@ -55,7 +65,7 @@ CSINode holds information about all CSI drivers installed on a node. CSI drivers
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
+resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -66,15 +76,20 @@ resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
 
   spec {
 
-    drivers {
+    limited {
+      assured_concurrency_shares = "TypeInt"
 
-      allocatable {
-        count = "TypeInt"
+      limit_response {
+
+        queuing {
+          hand_size          = "TypeInt"
+          queue_length_limit = "TypeInt"
+          queues             = "TypeInt"
+        }
+        type = "TypeString*"
       }
-      name          = "TypeString*"
-      node_id       = "TypeString*"
-      topology_keys = ["TypeString"]
     }
+    type = "TypeString*"
   }
 }
 
@@ -86,7 +101,7 @@ resource "k8s_storage_k8s_io_v1beta1_csi_node" "this" {
   
 ## metadata
 
-metadata.name must be the Kubernetes node name.
+`metadata` is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
 
     
 #### annotations
@@ -153,36 +168,55 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-spec is the specification of CSINode
+`spec` is the specification of the desired behavior of a "request-priority". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
 
     
-## drivers
+## limited
 
-drivers is a list of information of all CSI Drivers existing on a node. If all drivers in the list are uninstalled, this can become empty.
-
-    
-## allocatable
-
-allocatable represents the volume resources of a node that are available for scheduling.
+`limited` specifies how requests are handled for a Limited priority level. This field must be non-empty if and only if `type` is `"Limited"`.
 
     
-#### count
+#### assured_concurrency_shares
 
 ######  TypeInt
 
-Maximum number of unique volumes managed by the CSI driver that can be used on a node. A volume that is both attached and mounted on a node is considered to be used once, not twice. The same rule applies for a unique volume that is shared among multiple pods on the same node. If this field is nil, then the supported number of volumes on this node is unbounded.
-#### name
+`assuredConcurrencyShares` (ACS) configures the execution limit, which is a limit on the number of requests of this priority level that may be exeucting at a given time.  ACS must be a positive number. The server's concurrency limit (SCL) is divided among the concurrency-controlled priority levels in proportion to their assured concurrency shares. This produces the assured concurrency value (ACV) --- the number of requests that may be executing at a time --- for each such priority level:
+
+            ACV(l) = ceil( SCL * ACS(l) / ( sum[priority levels k] ACS(k) ) )
+
+bigger numbers of ACS mean more reserved concurrent requests (at the expense of every other PL). This field has a default value of 30.
+## limit_response
+
+`limitResponse` indicates what to do with requests that can not be executed right now
+
+    
+## queuing
+
+`queuing` holds the configuration parameters for queuing. This field may be non-empty only if `type` is `"Queue"`.
+
+    
+#### hand_size
+
+######  TypeInt
+
+`handSize` is a small positive number that configures the shuffle sharding of requests into queues.  When enqueuing a request at this priority level the request's flow identifier (a string pair) is hashed and the hash value is used to shuffle the list of queues and deal a hand of the size specified here.  The request is put into one of the shortest queues in that hand. `handSize` must be no larger than `queues`, and should be significantly smaller (so that a few heavy flows do not saturate most of the queues).  See the user-facing documentation for more extensive guidance on setting this field.  This field has a default value of 8.
+#### queue_length_limit
+
+######  TypeInt
+
+`queueLengthLimit` is the maximum number of requests allowed to be waiting in a given queue of this priority level at a time; excess requests are rejected.  This value must be positive.  If not specified, it will be defaulted to 50.
+#### queues
+
+######  TypeInt
+
+`queues` is the number of queues for this priority level. The queues exist independently at each apiserver. The value must be positive.  Setting it to 1 effectively precludes shufflesharding and thus makes the distinguisher method of associated flow schemas irrelevant.  This field has a default value of 64.
+#### type
 
 ###### Required •  TypeString
 
-This is the name of the CSI driver that this object refers to. This MUST be the same name returned by the CSI GetPluginName() call for that driver.
-#### node_id
+`type` is "Queue" or "Reject". "Queue" means that requests that can not be executed upon arrival are held in a queue until they can be executed or a queuing limit is reached. "Reject" means that requests that can not be executed upon arrival are rejected. Required.
+#### type
 
 ###### Required •  TypeString
 
-nodeID of the node from the driver point of view. This field enables Kubernetes to communicate with storage systems that do not share the same nomenclature for nodes. For example, Kubernetes may refer to a given node as "node1", but the storage system may refer to the same node as "nodeA". When Kubernetes issues a command to the storage system to attach a volume to a specific node, it can use this field to refer to the node name using the ID that the storage system will understand, e.g. "nodeA" instead of "node1". This field is required.
-#### topology_keys
-
-######  TypeList
-
-topologyKeys is the list of keys supported by the driver. When a driver is initialized on a cluster, it provides a set of topology keys that it understands (e.g. "company.com/zone", "company.com/region"). When a driver is initialized on a node, it provides the same topology keys along with values. Kubelet will expose these topology keys as labels on its own node object. When Kubernetes does topology aware provisioning, it can use this list to determine which labels it should retrieve from the node object and pass back to the driver. It is possible for different nodes to use different topology keys. This can be empty if driver does not support topology.
+`type` indicates whether this priority level is subject to limitation on request execution.  A value of `"Exempt"` means that requests of this priority level are not subject to a limit (and thus are never queued) and do not detract from the capacity made available to other priority levels.  A value of `"Limited"` means that (a) requests of this priority level _are_ subject to limits and (b) some of the server's limited capacity is made available exclusively to this priority level. Required.

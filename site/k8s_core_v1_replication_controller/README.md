@@ -1800,6 +1800,7 @@ ReplicationController represents the configuration of a replication controller.
 
     
 - [fsgroup](#fsgroup)
+- [fsgroup_change_policy](#fsgroup_change_policy)
 - [run_asgroup](#run_asgroup)
 - [run_asnon_root](#run_asnon_root)
 - [run_asuser](#run_asuser)
@@ -3402,10 +3403,11 @@ resource "k8s_core_v1_replication_controller" "this" {
         scheduler_name     = "TypeString"
 
         security_context {
-          fsgroup        = "TypeInt"
-          run_asgroup    = "TypeInt"
-          run_asnon_root = "TypeString"
-          run_asuser     = "TypeInt"
+          fsgroup               = "TypeInt"
+          fsgroup_change_policy = "TypeString"
+          run_asgroup           = "TypeInt"
+          run_asnon_root        = "TypeString"
+          run_asuser            = "TypeInt"
 
           selinux_options {
             level = "TypeString"
@@ -4328,7 +4330,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -4905,20 +4907,20 @@ The Windows specific settings applied to all containers. If unspecified, the opt
 
 ######  TypeString
 
-GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field.
 #### gmsa_credential_spec_name
 
 ######  TypeString
 
-GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpecName is the name of the GMSA credential spec to use.
 #### run_asuser_name
 
 ######  TypeString
 
-The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 ## startup_probe
 
-StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is an alpha feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is a beta feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 
     
 ## exec
@@ -5038,7 +5040,7 @@ Indicate how the termination message should be populated. File will use the cont
 Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false.
 ## volume_devices
 
-volumeDevices is the list of block devices to be used by the container. This is a beta feature.
+volumeDevices is the list of block devices to be used by the container.
 
     
 #### device_path
@@ -5085,7 +5087,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive.
 #### working_dir
 
 ######  TypeString
@@ -5188,7 +5190,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -5765,17 +5767,17 @@ The Windows specific settings applied to all containers. If unspecified, the opt
 
 ######  TypeString
 
-GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field.
 #### gmsa_credential_spec_name
 
 ######  TypeString
 
-GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpecName is the name of the GMSA credential spec to use.
 #### run_asuser_name
 
 ######  TypeString
 
-The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 ## startup_probe
 
 Probes are not allowed for ephemeral containers.
@@ -5903,7 +5905,7 @@ Indicate how the termination message should be populated. File will use the cont
 Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false.
 ## volume_devices
 
-volumeDevices is the list of block devices to be used by the container. This is a beta feature.
+volumeDevices is the list of block devices to be used by the container.
 
     
 #### device_path
@@ -5950,7 +5952,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive.
 #### working_dir
 
 ######  TypeString
@@ -6058,7 +6060,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -6635,20 +6637,20 @@ The Windows specific settings applied to all containers. If unspecified, the opt
 
 ######  TypeString
 
-GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field.
 #### gmsa_credential_spec_name
 
 ######  TypeString
 
-GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpecName is the name of the GMSA credential spec to use.
 #### run_asuser_name
 
 ######  TypeString
 
-The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 ## startup_probe
 
-StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is an alpha feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is a beta feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 
     
 ## exec
@@ -6768,7 +6770,7 @@ Indicate how the termination message should be populated. File will use the cont
 Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false.
 ## volume_devices
 
-volumeDevices is the list of block devices to be used by the container. This is a beta feature.
+volumeDevices is the list of block devices to be used by the container.
 
     
 #### device_path
@@ -6815,7 +6817,7 @@ Path within the volume from which the container's volume should be mounted. Defa
 
 ######  TypeString
 
-Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. This field is beta in 1.15.
+Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive.
 #### working_dir
 
 ######  TypeString
@@ -6890,6 +6892,11 @@ A special supplemental group that applies to all containers in a pod. Some volum
 1. The owning GID will be the FSGroup 2. The setgid bit is set (new files created in the volume will be owned by FSGroup) 3. The permission bits are OR'd with rw-rw----
 
 If unset, the Kubelet will not modify the ownership and permissions of any volume.
+#### fsgroup_change_policy
+
+######  TypeString
+
+fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are "OnRootMismatch" and "Always". If not specified defaults to "Always".
 #### run_asgroup
 
 ######  TypeInt
@@ -6959,17 +6966,17 @@ The Windows specific settings applied to all containers. If unspecified, the opt
 
 ######  TypeString
 
-GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field.
 #### gmsa_credential_spec_name
 
 ######  TypeString
 
-GMSACredentialSpecName is the name of the GMSA credential spec to use. This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.
+GMSACredentialSpecName is the name of the GMSA credential spec to use.
 #### run_asuser_name
 
 ######  TypeString
 
-The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence. This field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.
+The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 #### service_account
 
 ######  TypeString
@@ -6984,7 +6991,7 @@ ServiceAccountName is the name of the ServiceAccount to use to run this pod. Mor
 
 ######  TypeString
 
-Share a single process namespace between all of the containers in a pod. When this is set containers will be able to view and signal processes from other containers in the same pod, and the first process in each container will not be assigned PID 1. HostPID and ShareProcessNamespace cannot both be set. Optional: Default to false. This field is beta-level and may be disabled with the PodShareProcessNamespace feature.
+Share a single process namespace between all of the containers in a pod. When this is set containers will be able to view and signal processes from other containers in the same pod, and the first process in each container will not be assigned PID 1. HostPID and ShareProcessNamespace cannot both be set. Optional: Default to false.
 #### subdomain
 
 ######  TypeString
@@ -7027,7 +7034,7 @@ TolerationSeconds represents the period of time the toleration (which must be of
 Value is the taint value the toleration matches to. If the operator is Exists, the value should be empty, otherwise just a regular string.
 ## topology_spread_constraints
 
-TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. This field is alpha-level and is only honored by clusters that enables the EvenPodsSpread feature. All topologySpreadConstraints are ANDed.
+TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. This field is only honored by clusters that enable the EvenPodsSpread feature. All topologySpreadConstraints are ANDed.
 
     
 ## label_selector

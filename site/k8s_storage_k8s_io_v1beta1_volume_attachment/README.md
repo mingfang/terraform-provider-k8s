@@ -1782,7 +1782,7 @@ VolumeNamespace specifies the scope of the volume within StorageOS.  If no names
 
 ######  TypeString
 
-volumeMode defines if a volume is intended to be used with a formatted filesystem or to remain in raw block state. Value of Filesystem is implied when not included in spec. This is a beta feature.
+volumeMode defines if a volume is intended to be used with a formatted filesystem or to remain in raw block state. Value of Filesystem is implied when not included in spec.
 ## vsphere_volume
 
 VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine
