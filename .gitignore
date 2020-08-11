@@ -8,3 +8,4 @@ crash.log
 kubeconfig
 dist
 modules
+/gnupg/
