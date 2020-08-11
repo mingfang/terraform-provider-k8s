@@ -17,6 +17,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.selector\.match_labels$`),
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.strategy`),
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.template.spec.init_containers`),
+	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.pod_management_policy`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_\w+\.spec\.template\.spec\.volumes`),
 	regexp.MustCompile(`k8s_\w+_\w+_secret\.type$`),
