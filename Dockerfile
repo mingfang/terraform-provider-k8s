@@ -1,18 +1,23 @@
 FROM golang:1.12 as base
 RUN apt-get update
-RUN apt-get install -y vim unzip zip
+RUN apt-get install -y vim unzip zip pgp
 
 RUN wget -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/v0.6.0/terraform-docs-v0.6.0-linux-amd64 && \
     chmod +x /usr/local/bin/terraform-docs
+
+# Kubectl
+RUN wget -P /usr/local/bin https://storage.googleapis.com/kubernetes-release/release/v1.18.5/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
 
 #Docker client only
 RUN wget -O - https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar zx -C /usr/local/bin --strip-components=1 docker/docker
 
 #Helm
-RUN wget -O - https://get.helm.sh/helm-v3.0.1-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
+RUN wget -O - https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
 
 # goreleaser
-RUN wget -O - https://github.com/goreleaser/goreleaser/releases/download/v0.118.2/goreleaser_Linux_x86_64.tar.gz|tar zx
+RUN wget -O - https://github.com/goreleaser/goreleaser/releases/download/v0.141.0/goreleaser_Linux_x86_64.tar.gz|tar zx
 RUN chmod +x goreleaser && \
     mv goreleaser /usr/local/bin
 
@@ -29,7 +34,7 @@ ENV GO111MODULE=on
 #    XC_OS=linux XC_ARCH=amd64 make bin
 #RUN mv /go/bin/terraform /usr/local/bin/terraform
 
-RUN wget https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \
     unzip *.zip && \
     mv terraform /usr/local/bin && \
     rm *.zip

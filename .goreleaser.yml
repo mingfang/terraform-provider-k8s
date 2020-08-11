@@ -3,40 +3,59 @@
 # Snapshot
 # goreleaser --snapshot --rm-dist
 
-# Release
-# git tag -a v0.1.0 -m "First release"
-# git push origin v0.1.0
-# goreleaser release
+# Release, https://www.terraform.io/docs/registry/providers/publishing.html
+# Cache the password for your GPG private key with `gpg --armor --detach-sign`
+# Tag your version with `git tag v1.2.3`
+# `goreleaser release --rm-dist`
 
 # Make sure to check the documentation at http://goreleaser.com
 
 before:
   hooks:
-    # you may remove this if you don't use vgo
-    #- go mod tidy
-    # you may remove this if you don't need go generate
-    #- go generate ./...
+    - go mod tidy
 builds:
-- binary: "terraform-provider-k8s_v{{ .Version }}"
-  env:
-  - CGO_ENABLED=0
+- env:
+    # goreleaser does not work with CGO, it could also complicate
+    # usage by users in CI/CD systems like Terraform Cloud where
+    # they are unable to install libraries.
+    - CGO_ENABLED=0
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  ldflags:
+    - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
   goos:
-  - darwin
-  - linux
-  - windows
+    - windows
+    - linux
+    - darwin
   goarch:
-  - amd64
+    - amd64
+    - '386'
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: '386'
+  binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
-- files:
-  - none*
-  replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+- format: zip
+  name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 checksum:
-  name_template: 'checksums.txt'
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+signs:
+  - artifacts: checksum
+    args:
+      # if you are using this is a GitHub action or some other automated pipeline, you
+      # need to pass the batch flag to indicate its not interactive.
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}" # set this environment variable for your signing key
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+release:
+  # Visit your project's GitHub Releases page to publish this release.
+  draft: true
 snapshot:
   name_template: "{{ .Version }}"
 changelog:
