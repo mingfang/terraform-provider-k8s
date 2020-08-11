@@ -12,8 +12,25 @@ terraform-provider-k8s is a Terraform provider to manage Kubernetes resources.
 A catalog of reusable modules is at [terraform-k8s-modules](https://github.com/mingfang/terraform-k8s-modules)
 
 ## Requirements
-- Terraform 0.12+
+- Terraform 0.12 and 0.13
 - Kubernetes v1.14+ (Recommended for best CRD support)
+
+## Upgrading to Terraform 0.13
+- Terraform 0.13 can automatically install this plugin.  Make sure your Terraform configuration block has the plugin information like this.
+```
+terraform {
+  required_providers {
+    k8s = {
+      source  = "mingfang/k8s"
+    }
+  }
+}
+``` 
+
+- If you have existing Terraform state created before Terraform 0.13 then you may have to upgrade the state using this command.
+```
+terraform state replace-provider 'registry.terraform.io/-/k8s' 'mingfang/k8s'
+```
 
 ## Installation
 Download the binary from the [releases](https://github.com/mingfang/terraform-provider-k8s/releases).
