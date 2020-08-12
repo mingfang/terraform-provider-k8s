@@ -43,7 +43,7 @@ func main() {
 }
 
 func generateSite() {
-	var baseDir = "./site"
+	var baseDir = "./docs/resources"
 	CreateDirIfNotExist(baseDir)
 
 	resourcesMap := k8s.BuildResourcesMap()
@@ -56,13 +56,10 @@ func generateSite() {
 		resource := resourcesMap[resourceKey]
 		schema := k8s.K8SConfig_Singleton().TFSchemasMap[resourceKey]
 
-		dir := baseDir + "/" + resourceKey
 		if k8s.IsDeprecated(schema) {
-			os.Remove(dir)
-			dir = baseDir + "/DEPRECATED/" + resourceKey
+			continue
 		}
-		CreateDirIfNotExist(dir)
-		file, err := os.OpenFile(dir+"/"+"README.md", os.O_WRONLY|os.O_CREATE, 0755)
+		file, err := os.OpenFile(baseDir + "/" + resourceKey[4:] + ".md", os.O_WRONLY|os.O_CREATE, 0755)
 		if err != nil {
 			log.Fatal(err)
 		}
