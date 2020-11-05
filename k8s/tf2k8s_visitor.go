@@ -127,7 +127,7 @@ func (this *TF2K8SVisitor) VisitKind(proto *proto.Kind) {
 	//log.Println("VisitKind keyPath:", this.keyPath)
 
 	//special handling for JSON data
-	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+	if IsJSONSchemaProps(proto.GetPath().String()) {
 		this.handleJSON()
 		return
 	}

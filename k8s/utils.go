@@ -215,3 +215,16 @@ func PrintKeys(data map[string]struct{}) {
 func IsDeprecated(schema *tfSchema.Schema) bool {
 	return strings.Contains(schema.Description, "DEPRECATED")
 }
+
+var jsonSchemaPropsPattern = []*regexp.Regexp{
+	regexp.MustCompile(`k8s\..*\.JSONSchemaProps`),
+}
+
+func IsJSONSchemaProps(path string) bool {
+	for _, pattern := range jsonSchemaPropsPattern {
+		if pattern.MatchString(path) {
+			return true
+		}
+	}
+	return false
+}

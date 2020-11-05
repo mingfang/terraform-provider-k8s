@@ -107,7 +107,7 @@ func (this *K8S2TFReadVisitor) VisitKind(proto *proto.Kind) {
 	}
 
 	//special handling for JSON data
-	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+	if IsJSONSchemaProps(proto.GetPath().String()) {
 		this.handleJSON()
 		return
 	}

@@ -136,7 +136,7 @@ func (this *K8S2TFPrintVisitor) VisitKind(proto *proto.Kind) {
 
 	//fmt.Fprintf(this.buf, "%s//VisitKind %s %s\n", this.indent, this.key, proto.GetPath())
 	//special handling for JSON data
-	if proto.GetPath().String() == "io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps" {
+	if k8s.IsJSONSchemaProps(proto.GetPath().String()) {
 		//log.Println("VisitKind JSON:", this.path)
 		this.handleJSON()
 		return
