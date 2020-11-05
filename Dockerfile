@@ -34,7 +34,7 @@ ENV GO111MODULE=on
 #    XC_OS=linux XC_ARCH=amd64 make bin
 #RUN mv /go/bin/terraform /usr/local/bin/terraform
 
-RUN wget https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_amd64.zip && \
     unzip *.zip && \
     mv terraform /usr/local/bin && \
     rm *.zip
