@@ -252,6 +252,7 @@ var skipPaths = []*regexp.Regexp{
 	regexp.MustCompile(`^\[root] root.*`),
 	regexp.MustCompile(`^\[root] provider.*`),
 	regexp.MustCompile(`^\[root] meta.*`),
+	regexp.MustCompile(`.* \(close\)`),
 }
 
 //[root] module.deployment-service.k8s_apps_v1_deployment.this
