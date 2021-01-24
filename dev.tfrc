@@ -1,0 +1,8 @@
+provider_installation {
+
+  dev_overrides {
+    "mingfang/k8s" = "/root/.terraform.d/plugins/mingfang/k8s/0.0.0/linux_amd64"
+  }
+
+  direct {}
+}

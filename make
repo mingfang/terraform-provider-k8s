@@ -1,5 +1,7 @@
 clear
-rm /usr/local/bin/terraform-provider-k8s*
-go build -o /usr/local/bin/terraform-provider-k8s_v1.0.0
-ln -s -f /usr/local/bin/terraform-provider-k8s_v1.0.0 /go/bin/terraform-provider-k8s_v1.0.0
+rm -r ~/.terraform.d
+DIR=~/.terraform.d/plugins/mingfang/k8s/0.0.0/linux_amd64
+mkdir -p $DIR
+
+go build -o $DIR/terraform-provider-k8s
 terraform init

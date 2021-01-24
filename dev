@@ -5,6 +5,7 @@ docker build --pull --target dev --tag "${IMAGE}:dev" $@ .
 
 docker run --rm -p 8000:8000 \
   -e KUBECONFIG=/kubeconfig \
+  -e TF_CLI_CONFIG_FILE=/go/src/github.com/mingfang/terraform-provider-k8s/dev.tfrc \
   -v /mnt/ceph/docker-kubernetes-master/vault-data/cluster-admin-kubeconfig.yml:/kubeconfig \
   -v `pwd`:/go/src/github.com/mingfang/terraform-provider-k8s \
   -v `pwd`/../terraform-k8s-modules:/go/src/github.com/mingfang/terraform-provider-k8s/modules \
