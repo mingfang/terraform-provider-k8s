@@ -74,6 +74,7 @@ func IsSkipPath(path string) bool {
 
 var sensitivePaths = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_core_.*_secret\.data`),
+	regexp.MustCompile(`k8s_core_.*_secret\.string_data`),
 }
 
 func IsSensitive(path string) bool {
