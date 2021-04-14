@@ -20,10 +20,11 @@ func Test(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	instanceURL := terraform.Output(t, terraformOptions, "url")
+	tlsConfig := tls.Config{}
 	maxRetries := 30
 	timeBetweenRetries := 5 * time.Second
 
-	http_helper.HttpGetWithRetryWithCustomValidation(t, instanceURL, maxRetries, timeBetweenRetries, validate)
+	http_helper.HttpGetWithRetryWithCustomValidation(t, instanceURL, &tlsConfig, maxRetries, timeBetweenRetries, validate)
 }
 
 func validate(status int, _ string) bool {
