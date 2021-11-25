@@ -21,6 +21,7 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/gruntwork-io/terratest v0.18.5
 	github.com/hashicorp/terraform-plugin-sdk v1.4.1
+	github.com/hashicorp/tf-sdk-migrator v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
