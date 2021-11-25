@@ -1,6 +1,6 @@
 FROM golang:1.12 as base
 RUN apt-get update
-RUN apt-get install -y vim unzip zip pgp
+RUN apt-get install -y vim unzip zip pgp ca-certificates libgnutls30
 
 RUN wget -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/v0.6.0/terraform-docs-v0.6.0-linux-amd64 && \
     chmod +x /usr/local/bin/terraform-docs
@@ -34,7 +34,7 @@ ENV GO111MODULE=on
 #    XC_OS=linux XC_ARCH=amd64 make bin
 #RUN mv /go/bin/terraform /usr/local/bin/terraform
 
-RUN wget https://releases.hashicorp.com/terraform/0.14.5/terraform_0.14.5_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/0.15.3/terraform_0.15.3_linux_amd64.zip && \
     unzip *.zip && \
     mv terraform /usr/local/bin && \
     rm *.zip
