@@ -16,7 +16,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_\w+_\w+_service\.spec\.cluster_ip$`),
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.selector\.match_labels$`),
 	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.strategy`),
-	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.template.spec.init_containers`),
+	regexp.MustCompile(`k8s_\w+_\w+_deployment\.spec\.template\.spec\.init_containers`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.pod_management_policy`),
 	regexp.MustCompile(`k8s_\w+_\w+_stateful_set\.spec\.volume_claim_templates`),
 	regexp.MustCompile(`k8s_\w+_\w+_\w+\.spec\.template\.spec\.volumes`),
@@ -28,6 +28,7 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_.*\.parameters`),
 	regexp.MustCompile(`k8s_.*_storage_class\._provisioner`),
 	regexp.MustCompile(`k8s_.*_storage_class\.reclaim_policy`),
+	regexp.MustCompile(`^k8s_batch_.*_job\.spec\.template\.spec\.`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
