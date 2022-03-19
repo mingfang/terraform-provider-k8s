@@ -28,7 +28,8 @@ var forceNewPattern = []*regexp.Regexp{
 	regexp.MustCompile(`k8s_.*\.parameters`),
 	regexp.MustCompile(`k8s_.*_storage_class\._provisioner`),
 	regexp.MustCompile(`k8s_.*_storage_class\.reclaim_policy`),
-	regexp.MustCompile(`^k8s_batch_.*_job\.spec\.template\.spec\.`),
+	regexp.MustCompile(`^k8s_batch_.*_job\.spec\.template\.`),
+	regexp.MustCompile(`^k8s_batch_.*_job\.spec\.selector\.`),
 }
 
 // path format <resource key>.<object path> e.g. k8s_core_v1_service.metadata.name
