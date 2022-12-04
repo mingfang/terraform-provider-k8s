@@ -1,5 +1,5 @@
 
-# resource "k8s_discovery_k8s_io_v1beta1_endpoint_slice"
+# resource "k8s_discovery_k8s_io_v1_endpoint_slice"
 
 EndpointSlice represents a subset of the endpoints that implement a service. For a given service there may be multiple EndpointSlice objects, selected by labels, which must be joined to produce the full set of endpoints.
 
@@ -9,9 +9,10 @@ EndpointSlice represents a subset of the endpoints that implement a service. For
 
     
 - [addresses](#addresses)*
+- [deprecated_topology](#deprecated_topology)
 - [hostname](#hostname)
 - [node_name](#node_name)
-- [topology](#topology)
+- [zone](#zone)
 
     
 <details>
@@ -94,7 +95,7 @@ EndpointSlice represents a subset of the endpoints that implement a service. For
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_discovery_k8s_io_v1beta1_endpoint_slice" "this" {
+resource "k8s_discovery_k8s_io_v1_endpoint_slice" "this" {
 
   address_type = "TypeString*"
 
@@ -106,6 +107,7 @@ resource "k8s_discovery_k8s_io_v1beta1_endpoint_slice" "this" {
       serving     = "TypeString"
       terminating = "TypeString"
     }
+    deprecated_topology = { "key" = "TypeString" }
 
     hints {
 
@@ -125,7 +127,7 @@ resource "k8s_discovery_k8s_io_v1beta1_endpoint_slice" "this" {
       resource_version = "TypeString"
       uid              = "TypeString"
     }
-    topology = { "key" = "TypeString" }
+    zone = "TypeString"
   }
 
   metadata {
@@ -184,6 +186,11 @@ serving is identical to ready except that it is set regardless of the terminatin
 ######  TypeString
 
 terminating indicates that this endpoint is terminating. A nil value indicates an unknown state. Consumers should interpret this unknown state to mean that the endpoint is not terminating. This field can be enabled with the EndpointSliceTerminatingCondition feature gate.
+#### deprecated_topology
+
+######  TypeMap
+
+deprecatedTopology contains topology information part of the v1beta1 API. This field is deprecated, and will be removed when the v1beta1 API is removed (no sooner than kubernetes v1.24).  While this field can hold values, it is not writable through the v1 API, and any attempts to write to it will be silently ignored. Topology information can be found in the zone and nodeName fields instead.
 ## hints
 
 hints contains information associated with how an endpoint should be consumed.
@@ -191,7 +198,7 @@ hints contains information associated with how an endpoint should be consumed.
     
 ## for_zones
 
-forZones indicates the zone(s) this endpoint should be consumed by to enable topology aware routing. May contain a maximum of 8 entries.
+forZones indicates the zone(s) this endpoint should be consumed by to enable topology aware routing.
 
     
 #### name
@@ -249,18 +256,11 @@ Specific resourceVersion to which this reference is made, if any. More info: htt
 ######  TypeString
 
 UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-#### topology
+#### zone
 
-######  TypeMap
+######  TypeString
 
-topology contains arbitrary topology information associated with the endpoint. These key/value pairs must conform with the label format. https://kubernetes.io/docs/concepts/overview/working-with-objects/labels Topology may include a maximum of 16 key/value pairs. This includes, but is not limited to the following well known keys: * kubernetes.io/hostname: the value indicates the hostname of the node
-  where the endpoint is located. This should match the corresponding
-  node label.
-* topology.kubernetes.io/zone: the value indicates the zone where the
-  endpoint is located. This should match the corresponding node label.
-* topology.kubernetes.io/region: the value indicates the region where the
-  endpoint is located. This should match the corresponding node label.
-This field is deprecated and will be removed in future api versions.
+zone is the name of the Zone this endpoint exists in.
 ## metadata
 
 Standard object's metadata.

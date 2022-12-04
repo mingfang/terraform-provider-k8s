@@ -1,7 +1,7 @@
 
 # resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition"
 
-CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format <.spec.name>.<.spec.group>. Deprecated in v1.16, planned for removal in v1.19. Use apiextensions.k8s.io/v1 CustomResourceDefinition instead.
+CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format <.spec.name>.<.spec.group>. Deprecated in v1.16, planned for removal in v1.22. Use apiextensions.k8s.io/v1 CustomResourceDefinition instead.
 
   
 <details>
@@ -125,6 +125,8 @@ CustomResourceDefinition represents a resource that should be exposed on the API
 <summary>versions</summary><blockquote>
 
     
+- [deprecated](#deprecated)
+- [deprecation_warning](#deprecation_warning)
 - [name](#name)*
 - [served](#served)*
 - [storage](#storage)*
@@ -256,7 +258,9 @@ resource "k8s_apiextensions_k8s_io_v1beta1_custom_resource_definition" "this" {
         priority    = "TypeInt"
         type        = "TypeString*"
       }
-      name = "TypeString*"
+      deprecated          = "TypeString"
+      deprecation_warning = "TypeString"
+      name                = "TypeString*"
 
       schema {
         open_apiv3_schema = "TypeString"
@@ -326,7 +330,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -593,6 +597,16 @@ priority is an integer defining the relative importance of this column compared 
 ###### Required •  TypeString
 
 type is an OpenAPI type definition for this column. See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#data-types for details.
+#### deprecated
+
+######  TypeString
+
+deprecated indicates this version of the custom resource API is deprecated. When set to true, API requests to this version receive a warning header in the server response. Defaults to false.
+#### deprecation_warning
+
+######  TypeString
+
+deprecationWarning overrides the default warning returned to API clients. May only be set when `deprecated` is true. The default warning indicates this version is deprecated and recommends use of the newest served version of equal or greater stability, if one exists.
 #### name
 
 ###### Required •  TypeString

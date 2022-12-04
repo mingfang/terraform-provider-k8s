@@ -102,6 +102,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [scheduler_name](#scheduler_name)
 - [service_account](#service_account)
 - [service_account_name](#service_account_name)
+- [set_hostname_asfqdn](#set_hostname_asfqdn)
 - [share_process_namespace](#share_process_namespace)
 - [subdomain](#subdomain)
 - [termination_grace_period_seconds](#termination_grace_period_seconds)
@@ -239,6 +240,26 @@ The StatefulSet guarantees that a given network identity will always map to the 
 
 </details>
 
+<details>
+<summary>namespace_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
 </details>
 
 </details>
@@ -253,6 +274,26 @@ The StatefulSet guarantees that a given network identity will always map to the 
     
 <details>
 <summary>label_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>namespace_selector</summary><blockquote>
 
     
 - [match_labels](#match_labels)
@@ -316,6 +357,26 @@ The StatefulSet guarantees that a given network identity will always map to the 
 
 </details>
 
+<details>
+<summary>namespace_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
 </details>
 
 </details>
@@ -330,6 +391,26 @@ The StatefulSet guarantees that a given network identity will always map to the 
     
 <details>
 <summary>label_selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
+<details>
+<summary>namespace_selector</summary><blockquote>
 
     
 - [match_labels](#match_labels)
@@ -575,6 +656,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -642,6 +724,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -722,6 +805,16 @@ The StatefulSet guarantees that a given network identity will always map to the 
 </details>
 
 <details>
+<summary>seccomp_profile</summary><blockquote>
+
+    
+- [localhost_profile](#localhost_profile)
+- [type](#type)*
+
+    
+</details>
+
+<details>
 <summary>selinux_options</summary><blockquote>
 
     
@@ -754,6 +847,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1068,6 +1162,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1135,6 +1230,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1215,6 +1311,16 @@ The StatefulSet guarantees that a given network identity will always map to the 
 </details>
 
 <details>
+<summary>seccomp_profile</summary><blockquote>
+
+    
+- [localhost_profile](#localhost_profile)
+- [type](#type)*
+
+    
+</details>
+
+<details>
 <summary>selinux_options</summary><blockquote>
 
     
@@ -1247,6 +1353,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1559,6 +1666,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1626,6 +1734,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1706,6 +1815,16 @@ The StatefulSet guarantees that a given network identity will always map to the 
 </details>
 
 <details>
+<summary>seccomp_profile</summary><blockquote>
+
+    
+- [localhost_profile](#localhost_profile)
+- [type](#type)*
+
+    
+</details>
+
+<details>
 <summary>selinux_options</summary><blockquote>
 
     
@@ -1738,6 +1857,7 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [initial_delay_seconds](#initial_delay_seconds)
 - [period_seconds](#period_seconds)
 - [success_threshold](#success_threshold)
+- [termination_grace_period_seconds](#termination_grace_period_seconds)
 - [timeout_seconds](#timeout_seconds)
 
     
@@ -1831,6 +1951,16 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [supplemental_groups](#supplemental_groups)
 
     
+<details>
+<summary>seccomp_profile</summary><blockquote>
+
+    
+- [localhost_profile](#localhost_profile)
+- [type](#type)*
+
+    
+</details>
+
 <details>
 <summary>selinux_options</summary><blockquote>
 
@@ -2087,6 +2217,93 @@ The StatefulSet guarantees that a given network identity will always map to the 
 - [size_limit](#size_limit)
 
     
+</details>
+
+<details>
+<summary>ephemeral</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>volume_claim_template</summary><blockquote>
+
+    
+
+    
+<details>
+<summary>metadata</summary><blockquote>
+
+    
+- [annotations](#annotations)
+- [creation_timestamp](#creation_timestamp)
+- [deletion_grace_period_seconds](#deletion_grace_period_seconds)
+- [deletion_timestamp](#deletion_timestamp)
+- [labels](#labels)
+- [name](#name)
+- [namespace](#namespace)
+- [resource_version](#resource_version)
+- [self_link](#self_link)
+- [uid](#uid)
+
+    
+</details>
+
+<details>
+<summary>spec</summary><blockquote>
+
+    
+- [access_modes](#access_modes)
+- [storage_class_name](#storage_class_name)
+- [volume_mode](#volume_mode)
+- [volume_name](#volume_name)
+
+    
+<details>
+<summary>data_source</summary><blockquote>
+
+    
+- [api_group](#api_group)
+- [kind](#kind)*
+- [name](#name)*
+
+    
+</details>
+
+<details>
+<summary>resources</summary><blockquote>
+
+    
+- [limits](#limits)
+- [requests](#requests)
+
+    
+</details>
+
+<details>
+<summary>selector</summary><blockquote>
+
+    
+- [match_labels](#match_labels)
+
+    
+<details>
+<summary>match_expressions</summary><blockquote>
+
+    
+- [key](#key)*
+- [operator](#operator)*
+- [values](#values)
+
+    
+</details>
+
+</details>
+
+</details>
+
+</details>
+
 </details>
 
 <details>
@@ -2705,6 +2922,16 @@ resource "k8s_apps_v1_stateful_set" "this" {
                   }
                   match_labels = { "key" = "TypeString" }
                 }
+
+                namespace_selector {
+
+                  match_expressions {
+                    key      = "TypeString*"
+                    operator = "TypeString*"
+                    values   = ["TypeString"]
+                  }
+                  match_labels = { "key" = "TypeString" }
+                }
                 namespaces   = ["TypeString"]
                 topology_key = "TypeString*"
               }
@@ -2714,6 +2941,16 @@ resource "k8s_apps_v1_stateful_set" "this" {
             required_during_scheduling_ignored_during_execution {
 
               label_selector {
+
+                match_expressions {
+                  key      = "TypeString*"
+                  operator = "TypeString*"
+                  values   = ["TypeString"]
+                }
+                match_labels = { "key" = "TypeString" }
+              }
+
+              namespace_selector {
 
                 match_expressions {
                   key      = "TypeString*"
@@ -2742,6 +2979,16 @@ resource "k8s_apps_v1_stateful_set" "this" {
                   }
                   match_labels = { "key" = "TypeString" }
                 }
+
+                namespace_selector {
+
+                  match_expressions {
+                    key      = "TypeString*"
+                    operator = "TypeString*"
+                    values   = ["TypeString"]
+                  }
+                  match_labels = { "key" = "TypeString" }
+                }
                 namespaces   = ["TypeString"]
                 topology_key = "TypeString*"
               }
@@ -2751,6 +2998,16 @@ resource "k8s_apps_v1_stateful_set" "this" {
             required_during_scheduling_ignored_during_execution {
 
               label_selector {
+
+                match_expressions {
+                  key      = "TypeString*"
+                  operator = "TypeString*"
+                  values   = ["TypeString"]
+                }
+                match_labels = { "key" = "TypeString" }
+              }
+
+              namespace_selector {
 
                 match_expressions {
                   key      = "TypeString*"
@@ -2894,7 +3151,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           name = "TypeString*"
 
@@ -2932,7 +3190,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
 
           resources {
@@ -2953,6 +3212,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
             run_asgroup               = "TypeInt"
             run_asnon_root            = "TypeString"
             run_asuser                = "TypeInt"
+
+            seccomp_profile {
+              localhost_profile = "TypeString"
+              type              = "TypeString*"
+            }
 
             selinux_options {
               level = "TypeString"
@@ -2994,7 +3258,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -3158,7 +3423,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           name = "TypeString*"
 
@@ -3196,7 +3462,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
 
           resources {
@@ -3217,6 +3484,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
             run_asgroup               = "TypeInt"
             run_asnon_root            = "TypeString"
             run_asuser                = "TypeInt"
+
+            seccomp_profile {
+              localhost_profile = "TypeString"
+              type              = "TypeString*"
+            }
 
             selinux_options {
               level = "TypeString"
@@ -3258,7 +3530,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -3424,7 +3697,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           name = "TypeString*"
 
@@ -3462,7 +3736,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
 
           resources {
@@ -3483,6 +3758,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
             run_asgroup               = "TypeInt"
             run_asnon_root            = "TypeString"
             run_asuser                = "TypeInt"
+
+            seccomp_profile {
+              localhost_profile = "TypeString"
+              type              = "TypeString*"
+            }
 
             selinux_options {
               level = "TypeString"
@@ -3524,7 +3804,8 @@ resource "k8s_apps_v1_stateful_set" "this" {
               host = "TypeString"
               port = "TypeString*"
             }
-            timeout_seconds = "TypeInt"
+            termination_grace_period_seconds = "TypeInt"
+            timeout_seconds                  = "TypeInt"
           }
           stdin                      = "TypeString"
           stdin_once                 = "TypeString"
@@ -3568,6 +3849,11 @@ resource "k8s_apps_v1_stateful_set" "this" {
           run_asnon_root        = "TypeString"
           run_asuser            = "TypeInt"
 
+          seccomp_profile {
+            localhost_profile = "TypeString"
+            type              = "TypeString*"
+          }
+
           selinux_options {
             level = "TypeString"
             role  = "TypeString"
@@ -3589,6 +3875,7 @@ resource "k8s_apps_v1_stateful_set" "this" {
         }
         service_account                  = "TypeString"
         service_account_name             = "TypeString"
+        set_hostname_asfqdn              = "TypeString"
         share_process_namespace          = "TypeString"
         subdomain                        = "TypeString"
         termination_grace_period_seconds = "TypeInt"
@@ -3709,6 +3996,47 @@ resource "k8s_apps_v1_stateful_set" "this" {
           empty_dir {
             medium     = "TypeString"
             size_limit = "TypeString"
+          }
+
+          ephemeral {
+
+            volume_claim_template {
+
+              metadata {
+                annotations = { "key" = "TypeString" }
+                labels      = { "key" = "TypeString" }
+                name        = "TypeString"
+                namespace   = "TypeString"
+              }
+
+              spec {
+                access_modes = ["TypeString"]
+
+                data_source {
+                  api_group = "TypeString"
+                  kind      = "TypeString*"
+                  name      = "TypeString*"
+                }
+
+                resources {
+                  limits   = { "key" = "TypeString" }
+                  requests = { "key" = "TypeString" }
+                }
+
+                selector {
+
+                  match_expressions {
+                    key      = "TypeString*"
+                    operator = "TypeString*"
+                    values   = ["TypeString"]
+                  }
+                  match_labels = { "key" = "TypeString" }
+                }
+                storage_class_name = "TypeString"
+                volume_mode        = "TypeString"
+                volume_name        = "TypeString"
+              }
+            }
           }
 
           fc {
@@ -4024,7 +4352,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -4151,7 +4479,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -4345,11 +4673,41 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+## namespace_selector
+
+A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 #### namespaces
 
 ######  TypeList
 
-namespaces specifies which namespaces the labelSelector applies to (matches against); null or empty list means "this pod's namespace"
+namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means "this pod's namespace"
 #### topology_key
 
 ###### Required •  TypeString
@@ -4395,11 +4753,41 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+## namespace_selector
+
+A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 #### namespaces
 
 ######  TypeList
 
-namespaces specifies which namespaces the labelSelector applies to (matches against); null or empty list means "this pod's namespace"
+namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means "this pod's namespace"
 #### topology_key
 
 ###### Required •  TypeString
@@ -4450,11 +4838,41 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+## namespace_selector
+
+A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 #### namespaces
 
 ######  TypeList
 
-namespaces specifies which namespaces the labelSelector applies to (matches against); null or empty list means "this pod's namespace"
+namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means "this pod's namespace"
 #### topology_key
 
 ###### Required •  TypeString
@@ -4500,11 +4918,41 @@ values is an array of string values. If the operator is In or NotIn, the values 
 ######  TypeMap
 
 matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+## namespace_selector
+
+A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 #### namespaces
 
 ######  TypeList
 
-namespaces specifies which namespaces the labelSelector applies to (matches against); null or empty list means "this pod's namespace"
+namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means "this pod's namespace"
 #### topology_key
 
 ###### Required •  TypeString
@@ -4572,7 +5020,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
+Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -4910,6 +5358,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -5040,6 +5493,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -5047,19 +5505,19 @@ Number or name of the port to access on the container. Number must be in the ran
 Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 ## resources
 
-Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 
     
 #### limits
 
 ######  TypeMap
 
-Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 #### requests
 
 ######  TypeMap
 
-Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 ## security_context
 
 Security options the pod should run with. More info: https://kubernetes.io/docs/concepts/policy/security-context/ More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -5115,6 +5573,23 @@ Indicates that the container must run as a non-root user. If true, the Kubelet w
 ######  TypeInt
 
 The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+## seccomp_profile
+
+The seccomp options to use by this container. If seccomp options are provided at both the pod & container level, the container options override the pod options.
+
+    
+#### localhost_profile
+
+######  TypeString
+
+localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is "Localhost".
+#### type
+
+###### Required •  TypeString
+
+type indicates which kind of seccomp profile will be applied. Valid options are:
+
+Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
 ## selinux_options
 
 The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
@@ -5162,7 +5637,7 @@ GMSACredentialSpecName is the name of the GMSA credential spec to use.
 The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 ## startup_probe
 
-StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is a beta feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 
     
 ## exec
@@ -5250,6 +5725,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -5432,7 +5912,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
+Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -5770,6 +6250,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -5900,6 +6385,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -5914,12 +6404,12 @@ Resources are not allowed for ephemeral containers. Ephemeral containers use spa
 
 ######  TypeMap
 
-Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 #### requests
 
 ######  TypeMap
 
-Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 ## security_context
 
 SecurityContext is not allowed for ephemeral containers.
@@ -5975,6 +6465,23 @@ Indicates that the container must run as a non-root user. If true, the Kubelet w
 ######  TypeInt
 
 The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+## seccomp_profile
+
+The seccomp options to use by this container. If seccomp options are provided at both the pod & container level, the container options override the pod options.
+
+    
+#### localhost_profile
+
+######  TypeString
+
+localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is "Localhost".
+#### type
+
+###### Required •  TypeString
+
+type indicates which kind of seccomp profile will be applied. Valid options are:
+
+Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
 ## selinux_options
 
 The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
@@ -6110,6 +6617,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -6302,7 +6814,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its key must be defined
 ## field_ref
 
-Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
+Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
 
     
 #### api_version
@@ -6640,6 +7152,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -6770,6 +7287,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -6777,19 +7299,19 @@ Number or name of the port to access on the container. Number must be in the ran
 Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 ## resources
 
-Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 
     
 #### limits
 
 ######  TypeMap
 
-Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 #### requests
 
 ######  TypeMap
 
-Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 ## security_context
 
 Security options the pod should run with. More info: https://kubernetes.io/docs/concepts/policy/security-context/ More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -6845,6 +7367,23 @@ Indicates that the container must run as a non-root user. If true, the Kubelet w
 ######  TypeInt
 
 The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+## seccomp_profile
+
+The seccomp options to use by this container. If seccomp options are provided at both the pod & container level, the container options override the pod options.
+
+    
+#### localhost_profile
+
+######  TypeString
+
+localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is "Localhost".
+#### type
+
+###### Required •  TypeString
+
+type indicates which kind of seccomp profile will be applied. Valid options are:
+
+Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
 ## selinux_options
 
 The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
@@ -6892,7 +7431,7 @@ GMSACredentialSpecName is the name of the GMSA credential spec to use.
 The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
 ## startup_probe
 
-StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. This is a beta feature enabled by the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 
     
 ## exec
@@ -6980,6 +7519,11 @@ Optional: Host name to connect to, defaults to the pod IP.
 ###### Required •  TypeString
 
 Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
+#### termination_grace_period_seconds
+
+######  TypeInt
+
+Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
 #### timeout_seconds
 
 ######  TypeInt
@@ -7084,7 +7628,7 @@ Overhead represents the resource overhead associated with running a pod for a gi
 
 ######  TypeString
 
-PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is alpha-level and is only honored by servers that enable the NonPreemptingPriority feature.
+PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is beta-level, gated by the NonPreemptingPriority feature-gate.
 #### priority
 
 ######  TypeInt
@@ -7138,7 +7682,7 @@ If unset, the Kubelet will not modify the ownership and permissions of any volum
 
 ######  TypeString
 
-fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are "OnRootMismatch" and "Always". If not specified defaults to "Always".
+fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are "OnRootMismatch" and "Always". If not specified, "Always" is used.
 #### run_asgroup
 
 ######  TypeInt
@@ -7154,6 +7698,23 @@ Indicates that the container must run as a non-root user. If true, the Kubelet w
 ######  TypeInt
 
 The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container.
+## seccomp_profile
+
+The seccomp options to use by the containers in this pod.
+
+    
+#### localhost_profile
+
+######  TypeString
+
+localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is "Localhost".
+#### type
+
+###### Required •  TypeString
+
+type indicates which kind of seccomp profile will be applied. Valid options are:
+
+Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
 ## selinux_options
 
 The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container.
@@ -7229,6 +7790,11 @@ DeprecatedServiceAccount is a depreciated alias for ServiceAccountName. Deprecat
 ######  TypeString
 
 ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+#### set_hostname_asfqdn
+
+######  TypeString
+
+If true the pod's hostname will be configured as the pod's FQDN, rather than the leaf name (the default). In Linux containers, this means setting the FQDN in the hostname field of the kernel (the nodename field of struct utsname). In Windows containers, this means setting the registry value of hostname for the registry key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters to FQDN. If a pod does not have FQDN, this has no effect. Default to false.
 #### share_process_namespace
 
 ######  TypeString
@@ -7243,7 +7809,7 @@ If specified, the fully qualified Pod hostname will be "<hostname>.<subdomain>.<
 
 ######  TypeInt
 
-Optional duration in seconds the pod needs to terminate gracefully. May be decreased in delete request. Value must be non-negative integer. The value zero indicates delete immediately. If this value is nil, the default grace period will be used instead. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. Defaults to 30 seconds.
+Optional duration in seconds the pod needs to terminate gracefully. May be decreased in delete request. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). If this value is nil, the default grace period will be used instead. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. Defaults to 30 seconds.
 ## tolerations
 
 If specified, the pod's tolerations.
@@ -7276,7 +7842,7 @@ TolerationSeconds represents the period of time the toleration (which must be of
 Value is the taint value the toleration matches to. If the operator is Exists, the value should be empty, otherwise just a regular string.
 ## topology_spread_constraints
 
-TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. This field is only honored by clusters that enable the EvenPodsSpread feature. All topologySpreadConstraints are ANDed.
+TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. All topologySpreadConstraints are ANDed.
 
     
 ## label_selector
@@ -7313,7 +7879,7 @@ matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabe
 
 ###### Required •  TypeInt
 
-MaxSkew describes the degree to which pods may be unevenly distributed. It's the maximum permitted difference between the number of matching pods in any two topology domains of a given topology type. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       | - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1; scheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2) violate MaxSkew(1). - if MaxSkew is 2, incoming pod can be scheduled onto any zone. It's a required field. Default value is 1 and 0 is not allowed.
+MaxSkew describes the degree to which pods may be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`, it is the maximum permitted difference between the number of matching pods in the target topology and the global minimum. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       | - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1; scheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2) violate MaxSkew(1). - if MaxSkew is 2, incoming pod can be scheduled onto any zone. When `whenUnsatisfiable=ScheduleAnyway`, it is used to give higher precedence to topologies that satisfy it. It's a required field. Default value is 1 and 0 is not allowed.
 #### topology_key
 
 ###### Required •  TypeString
@@ -7323,7 +7889,10 @@ TopologyKey is the key of node labels. Nodes that have a label with this key and
 
 ###### Required •  TypeString
 
-WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy the spread constraint. - DoNotSchedule (default) tells the scheduler not to schedule it - ScheduleAnyway tells the scheduler to still schedule it It's considered as "Unsatisfiable" if and only if placing incoming pod on any topology violates "MaxSkew". For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   | If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler won't make it *more* imbalanced. It's a required field.
+WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy the spread constraint. - DoNotSchedule (default) tells the scheduler not to schedule it. - ScheduleAnyway tells the scheduler to schedule the pod in any location,
+  but giving higher precedence to topologies that would help reduce the
+  skew.
+A constraint is considered "Unsatisfiable" for an incoming pod if and only if every possible node assigment for that pod would violate "MaxSkew" on some topology. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   | If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler won't make it *more* imbalanced. It's a required field.
 ## volumes
 
 List of volumes that can be mounted by containers belonging to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes
@@ -7488,7 +8057,7 @@ ConfigMap represents a configMap that should populate this volume
 
 ######  TypeInt
 
-Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 ## items
 
 If unspecified, each key-value pair in the Data field of the referenced ConfigMap will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the ConfigMap, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
@@ -7503,7 +8072,7 @@ The key to project.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -7521,7 +8090,7 @@ Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/wo
 Specify whether the ConfigMap or its keys must be defined
 ## csi
 
-CSI (Container Storage Interface) represents storage that is handled by an external CSI driver (Alpha feature).
+CSI (Container Storage Interface) represents ephemeral storage that is handled by certain external CSI drivers (Beta feature).
 
     
 #### driver
@@ -7563,7 +8132,7 @@ DownwardAPI represents downward API about the pod that should populate this volu
 
 ######  TypeInt
 
-Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits to use on created files by default. Must be a Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 ## items
 
 Items is a list of downward API volume file
@@ -7588,7 +8157,7 @@ Path of the field to select in the specified API version.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file, must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -7629,6 +8198,194 @@ What type of storage medium should back this directory. The default is "" which 
 ######  TypeString
 
 Total amount of local storage required for this EmptyDir volume. The size limit is also applicable for memory medium. The maximum usage on memory medium EmptyDir would be the minimum value between the SizeLimit specified here and the sum of memory limits of all containers in a pod. The default is nil which means that the limit is undefined. More info: http://kubernetes.io/docs/user-guide/volumes#emptydir
+## ephemeral
+
+Ephemeral represents a volume that is handled by a cluster storage driver. The volume's lifecycle is tied to the pod that defines it - it will be created before the pod starts, and deleted when the pod is removed.
+
+Use this if: a) the volume is only needed while the pod runs, b) features of normal volumes like restoring from snapshot or capacity
+   tracking are needed,
+c) the storage driver is specified through a storage class, and d) the storage driver supports dynamic volume provisioning through
+   a PersistentVolumeClaim (see EphemeralVolumeSource for more
+   information on the connection between this volume type
+   and PersistentVolumeClaim).
+
+Use PersistentVolumeClaim or one of the vendor-specific APIs for volumes that persist for longer than the lifecycle of an individual pod.
+
+Use CSI for light-weight local ephemeral volumes if the CSI driver is meant to be used that way - see the documentation of the driver for more information.
+
+A pod can use both types of ephemeral volumes and persistent volumes at the same time.
+
+This is a beta feature and only available when the GenericEphemeralVolume feature gate is enabled.
+
+    
+## volume_claim_template
+
+Will be used to create a stand-alone PVC to provision the volume. The pod in which this EphemeralVolumeSource is embedded will be the owner of the PVC, i.e. the PVC will be deleted together with the pod.  The name of the PVC will be `<pod name>-<volume name>` where `<volume name>` is the name from the `PodSpec.Volumes` array entry. Pod validation will reject the pod if the concatenated name is not valid for a PVC (for example, too long).
+
+An existing PVC with that name that is not owned by the pod will *not* be used for the pod to avoid using an unrelated volume by mistake. Starting the pod is then blocked until the unrelated PVC is removed. If such a pre-created PVC is meant to be used by the pod, the PVC has to updated with an owner reference to the pod once the pod exists. Normally this should not be necessary, but it may be useful when manually reconstructing a broken cluster.
+
+This field is read-only and no changes will be made by Kubernetes to the PVC after it has been created.
+
+Required, must not be nil.
+
+    
+## metadata
+
+May contain labels and annotations that will be copied into the PVC when creating it. No other fields are allowed and will be rejected during validation.
+
+    
+#### annotations
+
+######  TypeMap
+
+Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations
+#### creation_timestamp
+
+######  ReadOnly • TypeString
+
+CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+
+Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+#### deletion_grace_period_seconds
+
+######  ReadOnly • TypeInt
+
+Number of seconds allowed for this object to gracefully terminate before it will be removed from the system. Only set when deletionTimestamp is also set. May only be shortened. Read-only.
+#### deletion_timestamp
+
+######  ReadOnly • TypeString
+
+DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.
+
+Populated by the system when a graceful deletion is requested. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+#### labels
+
+######  TypeMap
+
+Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
+#### name
+
+######  TypeString
+
+Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names
+#### namespace
+
+######  TypeString
+
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+
+Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+#### resource_version
+
+######  ReadOnly • TypeString
+
+An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+#### self_link
+
+######  ReadOnly • TypeString
+
+SelfLink is a URL representing this object. Populated by the system. Read-only.
+
+DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the field is planned to be removed in 1.21 release.
+#### uid
+
+######  ReadOnly • TypeString
+
+UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
+
+Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+## spec
+
+The specification for the PersistentVolumeClaim. The entire content is copied unchanged into the PVC that gets created from this template. The same fields as in a PersistentVolumeClaim are also valid here.
+
+    
+#### access_modes
+
+######  TypeList
+
+AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+## data_source
+
+This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.
+
+    
+#### api_group
+
+######  TypeString
+
+APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+#### kind
+
+###### Required •  TypeString
+
+Kind is the type of resource being referenced
+#### name
+
+###### Required •  TypeString
+
+Name is the name of resource being referenced
+## resources
+
+Resources represents the minimum resources the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources
+
+    
+#### limits
+
+######  TypeMap
+
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+#### requests
+
+######  TypeMap
+
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+## selector
+
+A label query over volumes to consider for binding.
+
+    
+## match_expressions
+
+matchExpressions is a list of label selector requirements. The requirements are ANDed.
+
+    
+#### key
+
+###### Required •  TypeString
+
+key is the label key that the selector applies to.
+#### operator
+
+###### Required •  TypeString
+
+operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+#### values
+
+######  TypeList
+
+values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+#### match_labels
+
+######  TypeMap
+
+matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+#### storage_class_name
+
+######  TypeString
+
+Name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
+#### volume_mode
+
+######  TypeString
+
+volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec.
+#### volume_name
+
+######  TypeString
+
+VolumeName is the binding reference to the PersistentVolume backing this claim.
 ## fc
 
 FC represents a Fibre Channel resource that is attached to a kubelet's host machine and then exposed to the pod.
@@ -7938,7 +8695,7 @@ Items for all in one resources secrets, configmaps, and downward API
 
 ######  TypeInt
 
-Mode bits to use on created files by default. Must be a value between 0 and 0777. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 ## sources
 
 list of volume projections
@@ -7963,7 +8720,7 @@ The key to project.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -8008,7 +8765,7 @@ Path of the field to select in the specified API version.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file, must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -8053,7 +8810,7 @@ The key to project.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -8243,7 +9000,7 @@ Secret represents a secret that should populate this volume. More info: https://
 
 ######  TypeInt
 
-Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 ## items
 
 If unspecified, each key-value pair in the Data field of the referenced Secret will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the Secret, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
@@ -8258,7 +9015,7 @@ The key to project.
 
 ######  TypeInt
 
-Optional: mode bits to use on this file, must be a value between 0 and 0777. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
 #### path
 
 ###### Required •  TypeString
@@ -8412,7 +9169,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -8448,7 +9205,7 @@ Spec defines the desired characteristics of a volume requested by a pod author. 
 AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
 ## data_source
 
-This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot - Beta) * An existing PVC (PersistentVolumeClaim) * An existing custom resource/object that implements data population (Alpha) In order to use VolumeSnapshot object types, the appropriate feature gate must be enabled (VolumeSnapshotDataSource or AnyVolumeDataSource) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the specified data source is not supported, the volume will not be created and the failure will be reported as an event. In the future, we plan to support more data source types and the behavior of the provisioner may change.
+This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.
 
     
 #### api_group
@@ -8475,12 +9232,12 @@ Resources represents the minimum resources the volume should have. More info: ht
 
 ######  TypeMap
 
-Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 #### requests
 
 ######  TypeMap
 
-Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 ## selector
 
 A label query over volumes to consider for binding.

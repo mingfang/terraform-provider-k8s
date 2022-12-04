@@ -1,7 +1,7 @@
 
-# resource "k8s_auditregistration_k8s_io_v1alpha1_audit_sink"
+# resource "k8s_autoscaling_k8s_io_v1_vertical_pod_autoscaler_checkpoint"
 
-AuditSink represents a cluster level audit sink
+VerticalPodAutoscalerCheckpoint is the checkpoint of the internal state of VPA that is used for recovery after recommender's restart.
 
   
 <details>
@@ -26,58 +26,10 @@ AuditSink represents a cluster level audit sink
 <summary>spec</summary><blockquote>
 
     
+- [container_name](#container_name)
+- [vpa_object_name](#vpa_object_name)
 
     
-<details>
-<summary>policy</summary><blockquote>
-
-    
-- [level](#level)*
-- [stages](#stages)
-
-    
-</details>
-
-<details>
-<summary>webhook</summary><blockquote>
-
-    
-
-    
-<details>
-<summary>client_config</summary><blockquote>
-
-    
-- [cabundle](#cabundle)
-- [url](#url)
-
-    
-<details>
-<summary>service</summary><blockquote>
-
-    
-- [name](#name)*
-- [namespace](#namespace)*
-- [path](#path)
-- [port](#port)
-
-    
-</details>
-
-</details>
-
-<details>
-<summary>throttle</summary><blockquote>
-
-    
-- [burst](#burst)
-- [qps](#qps)
-
-    
-</details>
-
-</details>
-
 </details>
 
 
@@ -85,7 +37,7 @@ AuditSink represents a cluster level audit sink
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_auditregistration_k8s_io_v1alpha1_audit_sink" "this" {
+resource "k8s_autoscaling_k8s_io_v1_vertical_pod_autoscaler_checkpoint" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -95,31 +47,8 @@ resource "k8s_auditregistration_k8s_io_v1alpha1_audit_sink" "this" {
   }
 
   spec {
-
-    policy {
-      level  = "TypeString*"
-      stages = ["TypeString"]
-    }
-
-    webhook {
-
-      client_config {
-        cabundle = "TypeString"
-
-        service {
-          name      = "TypeString*"
-          namespace = "TypeString*"
-          path      = "TypeString"
-          port      = "TypeInt"
-        }
-        url = "TypeString"
-      }
-
-      throttle {
-        burst = "TypeInt"
-        qps   = "TypeInt"
-      }
-    }
+    container_name  = "TypeString"
+    vpa_object_name = "TypeString"
   }
 }
 
@@ -131,7 +60,7 @@ resource "k8s_auditregistration_k8s_io_v1alpha1_audit_sink" "this" {
   
 ## metadata
 
-
+Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 
     
 #### annotations
@@ -172,7 +101,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -198,93 +127,16 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-Spec defines the audit configuration spec
+Specification of the checkpoint. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
 
     
-## policy
-
-Policy defines the policy for selecting which events should be sent to the webhook required
-
-    
-#### level
-
-###### Required •  TypeString
-
-The Level that all requests are recorded at. available options: None, Metadata, Request, RequestResponse required
-#### stages
-
-######  TypeList
-
-Stages is a list of stages for which events are created.
-## webhook
-
-Webhook to send events required
-
-    
-## client_config
-
-ClientConfig holds the connection parameters for the webhook required
-
-    
-#### cabundle
+#### container_name
 
 ######  TypeString
 
-`caBundle` is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on the apiserver are used.
-## service
-
-`service` is a reference to the service for this webhook. Either `service` or `url` must be specified.
-
-If the webhook is running within the cluster, then you should use `service`.
-
-    
-#### name
-
-###### Required •  TypeString
-
-`name` is the name of the service. Required
-#### namespace
-
-###### Required •  TypeString
-
-`namespace` is the namespace of the service. Required
-#### path
+Name of the checkpointed container.
+#### vpa_object_name
 
 ######  TypeString
 
-`path` is an optional URL path which will be sent in any request to this service.
-#### port
-
-######  TypeInt
-
-If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
-#### url
-
-######  TypeString
-
-`url` gives the location of the webhook, in standard URL form (`scheme://host:port/path`). Exactly one of `url` or `service` must be specified.
-
-The `host` should not refer to a service running in the cluster; use the `service` field instead. The host might be resolved via external DNS in some apiservers (e.g., `kube-apiserver` cannot resolve in-cluster DNS as that would be a layering violation). `host` may also be an IP address.
-
-Please note that using `localhost` or `127.0.0.1` as a `host` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster.
-
-The scheme must be "https"; the URL must begin with "https://".
-
-A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier.
-
-Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either.
-## throttle
-
-Throttle holds the options for throttling the webhook
-
-    
-#### burst
-
-######  TypeInt
-
-ThrottleBurst is the maximum number of events sent at the same moment default 15 QPS
-#### qps
-
-######  TypeInt
-
-ThrottleQPS maximum number of batches per second default 10 QPS
+Name of the VPA object that stored VerticalPodAutoscalerCheckpoint object.

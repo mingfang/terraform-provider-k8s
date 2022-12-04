@@ -36,6 +36,8 @@ IngressClass represents the class of the Ingress, referenced by the Ingress Spec
 - [api_group](#api_group)
 - [kind](#kind)*
 - [name](#name)*
+- [namespace](#namespace)
+- [scope](#scope)
 
     
 </details>
@@ -63,6 +65,8 @@ resource "k8s_networking_k8s_io_v1beta1_ingress_class" "this" {
       api_group = "TypeString"
       kind      = "TypeString*"
       name      = "TypeString*"
+      namespace = "TypeString"
+      scope     = "TypeString"
     }
   }
 }
@@ -116,7 +120,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -164,9 +168,19 @@ APIGroup is the group for the resource being referenced. If APIGroup is not spec
 
 ###### Required •  TypeString
 
-Kind is the type of resource being referenced
+Kind is the type of resource being referenced.
 #### name
 
 ###### Required •  TypeString
 
-Name is the name of resource being referenced
+Name is the name of resource being referenced.
+#### namespace
+
+######  TypeString
+
+Namespace is the namespace of the resource being referenced. This field is required when scope is set to "Namespace" and must be unset when scope is set to "Cluster".
+#### scope
+
+######  TypeString
+
+Scope represents if this refers to a cluster or namespace scoped resource. This may be set to "Cluster" (default) or "Namespace". Field can be enabled with IngressClassNamespacedParams feature gate.

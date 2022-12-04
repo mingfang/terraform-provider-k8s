@@ -1,5 +1,5 @@
 
-# resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_flow_schema"
+# resource "k8s_flowcontrol_apiserver_k8s_io_v1beta1_flow_schema"
 
 FlowSchema defines the schema of a group of flows. Note that a flow is made up of a set of inbound API requests with similar attributes and is identified by a pair of strings: the name of the FlowSchema and a "flow distinguisher".
 
@@ -122,7 +122,7 @@ FlowSchema defines the schema of a group of flows. Note that a flow is made up o
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_flow_schema" "this" {
+resource "k8s_flowcontrol_apiserver_k8s_io_v1beta1_flow_schema" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -185,7 +185,7 @@ resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_flow_schema" "this" {
   
 ## metadata
 
-`metadata` is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+`metadata` is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 
     
 #### annotations
@@ -226,7 +226,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -252,7 +252,7 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-`spec` is the specification of the desired behavior of a FlowSchema. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+`spec` is the specification of the desired behavior of a FlowSchema. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 
     
 ## distinguisher_method

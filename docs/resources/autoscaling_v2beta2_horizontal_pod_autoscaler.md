@@ -88,6 +88,28 @@ HorizontalPodAutoscaler is the configuration for a horizontal pod autoscaler, wh
 
     
 <details>
+<summary>container_resource</summary><blockquote>
+
+    
+- [container](#container)*
+- [name](#name)*
+
+    
+<details>
+<summary>target</summary><blockquote>
+
+    
+- [average_utilization](#average_utilization)
+- [average_value](#average_value)
+- [type](#type)*
+- [value](#value)
+
+    
+</details>
+
+</details>
+
+<details>
 <summary>external</summary><blockquote>
 
     
@@ -325,6 +347,18 @@ resource "k8s_autoscaling_v2beta2_horizontal_pod_autoscaler" "this" {
 
     metrics {
 
+      container_resource {
+        container = "TypeString*"
+        name      = "TypeString*"
+
+        target {
+          average_utilization = "TypeInt"
+          average_value       = "TypeString"
+          type                = "TypeString*"
+          value               = "TypeString"
+        }
+      }
+
       external {
 
         metric {
@@ -474,7 +508,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -591,6 +625,46 @@ maxReplicas is the upper limit for the number of replicas to which the autoscale
 metrics contains the specifications for which to use to calculate the desired replica count (the maximum replica count across all metrics will be used).  The desired replica count is calculated multiplying the ratio between the target value and the current value by the current number of pods.  Ergo, metrics used must decrease as the pod count is increased, and vice-versa.  See the individual metric source types for more information about how each type of metric must respond. If not set, the default metric will be set to 80% average CPU utilization.
 
     
+## container_resource
+
+container resource refers to a resource metric (such as those specified in requests and limits) known to Kubernetes describing a single container in each pod of the current scale target (e.g. CPU or memory). Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the "pods" source. This is an alpha feature and can be enabled by the HPAContainerMetrics feature flag.
+
+    
+#### container
+
+###### Required •  TypeString
+
+container is the name of the container in the pods of the scaling target
+#### name
+
+###### Required •  TypeString
+
+name is the name of the resource in question.
+## target
+
+target specifies the target value for the given metric
+
+    
+#### average_utilization
+
+######  TypeInt
+
+averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type
+#### average_value
+
+######  TypeString
+
+averageValue is the target value of the average of the metric across all relevant pods (as a quantity)
+#### type
+
+###### Required •  TypeString
+
+type represents whether the metric type is Utilization, Value, or AverageValue
+#### value
+
+######  TypeString
+
+value is the target value of the metric (as a quantity).
 ## external
 
 external refers to a global metric that is not associated with any Kubernetes object. It allows autoscaling based on information coming from components running outside of cluster (for example length of queue in cloud messaging service, or QPS from loadbalancer running outside of cluster).
@@ -860,7 +934,7 @@ value is the target value of the metric (as a quantity).
 
 ###### Required •  TypeString
 
-type is the type of metric source.  It should be one of "Object", "Pods" or "Resource", each mapping to a matching field in the object.
+type is the type of metric source.  It should be one of "ContainerResource", "External", "Object", "Pods" or "Resource", each mapping to a matching field in the object. Note: "ContainerResource" type is available on when the feature-gate HPAContainerMetrics is enabled
 #### min_replicas
 
 ######  TypeInt

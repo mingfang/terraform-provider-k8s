@@ -1,5 +1,5 @@
 
-# resource "k8s_networking_k8s_io_v1beta1_ingress"
+# resource "k8s_networking_k8s_io_v1_ingress"
 
 Ingress is a collection of rules that allow inbound connections to reach the endpoints defined by a backend. An Ingress can be configured to give services externally-reachable urls, load balance traffic, terminate SSL, offer name based virtual hosting etc.
 
@@ -30,11 +30,9 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 
     
 <details>
-<summary>backend</summary><blockquote>
+<summary>default_backend</summary><blockquote>
 
     
-- [service_name](#service_name)
-- [service_port](#service_port)
 
     
 <details>
@@ -46,6 +44,25 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 - [name](#name)*
 
     
+</details>
+
+<details>
+<summary>service</summary><blockquote>
+
+    
+- [name](#name)*
+
+    
+<details>
+<summary>port</summary><blockquote>
+
+    
+- [name](#name)
+- [number](#number)
+
+    
+</details>
+
 </details>
 
 </details>
@@ -75,8 +92,6 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 <summary>backend</summary><blockquote>
 
     
-- [service_name](#service_name)
-- [service_port](#service_port)
 
     
 <details>
@@ -88,6 +103,25 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 - [name](#name)*
 
     
+</details>
+
+<details>
+<summary>service</summary><blockquote>
+
+    
+- [name](#name)*
+
+    
+<details>
+<summary>port</summary><blockquote>
+
+    
+- [name](#name)
+- [number](#number)
+
+    
+</details>
+
 </details>
 
 </details>
@@ -115,7 +149,7 @@ Ingress is a collection of rules that allow inbound connections to reach the end
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
+resource "k8s_networking_k8s_io_v1_ingress" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -126,15 +160,22 @@ resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
 
   spec {
 
-    backend {
+    default_backend {
 
       resource {
         api_group = "TypeString"
         kind      = "TypeString*"
         name      = "TypeString*"
       }
-      service_name = "TypeString"
-      service_port = "TypeString"
+
+      service {
+        name = "TypeString*"
+
+        port {
+          name   = "TypeString"
+          number = "TypeInt"
+        }
+      }
     }
     ingress_class_name = "TypeString"
 
@@ -152,8 +193,15 @@ resource "k8s_networking_k8s_io_v1beta1_ingress" "this" {
               kind      = "TypeString*"
               name      = "TypeString*"
             }
-            service_name = "TypeString"
-            service_port = "TypeString"
+
+            service {
+              name = "TypeString*"
+
+              port {
+                name   = "TypeString"
+                number = "TypeInt"
+              }
+            }
           }
           path      = "TypeString"
           path_type = "TypeString"
@@ -246,14 +294,14 @@ Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-gu
 Spec is the desired state of the Ingress. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 
     
-## backend
+## default_backend
 
-A default backend capable of servicing requests that don't match any rule. At least one of 'backend' or 'rules' must be specified. This field is optional to allow the loadbalancer controller or defaulting logic to specify a global default.
+DefaultBackend is the backend that should handle requests that don't match any rule. If Rules are not specified, DefaultBackend must be specified. If DefaultBackend is not set, the handling of requests that do not match any of the rules will be up to the Ingress controller.
 
     
 ## resource
 
-Resource is an ObjectRef to another Kubernetes resource in the namespace of the Ingress object. If resource is specified, serviceName and servicePort must not be specified.
+Resource is an ObjectRef to another Kubernetes resource in the namespace of the Ingress object. If resource is specified, a service.Name and service.Port must not be specified. This is a mutually exclusive setting with "Service".
 
     
 #### api_group
@@ -271,16 +319,31 @@ Kind is the type of resource being referenced
 ###### Required •  TypeString
 
 Name is the name of resource being referenced
-#### service_name
+## service
+
+Service references a Service as a Backend. This is a mutually exclusive setting with "Resource".
+
+    
+#### name
+
+###### Required •  TypeString
+
+Name is the referenced service. The service must exist in the same namespace as the Ingress object.
+## port
+
+Port of the referenced service. A port name or port number is required for a IngressServiceBackend.
+
+    
+#### name
 
 ######  TypeString
 
-Specifies the name of the referenced service.
-#### service_port
+Name is the name of the port on the Service. This is a mutually exclusive setting with "Number".
+#### number
 
-######  TypeString
+######  TypeInt
 
-Specifies the port of the referenced service.
+Number is the numerical port number (e.g. 80) on the Service. This is a mutually exclusive setting with "Name".
 #### ingress_class_name
 
 ######  TypeString
@@ -320,7 +383,7 @@ Backend defines the referenced service endpoint to which the traffic will be for
     
 ## resource
 
-Resource is an ObjectRef to another Kubernetes resource in the namespace of the Ingress object. If resource is specified, serviceName and servicePort must not be specified.
+Resource is an ObjectRef to another Kubernetes resource in the namespace of the Ingress object. If resource is specified, a service.Name and service.Port must not be specified. This is a mutually exclusive setting with "Service".
 
     
 #### api_group
@@ -338,16 +401,31 @@ Kind is the type of resource being referenced
 ###### Required •  TypeString
 
 Name is the name of resource being referenced
-#### service_name
+## service
+
+Service references a Service as a Backend. This is a mutually exclusive setting with "Resource".
+
+    
+#### name
+
+###### Required •  TypeString
+
+Name is the referenced service. The service must exist in the same namespace as the Ingress object.
+## port
+
+Port of the referenced service. A port name or port number is required for a IngressServiceBackend.
+
+    
+#### name
 
 ######  TypeString
 
-Specifies the name of the referenced service.
-#### service_port
+Name is the name of the port on the Service. This is a mutually exclusive setting with "Number".
+#### number
 
-######  TypeString
+######  TypeInt
 
-Specifies the port of the referenced service.
+Number is the numerical port number (e.g. 80) on the Service. This is a mutually exclusive setting with "Name".
 #### path
 
 ######  TypeString
@@ -367,7 +445,7 @@ PathType determines the interpretation of the Path matching. PathType can be one
 * ImplementationSpecific: Interpretation of the Path matching is up to
   the IngressClass. Implementations can treat this as a separate PathType
   or treat it identically to Prefix or Exact path types.
-Implementations are required to support all path types. Defaults to ImplementationSpecific.
+Implementations are required to support all path types.
 ## tls
 
 TLS configuration. Currently the Ingress only supports a single TLS port, 443. If multiple members of this list specify different hosts, they will be multiplexed on the same port according to the hostname specified through the SNI TLS extension, if the ingress controller fulfilling the ingress supports SNI.

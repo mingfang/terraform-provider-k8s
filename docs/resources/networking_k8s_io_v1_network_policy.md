@@ -39,6 +39,7 @@ NetworkPolicy describes what network traffic is allowed for a set of Pods
 <summary>ports</summary><blockquote>
 
     
+- [end_port](#end_port)
 - [port](#port)
 - [protocol](#protocol)
 
@@ -173,6 +174,7 @@ NetworkPolicy describes what network traffic is allowed for a set of Pods
 <summary>ports</summary><blockquote>
 
     
+- [end_port](#end_port)
 - [port](#port)
 - [protocol](#protocol)
 
@@ -222,6 +224,7 @@ resource "k8s_networking_k8s_io_v1_network_policy" "this" {
     egress {
 
       ports {
+        end_port = "TypeInt"
         port     = "TypeString"
         protocol = "TypeString"
       }
@@ -286,6 +289,7 @@ resource "k8s_networking_k8s_io_v1_network_policy" "this" {
       }
 
       ports {
+        end_port = "TypeInt"
         port     = "TypeString"
         protocol = "TypeString"
       }
@@ -353,7 +357,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -392,11 +396,16 @@ List of egress rules to be applied to the selected pods. Outgoing traffic is all
 List of destination ports for outgoing traffic. Each item in this list is combined using a logical OR. If this field is empty or missing, this rule matches all ports (traffic not restricted by port). If this field is present and contains at least one item, then this rule allows traffic only if the traffic matches at least one port in the list.
 
     
+#### end_port
+
+######  TypeInt
+
+If set, indicates that the range of ports from port to endPort, inclusive, should be allowed by the policy. This field cannot be defined if the port field is not defined or if the port field is defined as a named (string) port. The endPort must be equal or greater than port. This feature is in Alpha state and should be enabled using the Feature Gate "NetworkPolicyEndPort".
 #### port
 
 ######  TypeString
 
-The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers.
+The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched.
 #### protocol
 
 ######  TypeString
@@ -580,11 +589,16 @@ matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabe
 List of ports which should be made accessible on the pods selected for this rule. Each item in this list is combined using a logical OR. If this field is empty or missing, this rule matches all ports (traffic not restricted by port). If this field is present and contains at least one item, then this rule allows traffic only if the traffic matches at least one port in the list.
 
     
+#### end_port
+
+######  TypeInt
+
+If set, indicates that the range of ports from port to endPort, inclusive, should be allowed by the policy. This field cannot be defined if the port field is not defined or if the port field is defined as a named (string) port. The endPort must be equal or greater than port. This feature is in Alpha state and should be enabled using the Feature Gate "NetworkPolicyEndPort".
 #### port
 
 ######  TypeString
 
-The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers.
+The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched.
 #### protocol
 
 ######  TypeString
@@ -624,4 +638,4 @@ matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabe
 
 ######  TypeList
 
-List of rule types that the NetworkPolicy relates to. Valid options are "Ingress", "Egress", or "Ingress,Egress". If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8
+List of rule types that the NetworkPolicy relates to. Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8

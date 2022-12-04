@@ -1,7 +1,7 @@
 
-# resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration"
+# resource "k8s_autoscaling_k8s_io_v1beta2_vertical_pod_autoscaler"
 
-PriorityLevelConfiguration represents the configuration of a priority level.
+VerticalPodAutoscaler is the configuration for a vertical pod autoscaler, which automatically manages pod resources based on historical and real time resource utilization.
 
   
 <details>
@@ -26,36 +26,46 @@ PriorityLevelConfiguration represents the configuration of a priority level.
 <summary>spec</summary><blockquote>
 
     
-- [type](#type)*
 
     
 <details>
-<summary>limited</summary><blockquote>
+<summary>resource_policy</summary><blockquote>
 
     
-- [assured_concurrency_shares](#assured_concurrency_shares)
-
-    
-<details>
-<summary>limit_response</summary><blockquote>
-
-    
-- [type](#type)*
 
     
 <details>
-<summary>queuing</summary><blockquote>
+<summary>container_policies</summary><blockquote>
 
     
-- [hand_size](#hand_size)
-- [queue_length_limit](#queue_length_limit)
-- [queues](#queues)
+- [container_name](#container_name)
+- [max_allowed](#max_allowed)
+- [min_allowed](#min_allowed)
+- [mode](#mode)
 
     
 </details>
 
 </details>
 
+<details>
+<summary>target_ref</summary><blockquote>
+
+    
+- [api_version](#api_version)
+- [kind](#kind)*
+- [name](#name)*
+
+    
+</details>
+
+<details>
+<summary>update_policy</summary><blockquote>
+
+    
+- [update_mode](#update_mode)
+
+    
 </details>
 
 </details>
@@ -65,7 +75,7 @@ PriorityLevelConfiguration represents the configuration of a priority level.
 <summary>example</summary><blockquote>
 
 ```hcl
-resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration" "this" {
+resource "k8s_autoscaling_k8s_io_v1beta2_vertical_pod_autoscaler" "this" {
 
   metadata {
     annotations = { "key" = "TypeString" }
@@ -76,20 +86,25 @@ resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration
 
   spec {
 
-    limited {
-      assured_concurrency_shares = "TypeInt"
+    resource_policy {
 
-      limit_response {
-
-        queuing {
-          hand_size          = "TypeInt"
-          queue_length_limit = "TypeInt"
-          queues             = "TypeInt"
-        }
-        type = "TypeString*"
+      container_policies {
+        container_name = "TypeString"
+        max_allowed    = { "key" = "TypeString" }
+        min_allowed    = { "key" = "TypeString" }
+        mode           = "TypeString"
       }
     }
-    type = "TypeString*"
+
+    target_ref {
+      api_version = "TypeString"
+      kind        = "TypeString*"
+      name        = "TypeString*"
+    }
+
+    update_policy {
+      update_mode = "TypeString"
+    }
   }
 }
 
@@ -101,7 +116,7 @@ resource "k8s_flowcontrol_apiserver_k8s_io_v1alpha1_priority_level_configuration
   
 ## metadata
 
-`metadata` is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 
     
 #### annotations
@@ -142,7 +157,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -168,55 +183,66 @@ UID is the unique in time and space value for this object. It is typically gener
 Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
 ## spec
 
-`spec` is the specification of the desired behavior of a "request-priority". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
 
     
-## limited
+## resource_policy
 
-`limited` specifies how requests are handled for a Limited priority level. This field must be non-empty if and only if `type` is `"Limited"`.
-
-    
-#### assured_concurrency_shares
-
-######  TypeInt
-
-`assuredConcurrencyShares` (ACS) configures the execution limit, which is a limit on the number of requests of this priority level that may be exeucting at a given time.  ACS must be a positive number. The server's concurrency limit (SCL) is divided among the concurrency-controlled priority levels in proportion to their assured concurrency shares. This produces the assured concurrency value (ACV) --- the number of requests that may be executing at a time --- for each such priority level:
-
-            ACV(l) = ceil( SCL * ACS(l) / ( sum[priority levels k] ACS(k) ) )
-
-bigger numbers of ACS mean more reserved concurrent requests (at the expense of every other PL). This field has a default value of 30.
-## limit_response
-
-`limitResponse` indicates what to do with requests that can not be executed right now
+Controls how the autoscaler computes recommended resources. The resource policy may be used to set constraints on the recommendations for individual containers. If not specified, the autoscaler computes recommended resources for all containers in the pod, without additional constraints.
 
     
-## queuing
+## container_policies
 
-`queuing` holds the configuration parameters for queuing. This field may be non-empty only if `type` is `"Queue"`.
+Per-container resource policies.
 
     
-#### hand_size
+#### container_name
 
-######  TypeInt
+######  TypeString
 
-`handSize` is a small positive number that configures the shuffle sharding of requests into queues.  When enqueuing a request at this priority level the request's flow identifier (a string pair) is hashed and the hash value is used to shuffle the list of queues and deal a hand of the size specified here.  The request is put into one of the shortest queues in that hand. `handSize` must be no larger than `queues`, and should be significantly smaller (so that a few heavy flows do not saturate most of the queues).  See the user-facing documentation for more extensive guidance on setting this field.  This field has a default value of 8.
-#### queue_length_limit
+Name of the container or DefaultContainerResourcePolicy, in which case the policy is used by the containers that don't have their own policy specified.
+#### max_allowed
 
-######  TypeInt
+######  TypeMap
 
-`queueLengthLimit` is the maximum number of requests allowed to be waiting in a given queue of this priority level at a time; excess requests are rejected.  This value must be positive.  If not specified, it will be defaulted to 50.
-#### queues
+Specifies the maximum amount of resources that will be recommended for the container. The default is no maximum.
+#### min_allowed
 
-######  TypeInt
+######  TypeMap
 
-`queues` is the number of queues for this priority level. The queues exist independently at each apiserver. The value must be positive.  Setting it to 1 effectively precludes shufflesharding and thus makes the distinguisher method of associated flow schemas irrelevant.  This field has a default value of 64.
-#### type
+Specifies the minimal amount of resources that will be recommended for the container. The default is no minimum.
+#### mode
+
+######  TypeString
+
+Whether autoscaler is enabled for the container. The default is "Auto".
+## target_ref
+
+TargetRef points to the controller managing the set of pods for the autoscaler to control - e.g. Deployment, StatefulSet. VerticalPodAutoscaler can be targeted at controller implementing scale subresource (the pod set is retrieved from the controller's ScaleStatus) or some well known controllers (e.g. for DaemonSet the pod set is read from the controller's spec). If VerticalPodAutoscaler cannot use specified target it will report ConfigUnsupported condition. Note that VerticalPodAutoscaler does not require full implementation of scale subresource - it will not use it to modify the replica count. The only thing retrieved is a label selector matching pods grouped by the target resource.
+
+    
+#### api_version
+
+######  TypeString
+
+API version of the referent
+#### kind
 
 ###### Required •  TypeString
 
-`type` is "Queue" or "Reject". "Queue" means that requests that can not be executed upon arrival are held in a queue until they can be executed or a queuing limit is reached. "Reject" means that requests that can not be executed upon arrival are rejected. Required.
-#### type
+Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+#### name
 
 ###### Required •  TypeString
 
-`type` indicates whether this priority level is subject to limitation on request execution.  A value of `"Exempt"` means that requests of this priority level are not subject to a limit (and thus are never queued) and do not detract from the capacity made available to other priority levels.  A value of `"Limited"` means that (a) requests of this priority level _are_ subject to limits and (b) some of the server's limited capacity is made available exclusively to this priority level. Required.
+Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names
+## update_policy
+
+Describes the rules on how changes are applied to the pods. If not specified, all fields in the `PodUpdatePolicy` are set to their default values.
+
+    
+#### update_mode
+
+######  TypeString
+
+Controls when autoscaler applies changes to the pod resources. The default is 'Auto'.

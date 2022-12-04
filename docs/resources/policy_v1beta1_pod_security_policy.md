@@ -1,7 +1,7 @@
 
 # resource "k8s_policy_v1beta1_pod_security_policy"
 
-PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container.
+PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container. Deprecated in 1.21.
 
   
 <details>
@@ -340,7 +340,7 @@ Name must be unique within a namespace. Is required when creating resources, alt
 
 ######  TypeString
 
-Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
 
 Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
 #### resource_version
@@ -381,7 +381,7 @@ allowPrivilegeEscalation determines if a pod can request to allow privilege esca
 allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities.
 ## allowed_csi_drivers
 
-AllowedCSIDrivers is a whitelist of inline CSI drivers that must be explicitly set to be embedded within a pod spec. An empty value indicates that any CSI driver can be used for inline ephemeral volumes. This is an alpha field, and is only honored if the API server enables the CSIInlineVolume feature gate.
+AllowedCSIDrivers is an allowlist of inline CSI drivers that must be explicitly set to be embedded within a pod spec. An empty value indicates that any CSI driver can be used for inline ephemeral volumes. This is a beta field, and is only honored if the API server enables the CSIInlineVolume feature gate.
 
     
 #### name
@@ -391,7 +391,7 @@ AllowedCSIDrivers is a whitelist of inline CSI drivers that must be explicitly s
 Name is the registered name of the CSI driver
 ## allowed_flex_volumes
 
-allowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the "volumes" field.
+allowedFlexVolumes is an allowlist of Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the "volumes" field.
 
     
 #### driver
@@ -401,7 +401,7 @@ allowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicate
 driver is the name of the Flexvolume driver.
 ## allowed_host_paths
 
-allowedHostPaths is a white list of allowed host paths. Empty indicates that all host paths may be used.
+allowedHostPaths is an allowlist of host paths. Empty indicates that all host paths may be used.
 
     
 #### path_prefix
@@ -420,12 +420,12 @@ when set to true, will allow host volumes matching the pathPrefix only if all vo
 
 ######  TypeList
 
-AllowedProcMountTypes is a whitelist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled.
+AllowedProcMountTypes is an allowlist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled.
 #### allowed_unsafe_sysctls
 
 ######  TypeList
 
-allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to whitelist all allowed unsafe sysctls explicitly to avoid rejection.
+allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to allowlist all allowed unsafe sysctls explicitly to avoid rejection.
 
 Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc.
 #### default_add_capabilities
@@ -574,7 +574,7 @@ runtimeClass is the strategy that will dictate the allowable RuntimeClasses for 
 
 ###### Required •  TypeList
 
-allowedRuntimeClassNames is a whitelist of RuntimeClass names that may be specified on a pod. A value of "*" means that any RuntimeClass name is allowed, and must be the only item in the list. An empty list requires the RuntimeClassName field to be unset.
+allowedRuntimeClassNames is an allowlist of RuntimeClass names that may be specified on a pod. A value of "*" means that any RuntimeClass name is allowed, and must be the only item in the list. An empty list requires the RuntimeClassName field to be unset.
 #### default_runtime_class_name
 
 ######  TypeString
@@ -644,4 +644,4 @@ rule is the strategy that will dictate what supplemental groups is used in the S
 
 ######  TypeList
 
-volumes is a white list of allowed volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'.
+volumes is an allowlist of volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'.
