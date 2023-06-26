@@ -1,4 +1,4 @@
-FROM golang:1.12 as base
+FROM golang:1.16 as base
 RUN apt-get update
 RUN apt-get install -y vim unzip zip pgp ca-certificates libgnutls30
 
@@ -17,7 +17,7 @@ RUN wget -O - https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar
 RUN wget -O - https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz | tar zx -C /usr/local/bin --strip-components=1 linux-amd64/helm
 
 # goreleaser
-RUN wget -O - https://github.com/goreleaser/goreleaser/releases/download/v0.141.0/goreleaser_Linux_x86_64.tar.gz|tar zx
+RUN wget -O - https://github.com/goreleaser/goreleaser/releases/download/v0.156.0/goreleaser_Linux_x86_64.tar.gz|tar zx
 RUN chmod +x goreleaser && \
     mv goreleaser /usr/local/bin
 
