@@ -148,6 +148,13 @@ func (this *K8S2TFReadVisitor) handleJSON() {
 	if this.context == nil {
 		return
 	}
+	// If context is already a plain string, return it as-is.
+	// This handles int-or-string fields where the API server returns raw string values.
+	// json.Marshal would double-encode them to "\"value\"" instead of keeping "value".
+	if s, ok := this.context.(string); ok {
+		this.Object = s
+		return
+	}
 	jsonBytes, err := json.Marshal(this.context)
 	if err != nil {
 		log.Fatal(err)

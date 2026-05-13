@@ -1,10 +1,10 @@
 package k8s
 
 import (
+	"encoding/json"
 	"log"
 
 	tfSchema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 
 	"k8s.io/kube-openapi/pkg/util/proto"
 )
@@ -143,8 +143,21 @@ func (this *K8S2TFSchemaVisitor) handleJSON() {
 	//log.Println("handleJSON path:", this.path)
 	this.Schema.Type = tfSchema.TypeString
 	this.Schema.StateFunc = func(v interface{}) string {
-		json, _ := structure.NormalizeJsonString(v.(string))
-		return json
+		s := v.(string)
+		// Try to parse as JSON
+		var parsed interface{}
+		if err := json.Unmarshal([]byte(s), &parsed); err == nil {
+			// If parsed value is a plain string, return it as-is
+			// This handles int-or-string fields where the API server returns raw values
+			// and the old provider double-encoded them to JSON strings.
+			if _, ok := parsed.(string); ok {
+				return parsed.(string)
+			}
+			// For objects/maps, normalize JSON formatting
+			normalized, _ := json.Marshal(parsed)
+			return string(normalized)
+		}
+		// Plain string (not valid JSON) — return as-is
+		return s
 	}
-	this.Schema.DiffSuppressFunc = structure.SuppressJsonDiff
 }
